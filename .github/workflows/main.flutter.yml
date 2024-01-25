@@ -20,7 +20,7 @@ on:
 jobs:
 
   build-linux:
-    name: Build Linux (ubuntu-latest;flutter 3.16.0)
+    name: Build Linux (ubuntu-latest;flutter 3.16.8)
     runs-on: [ubuntu-latest]
     strategy:
       fail-fast: false
@@ -37,7 +37,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.16.0"
+          flutter-version: "3.16.8"
           channel: "stable"
           cache: true
 
@@ -61,7 +61,7 @@ jobs:
           path: build/linux/x64/release/bundle
 
   build-windows:
-    name: Build Windows (windows-latest;flutter 3.16.0)
+    name: Build Windows (windows-latest;flutter 3.16.8)
     runs-on: [windows-latest]
     strategy:
       fail-fast: false
@@ -73,7 +73,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.16.0"
+          flutter-version: "3.16.8"
           channel: "stable"
           cache: true
 
@@ -133,7 +133,7 @@ jobs:
 #          path: build/macos/Build/Products/Release/NosoSova.app
 
   build-android:
-    name: Build Android (ubuntu-latest;flutter 3.16.0;Java zulu 17)
+    name: Build Android (ubuntu-latest;flutter 3.16.8;Java zulu 17)
     runs-on: [ubuntu-latest]
     strategy:
       fail-fast: false
@@ -151,7 +151,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.16.0"
+          flutter-version: "3.16.8"
           channel: "stable"
           cache: true
 
