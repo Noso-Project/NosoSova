@@ -326,6 +326,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pnlDay => 'PnL pro Tag';
 
   @override
+  String get successSaveExportFile => 'Ihre Brieftasche wurde erfolgreich exportiert';
+
+  @override
   String get displayPendingTransactions => 'Hier werden Ihre ausstehenden Transaktionen angezeigt';
 
   @override

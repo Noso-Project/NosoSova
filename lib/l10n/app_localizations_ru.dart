@@ -326,6 +326,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pnlDay => 'PnL за сутки';
 
   @override
+  String get successSaveExportFile => 'Ваш кошелек был успешно экспортирован';
+
+  @override
   String get displayPendingTransactions => 'Здесь будут ваши отложенные транзакции';
 
   @override

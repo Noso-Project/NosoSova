@@ -477,7 +477,7 @@
     },
     {
       "name": "noso_dart",
-      "rootUri": "file:///C:/Users/apasi/AppData/Local/Pub/Cache/hosted/pub.dev/noso_dart-1.0.3",
+      "rootUri": "../../NosoDart",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -962,7 +962,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-01-25T15:44:40.387225Z",
+  "generated": "2024-01-26T16:34:49.323029Z",
   "generator": "pub",
   "generatorVersion": "3.2.5"
 }

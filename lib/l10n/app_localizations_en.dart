@@ -326,6 +326,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pnlDay => 'PnL per day';
 
   @override
+  String get successSaveExportFile => 'Your wallet has been successfully exported';
+
+  @override
   String get displayPendingTransactions => 'Your pending transactions are displayed here';
 
   @override

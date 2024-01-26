@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_file_saver_dev/flutter_file_saver_dev.dart';
 import 'package:noso_dart/const.dart';
 import 'package:noso_dart/handlers/address_handler.dart';
+import 'package:noso_dart/handlers/files_handler.dart';
 import 'package:noso_dart/handlers/order_handler.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:noso_dart/models/noso/node.dart';
@@ -79,7 +82,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     on<AddAddress>(_addAddress);
     on<CreateNewAddress>(_createNewAddress);
     on<ImportWalletFile>(_importWalletFile);
-    on<ExportWallet>(_exportWalletFile);
+    on<ExportWalletDialog>(_exportWalletFile);
+    on<ExportWallet>(_exportWalletFileSave);
     on<ImportWalletQr>(_importWalletQr);
     on<AddAddresses>(_addAddresses);
     on<SetAlias>(_setAliasAddress);
@@ -642,29 +646,68 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       if (file.extension?.toLowerCase() == FilesConst.pkwExtensions) {
         var bytes =
             await _repositories.fileRepository.readBytesFromPlatformFile(file);
-        var listAddress = DataParser.parseExternalWallet(bytes);
-        if (listAddress.isNotEmpty) {
-          _responseStatusStream.add(ResponseListenerPage(
-              idWidget: ResponseWidgetsIds.widgetImportAddress,
-              codeMessage: 0,
-              action: ActionsFileWallet.walletOpen,
-              actionValue: listAddress));
-        } else {
+        var listAddress = FileHandler.readExternalWallet(bytes);
+
+        if (listAddress == null || listAddress.isEmpty) {
           _responseStatusStream.add(ResponseListenerPage(
               idWidget: ResponseWidgetsIds.widgetImportAddress,
               codeMessage: 5,
               snackBarType: SnackBarType.error));
+          return;
         }
+
+        // Wallet is open dialog selected address
+        _responseStatusStream.add(ResponseListenerPage(
+            idWidget: ResponseWidgetsIds.widgetImportAddress,
+            codeMessage: 0,
+            action: ActionsFileWallet.walletOpen,
+            actionValue: listAddress));
       } else {
         _responseStatusStream.add(ResponseListenerPage(
             idWidget: ResponseWidgetsIds.widgetImportAddress,
             codeMessage: 6,
             snackBarType: SnackBarType.error));
+        return;
       }
     }
   }
 
   void _exportWalletFile(event, emit) async {
+    var nameWallet = FormatWalletFile.nososova == event.formatFile
+        ? "wallet.nososova"
+        : "wallet.pkw";
+
+    if (Platform.isIOS || Platform.isAndroid || Platform.isMacOS) {
+      var bytes = FileHandler.writeWalletFile(state.wallet.address);
+
+      /// also, bytes == null. return error
+      if (bytes == null || bytes.isEmpty) {
+        _responseStatusStream.add(ResponseListenerPage(
+            idWidget: ResponseWidgetsIds.widgetImportAddress,
+            codeMessage: 6,
+            snackBarType: SnackBarType.error));
+        return;
+      }
+
+      FlutterFileSaverDev()
+          .writeFileAsBytes(
+            fileName: nameWallet,
+            bytes: Uint8List.fromList(bytes),
+          )
+          .whenComplete(() => _responseStatusStream.add(ResponseListenerPage(
+              idWidget: ResponseWidgetsIds.widgetImportAddress,
+              codeMessage: 16,
+              snackBarType: SnackBarType.success)));
+    } else if (Platform.isLinux || Platform.isWindows) {
+      _responseStatusStream.add(ResponseListenerPage(
+          idWidget: ResponseWidgetsIds.widgetImportAddress,
+          codeMessage: 0,
+          action: ActionsFileWallet.walletExportDialog,
+          actionValue: nameWallet));
+    }
+  }
+
+  void _exportWalletFileSave(event, emit) async {
     if (event.pathFile.isEmpty) {
       _responseStatusStream.add(ResponseListenerPage(
           idWidget: ResponseWidgetsIds.widgetImportAddress,
@@ -674,7 +717,22 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     }
     var addresses = state.wallet.address;
 
-    _repositories.fileRepository.saveExportWallet(addresses, event.pathFile);
+    var exportTrue = await _repositories.fileRepository
+        .saveExportWallet(addresses, event.pathFile);
+
+    if (exportTrue) {
+      _responseStatusStream.add(ResponseListenerPage(
+          idWidget: ResponseWidgetsIds.widgetImportAddress,
+          codeMessage: 16,
+          snackBarType: SnackBarType.success));
+      return;
+    } else {
+      _responseStatusStream.add(ResponseListenerPage(
+          idWidget: ResponseWidgetsIds.widgetImportAddress,
+          codeMessage: 0,
+          snackBarType: SnackBarType.error));
+      return;
+    }
   }
 
   /// This method is called after scanning the QR code, and passes an event to open a dialog to confirm the import

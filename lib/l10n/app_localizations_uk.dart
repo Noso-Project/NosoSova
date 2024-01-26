@@ -326,6 +326,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get pnlDay => 'PnL за добу';
 
   @override
+  String get successSaveExportFile => 'Ваш гаманець успішно експортовано';
+
+  @override
   String get displayPendingTransactions => 'Ваші відкладені транзакції відображатимуться тут';
 
   @override

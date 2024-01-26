@@ -739,6 +739,12 @@ abstract class AppLocalizations {
   /// **'PnL per day'**
   String get pnlDay;
 
+  /// No description provided for @successSaveExportFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Your wallet has been successfully exported'**
+  String get successSaveExportFile;
+
   /// No description provided for @displayPendingTransactions.
   ///
   /// In en, this message translates to:

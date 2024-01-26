@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:nososova/ui/pages/wallets/widgets/side_right_bar.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
 import 'package:nososova/ui/theme/style/icons_style.dart';
 
+import '../../../blocs/events/wallet_events.dart';
 import '../../../generated/assets.dart';
 import '../../../utils/files_const.dart';
 import '../../common/responses_util/response_widget_id.dart';
@@ -47,6 +49,19 @@ class WalletsPageState extends State<WalletsPage> {
           return;
         }
 
+        if (response.action == ActionsFileWallet.walletExportDialog) {
+          String? outputFile = await FilePicker.platform.saveFile(
+            dialogTitle: 'Please select an wallet file:',
+            fileName: response.actionValue,
+          );
+
+          if (outputFile != null) {
+            walletBloc.add(ExportWallet(outputFile));
+          }
+
+          return;
+        }
+
         await Future.delayed(const Duration(milliseconds: 200));
         SnackBarWidgetResponse(
                 context: GlobalKey<ScaffoldMessengerState>().currentContext ??
@@ -77,7 +92,7 @@ class WalletsPageState extends State<WalletsPage> {
               flex: 4,
               child: Column(
                 children: [
-                   const CardHeader(),
+                  const CardHeader(),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20.0,

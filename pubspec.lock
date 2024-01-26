@@ -624,11 +624,10 @@ packages:
   noso_dart:
     dependency: "direct main"
     description:
-      name: noso_dart
-      sha256: "8349eba91f5df6dd761cdd2c2d703bf931436ba5e687b34f0eb5d649b368ac2c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.3"
+      path: "../NosoDart"
+      relative: true
+    source: path
+    version: "1.1.0"
   package_config:
     dependency: transitive
     description:

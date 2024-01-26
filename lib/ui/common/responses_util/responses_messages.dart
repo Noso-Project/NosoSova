@@ -21,6 +21,7 @@ class ResponsesErrors {
       13: AppLocalizations.of(context)!.errorAddressFound,
       14: AppLocalizations.of(context)!.errorLastTime,
       15: AppLocalizations.of(context)!.errorPathSaveAddress,
+      16: AppLocalizations.of(context)!.successSaveExportFile,
     };
     if (messages.containsKey(errorCode)) {
       String? value = messages[errorCode];

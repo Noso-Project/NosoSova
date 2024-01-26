@@ -106,6 +106,7 @@
   "sellAddress": "Select an address",
   "offline": "Offline",
   "pnlDay": "PnL per day",
+  "successSaveExportFile": "Your wallet has been successfully exported",
   "displayPendingTransactions": "Your pending transactions are displayed here",
   "pendingTransaction": "Pending Transactions",
   "hintConnectStop": "The connection is dropped due to the instability of the mainnet. To continue using it, click on Change node",

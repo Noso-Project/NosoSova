@@ -107,6 +107,7 @@
   "hintStatusNodeRun": "Вузол в мережі",
   "hintStatusNodeNonRun": "Вузол не в мережі",
   "pnlDay": "PnL за добу",
+  "successSaveExportFile": "Ваш гаманець успішно експортовано",
   "displayPendingTransactions": "Ваші відкладені транзакції відображатимуться тут",
   "warringMessageSetAlias": "Операція доступна лише один раз",
   "emptyListAddress": "Створіть або згенеруйте нові адреси для вашого використання",
