@@ -376,6 +376,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       listAddresses = calculateResponse.address ?? state.wallet.address;
     }
 
+
     List<Pending>? pendingsParse = [];
     if (targetNode.pendings != 0) {
       var responsePendings = await _repositories.networkRepository

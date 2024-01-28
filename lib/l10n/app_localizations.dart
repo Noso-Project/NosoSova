@@ -544,7 +544,7 @@ abstract class AppLocalizations {
   /// No description provided for @editCustom.
   ///
   /// In en, this message translates to:
-  /// **'Changing name'**
+  /// **'Changing alias'**
   String get editCustom;
 
   /// No description provided for @errorLoading.

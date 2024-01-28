@@ -227,7 +227,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get message => 'Сообщение';
 
   @override
-  String get editCustom => 'Задать псевдоним';
+  String get editCustom => 'Смена псевдонима';
 
   @override
   String get errorLoading => 'Ошибка';

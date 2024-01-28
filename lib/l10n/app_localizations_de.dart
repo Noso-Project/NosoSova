@@ -227,7 +227,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get message => 'Nachricht';
 
   @override
-  String get editCustom => 'Name ändern';
+  String get editCustom => 'Aliasing-Änderung';
 
   @override
   String get errorLoading => 'Serverfehler';

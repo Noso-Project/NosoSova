@@ -41,6 +41,7 @@ class _DialogPendingTransactionState extends State<DialogPendingTransaction> {
                   itemCount: listPendings.length,
                   itemBuilder: (context, index) {
                     final item = listPendings[index];
+
                     return TilePendingTransaction(
                       pending: item,
                       onTap: () => runExplorer(item.orderId),
