@@ -7,6 +7,7 @@ class StatisticsCoin {
   double totalCoin;
   int totalNodes;
   int lastBlock;
+  int lastTimeUpdatePrice;
   double reward;
   double total;
   List<PriceData>? historyCoin;
@@ -16,6 +17,7 @@ class StatisticsCoin {
     this.totalCoin = 0,
     this.totalNodes = 0,
     this.lastBlock = 0,
+    this.lastTimeUpdatePrice = 0,
     this.reward = 0,
     this.total = 0,
     this.historyCoin,
@@ -46,7 +48,9 @@ class StatisticsCoin {
 
   get getLastPrice => historyCoin?.reversed.toList().last.price ?? 0.0000000;
 
-  get getDiff => (((getCurrentPrice - getLastPrice) / getLastPrice) * 100);
+  get getDiff => getCurrentPrice != 0 && getLastPrice != 0
+      ? (((getCurrentPrice - getLastPrice) / getLastPrice) * 100)
+      : 0;
 
   /// Method that returns a list of prices with a given interval
   List<PriceData> getIntervalPrices(int minutes) {
@@ -72,6 +76,7 @@ class StatisticsCoin {
     double? totalCoin,
     int? totalNodes,
     int? lastBlock,
+    int? lastTimeUpdatePrice,
     double? reward,
     double? total,
     ApiStatus? apiStatus,
@@ -81,6 +86,7 @@ class StatisticsCoin {
       totalCoin: totalCoin ?? this.totalCoin,
       totalNodes: totalNodes ?? this.totalNodes,
       lastBlock: lastBlock ?? this.lastBlock,
+      lastTimeUpdatePrice: lastTimeUpdatePrice ?? this.lastTimeUpdatePrice,
       reward: reward ?? this.reward,
       total: total ?? this.total,
       apiStatus: apiStatus ?? this.apiStatus,

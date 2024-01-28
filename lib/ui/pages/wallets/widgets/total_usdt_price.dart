@@ -53,7 +53,7 @@ class ItemTotalPrice extends StatelessWidget {
         if (state.statisticsCoin.apiStatus == ApiStatus.loading)
           LoadingAnimationWidget.prograssiveDots(
             color: Colors.white.withOpacity(0.5),
-            size: 28,
+            size: 30,
           ),
         if (state.statisticsCoin.apiStatus == ApiStatus.error)
           Text(

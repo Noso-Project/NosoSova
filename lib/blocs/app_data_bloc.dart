@@ -203,17 +203,6 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
         "Getting information from the node ${targetNode.seed.toTokenizer}"));
     var statsCopyCoin = state.statisticsCoin;
 
-    /*   var responsePriceHistory =
-        await _repositories.networkRepository.fetchHistoryPrice();
-    statsCopyCoin = responsePriceHistory.errors == null
-        ? statsCopyCoin.copyWith(
-            historyCoin: responsePriceHistory.value,
-            lastBlock: targetNode.lastblock)
-        : statsCopyCoin.copyWith(
-            lastBlock: targetNode.lastblock, apiStatus: ApiStatus.error);
-
-    */
-
     if (state.node.lastblock != targetNode.lastblock ||
         state.node.seed.ip != targetNode.seed.ip) {
       var responseLastBlockInfo =
@@ -237,7 +226,6 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
           totalNodes: blockInfo.count,
           reward: blockInfo.reward,
           lastBlock: targetNode.lastblock,
-          //    apiStatus: ApiStatus.connected
         );
         _debugBloc.add(AddStringDebug(
             "Obtaining information about the block is successful ${targetNode.lastblock}"));
@@ -300,17 +288,25 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     event,
     emit,
   ) async {
+    emit(state.copyWith(
+        statisticsCoin:
+            state.statisticsCoin.copyWith(apiStatus: ApiStatus.loading)));
     var responsePriceHistory =
         await _repositories.networkRepository.fetchHistoryPrice();
 
     var lastblock = state.node.lastblock;
-
-    emit(state.copyWith(
-        statisticsCoin: responsePriceHistory.errors == null
-            ? state.statisticsCoin.copyWith(
-                historyCoin: responsePriceHistory.value, lastBlock: lastblock, apiStatus: ApiStatus.connected)
-            : state.statisticsCoin
-                .copyWith(lastBlock: lastblock, apiStatus: ApiStatus.error)));
+    if (responsePriceHistory.errors == null) {
+      emit(state.copyWith(
+          statisticsCoin: state.statisticsCoin.copyWith(
+              historyCoin: responsePriceHistory.value,
+              lastBlock: lastblock,
+              apiStatus: ApiStatus.connected,
+              lastTimeUpdatePrice: DateTime.now().millisecondsSinceEpoch)));
+    } else if (state.statisticsCoin.apiStatus == ApiStatus.loading) {
+      emit(state.copyWith(
+          statisticsCoin: state.statisticsCoin
+              .copyWith(lastBlock: lastblock, apiStatus: ApiStatus.error)));
+    }
   }
 
   /// Method that starts a timer that simulates updating information

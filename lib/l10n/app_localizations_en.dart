@@ -332,7 +332,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get displayPendingTransactions => 'Your pending transactions are displayed here';
 
   @override
+  String get updatePriceMinute => 'Information is updated every minute';
+
+  @override
   String get pendingTransaction => 'Pending Transactions';
+
+  @override
+  String get updateTim => 'Updated';
 
   @override
   String get hintConnectStop => 'The connection is dropped due to the instability of the mainnet. To continue using it, click on Change node';
@@ -399,6 +405,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorStopSync => 'Connection lost due to errors';
+
+  @override
+  String get stopSync => 'Connection lost';
 
   @override
   String get unknownError => 'An error occurred';

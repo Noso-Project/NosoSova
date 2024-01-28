@@ -332,7 +332,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get displayPendingTransactions => 'Hier werden Ihre ausstehenden Transaktionen angezeigt';
 
   @override
+  String get updatePriceMinute => 'Die Informationen werden jede Minute aktualisiert';
+
+  @override
   String get pendingTransaction => 'Transacciones pendientes';
+
+  @override
+  String get updateTim => 'Aktualisiert';
 
   @override
   String get hintConnectStop => 'Die Verbindung wird aufgrund der Instabilität des Hauptnetzes unterbrochen. Um sie weiter zu nutzen, klicken Sie auf Knoten wechseln';
@@ -399,6 +405,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get errorStopSync => 'Verbindungsabbruch aufgrund von Fehlern';
+
+  @override
+  String get stopSync => 'Verbindung verloren';
 
   @override
   String get unknownError => 'Ein Fehler ist passiert';

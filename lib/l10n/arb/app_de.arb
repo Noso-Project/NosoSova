@@ -108,6 +108,8 @@
   "hintStatusNodeRun": "Knoten ist online",
   "hintStatusNodeNonRun": "Knoten ist offline",
   "sellAddress": "Wählen Sie eine Adresse aus",
+  "updatePriceMinute": "Die Informationen werden jede Minute aktualisiert",
+  "updateTim": "Aktualisiert",
   "pendingTransaction": "Transacciones pendientes",
   "successSaveExportFile": "Ihre Brieftasche wurde erfolgreich exportiert",
   "aliasMessage": "Der Alias kann zwischen 3 und 32 Zeichen lang sein. Vergiss nicht, dass für die Einrichtung eines Alias eine Transaktionsgebühr erhoben wird.",
@@ -131,5 +133,6 @@
   "errorStopSync": "Verbindungsabbruch aufgrund von Fehlern",
   "errorPathSaveAddress": "Fehler: Ungültige Adresse oder keine Berechtigung zum Schreiben der Datei",
   "hintConnectStop": "Die Verbindung wird aufgrund der Instabilität des Hauptnetzes unterbrochen. Um sie weiter zu nutzen, klicken Sie auf Knoten wechseln",
+  "stopSync": "Verbindung verloren",
   "errorLastTime": "Ihre Zeit ist im Rückstand, aktualisieren Sie Ihre Zeit"
 }

@@ -751,11 +751,23 @@ abstract class AppLocalizations {
   /// **'Your pending transactions are displayed here'**
   String get displayPendingTransactions;
 
+  /// No description provided for @updatePriceMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'Information is updated every minute'**
+  String get updatePriceMinute;
+
   /// No description provided for @pendingTransaction.
   ///
   /// In en, this message translates to:
   /// **'Pending Transactions'**
   String get pendingTransaction;
+
+  /// No description provided for @updateTim.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated'**
+  String get updateTim;
 
   /// No description provided for @hintConnectStop.
   ///
@@ -888,6 +900,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Connection lost due to errors'**
   String get errorStopSync;
+
+  /// No description provided for @stopSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection lost'**
+  String get stopSync;
 
   /// No description provided for @unknownError.
   ///

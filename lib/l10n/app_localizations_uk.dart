@@ -332,7 +332,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get displayPendingTransactions => 'Ваші відкладені транзакції відображатимуться тут';
 
   @override
+  String get updatePriceMinute => 'Оновлення інформації відбується кожну хвилину';
+
+  @override
   String get pendingTransaction => 'Очікувані транзакції';
+
+  @override
+  String get updateTim => 'Оновлено';
 
   @override
   String get hintConnectStop => 'З\'єднання розірвано через нестабільність мережі. Щоб продовжити, натисніть на Змінити вузол';
@@ -399,6 +405,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get errorStopSync => 'З\'єднання втрачено через помилки';
+
+  @override
+  String get stopSync => 'З\'єднання втрачено';
 
   @override
   String get unknownError => 'Виникла помилка';
