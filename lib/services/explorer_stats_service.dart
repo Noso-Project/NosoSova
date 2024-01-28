@@ -11,6 +11,7 @@ import '../models/responses/response_api.dart';
 
 class ExplorerStatsService {
   final String _apiStats = "https://api.nosocoin.com/";
+  final int _delaySeconds = 10;
 
   Future<ResponseApi> fetchHistoryTransactions(String addressHash) async {
     final response = await _fetchExplorerStats(
@@ -36,32 +37,39 @@ class ExplorerStatsService {
   }
 
   Future<ResponseApi> fetchHistoryPrice() async {
-    var response = await _fetchExplorerStats(
-        "${_apiStats}info/price?range=day&interval=10");
+    try {
+      var response = await _fetchExplorerStats(
+          "${_apiStats}info/price?range=day&interval=10");
 
-    if (response.errors != null) {
-      return response;
-    } else {
-      List<PriceData> listPrice = List<PriceData>.from(
-          response.value.map((item) => PriceData.fromJson(item)));
-
-      if (listPrice.isEmpty) {
-        return ResponseApi(errors: response.errors);
+      if (response.errors != null) {
+        return response;
       } else {
-        return ResponseApi(value: listPrice);
+        List<PriceData> listPrice = List<PriceData>.from(
+            response.value.map((item) => PriceData.fromJson(item)));
+
+        if (listPrice.isEmpty) {
+          return ResponseApi(errors: response.errors);
+        } else {
+          return ResponseApi(value: listPrice);
+        }
       }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Request failed with error: $e');
+      }
+      return ResponseApi(errors: 'Request failed with error: $e');
     }
   }
 
   Future<ResponseApi> fetchLastBlockInfo() async {
     try {
-    var response = await _fetchExplorerStats("${_apiStats}nodes/info");
+      var response = await _fetchExplorerStats("${_apiStats}nodes/info");
 
-    if (response.errors != null) {
-      return response;
-    } else {
-      return ResponseApi(value: BlockInfo.fromJson(response.value));
-    }
+      if (response.errors != null) {
+        return response;
+      } else {
+        return ResponseApi(value: BlockInfo.fromJson(response.value));
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Request failed with error: $e');
@@ -75,7 +83,7 @@ class ExplorerStatsService {
       final response = await http.get(
         Uri.parse(uri),
         headers: {"accept": "application/json"},
-      ).timeout(const Duration(seconds: 6));
+      ).timeout(Duration(seconds: _delaySeconds));
 
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);

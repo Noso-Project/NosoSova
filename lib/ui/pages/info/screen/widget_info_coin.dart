@@ -97,7 +97,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                     ),
                     const SizedBox(height: 20),
                     SizedBox(
-                      height: 150,
+                      height: 120,
                       width: double.infinity,
                       child: LineChart(
                         LineChartData(

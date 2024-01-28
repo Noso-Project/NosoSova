@@ -48,7 +48,8 @@ class AppDataState {
 class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
   AppBlocConfig appBlocConfig = AppBlocConfig();
   final DebugBloc _debugBloc;
-  Timer? timerSyncNetwork;
+  Timer? _timerSyncNetwork;
+  Timer? _timerSyncPriceHistory;
   final Repositories _repositories;
 
   final _walletEvent = StreamController<WalletEvent>.broadcast();
@@ -66,6 +67,7 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     on<SyncSuccess>(_syncResult);
     on<UpdateSupply>(_updateSupply);
     on<ReconnectFromError>(_reconnectFromError);
+    on<LoadPriceHistory>(_updatePriceHistory);
   }
 
   /// This method initializes the first network connection
@@ -80,6 +82,10 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     } else {
       await _selectTargetNode(event, emit, InitialNodeAlgh.listenDefaultNodes);
     }
+
+    // start timer update price history
+    _startTimerSyncPriceHistory();
+    add(LoadPriceHistory());
   }
 
   /// Метод який повідомляє системі про помилку
@@ -190,12 +196,14 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
   }
 
   Future<void> _syncNetwork(event, emit, Node targetNode) async {
-    emit(state.copyWith(statusConnected: StatusConnectNodes.sync));
+    emit(state.copyWith(
+        statusConnected: StatusConnectNodes.sync,
+        node: state.node.copyWith(seed: targetNode.seed)));
     _debugBloc.add(AddStringDebug(
         "Getting information from the node ${targetNode.seed.toTokenizer}"));
-
     var statsCopyCoin = state.statisticsCoin;
-    var responsePriceHistory =
+
+    /*   var responsePriceHistory =
         await _repositories.networkRepository.fetchHistoryPrice();
     statsCopyCoin = responsePriceHistory.errors == null
         ? statsCopyCoin.copyWith(
@@ -203,6 +211,8 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
             lastBlock: targetNode.lastblock)
         : statsCopyCoin.copyWith(
             lastBlock: targetNode.lastblock, apiStatus: ApiStatus.error);
+
+    */
 
     if (state.node.lastblock != targetNode.lastblock ||
         state.node.seed.ip != targetNode.seed.ip) {
@@ -224,9 +234,11 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
         }
 
         statsCopyCoin = statsCopyCoin.copyWith(
-            totalNodes: blockInfo.count,
-            reward: blockInfo.reward,
-            apiStatus: ApiStatus.connected);
+          totalNodes: blockInfo.count,
+          reward: blockInfo.reward,
+          lastBlock: targetNode.lastblock,
+          //    apiStatus: ApiStatus.connected
+        );
         _debugBloc.add(AddStringDebug(
             "Obtaining information about the block is successful ${targetNode.lastblock}"));
       } else {
@@ -284,11 +296,35 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     _startTimerSyncNetwork();
   }
 
+  Future<void> _updatePriceHistory(
+    event,
+    emit,
+  ) async {
+    var responsePriceHistory =
+        await _repositories.networkRepository.fetchHistoryPrice();
+
+    var lastblock = state.node.lastblock;
+
+    emit(state.copyWith(
+        statisticsCoin: responsePriceHistory.errors == null
+            ? state.statisticsCoin.copyWith(
+                historyCoin: responsePriceHistory.value, lastBlock: lastblock, apiStatus: ApiStatus.connected)
+            : state.statisticsCoin
+                .copyWith(lastBlock: lastblock, apiStatus: ApiStatus.error)));
+  }
+
   /// Method that starts a timer that simulates updating information
   void _startTimerSyncNetwork() {
-    timerSyncNetwork ??=
+    _timerSyncNetwork ??=
         Timer.periodic(Duration(seconds: appBlocConfig.delaySync), (timer) {
       add(ReconnectSeed(true));
+    });
+  }
+
+  void _startTimerSyncPriceHistory() {
+    _timerSyncPriceHistory ??=
+        Timer.periodic(const Duration(seconds: 60), (timer) async {
+      add(LoadPriceHistory());
     });
   }
 
@@ -309,11 +345,17 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
   @override
   Future<void> close() {
     _stopTimerSyncNetwork();
+    _stopSyncPriceHistory();
     return super.close();
   }
 
   void _stopTimerSyncNetwork() {
-    timerSyncNetwork?.cancel();
-    timerSyncNetwork = null;
+    _timerSyncNetwork?.cancel();
+    _timerSyncNetwork = null;
+  }
+
+  void _stopSyncPriceHistory() {
+    _timerSyncPriceHistory?.cancel();
+    _timerSyncPriceHistory = null;
   }
 }
