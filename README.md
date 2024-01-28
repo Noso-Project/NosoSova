@@ -1,5 +1,5 @@
 # NosoSova
-
+![GitHub Tag](https://img.shields.io/github/v/tag/Noso-Project/NosoSova)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Noso-Project/NosoSova/total)
 
 
