@@ -8,13 +8,12 @@ import 'package:noso_dart/node_request.dart';
 import 'package:noso_dart/utils/data_parser.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
 import 'package:nososova/blocs/events/wallet_events.dart';
-import 'package:nososova/models/apiExplorer/block_info.dart';
 import 'package:nososova/models/app/app_bloc_config.dart';
-import 'package:nososova/utils/status_api.dart';
 
 import '../models/app/debug.dart';
 import '../models/app/stats.dart';
 import '../models/responses/response_node.dart';
+import '../models/rest_api/block_info.dart';
 import '../repositories/repositories.dart';
 import '../utils/network_const.dart';
 import 'events/app_data_events.dart';

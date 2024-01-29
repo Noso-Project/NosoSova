@@ -6,9 +6,10 @@ import 'package:noso_dart/models/noso/seed.dart';
 import 'package:nososova/generated/assets.dart';
 
 final class NetworkConst {
+
   static const int durationTimeOut = 3;
   static const int delaySync = 30;
-  static AppInfo appInfo = AppInfo(appVersion: "NOSOSOVA_1_0");
+  static AppInfo appInfo = AppInfo(appVersion: "NOSOSOVA_0.1.3");
 
   static String getRandomNode(String? inputString) {
     List<String> elements = (inputString ?? "").split(',');
@@ -49,11 +50,12 @@ final class CheckConnect {
 
 enum InitialNodeAlgh { listenDefaultNodes, connectLastNode, listenUserNodes }
 
-enum StatusConnectNodes { connected, error, searchNode, sync, consensus }
-
 /// Connected - підключено
 /// error - помилка
 /// searchNode - пошук вузла
 /// sync - синхронізація
+enum StatusConnectNodes { connected, error, searchNode, sync, consensus }
+
+enum ApiStatus { connected, loading, error, result }
 
 enum ConsensusStatus { sync, error }

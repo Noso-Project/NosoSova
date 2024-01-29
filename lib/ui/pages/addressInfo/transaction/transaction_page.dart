@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nososova/models/apiExplorer/transaction_history.dart';
 import 'package:nososova/ui/common/widgets/widget_transaction.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../models/rest_api/transaction_history.dart';
 import '../../../theme/style/text_style.dart';
 
 class TransactionPage extends StatefulWidget {

@@ -8,7 +8,8 @@ import 'package:nososova/ui/theme/style/colors.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/app/stats.dart';
-import '../../../../utils/status_api.dart';
+import '../../../../utils/date_utils.dart';
+import '../../../../utils/network_const.dart';
 import '../../../common/components/info_item.dart';
 import '../../../common/widgets/dasher_divider.dart';
 import '../../../config/responsive.dart';
@@ -176,7 +177,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                 message: AppLocalizations.of(context)!.updatePriceMinute,
                 child: InfoItem().itemInfo(
                     AppLocalizations.of(context)!.updateTim,
-                    getTimeNow(state.statisticsCoin.lastTimeUpdatePrice),
+                    DateUtil.getTime(state.statisticsCoin.lastTimeUpdatePrice),
                     srinkin:
                         state.statisticsCoin.apiStatus == ApiStatus.loading))
           ],
@@ -245,12 +246,6 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
         ],
       );
     });
-  }
-
-  getTimeNow(int millisecondsSinceEpoch) {
-    DateTime currentTime =
-        DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
-    return '${currentTime.hour}:${(currentTime.minute).toString().padLeft(2, '0')}:${(currentTime.second).toString().padLeft(2, '0')}';
   }
 
   information(StatisticsCoin infoCoin) {

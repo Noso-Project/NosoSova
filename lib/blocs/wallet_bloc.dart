@@ -24,12 +24,12 @@ import 'package:nososova/models/app/response_page_listener.dart';
 import 'package:nososova/repositories/repositories.dart';
 
 import '../../models/address_wallet.dart';
-import '../models/apiExplorer/transaction_history.dart';
 import '../models/app/debug.dart';
 import '../models/app/response_calculate.dart';
 import '../models/app/state_node.dart';
 import '../models/app/wallet.dart';
 import '../models/responses/response_node.dart';
+import '../models/rest_api/transaction_history.dart';
 import '../ui/common/responses_util/response_widget_id.dart';
 import '../utils/files_const.dart';
 import '../utils/network_const.dart';

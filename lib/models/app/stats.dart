@@ -1,7 +1,7 @@
 import 'package:noso_dart/models/halving.dart';
 
-import '../../utils/status_api.dart';
-import '../apiExplorer/price_dat.dart';
+import '../../utils/network_const.dart';
+import '../rest_api/price_dat.dart';
 
 class StatisticsCoin {
   double totalCoin;

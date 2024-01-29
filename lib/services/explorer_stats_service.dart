@@ -3,11 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:nososova/models/apiExplorer/transaction_history.dart';
-
-import '../models/apiExplorer/block_info.dart';
-import '../models/apiExplorer/price_dat.dart';
 import '../models/responses/response_api.dart';
+import '../models/rest_api/block_info.dart';
+import '../models/rest_api/price_dat.dart';
+import '../models/rest_api/transaction_history.dart';
 
 class ExplorerStatsService {
   final String _apiStats = "https://api.nosocoin.com/";

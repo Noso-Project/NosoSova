@@ -4,7 +4,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 
 import '../../../../l10n/app_localizations.dart';
-import '../../../../utils/status_api.dart';
+import '../../../../utils/network_const.dart';
 import '../../../theme/style/colors.dart';
 import '../../../theme/style/text_style.dart';
 
