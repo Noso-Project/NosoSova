@@ -212,7 +212,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           idWidget: e.widgetId,
           codeMessage: 12,
           snackBarType: SnackBarType.error));
-      _debugBloc.add(AddStringDebug("Error sending payment, try again later"));
+      _debugBloc.add(
+          AddStringDebug("Error sending payment, incorrectly formed request"));
       return;
     }
 
@@ -269,7 +270,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           idWidget: e.widgetId,
           codeMessage: 12,
           snackBarType: SnackBarType.error));
-      _debugBloc.add(AddStringDebug("Error sending payment, try again later"));
+      _debugBloc.add(AddStringDebug(
+          "Error sending payment, error code ${int.parse(result[1])}"));
       return;
     }
   }
@@ -375,7 +377,6 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           localAddress: listAddresses);
       listAddresses = calculateResponse.address ?? state.wallet.address;
     }
-
 
     List<Pending>? pendingsParse = [];
     if (targetNode.pendings != 0) {
