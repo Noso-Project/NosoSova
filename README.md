@@ -2,11 +2,6 @@
 ![GitHub Tag](https://img.shields.io/github/v/tag/Noso-Project/NosoSova)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Noso-Project/NosoSova/total)
 
-
-
-![GitHub Tag](https://img.shields.io/github/v/tag/Noso-Project/NosoSova)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Noso-Project/NosoSova/total)
-
 This is a `lite` wallet for the cryptocurrency [Noso](https://nosocoin.com).
 
 The application is being developed in Flutter(Dart).
