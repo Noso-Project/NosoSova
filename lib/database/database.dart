@@ -41,7 +41,6 @@ class MyDatabase extends _$MyDatabase {
       batch.insertAll(addresses, insertable);
     });
   }
-
   Future<void> deleteWallet(Address value) async {
     final insertable = AddressesCompanion(
       publicKey: Value(value.publicKey),
