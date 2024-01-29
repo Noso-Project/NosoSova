@@ -546,9 +546,6 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             ? NosoMath().bigIntToInt(fromPsk: bytesScope)
             : 0;
 
-        //    var bytesLastOp = bytesSummary.sublist(index + 99, index + 106);
-        //      var targetLastOp = 0;
-
         allTotalBalance += targetBalance;
 
         var foundLocal = listAddress.firstWhere(
