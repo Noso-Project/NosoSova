@@ -136,12 +136,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 10),
                         Text(
                           AppLocalizations.of(context)!.sender,
                           textAlign: TextAlign.start,
                           style:
-                              AppTextStyles.dialogTitle.copyWith(fontSize: 22),
+                              AppTextStyles.dialogTitle.copyWith(fontSize: 20),
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -171,12 +171,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   ),
                           ),
                         ),
-                        const SizedBox(height: 10),
+
                         Text(
                           AppLocalizations.of(context)!.receiver,
                           textAlign: TextAlign.start,
                           style:
-                              AppTextStyles.dialogTitle.copyWith(fontSize: 22),
+                              AppTextStyles.dialogTitle.copyWith(fontSize: 20),
                         ),
                         const SizedBox(height: 10),
                         TextField(
@@ -191,12 +191,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             decoration:
                                 AppTextFiledDecoration.defaultDecoration(
                                     AppLocalizations.of(context)!.receiver)),
-                        const SizedBox(height: 10),
+                 //       const SizedBox(height: 10),
                         Text(
                           AppLocalizations.of(context)!.amount,
                           textAlign: TextAlign.start,
                           style:
-                              AppTextStyles.dialogTitle.copyWith(fontSize: 22),
+                              AppTextStyles.dialogTitle.copyWith(fontSize: 20),
                         ),
                         const SizedBox(height: 10),
                         TextField(
@@ -233,16 +233,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             buttonPercent(100),
                           ],
                         ),
-                        /*       const SizedBox(height: 30),
-                          TextField(
-                              maxLength: 120,
-                              controller: messageController,
-                              style: AppTextStyles.textFieldStyle,
-                              decoration:
-                                  AppTextFiledDecoration.defaultDecoration(
-                                      AppLocalizations.of(context)!.message)),
-
-                    */
+                        const SizedBox(height: 30),
+                        TextField(
+                            maxLength: 120,
+                            controller: messageController,
+                            style: AppTextStyles.textFieldStyle,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                            ],
+                            decoration:
+                                AppTextFiledDecoration.defaultDecoration(
+                                    AppLocalizations.of(context)!.message)),
                         const SizedBox(height: 10),
                         Row(
                             crossAxisAlignment: CrossAxisAlignment.start,

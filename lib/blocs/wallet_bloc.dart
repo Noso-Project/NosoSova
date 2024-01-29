@@ -132,7 +132,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           codeMessage: 3,
           snackBarType: SnackBarType.error));
       _debugBloc.add(AddStringDebug(
-          "Error filling in orderData, order to change alias is not valid"));
+          "Error filling in orderData, order to change alias is not valid",
+          DebugType.error));
 
       return;
     }
@@ -145,7 +146,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           idWidget: e.widgetId,
           codeMessage: 3,
           snackBarType: SnackBarType.error));
-      _debugBloc.add(AddStringDebug("Error: alias change order is not valid"));
+      _debugBloc.add(AddStringDebug(
+          "Error: alias change order is not valid", DebugType.error));
     } else {
       String resultCode = String.fromCharCodes(resp.value);
       if (int.parse(resultCode) == 0) {
@@ -153,16 +155,16 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             idWidget: e.widgetId,
             codeMessage: 4,
             snackBarType: SnackBarType.success));
-        _debugBloc
-            .add(AddStringDebug("Alias change order successfully registered"));
+        _debugBloc.add(AddStringDebug(
+            "Alias change order successfully registered", DebugType.success));
         appDataBloc.add(ReconnectSeed(true));
       } else {
         _responseStatusStream.add(ResponseListenerPage(
             idWidget: e.widgetId,
             codeMessage: 3,
             snackBarType: SnackBarType.error));
-        _debugBloc
-            .add(AddStringDebug("Error: alias change order is not valid"));
+        _debugBloc.add(AddStringDebug(
+            "Error: alias change order is not valid", DebugType.error));
       }
     }
   }
@@ -185,7 +187,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           codeMessage: !isBalanceCorrect ? 1 : 2,
           snackBarType: SnackBarType.error));
       _debugBloc.add(AddStringDebug(
-          "An attempt to send a payment was unsuccessful. Input error or not enough coins"));
+          "An attempt to send a payment was unsuccessful. Input error or not enough coins",
+          DebugType.error));
       return;
     }
     if (state.wallet.consensusStatus != ConsensusStatus.sync) {
@@ -194,7 +197,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           codeMessage: 10,
           snackBarType: SnackBarType.error));
       _debugBloc.add(AddStringDebug(
-          "An attempt to send a payment was unsuccessful. The system is not synchronized with the network"));
+          "An attempt to send a payment was unsuccessful. The system is not synchronized with the network",
+          DebugType.error));
       return;
     }
 
@@ -212,8 +216,9 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           idWidget: e.widgetId,
           codeMessage: 12,
           snackBarType: SnackBarType.error));
-      _debugBloc.add(
-          AddStringDebug("Error sending payment, incorrectly formed request"));
+      _debugBloc.add(AddStringDebug(
+          "Error sending payment, incorrectly formed request",
+          DebugType.error));
       return;
     }
 
@@ -235,7 +240,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
               receiver: receiver),
           snackBarType: SnackBarType.ignore));
       _debugBloc.add(AddStringDebug(
-          "New payment has been created, ID -> ${newOrder.timeStamp ?? ""}"));
+          "New payment has been created, ID -> ${newOrder.timeStamp ?? ""}",
+          DebugType.success));
       appDataBloc.add(ReconnectSeed(true));
     } else {
       if (int.parse(result[1]) == 11) {
@@ -244,7 +250,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             codeMessage: 11,
             snackBarType: SnackBarType.error));
         _debugBloc.add(AddStringDebug(
-            "An attempt to send a payment was unsuccessful. Address blocked"));
+            "An attempt to send a payment was unsuccessful. Address blocked",
+            DebugType.error));
         return;
       }
 
@@ -253,8 +260,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             idWidget: e.widgetId,
             codeMessage: 14,
             snackBarType: SnackBarType.error));
-        _debugBloc.add(
-            AddStringDebug("Your time is behind, please update your time"));
+        _debugBloc.add(AddStringDebug(
+            "Your time is behind, please update your time", DebugType.error));
         return;
       }
       if (int.parse(result[1]) == 10) {
@@ -263,7 +270,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             codeMessage: 13,
             snackBarType: SnackBarType.error));
         _debugBloc.add(AddStringDebug(
-            "An attempt to send a payment was unsuccessful. Recipient does not exist"));
+            "An attempt to send a payment was unsuccessful. Recipient does not exist",
+            DebugType.error));
         return;
       }
       _responseStatusStream.add(ResponseListenerPage(
@@ -271,7 +279,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           codeMessage: 12,
           snackBarType: SnackBarType.error));
       _debugBloc.add(AddStringDebug(
-          "Error sending payment, error code ${int.parse(result[1])}"));
+          "Error sending payment, error code ${int.parse(result[1])}",
+          DebugType.error));
       return;
     }
   }
