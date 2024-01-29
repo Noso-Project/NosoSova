@@ -7,7 +7,7 @@ import '../../../blocs/history_transactions_bloc.dart';
 import '../../../blocs/wallet_bloc.dart';
 import '../../../dependency_injection.dart';
 import '../../../models/address_wallet.dart';
-import '../../../models/apiExplorer/transaction_history.dart';
+import '../../../models/rest_api/transaction_history.dart';
 import '../../../repositories/repositories.dart';
 import '../../config/responsive.dart';
 import '../../pages/addressInfo/address_info_page.dart';
@@ -32,7 +32,7 @@ class PageRouter {
       );
     } else {
       WoltModalSheet.show(
-        minDialogWidth: 500,
+        minDialogWidth: 550,
         context: context,
         pageListBuilder: (BuildContext _) {
           return [

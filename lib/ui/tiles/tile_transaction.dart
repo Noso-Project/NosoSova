@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nososova/models/apiExplorer/transaction_history.dart';
+
 import 'package:nososova/ui/theme/style/icons_style.dart';
 import 'package:nososova/ui/theme/style/text_style.dart';
 
 import '../../generated/assets.dart';
+import '../../models/rest_api/transaction_history.dart';
 import '../../utils/other_utils.dart';
 import '../theme/style/colors.dart';
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noso_dart/const.dart';
-import 'package:nososova/models/apiExplorer/transaction_history.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
 import 'package:nososova/ui/theme/style/icons_style.dart';
 
 import '../../../generated/assets.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../models/rest_api/transaction_history.dart';
 import '../../../utils/other_utils.dart';
 import '../../config/responsive.dart';
 import '../../theme/style/text_style.dart';

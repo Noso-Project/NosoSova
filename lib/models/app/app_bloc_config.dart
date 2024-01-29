@@ -6,20 +6,20 @@ class AppBlocConfig {
   late int? _lastBlock;
   int _delaySync = NetworkConst.delaySync;
   bool _isOneStartup = true;
-  late int? _countAttempsConnections = 0;
+  late int? _countErrorConnections = 0;
 
   AppBlocConfig({
     String? lastSeed,
     String? nodesList,
     int? lastBlock,
     int? delaySync,
-    int? countAttempsConnections,
+    int? countErrorConnections,
     bool? isOneStartup,
   }) {
     _lastSeed = lastSeed;
     _nodesList = nodesList;
     _lastBlock = lastBlock;
-    _countAttempsConnections = countAttempsConnections;
+    _countErrorConnections = countErrorConnections;
     _delaySync = delaySync ?? NetworkConst.delaySync;
     _isOneStartup = isOneStartup ?? false;
   }
@@ -34,7 +34,7 @@ class AppBlocConfig {
 
   bool get isOneStartup => _isOneStartup;
 
-  int? get getCountErrors => _countAttempsConnections;
+  int? get getCountErrors => _countErrorConnections;
 
   AppBlocConfig copyWith({
     String? lastSeed,
@@ -48,8 +48,8 @@ class AppBlocConfig {
         lastSeed: lastSeed ?? _lastSeed,
         nodesList: nodesList ?? _nodesList,
         lastBlock: lastBlock ?? _lastBlock,
-        countAttempsConnections:
-            countAttempsConnections ?? _countAttempsConnections,
+        countErrorConnections:
+            countAttempsConnections ?? _countErrorConnections,
         delaySync: delaySync ?? _delaySync,
         isOneStartup: _isOneStartup = isOneStartup ?? false);
   }

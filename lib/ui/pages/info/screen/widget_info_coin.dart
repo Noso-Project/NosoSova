@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
+import 'package:nososova/blocs/events/app_data_events.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/app/stats.dart';
-import '../../../../utils/status_api.dart';
-import '../../../common/components/empty_list_widget.dart';
+import '../../../../utils/date_utils.dart';
+import '../../../../utils/network_const.dart';
 import '../../../common/components/info_item.dart';
-import '../../../common/components/loading.dart';
+import '../../../common/widgets/dasher_divider.dart';
 import '../../../config/responsive.dart';
 import '../../../theme/style/text_style.dart';
 
@@ -24,6 +25,7 @@ class WidgetInfoCoin extends StatefulWidget {
 class _WidgetInfoCoinState extends State<WidgetInfoCoin>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  int selectIndexTab = 0;
 
   @override
   void initState() {
@@ -35,15 +37,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
   Widget build(BuildContext context) {
     return BlocBuilder<AppDataBloc, AppDataState>(builder: (context, state) {
       var infoCoin = state.statisticsCoin;
-      if (infoCoin.apiStatus == ApiStatus.loading) {
-        return const LoadingWidget();
-      }
-
-      if (infoCoin.apiStatus == ApiStatus.error) {
-        return  EmptyWidget(descrpt: AppLocalizations.of(context)!.priceInfoErrorServer, title: AppLocalizations.of(context)!.unknownError,);
-      }
-
-      var diff = state.statisticsCoin.getDiff;
+      var diff = infoCoin.getDiff;
       var gradient = [
         CustomColors.primaryColor,
         diff > 0 ? CustomColors.positiveBalance : CustomColors.negativeBalance
@@ -63,41 +57,51 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                       style: AppTextStyles.itemStyle.copyWith(fontSize: 20),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          infoCoin.getCurrentPrice.toStringAsFixed(6),
-                          style: AppTextStyles.titleMin
-                              .copyWith(fontSize: 36, color: Colors.black),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              infoCoin.getCurrentPrice.toStringAsFixed(6),
+                              style: AppTextStyles.titleMin
+                                  .copyWith(fontSize: 36, color: Colors.black),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              "USDT",
+                              style: AppTextStyles.titleMin
+                                  .copyWith(color: Colors.black),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 5),
-                        Text(
-                          "USDT",
-                          style: AppTextStyles.titleMin
-                              .copyWith(color: Colors.black),
-                        ),
+                        IconButton(
+                            disabledColor: Colors.grey,
+                            tooltip: AppLocalizations.of(context)!.updateInfo,
+                            icon: const Icon(Icons.restart_alt_outlined),
+                            onPressed: state.statisticsCoin.apiStatus ==
+                                    ApiStatus.loading
+                                ? null
+                                : () => context
+                                    .read<AppDataBloc>()
+                                    .add(LoadPriceHistory())),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${diff < 0 ? "" : "+"}${diff.toStringAsFixed(2)}%",
-                          style: AppTextStyles.titleMin.copyWith(
-                              color: diff == 0
-                                  ? Colors.black
-                                  : diff < 0
-                                      ? CustomColors.negativeBalance
-                                      : CustomColors.positiveBalance,
-                              fontSize: 20),
-                        ),
-                      ],
+                    Text(
+                      "${diff < 0 ? "" : "+"}${diff.toStringAsFixed(2)}%",
+                      style: AppTextStyles.titleMin.copyWith(
+                          color: diff == 0
+                              ? Colors.black
+                              : diff < 0
+                                  ? CustomColors.negativeBalance
+                                  : CustomColors.positiveBalance,
+                          fontSize: 20),
                     ),
                     const SizedBox(height: 20),
                     SizedBox(
-                      height: 150,
+                      height: 120,
                       width: double.infinity,
                       child: LineChart(
                         LineChartData(
@@ -108,7 +112,6 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                             show: false,
                           ),
                           lineTouchData: const LineTouchData(enabled: true),
-
                           borderData: FlBorderData(
                             show: false,
                           ),
@@ -148,25 +151,84 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                     ),
                     const SizedBox(height: 10),
                   ])),
+          if (state.statisticsCoin.apiStatus == ApiStatus.error) ...[
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: CustomColors.negativeBalance.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: CustomColors.negativeBalance),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    child: Text(
+                      AppLocalizations.of(context)!.stopSync,
+                      style: AppTextStyles.walletAddress.copyWith(
+                          fontSize: 14, color: CustomColors.negativeBalance),
+                    ),
+                  ),
+                )),
+            const SizedBox(height: 10)
+          ] else ...[
+            Tooltip(
+                message: AppLocalizations.of(context)!.updatePriceMinute,
+                child: InfoItem().itemInfo(
+                    AppLocalizations.of(context)!.updateTim,
+                    DateUtil.getTime(state.statisticsCoin.lastTimeUpdatePrice),
+                    srinkin:
+                        state.statisticsCoin.apiStatus == ApiStatus.loading))
+          ],
+          if (!Responsive.isMobile(context)) ...[
+            const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: DasherDivider(color: Colors.grey)),
+            InfoItem().itemInfo(
+                AppLocalizations.of(context)!.numberOfMinedCoins,
+                NumberFormat.compact().format(infoCoin.getTotalCoin)),
+            InfoItem().itemInfo(AppLocalizations.of(context)!.marketcap,
+                "\$${NumberFormat.compact().format(infoCoin.getMarketCap)}"),
+            InfoItem().itemInfo(AppLocalizations.of(context)!.activeNodes,
+                infoCoin.totalNodes.toString()),
+            const SizedBox(
+              height: 10,
+            )
+          ],
           if (Responsive.isMobile(context)) ...[
+            const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: DasherDivider(color: Colors.grey)),
+            const SizedBox(height: 20),
             TabBar(
               controller: _tabController,
-              isScrollable: true,
               indicatorColor: const Color(0xFF2B2F4F).withOpacity(0.4),
               indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
+              onTap: (index) {
+                setState(() {
+                  selectIndexTab = index;
+                });
+              },
               tabs: [
                 Tab(
                   child: Text(
                     AppLocalizations.of(context)!.information,
-                    style: AppTextStyles.itemStyle
-                        .copyWith(color: Colors.black, fontSize: 20),
+                    style: selectIndexTab == 0
+                        ? AppTextStyles.walletAddress
+                            .copyWith(color: Colors.black, fontSize: 20)
+                        : AppTextStyles.itemStyle
+                            .copyWith(color: Colors.black, fontSize: 20),
                   ),
                 ),
                 Tab(
                   child: Text(
                     AppLocalizations.of(context)!.masternodes,
-                    style: AppTextStyles.itemStyle
-                        .copyWith(color: Colors.black, fontSize: 20),
+                    style: selectIndexTab == 1
+                        ? AppTextStyles.walletAddress
+                            .copyWith(color: Colors.black, fontSize: 20)
+                        : AppTextStyles.itemStyle
+                            .copyWith(color: Colors.black, fontSize: 20),
                   ),
                 ),
               ],
@@ -192,8 +254,6 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        InfoItem().itemInfo(AppLocalizations.of(context)!.blocksRemaining,
-            infoCoin.getHalvingTimer.blocks.toString()),
         InfoItem().itemInfo(AppLocalizations.of(context)!.daysUntilNextHalving,
             infoCoin.getHalvingTimer.days.toString()),
         InfoItem().itemInfo(AppLocalizations.of(context)!.numberOfMinedCoins,

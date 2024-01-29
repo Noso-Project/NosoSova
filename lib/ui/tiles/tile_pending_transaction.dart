@@ -4,6 +4,7 @@ import 'package:nososova/ui/theme/style/text_style.dart';
 import 'package:nososova/utils/other_utils.dart';
 
 import '../../generated/assets.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/style/icons_style.dart';
 
 class TilePendingTransaction extends StatefulWidget {
@@ -23,6 +24,7 @@ class TilePendingTransaction extends StatefulWidget {
 class _TilePendingTransactionState extends State<TilePendingTransaction> {
   @override
   Widget build(BuildContext context) {
+    bool isCustom = widget.pending.orderType == "CUSTOM";
     return ListTile(
         contentPadding: const EdgeInsets.only(left: 10, right: 15),
         leading: AppIconsStyle.icon3x2(Assets.iconsPendingTransaction,
@@ -47,7 +49,9 @@ class _TilePendingTransactionState extends State<TilePendingTransaction> {
                   style: AppTextStyles.itemStyle.copyWith(fontSize: 16),
                 ),
                 Text(
-                  "Amount: ${widget.pending.amountTransfer}",
+                  isCustom
+                      ? AppLocalizations.of(context)!.editCustom
+                      : "Amount: ${widget.pending.amountTransfer}",
                   style: AppTextStyles.walletAddress.copyWith(fontSize: 18),
                 )
               ],

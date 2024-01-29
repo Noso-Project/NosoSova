@@ -20,6 +20,7 @@ class AddressActionsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var walletBloc = BlocProvider.of<WalletBloc>(context);
+    var isCustomPending = walletBloc.state.wallet.pendings.any((pending) => pending.sender == address.hash);
     return Container(
         height: MediaQuery.of(context).size.height * 0.5,
         width: double.infinity,
@@ -36,7 +37,7 @@ class AddressActionsWidget extends StatelessWidget {
               Assets.iconsOutput,
               AppLocalizations.of(context)!.sendFromAddress,
               () => PageRouter.routePaymentPage(context, address)),
-          if (address.custom == null)
+          if (address.custom == null && !isCustomPending)
             buildListTileSvg(
                 Assets.iconsRename,
                 enabled: address.custom == null,

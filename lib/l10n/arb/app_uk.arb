@@ -107,6 +107,9 @@
   "hintStatusNodeRun": "Вузол в мережі",
   "hintStatusNodeNonRun": "Вузол не в мережі",
   "pnlDay": "PnL за добу",
+  "updatePriceMinute": "Оновлення інформації відбується кожну хвилину",
+  "updateTim": "Оновлено",
+  "successSaveExportFile": "Ваш гаманець успішно експортовано",
   "displayPendingTransactions": "Ваші відкладені транзакції відображатимуться тут",
   "warringMessageSetAlias": "Операція доступна лише один раз",
   "emptyListAddress": "Створіть або згенеруйте нові адреси для вашого використання",
@@ -131,5 +134,6 @@
   "unknownError": "Виникла помилка",
   "errorPathSaveAddress": "Помилка: Невірна адреса або немає дозволу на запис файлу",
   "errorStopSync": "З'єднання втрачено через помилки",
+  "stopSync": "З'єднання втрачено",
   "errorLastTime": "Ваша час відстає, оновіть ваш час"
 }

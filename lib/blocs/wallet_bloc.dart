@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_file_saver_dev/flutter_file_saver_dev.dart';
 import 'package:noso_dart/const.dart';
 import 'package:noso_dart/handlers/address_handler.dart';
+import 'package:noso_dart/handlers/files_handler.dart';
 import 'package:noso_dart/handlers/order_handler.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:noso_dart/models/noso/node.dart';
@@ -21,12 +24,12 @@ import 'package:nososova/models/app/response_page_listener.dart';
 import 'package:nososova/repositories/repositories.dart';
 
 import '../../models/address_wallet.dart';
-import '../models/apiExplorer/transaction_history.dart';
 import '../models/app/debug.dart';
 import '../models/app/response_calculate.dart';
 import '../models/app/state_node.dart';
 import '../models/app/wallet.dart';
 import '../models/responses/response_node.dart';
+import '../models/rest_api/transaction_history.dart';
 import '../ui/common/responses_util/response_widget_id.dart';
 import '../utils/files_const.dart';
 import '../utils/network_const.dart';
@@ -79,7 +82,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     on<AddAddress>(_addAddress);
     on<CreateNewAddress>(_createNewAddress);
     on<ImportWalletFile>(_importWalletFile);
-    on<ExportWallet>(_exportWalletFile);
+    on<ExportWalletDialog>(_exportWalletFile);
+    on<ExportWallet>(_exportWalletFileSave);
     on<ImportWalletQr>(_importWalletQr);
     on<AddAddresses>(_addAddresses);
     on<SetAlias>(_setAliasAddress);
@@ -128,7 +132,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           codeMessage: 3,
           snackBarType: SnackBarType.error));
       _debugBloc.add(AddStringDebug(
-          "Error filling in orderData, order to change alias is not valid"));
+          "Error filling in orderData, order to change alias is not valid",
+          DebugType.error));
 
       return;
     }
@@ -141,7 +146,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           idWidget: e.widgetId,
           codeMessage: 3,
           snackBarType: SnackBarType.error));
-      _debugBloc.add(AddStringDebug("Error: alias change order is not valid"));
+      _debugBloc.add(AddStringDebug(
+          "Error: alias change order is not valid", DebugType.error));
     } else {
       String resultCode = String.fromCharCodes(resp.value);
       if (int.parse(resultCode) == 0) {
@@ -149,16 +155,16 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             idWidget: e.widgetId,
             codeMessage: 4,
             snackBarType: SnackBarType.success));
-        _debugBloc
-            .add(AddStringDebug("Alias change order successfully registered"));
+        _debugBloc.add(AddStringDebug(
+            "Alias change order successfully registered", DebugType.success));
         appDataBloc.add(ReconnectSeed(true));
       } else {
         _responseStatusStream.add(ResponseListenerPage(
             idWidget: e.widgetId,
             codeMessage: 3,
             snackBarType: SnackBarType.error));
-        _debugBloc
-            .add(AddStringDebug("Error: alias change order is not valid"));
+        _debugBloc.add(AddStringDebug(
+            "Error: alias change order is not valid", DebugType.error));
       }
     }
   }
@@ -181,7 +187,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           codeMessage: !isBalanceCorrect ? 1 : 2,
           snackBarType: SnackBarType.error));
       _debugBloc.add(AddStringDebug(
-          "An attempt to send a payment was unsuccessful. Input error or not enough coins"));
+          "An attempt to send a payment was unsuccessful. Input error or not enough coins",
+          DebugType.error));
       return;
     }
     if (state.wallet.consensusStatus != ConsensusStatus.sync) {
@@ -190,7 +197,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           codeMessage: 10,
           snackBarType: SnackBarType.error));
       _debugBloc.add(AddStringDebug(
-          "An attempt to send a payment was unsuccessful. The system is not synchronized with the network"));
+          "An attempt to send a payment was unsuccessful. The system is not synchronized with the network",
+          DebugType.error));
       return;
     }
 
@@ -208,7 +216,9 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           idWidget: e.widgetId,
           codeMessage: 12,
           snackBarType: SnackBarType.error));
-      _debugBloc.add(AddStringDebug("Error sending payment, try again later"));
+      _debugBloc.add(AddStringDebug(
+          "Error sending payment, incorrectly formed request",
+          DebugType.error));
       return;
     }
 
@@ -230,7 +240,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
               receiver: receiver),
           snackBarType: SnackBarType.ignore));
       _debugBloc.add(AddStringDebug(
-          "New payment has been created, ID -> ${newOrder.timeStamp ?? ""}"));
+          "New payment has been created, ID -> ${newOrder.timeStamp ?? ""}",
+          DebugType.success));
       appDataBloc.add(ReconnectSeed(true));
     } else {
       if (int.parse(result[1]) == 11) {
@@ -239,7 +250,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             codeMessage: 11,
             snackBarType: SnackBarType.error));
         _debugBloc.add(AddStringDebug(
-            "An attempt to send a payment was unsuccessful. Address blocked"));
+            "An attempt to send a payment was unsuccessful. Address blocked",
+            DebugType.error));
         return;
       }
 
@@ -248,8 +260,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             idWidget: e.widgetId,
             codeMessage: 14,
             snackBarType: SnackBarType.error));
-        _debugBloc.add(
-            AddStringDebug("Your time is behind, please update your time"));
+        _debugBloc.add(AddStringDebug(
+            "Your time is behind, please update your time", DebugType.error));
         return;
       }
       if (int.parse(result[1]) == 10) {
@@ -258,14 +270,17 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             codeMessage: 13,
             snackBarType: SnackBarType.error));
         _debugBloc.add(AddStringDebug(
-            "An attempt to send a payment was unsuccessful. Recipient does not exist"));
+            "An attempt to send a payment was unsuccessful. Recipient does not exist",
+            DebugType.error));
         return;
       }
       _responseStatusStream.add(ResponseListenerPage(
           idWidget: e.widgetId,
           codeMessage: 12,
           snackBarType: SnackBarType.error));
-      _debugBloc.add(AddStringDebug("Error sending payment, try again later"));
+      _debugBloc.add(AddStringDebug(
+          "Error sending payment, error code ${int.parse(result[1])}",
+          DebugType.error));
       return;
     }
   }
@@ -541,9 +556,6 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             ? NosoMath().bigIntToInt(fromPsk: bytesScope)
             : 0;
 
-        //    var bytesLastOp = bytesSummary.sublist(index + 99, index + 106);
-        //      var targetLastOp = 0;
-
         allTotalBalance += targetBalance;
 
         var foundLocal = listAddress.firstWhere(
@@ -642,29 +654,68 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       if (file.extension?.toLowerCase() == FilesConst.pkwExtensions) {
         var bytes =
             await _repositories.fileRepository.readBytesFromPlatformFile(file);
-        var listAddress = DataParser.parseExternalWallet(bytes);
-        if (listAddress.isNotEmpty) {
-          _responseStatusStream.add(ResponseListenerPage(
-              idWidget: ResponseWidgetsIds.widgetImportAddress,
-              codeMessage: 0,
-              action: ActionsFileWallet.walletOpen,
-              actionValue: listAddress));
-        } else {
+        var listAddress = FileHandler.readExternalWallet(bytes);
+
+        if (listAddress == null || listAddress.isEmpty) {
           _responseStatusStream.add(ResponseListenerPage(
               idWidget: ResponseWidgetsIds.widgetImportAddress,
               codeMessage: 5,
               snackBarType: SnackBarType.error));
+          return;
         }
+
+        // Wallet is open dialog selected address
+        _responseStatusStream.add(ResponseListenerPage(
+            idWidget: ResponseWidgetsIds.widgetImportAddress,
+            codeMessage: 0,
+            action: ActionsFileWallet.walletOpen,
+            actionValue: listAddress));
       } else {
         _responseStatusStream.add(ResponseListenerPage(
             idWidget: ResponseWidgetsIds.widgetImportAddress,
             codeMessage: 6,
             snackBarType: SnackBarType.error));
+        return;
       }
     }
   }
 
   void _exportWalletFile(event, emit) async {
+    var nameWallet = FormatWalletFile.nososova == event.formatFile
+        ? "wallet.nososova"
+        : "wallet.pkw";
+
+    if (Platform.isIOS || Platform.isAndroid || Platform.isMacOS) {
+      var bytes = FileHandler.writeWalletFile(state.wallet.address);
+
+      /// also, bytes == null. return error
+      if (bytes == null || bytes.isEmpty) {
+        _responseStatusStream.add(ResponseListenerPage(
+            idWidget: ResponseWidgetsIds.widgetImportAddress,
+            codeMessage: 6,
+            snackBarType: SnackBarType.error));
+        return;
+      }
+
+      FlutterFileSaverDev()
+          .writeFileAsBytes(
+            fileName: nameWallet,
+            bytes: Uint8List.fromList(bytes),
+          )
+          .whenComplete(() => _responseStatusStream.add(ResponseListenerPage(
+              idWidget: ResponseWidgetsIds.widgetImportAddress,
+              codeMessage: 16,
+              snackBarType: SnackBarType.success)));
+    } else if (Platform.isLinux || Platform.isWindows) {
+      _responseStatusStream.add(ResponseListenerPage(
+          idWidget: ResponseWidgetsIds.widgetImportAddress,
+          codeMessage: 0,
+          action: ActionsFileWallet.walletExportDialog,
+          actionValue: nameWallet));
+    }
+  }
+
+  void _exportWalletFileSave(event, emit) async {
     if (event.pathFile.isEmpty) {
       _responseStatusStream.add(ResponseListenerPage(
           idWidget: ResponseWidgetsIds.widgetImportAddress,
@@ -674,7 +725,22 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     }
     var addresses = state.wallet.address;
 
-    _repositories.fileRepository.saveExportWallet(addresses, event.pathFile);
+    var exportTrue = await _repositories.fileRepository
+        .saveExportWallet(addresses, event.pathFile);
+
+    if (exportTrue) {
+      _responseStatusStream.add(ResponseListenerPage(
+          idWidget: ResponseWidgetsIds.widgetImportAddress,
+          codeMessage: 16,
+          snackBarType: SnackBarType.success));
+      return;
+    } else {
+      _responseStatusStream.add(ResponseListenerPage(
+          idWidget: ResponseWidgetsIds.widgetImportAddress,
+          codeMessage: 0,
+          snackBarType: SnackBarType.error));
+      return;
+    }
   }
 
   /// This method is called after scanning the QR code, and passes an event to open a dialog to confirm the import

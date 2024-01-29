@@ -20,9 +20,8 @@ class NetworkRepository {
     return _nodeService.getRandomDevNode();
   }
 
-  /// Api Explorer Service
+  /// Api REST
   /// https://api.nosocoin.com/docs/
-
   Future<ResponseApi> fetchHistoryTransactions(String hashAddress) {
     return _explorerStatsService.fetchHistoryTransactions(hashAddress);
   }

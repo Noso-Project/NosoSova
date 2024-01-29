@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nososova/blocs/history_transactions_bloc.dart';
-import 'package:nososova/models/apiExplorer/transaction_history.dart';
-import 'package:nososova/utils/status_api.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/address_wallet.dart';
+import '../../../../models/rest_api/transaction_history.dart';
+import '../../../../utils/network_const.dart';
 import '../../../common/components/empty_list_widget.dart';
 import '../../../common/components/loading.dart';
 import '../../../common/route/page_router.dart';

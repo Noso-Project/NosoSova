@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nososova/ui/theme/style/text_style.dart';
+import 'package:nososova/utils/other_utils.dart';
 
 import '../../generated/assets.dart';
 import '../../models/address_wallet.dart';
@@ -27,13 +28,6 @@ class AddressListTileState extends State<AddressNodeTile> {
     return AppIconsStyle.icon3x2(Assets.iconsNodeStop);
   }
 
-  String hashObfuscation(String hash) {
-    if (hash.length >= 25) {
-      return "${hash.substring(0, 9)}...${hash.substring(hash.length - 9)}";
-    }
-    return hash;
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -43,7 +37,7 @@ class AddressListTileState extends State<AddressNodeTile> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                widget.address.hash.toString(),
+                OtherUtils.hashObfuscation(widget.address.hash),
                 style: AppTextStyles.walletAddress,
               ),
             ]));

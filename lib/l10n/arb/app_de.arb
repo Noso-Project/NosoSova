@@ -70,7 +70,7 @@
   "openToExplorer": "Im Explorer ansehen",
   "shareTransaction": "Transaktion teilen",
   "message": "Nachricht",
-  "editCustom": "Name ändern",
+  "editCustom": "Aliasing-Änderung",
   "errorLoading": "Serverfehler",
   "catActionAddress": "Adressaktion",
   "customNameAdd": "Alias setzen",
@@ -108,7 +108,10 @@
   "hintStatusNodeRun": "Knoten ist online",
   "hintStatusNodeNonRun": "Knoten ist offline",
   "sellAddress": "Wählen Sie eine Adresse aus",
+  "updatePriceMinute": "Die Informationen werden jede Minute aktualisiert",
+  "updateTim": "Aktualisiert",
   "pendingTransaction": "Transacciones pendientes",
+  "successSaveExportFile": "Ihre Brieftasche wurde erfolgreich exportiert",
   "aliasMessage": "Der Alias kann zwischen 3 und 32 Zeichen lang sein. Vergiss nicht, dass für die Einrichtung eines Alias eine Transaktionsgebühr erhoben wird.",
   "errorNoFoundCoinsTransaction": "Der Kontostand ist zu niedrig für diese Transaktion",
   "errorInformationIncorrect": "Die Transaktionsinformationen sind nicht korrekt",
@@ -130,5 +133,6 @@
   "errorStopSync": "Verbindungsabbruch aufgrund von Fehlern",
   "errorPathSaveAddress": "Fehler: Ungültige Adresse oder keine Berechtigung zum Schreiben der Datei",
   "hintConnectStop": "Die Verbindung wird aufgrund der Instabilität des Hauptnetzes unterbrochen. Um sie weiter zu nutzen, klicken Sie auf Knoten wechseln",
+  "stopSync": "Verbindung verloren",
   "errorLastTime": "Ihre Zeit ist im Rückstand, aktualisieren Sie Ihre Zeit"
 }

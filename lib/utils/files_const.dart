@@ -6,6 +6,7 @@ final class FilesConst {
 
 enum ActionsFileWallet {
   walletOpen,
+  walletExportDialog,
   fileNotSupported,
   isFileEmpty,
   addressAdded

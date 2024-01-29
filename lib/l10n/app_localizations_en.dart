@@ -227,7 +227,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get message => 'Message';
 
   @override
-  String get editCustom => 'Changing name';
+  String get editCustom => 'Changing alias';
 
   @override
   String get errorLoading => 'Server error';
@@ -326,10 +326,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pnlDay => 'PnL per day';
 
   @override
+  String get successSaveExportFile => 'Your wallet has been successfully exported';
+
+  @override
   String get displayPendingTransactions => 'Your pending transactions are displayed here';
 
   @override
+  String get updatePriceMinute => 'Information is updated every minute';
+
+  @override
   String get pendingTransaction => 'Pending Transactions';
+
+  @override
+  String get updateTim => 'Updated';
 
   @override
   String get hintConnectStop => 'The connection is dropped due to the instability of the mainnet. To continue using it, click on Change node';
@@ -396,6 +405,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorStopSync => 'Connection lost due to errors';
+
+  @override
+  String get stopSync => 'Connection lost';
 
   @override
   String get unknownError => 'An error occurred';

@@ -27,3 +27,7 @@ class UpdateSupply extends AppDataEvent {
 class ReconnectFromError extends AppDataEvent {
   ReconnectFromError();
 }
+
+class LoadPriceHistory extends AppDataEvent {
+  LoadPriceHistory();
+}

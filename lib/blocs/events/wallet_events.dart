@@ -3,6 +3,7 @@ import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:noso_dart/models/noso/pending.dart';
 
 import '../../models/address_wallet.dart';
+import '../../utils/files_const.dart';
 
 abstract class WalletEvent {}
 
@@ -88,6 +89,12 @@ class CalculateBalance extends WalletEvent {
 
 class ErrorSync extends WalletEvent {
   ErrorSync();
+}
+
+class ExportWalletDialog extends WalletEvent {
+  final FormatWalletFile formatFile;
+
+  ExportWalletDialog(this.formatFile);
 }
 
 class ExportWallet extends WalletEvent {

@@ -73,7 +73,7 @@
   "openToExplorer": "Open to Noso Explorer",
   "shareTransaction": "Share Transaction",
   "message": "Message",
-  "editCustom": "Changing name",
+  "editCustom": "Changing alias",
   "errorLoading": "Server error",
   "catActionAddress": "Address actions",
   "customNameAdd": "Set Alias",
@@ -106,8 +106,11 @@
   "sellAddress": "Select an address",
   "offline": "Offline",
   "pnlDay": "PnL per day",
+  "successSaveExportFile": "Your wallet has been successfully exported",
   "displayPendingTransactions": "Your pending transactions are displayed here",
+  "updatePriceMinute": "Information is updated every minute",
   "pendingTransaction": "Pending Transactions",
+  "updateTim": "Updated",
   "hintConnectStop": "The connection is dropped due to the instability of the mainnet. To continue using it, click on Change node",
   "emptyListAddress": "Create or generate new addresses for your use",
   "aliasMessage": "The alias can be set from 3 to 32 characters long. Also, don't forget that a transaction fee is charged for setting up alias.",
@@ -130,5 +133,6 @@
   "errorLastTime": "Your time is behind, please update your time",
   "errorPathSaveAddress": "Error: Invalid address or no permission to write file",
   "errorStopSync": "Connection lost due to errors",
+  "stopSync": "Connection lost",
   "unknownError": "An error occurred"
 }

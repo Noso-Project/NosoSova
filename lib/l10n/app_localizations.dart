@@ -544,7 +544,7 @@ abstract class AppLocalizations {
   /// No description provided for @editCustom.
   ///
   /// In en, this message translates to:
-  /// **'Changing name'**
+  /// **'Changing alias'**
   String get editCustom;
 
   /// No description provided for @errorLoading.
@@ -739,17 +739,35 @@ abstract class AppLocalizations {
   /// **'PnL per day'**
   String get pnlDay;
 
+  /// No description provided for @successSaveExportFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Your wallet has been successfully exported'**
+  String get successSaveExportFile;
+
   /// No description provided for @displayPendingTransactions.
   ///
   /// In en, this message translates to:
   /// **'Your pending transactions are displayed here'**
   String get displayPendingTransactions;
 
+  /// No description provided for @updatePriceMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'Information is updated every minute'**
+  String get updatePriceMinute;
+
   /// No description provided for @pendingTransaction.
   ///
   /// In en, this message translates to:
   /// **'Pending Transactions'**
   String get pendingTransaction;
+
+  /// No description provided for @updateTim.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated'**
+  String get updateTim;
 
   /// No description provided for @hintConnectStop.
   ///
@@ -882,6 +900,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Connection lost due to errors'**
   String get errorStopSync;
+
+  /// No description provided for @stopSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection lost'**
+  String get stopSync;
 
   /// No description provided for @unknownError.
   ///

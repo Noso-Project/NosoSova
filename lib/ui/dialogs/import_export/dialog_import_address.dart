@@ -4,6 +4,7 @@ import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:nososova/l10n/app_localizations.dart';
 import 'package:nososova/ui/config/responsive.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
+import 'package:nososova/utils/other_utils.dart';
 
 import '../../../blocs/events/wallet_events.dart';
 import '../../../blocs/wallet_bloc.dart';
@@ -32,7 +33,6 @@ class DialogImportAddressState extends State<DialogImportAddress> {
     walletBloc = BlocProvider.of<WalletBloc>(context);
   }
 
-  /// TODO Баг: Якщо один елемент в списку то список максимально ростягнути багато пустого місця
   @override
   Widget build(BuildContext context) {
     var addresses = widget.address;
@@ -55,11 +55,21 @@ class DialogImportAddressState extends State<DialogImportAddress> {
               itemCount: addresses.length,
               itemBuilder: (BuildContext context, int index) {
                 final item = addresses[index];
-                final isSelected = selectedItems.contains(item);
+                bool isSelected = selectedItems.contains(item);
 
                 return ListTile(
+                  onTap: () {
+                    setState(() {
+                      isSelected = !isSelected;
+                      if (isSelected) {
+                        selectedItems.add(item);
+                      } else {
+                        selectedItems.remove(item);
+                      }
+                    });
+                  },
                   contentPadding: const EdgeInsets.all(0),
-                  title: Text(item.hash,
+                  title: Text(item.custom != null ? item.custom ?? "" : OtherUtils.hashObfuscation(item.hash),
                       style: AppTextStyles.itemStyle.copyWith(fontSize: 16)),
                   leading: Checkbox(
                     activeColor: CustomColors.primaryColor,

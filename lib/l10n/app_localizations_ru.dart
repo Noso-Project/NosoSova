@@ -227,7 +227,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get message => 'Сообщение';
 
   @override
-  String get editCustom => 'Задать псевдоним';
+  String get editCustom => 'Смена псевдонима';
 
   @override
   String get errorLoading => 'Ошибка';
@@ -326,10 +326,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pnlDay => 'PnL за сутки';
 
   @override
+  String get successSaveExportFile => 'Ваш кошелек был успешно экспортирован';
+
+  @override
   String get displayPendingTransactions => 'Здесь будут ваши отложенные транзакции';
 
   @override
+  String get updatePriceMinute => 'Обновление информации происходит каждую минуту';
+
+  @override
   String get pendingTransaction => 'Незавершенные сделки';
+
+  @override
+  String get updateTim => 'Обновлено';
 
   @override
   String get hintConnectStop => 'Соединение прервано из-за нестабильности основной сети. Чтобы продолжить его использование, нажмите на кнопку Изменить узел';
@@ -396,6 +405,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get errorStopSync => 'Соединение потеряно из-за ошибок';
+
+  @override
+  String get stopSync => 'Соединение потеряно';
 
   @override
   String get unknownError => 'Произошла ошибка';

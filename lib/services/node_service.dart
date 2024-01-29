@@ -29,14 +29,7 @@ class NodeService {
       }
       final endTime = DateTime.now().millisecondsSinceEpoch;
       final responseTime = endTime - startTime;
-   /*   if (kDebugMode) {
-        if (command != NodeRequest.getSummaryZip) {
-          print("${String.fromCharCodes(responseBytes)}, seed -> ${seed.ip}");
-        }
-      }
 
-
-    */
       socket.close();
       if (responseBytes.isNotEmpty) {
         seed.ping = responseTime;

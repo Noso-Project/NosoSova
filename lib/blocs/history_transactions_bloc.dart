@@ -2,9 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/repositories/repositories.dart';
 
-import '../models/apiExplorer/transaction_history.dart';
 import '../models/responses/response_api.dart';
-import '../utils/status_api.dart';
+import '../models/rest_api/transaction_history.dart';
+import '../utils/network_const.dart';
 import 'events/history_transactions_events.dart';
 
 class HistoryTransactionsBState {
