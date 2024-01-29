@@ -20,6 +20,7 @@ import 'package:noso_dart/utils/data_parser.dart';
 import 'package:noso_dart/utils/noso_math.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
+import 'package:nososova/models/app/response_backup.dart';
 import 'package:nososova/models/app/response_page_listener.dart';
 import 'package:nososova/repositories/repositories.dart';
 
@@ -290,11 +291,22 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     await for (final addressList in addressStream) {
       if (isFirstInit) {
         isFirstInit = false;
+        createBackup(addressList);
         emit(state.copyWith(
             wallet: state.wallet.copyWith(address: addressList)));
       } else {
         add(CalculateBalance(false, addressList));
       }
+    }
+  }
+
+  Future<void> createBackup(List<Address> addressList) async {
+    ResponseBackup backup = await _repositories.fileRepository.backupWallet(addressList);
+    if(backup.status) {
+      _debugBloc.add(AddStringDebug("Creating backup wallet is complete \nPath ->  ${backup.message}", DebugType.success));
+    }else {
+      _debugBloc.add(AddStringDebug("Error creating a backup wallet. Be careful \Error ->  ${backup.message}", DebugType.error));
+
     }
   }
 

@@ -27,7 +27,6 @@ class MyDatabase extends _$MyDatabase {
             hash: Value(value.hash),
           ));
     });
-    // await into(addresses).insertOnConflictUpdate(insertable);
   }
 
   Future<void> addAddresses(List<AddressObject> value) async {
@@ -57,16 +56,50 @@ class MyDatabase extends _$MyDatabase {
 }
 
 LazyDatabase _openConnection() {
+  var nameDatabase = 'db.sqlite';
+
+  Future<void> moveDatabase() async {
+    try {
+      var pathDestin = Platform.isMacOS
+          ? await getLibraryDirectory()
+          : await getApplicationSupportDirectory();
+      String destinationPath = "${pathDestin.path}/database";
+      var path = await getApplicationDocumentsDirectory();
+      final newFile = File('$destinationPath/$nameDatabase');
+      File sourceFile = File(p.join("${path.path}/NosoSova", nameDatabase));
+
+
+      print(sourceFile.existsSync());
+      if (!newFile.existsSync() && sourceFile.existsSync()) {
+        File destinationFile = await newFile.create(recursive: true);
+        await sourceFile.copy(destinationFile.path);
+
+        print('File successfully moved to $destinationPath.');
+      } else {
+        print('SKIP NOT FOUND DB');
+        return;
+      }
+    } catch (e) {
+      print("Error move database $e");
+    }
+  }
+
   return LazyDatabase(() async {
     String dbFolder;
-    if (Platform.isMacOS || Platform.isLinux || Platform.isWindows) {
-      var path = await getApplicationDocumentsDirectory();
-      dbFolder = "${path.path}/NosoSova";
+
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+      await moveDatabase();
+      var path = Platform.isMacOS
+          ? await getLibraryDirectory()
+          : await getApplicationSupportDirectory();
+      dbFolder = "${path.path}/database";
     } else {
       var path = await getApplicationDocumentsDirectory();
       dbFolder = path.path;
     }
-    final file = File(p.join(dbFolder, 'db.sqlite'));
+
+    final file = File(p.join(dbFolder, nameDatabase));
+
     return NativeDatabase.createInBackground(file);
   });
 }

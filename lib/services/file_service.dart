@@ -9,6 +9,8 @@ import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:nososova/models/address_wallet.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../models/app/response_backup.dart';
+
 class FileService {
   String nameFileSummary = "sumary.psk";
 
@@ -92,7 +94,7 @@ class FileService {
   /// A boolean indicating whether the operation was successful.
   Future<bool> saveWallet(List<Address> listAddresses, String filePath) async {
     try {
-      File walletFile = File(filePath);
+      File walletFile = await File(filePath).create(recursive: true);
       List<int>? bytes = FileHandler.writeWalletFile(listAddresses);
 
       if (bytes == null) {
@@ -133,6 +135,38 @@ class FileService {
         print('Error reading file: $e');
       }
       return Uint8List(0);
+    }
+  }
+
+  /// Function to backup the wallet
+  Future<ResponseBackup> backupWallet(List<Address> listAddresses) async {
+    String folderDir = "";
+    try {
+      if (Platform.isLinux || Platform.isWindows) {
+        var path = await getApplicationSupportDirectory();
+        folderDir = path.path;
+      } else if (Platform.isMacOS || Platform.isIOS) {
+        var path = await getLibraryDirectory();
+        folderDir = path.path;
+      } else if (Platform.isAndroid) {
+        var path = await getExternalStorageDirectory();
+        if (path == null) {
+          return ResponseBackup(
+              message: "Error backup Wallet file: AndroidPath Not Found");
+        }
+        folderDir = path.path;
+      }
+
+      if (folderDir.isEmpty) {
+        return ResponseBackup(
+            message: "Error backup Wallet file: Path Not Found");
+      }
+      var path = "$folderDir/backup/backupWallet.pkw";
+      await saveWallet(listAddresses, path);
+
+      return ResponseBackup(message: path, status: true);
+    } catch (e) {
+      return ResponseBackup(message: "Error backup Wallet file $e");
     }
   }
 }
