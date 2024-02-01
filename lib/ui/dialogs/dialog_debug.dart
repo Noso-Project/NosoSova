@@ -27,11 +27,13 @@ class DialogDebugState extends State<DialogDebug> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+          /*  Text(
               AppLocalizations.of(context)!.debugInfo,
               style: AppTextStyles.dialogTitle,
             ),
             const SizedBox(height: 20),
+
+           */
             Container(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               decoration: BoxDecoration(

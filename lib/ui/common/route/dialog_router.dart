@@ -195,13 +195,29 @@ class DialogRouter {
 
   /// Dialog in which debug information is displayed
   static void showDialogDebug(BuildContext context) {
-    showModalBottomSheet(
-        shape: DialogStyle.borderShape,
-        context: context,
-        builder: (_) => BlocProvider.value(
-              value: BlocProvider.of<DebugBloc>(context),
-              child: const DialogDebug(),
-            ));
+    WoltModalSheet.show(
+      context: context,
+      minDialogWidth: 700,
+      pageListBuilder: (BuildContext _) {
+        return [
+          WoltModalSheetPage(
+              backgroundColor: Colors.white,
+              hasSabGradient: false,
+              topBarTitle: Text(AppLocalizations.of(context)!.debugInfo,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.walletAddress.copyWith(fontSize: 22)),
+              isTopBarLayerAlwaysVisible: true,
+              trailingNavBarWidget: IconButton(
+                padding: const EdgeInsets.all(20),
+                icon: const Icon(Icons.close),
+                onPressed: Navigator.of(context).pop,
+              ),
+              child: BlocProvider.value(
+                  value: BlocProvider.of<DebugBloc>(context),
+                  child: const DialogDebug())),
+        ];
+      },
+    );
   }
 
   /// Dialog in which list address to import file
@@ -248,7 +264,7 @@ class DialogRouter {
               topBarTitle: Text(
                   AppLocalizations.of(context)!.pendingTransaction,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.walletAddress.copyWith()),
+                  style: AppTextStyles.walletAddress.copyWith(fontSize: 22)),
               isTopBarLayerAlwaysVisible: true,
               trailingNavBarWidget: IconButton(
                 padding: const EdgeInsets.all(20),

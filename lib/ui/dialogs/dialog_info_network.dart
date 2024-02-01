@@ -92,7 +92,6 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
                         ),
                       ),
                     ))),
-          if (!Responsive.isMobile(context)) ...[
             ListTile(
               leading: AppIconsStyle.icon3x2(Assets.iconsDebugI),
               title: Text(
@@ -109,7 +108,7 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
                       context, state.statusConnected, state.node.seed),
                   StatusConnectNodes.connected),
             ],
-          ],
+
           if (state.statusConnected != StatusConnectNodes.error) ...[
             itemInfo(AppLocalizations.of(context)!.nodeType,
                 getNetworkType(state.node), state.statusConnected),
