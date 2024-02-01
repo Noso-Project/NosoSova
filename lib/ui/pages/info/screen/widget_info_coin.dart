@@ -2,10 +2,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:nososova/blocs/app_data_bloc.dart';
-import 'package:nososova/blocs/events/app_data_events.dart';
+import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
 
+import '../../../../blocs/events/coininfo_events.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/app/stats.dart';
 import '../../../../utils/date_utils.dart';
@@ -35,7 +35,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppDataBloc, AppDataState>(builder: (context, state) {
+    return BlocBuilder<CoinInfoBloc, CoinInfoState>(builder: (context, state) {
       var infoCoin = state.statisticsCoin;
       var diff = infoCoin.getDiff;
       var gradient = [
@@ -81,11 +81,10 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                             disabledColor: Colors.grey,
                             tooltip: AppLocalizations.of(context)!.updateInfo,
                             icon: const Icon(Icons.restart_alt_outlined),
-                            onPressed: state.statisticsCoin.apiStatus ==
-                                    ApiStatus.loading
+                            onPressed: infoCoin.apiStatus == ApiStatus.loading
                                 ? null
                                 : () => context
-                                    .read<AppDataBloc>()
+                                    .read<CoinInfoBloc>()
                                     .add(LoadPriceHistory())),
                       ],
                     ),
@@ -151,7 +150,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                     ),
                     const SizedBox(height: 10),
                   ])),
-          if (state.statisticsCoin.apiStatus == ApiStatus.error) ...[
+          if (infoCoin.apiStatus == ApiStatus.error) ...[
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
@@ -177,9 +176,8 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                 message: AppLocalizations.of(context)!.updatePriceMinute,
                 child: InfoItem().itemInfo(
                     AppLocalizations.of(context)!.updateTim,
-                    DateUtil.getTime(state.statisticsCoin.lastTimeUpdatePrice),
-                    srinkin:
-                        state.statisticsCoin.apiStatus == ApiStatus.loading))
+                    DateUtil.getTime(infoCoin.lastTimeUpdatePrice),
+                    srinkin: infoCoin.apiStatus == ApiStatus.loading))
           ],
           if (!Responsive.isMobile(context)) ...[
             const Padding(

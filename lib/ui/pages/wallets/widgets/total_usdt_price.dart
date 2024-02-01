@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:nososova/blocs/app_data_bloc.dart';
+import 'package:nososova/blocs/coininfo_bloc.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../utils/network_const.dart';
@@ -15,7 +15,7 @@ class ItemTotalPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppDataBloc, AppDataState>(builder: (context, state) {
+    return BlocBuilder<CoinInfoBloc, CoinInfoState>(builder: (context, state) {
       var diff = state.statisticsCoin.getDiff;
       var priceDif = ((((state.statisticsCoin.getCurrentPrice * totalPrice) -
           state.statisticsCoin.getLastPrice * totalPrice)));

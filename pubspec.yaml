@@ -42,6 +42,7 @@ dependencies:
   wolt_modal_sheet: ^0.2.0
   flutter_screenutil: ^5.9.0
   window_manager: ^0.3.7
+  isolate_flutter: ^2.0.0
   noso_dart: ^1.1.0
     ## noso_dart:
   ##    path: ../NosoDart

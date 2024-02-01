@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
+import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
+import 'package:nososova/blocs/events/coininfo_events.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/l10n/app_localizations.dart';
@@ -65,6 +67,11 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider<DebugBloc>(create: (context) => locator<DebugBloc>()),
+          BlocProvider<CoinInfoBloc>(create: (context) {
+            var bloc = locator<CoinInfoBloc>();
+            bloc.add(InitBloc());
+            return bloc;
+          }),
           BlocProvider<WalletBloc>(
             create: (context) => locator<WalletBloc>(),
           ),

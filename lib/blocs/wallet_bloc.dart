@@ -20,6 +20,7 @@ import 'package:noso_dart/utils/data_parser.dart';
 import 'package:noso_dart/utils/noso_math.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
+import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/models/app/response_backup.dart';
 import 'package:nososova/models/app/response_page_listener.dart';
 import 'package:nososova/repositories/repositories.dart';
@@ -36,6 +37,7 @@ import '../utils/files_const.dart';
 import '../utils/network_const.dart';
 import 'debug_bloc.dart';
 import 'events/app_data_events.dart';
+import 'events/coininfo_events.dart';
 import 'events/debug_events.dart';
 import 'events/wallet_events.dart';
 
@@ -60,6 +62,7 @@ class WalletState {
 
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
   final AppDataBloc appDataBloc;
+  final CoinInfoBloc coinInfoBloc;
   final Repositories _repositories;
   final DebugBloc _debugBloc;
   bool isFirstInit = true;
@@ -75,6 +78,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   WalletBloc({
     required Repositories repositories,
     required this.appDataBloc,
+    required this.coinInfoBloc,
     required DebugBloc debugBloc,
   })  : _repositories = repositories,
         _debugBloc = debugBloc,
@@ -288,6 +292,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
   initBloc() async {
     final addressStream = _repositories.localRepository.fetchAddress();
+
     await for (final addressList in addressStream) {
       if (isFirstInit) {
         isFirstInit = false;
@@ -301,12 +306,16 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   }
 
   Future<void> createBackup(List<Address> addressList) async {
-    ResponseBackup backup = await _repositories.fileRepository.backupWallet(addressList);
-    if(backup.status) {
-      _debugBloc.add(AddStringDebug("Creating backup wallet is complete \nPath ->  ${backup.message}", DebugType.success));
-    }else {
-      _debugBloc.add(AddStringDebug("Error creating a backup wallet. Be careful \Error ->  ${backup.message}", DebugType.error));
-
+    ResponseBackup backup =
+        await _repositories.fileRepository.backupWallet(addressList);
+    if (backup.status) {
+      _debugBloc.add(AddStringDebug(
+          "Creating backup wallet is complete \nPath ->  ${backup.message}",
+          DebugType.success));
+    } else {
+      _debugBloc.add(AddStringDebug(
+          "Error creating a backup wallet. Be careful \Error ->  ${backup.message}",
+          DebugType.error));
     }
   }
 
@@ -382,7 +391,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             await _repositories.fileRepository.loadSummary() ?? Uint8List(0),
             localAddress: listAddresses);
         listAddresses = calculateResponse.address ?? state.wallet.address;
-        appDataBloc.add(UpdateSupply(calculateResponse.allTotalBalance));
+
+        coinInfoBloc.add(UpdateSupply(calculateResponse.allTotalBalance));
       } else {
         _debugBloc.add(AddStringDebug(
             "Consensus is incorrect, let's try to reconnect", DebugType.error));
@@ -443,7 +453,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   StateNodes _getActiveNodesInfo(
       StateNodes stateNodes, String totalNodes, List<Address> listAddresses) {
     List<String> nodesList = totalNodes.split(',');
-    var nodeRewardDay = appDataBloc.state.statisticsCoin.getBlockDayNodeReward;
+    var nodeRewardDay = coinInfoBloc.state.statisticsCoin.getBlockDayNodeReward;
 
     if (nodesList.isNotEmpty) {
       List<Address> listUserNodes = [];

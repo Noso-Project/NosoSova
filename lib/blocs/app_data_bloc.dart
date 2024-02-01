@@ -6,7 +6,9 @@ import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/models/noso/seed.dart';
 import 'package:noso_dart/node_request.dart';
 import 'package:noso_dart/utils/data_parser.dart';
+import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
+import 'package:nososova/blocs/events/coininfo_events.dart';
 import 'package:nososova/blocs/events/wallet_events.dart';
 import 'package:nososova/models/app/app_bloc_config.dart';
 
@@ -22,23 +24,19 @@ import 'events/debug_events.dart';
 class AppDataState {
   final Node node;
   final StatusConnectNodes statusConnected;
-  final StatisticsCoin statisticsCoin;
 
   AppDataState({
     this.statusConnected = StatusConnectNodes.searchNode,
     Node? node,
     StatisticsCoin? statisticsCoin,
-  })  : node = node ?? Node(seed: Seed()),
-        statisticsCoin = statisticsCoin ?? StatisticsCoin();
+  }) : node = node ?? Node(seed: Seed());
 
   AppDataState copyWith({
     Node? node,
-    StatisticsCoin? statisticsCoin,
     StatusConnectNodes? statusConnected,
   }) {
     return AppDataState(
       node: node ?? this.node,
-      statisticsCoin: statisticsCoin ?? this.statisticsCoin,
       statusConnected: statusConnected ?? this.statusConnected,
     );
   }
@@ -47,8 +45,8 @@ class AppDataState {
 class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
   AppBlocConfig appBlocConfig = AppBlocConfig();
   final DebugBloc _debugBloc;
+  final CoinInfoBloc coinInfoBloc;
   Timer? _timerSyncNetwork;
-  Timer? _timerSyncPriceHistory;
   final Repositories _repositories;
 
   final _walletEvent = StreamController<WalletEvent>.broadcast();
@@ -58,15 +56,14 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
   AppDataBloc({
     required Repositories repositories,
     required DebugBloc debugBloc,
+    required this.coinInfoBloc,
   })  : _repositories = repositories,
         _debugBloc = debugBloc,
         super(AppDataState()) {
     on<ReconnectSeed>(_reconnectNode);
     on<InitialConnect>(_init);
     on<SyncSuccess>(_syncResult);
-    on<UpdateSupply>(_updateSupply);
     on<ReconnectFromError>(_reconnectFromError);
-    on<LoadPriceHistory>(_updatePriceHistory);
   }
 
   /// This method initializes the first network connection
@@ -82,9 +79,7 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
       await _selectTargetNode(event, emit, InitialNodeAlgh.listenDefaultNodes);
     }
 
-    // start timer update price history
-    _startTimerSyncPriceHistory();
-    add(LoadPriceHistory());
+    // add(LoadPriceHistory());
   }
 
   /// Метод який повідомляє системі про помилку
@@ -128,15 +123,6 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
       _debugBloc.add(AddStringDebug("Reconnecting to new node"));
       await _selectTargetNode(event, emit, getRandomAlgorithm());
     }
-  }
-
-  Future<void> _updateSupply(
-    event,
-    emit,
-  ) async {
-    emit(state.copyWith(
-        statisticsCoin:
-            state.statisticsCoin.copyWith(totalCoin: event.supply)));
   }
 
   /// This method implements the selection of the node to which we will connect in the future
@@ -200,41 +186,13 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
         node: state.node.copyWith(seed: targetNode.seed)));
     _debugBloc.add(AddStringDebug(
         "Getting information from the node ${targetNode.seed.toTokenizer}"));
-    var statsCopyCoin = state.statisticsCoin;
 
     if (state.node.lastblock != targetNode.lastblock ||
         state.node.seed.ip != targetNode.seed.ip) {
-      var responseLastBlockInfo =
-          await _repositories.networkRepository.fetchLastBlockInfo();
+      var blockInfo = await _loadSeedPeople(targetNode);
 
-      if (responseLastBlockInfo.errors == null) {
-        BlockInfo blockInfo = responseLastBlockInfo.value;
-        if (blockInfo.masternodes.isNotEmpty) {
-          _repositories.sharedRepository
-              .saveNodesList(blockInfo.getMasternodesString());
-          appBlocConfig = appBlocConfig.copyWith(
-              nodesList: blockInfo.getMasternodesString());
-          _debugBloc.add(AddStringDebug(
-              "The list of active nodes is updated, currently they are -> ${blockInfo.count}"));
-        } else {
-          _debugBloc
-              .add(AddStringDebug("The list of active nodes is not updated"));
-        }
-
-        statsCopyCoin = statsCopyCoin.copyWith(
-          totalNodes: blockInfo.count,
-          reward: blockInfo.reward,
-          lastBlock: targetNode.lastblock,
-        );
-        _debugBloc.add(AddStringDebug(
-            "Obtaining information about the block is successful ${targetNode.lastblock}"));
-      } else {
-        _debugBloc
-            .add(AddStringDebug("Block information not received, skipped"));
-        _debugBloc.add(AddStringDebug(
-            "Error: ${responseLastBlockInfo.errors}", DebugType.error));
-        statsCopyCoin = statsCopyCoin.copyWith(apiStatus: ApiStatus.error);
-      }
+      coinInfoBloc.add(
+          UpdateCoinInfo(blockInfo.copyWith(blockId: targetNode.lastblock)));
 
       ResponseNode<List<int>> responseSummary = await _repositories
           .networkRepository
@@ -243,9 +201,9 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
           .writeSummaryZip(responseSummary.value ?? []);
       if (responseSummary.errors == null && isSavedSummary) {
         emit(state.copyWith(
-            node: targetNode,
-            statusConnected: StatusConnectNodes.consensus,
-            statisticsCoin: statsCopyCoin));
+          node: targetNode,
+          statusConnected: StatusConnectNodes.consensus,
+        ));
         _walletEvent.add(CalculateBalance(true, null));
         return;
       } else {
@@ -257,9 +215,9 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     }
 
     emit(state.copyWith(
-        node: targetNode,
-        statusConnected: StatusConnectNodes.connected,
-        statisticsCoin: statsCopyCoin));
+      node: targetNode,
+      statusConnected: StatusConnectNodes.connected,
+    ));
 
     if (targetNode.pendings != 0) {
       _walletEvent.add(CalculateBalance(false, null));
@@ -268,6 +226,55 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     }
 
     return;
+  }
+
+  Future<BlockInfo> _loadSeedPeople(Node tNode) async {
+    var blockInfo =
+        BlockInfo(blockId: 0, reward: 0.15, count: 0, masternodes: []);
+    var isListNodesFail = false;
+    var responseLastBlockInfo =
+        await _repositories.networkRepository.fetchLastBlockInfo();
+
+    if (responseLastBlockInfo.errors == null) {
+      blockInfo = responseLastBlockInfo.value;
+    }
+
+    if (blockInfo.masternodes.isNotEmpty &&
+        responseLastBlockInfo.errors == null) {
+      _debugBloc.add(AddStringDebug(
+          "The list of active nodes is updated, currently they are -> ${blockInfo.count}"));
+    } else {
+      var response = await _repositories.networkRepository
+          .fetchNode(NodeRequest.getNodeList, tNode.seed);
+      if (response.errors == null) {
+        List<Seed> listUserNodes = DataParser().parseDataSeeds(response.value);
+        blockInfo = blockInfo.copyWith(
+            masternodes: Masternode().copyFromSeed(listUserNodes),
+            count: listUserNodes.length);
+        _debugBloc.add(AddStringDebug(
+            "The list of active nodes is updated, currently they are -> ${listUserNodes.length}"));
+      } else {
+        isListNodesFail = true;
+        _debugBloc
+            .add(AddStringDebug("The list of active nodes is not updated"));
+      }
+    }
+
+    if (isListNodesFail) {
+      _debugBloc.add(AddStringDebug("Block information not received, skipped"));
+      _debugBloc.add(AddStringDebug(
+          "Error: ${responseLastBlockInfo.errors}", DebugType.error));
+      return blockInfo;
+    } else {
+      _repositories.sharedRepository
+          .saveNodesList(blockInfo.getMasternodesString());
+      appBlocConfig =
+          appBlocConfig.copyWith(nodesList: blockInfo.getMasternodesString());
+      _debugBloc.add(AddStringDebug(
+          "Obtaining information about the block is successful ${tNode.lastblock}"));
+    }
+
+    return blockInfo;
   }
 
   /// The method that receives the response about the synchronization status in WalletBloc
@@ -283,43 +290,11 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     _startTimerSyncNetwork();
   }
 
-  Future<void> _updatePriceHistory(
-    event,
-    emit,
-  ) async {
-    emit(state.copyWith(
-        statisticsCoin:
-            state.statisticsCoin.copyWith(apiStatus: ApiStatus.loading)));
-    var responsePriceHistory =
-        await _repositories.networkRepository.fetchHistoryPrice();
-
-    var lastblock = state.node.lastblock;
-    if (responsePriceHistory.errors == null) {
-      emit(state.copyWith(
-          statisticsCoin: state.statisticsCoin.copyWith(
-              historyCoin: responsePriceHistory.value,
-              lastBlock: lastblock,
-              apiStatus: ApiStatus.connected,
-              lastTimeUpdatePrice: DateTime.now().millisecondsSinceEpoch)));
-    } else if (state.statisticsCoin.apiStatus == ApiStatus.loading) {
-      emit(state.copyWith(
-          statisticsCoin: state.statisticsCoin
-              .copyWith(lastBlock: lastblock, apiStatus: ApiStatus.error)));
-    }
-  }
-
   /// Method that starts a timer that simulates updating information
   void _startTimerSyncNetwork() {
     _timerSyncNetwork ??=
         Timer.periodic(Duration(seconds: appBlocConfig.delaySync), (timer) {
       add(ReconnectSeed(true));
-    });
-  }
-
-  void _startTimerSyncPriceHistory() {
-    _timerSyncPriceHistory ??=
-        Timer.periodic(const Duration(seconds: 60), (timer) async {
-      add(LoadPriceHistory());
     });
   }
 
@@ -340,17 +315,12 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
   @override
   Future<void> close() {
     _stopTimerSyncNetwork();
-    _stopSyncPriceHistory();
+    //  _stopSyncPriceHistory();
     return super.close();
   }
 
   void _stopTimerSyncNetwork() {
     _timerSyncNetwork?.cancel();
     _timerSyncNetwork = null;
-  }
-
-  void _stopSyncPriceHistory() {
-    _timerSyncPriceHistory?.cancel();
-    _timerSyncPriceHistory = null;
   }
 }
