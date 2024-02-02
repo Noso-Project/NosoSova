@@ -20,7 +20,7 @@ import 'blocs/events/app_data_events.dart';
 import 'generated/assets.dart';
 
 Future<void> main() async {
-  await dotenv.load(fileName: Assets.nososova);
+  await dotenv.load(fileName: Assets.nosoSova);
   setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {

@@ -17,6 +17,7 @@ import '../../dialogs/dialog_debug.dart';
 import '../../dialogs/dialog_info_network.dart';
 import '../../dialogs/dialog_pending_transactions.dart';
 import '../../dialogs/dialog_sel_address.dart';
+import '../../dialogs/dialog_settings.dart';
 import '../../dialogs/dialog_wallet_actions.dart';
 import '../../dialogs/import_export/dialog_import_address.dart';
 import '../../dialogs/import_export/dialog_import_keys_pair.dart';
@@ -170,6 +171,7 @@ class DialogRouter {
     } else {
       WoltModalSheet.show(
         context: context,
+        showDragHandle: false,
         pageListBuilder: (BuildContext _) {
           return [
             WoltModalSheetPage(
@@ -197,6 +199,7 @@ class DialogRouter {
   static void showDialogDebug(BuildContext context) {
     WoltModalSheet.show(
       context: context,
+      showDragHandle: false,
       minDialogWidth: 700,
       pageListBuilder: (BuildContext _) {
         return [
@@ -235,6 +238,7 @@ class DialogRouter {
   static void showDialogViewKeysPair(BuildContext context, Address address) {
     WoltModalSheet.show(
       context: context,
+      showDragHandle: false,
       minDialogWidth: 600,
       pageListBuilder: (BuildContext _) {
         return [
@@ -255,6 +259,7 @@ class DialogRouter {
   static void showDialogPendingTransaction(BuildContext context) {
     WoltModalSheet.show(
       context: context,
+      showDragHandle: false,
       minDialogWidth: 500,
       pageListBuilder: (BuildContext _) {
         return [
@@ -291,5 +296,30 @@ class DialogRouter {
                 selected: selected,
               ),
             ));
+  }
+
+  static void showDialogSettings(BuildContext context) {
+    WoltModalSheet.show(
+      context: context,
+      showDragHandle: false,
+      minDialogWidth: 700,
+      pageListBuilder: (BuildContext _) {
+        return [
+          WoltModalSheetPage(
+              backgroundColor: Colors.white,
+              hasSabGradient: false,
+              topBarTitle: Text(AppLocalizations.of(context)!.debugInfo,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.walletAddress.copyWith(fontSize: 22)),
+              isTopBarLayerAlwaysVisible: true,
+              trailingNavBarWidget: IconButton(
+                padding: const EdgeInsets.all(20),
+                icon: const Icon(Icons.close),
+                onPressed: Navigator.of(context).pop,
+              ),
+              child: const DialogSettings()),
+        ];
+      },
+    );
   }
 }

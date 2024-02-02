@@ -35,10 +35,10 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                         onPressed: () => DialogRouter.showDialogScanQr(context),
                       ),
                     IconButton(
-                      icon: AppIconsStyle.icon3x2(Assets.iconsDebugI,
+                      icon: AppIconsStyle.icon3x2(Assets.iconsSettings,
                           colorFilter: ColorFilter.mode(
                               Colors.white.withOpacity(0.7), BlendMode.srcIn)),
-                      onPressed: () => DialogRouter.showDialogDebug(context),
+                      onPressed: () => DialogRouter.showDialogSettings(context),
                     )
                   ],
                 ),
