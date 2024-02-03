@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:nososova/ui/dialogs/dialog_settings.dart';
 
 import '../../../../generated/assets.dart';
 import '../../../common/components/network_info.dart';
@@ -10,7 +11,8 @@ import '../../../theme/style/icons_style.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isVisible;
-   const DefaultAppBar({super.key,  this.isVisible = false});
+
+  const DefaultAppBar({super.key, this.isVisible = false});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,8 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                       icon: AppIconsStyle.icon3x2(Assets.iconsSettings,
                           colorFilter: ColorFilter.mode(
                               Colors.white.withOpacity(0.7), BlendMode.srcIn)),
-                      onPressed: () => DialogRouter.showDialogSettings(context),
+                      onPressed: () =>
+                          DialogSettings.showDialogSettings(context),
                     )
                   ],
                 ),

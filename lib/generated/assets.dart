@@ -26,6 +26,9 @@ class Assets {
   static const String iconsRename = 'assets/icons/rename.svg';
   static const String iconsScan = 'assets/icons/scan.svg';
   static const String iconsSettings = 'assets/icons/settings.svg';
+  static const String iconsSocDiscord = 'assets/icons/soc_discord.svg';
+  static const String iconsSocGithub = 'assets/icons/soc_github.svg';
+  static const String iconsSocTelegram = 'assets/icons/soc_telegram.svg';
   static const String iconsText = 'assets/icons/text.svg';
   static const String iconsTextTwo = 'assets/icons/text_two.svg';
   static const String iconsWallet = 'assets/icons/wallet.svg';
