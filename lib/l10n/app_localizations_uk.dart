@@ -398,7 +398,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get errorNotSupportedWallet => 'Цей файл не підтримується';
 
   @override
-  String get errorLastTime => 'Ваша час відстає, оновіть ваш час';
+  String get errorLastTime => 'Ваш час відстає, оновіть його будь-ласка';
 
   @override
   String get errorPathSaveAddress => 'Помилка: Невірна адреса або немає дозволу на запис файлу';
@@ -411,4 +411,34 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get unknownError => 'Виникла помилка';
+
+  @override
+  String get appVersions => 'Версія програми';
+
+  @override
+  String get developer => 'Розробник';
+
+  @override
+  String get socialLinks => 'Посилання на соціальні мережі';
+
+  @override
+  String get openSettings => 'Відкрити налаштування';
+
+  @override
+  String get mainSet => 'Основні налаштування';
+
+  @override
+  String get expertSet => 'Експертні налаштування';
+
+  @override
+  String get darkTheme => 'Темна тема';
+
+  @override
+  String get selLanguage => 'Виберіть мову';
+
+  @override
+  String get updateListSet => 'Оновити список насіння';
+
+  @override
+  String get updateListSetSubtitle => 'Оновлення списку вузлів, використовувати, коли додаток не підключено до мережі';
 }

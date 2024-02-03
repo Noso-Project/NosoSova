@@ -12,6 +12,7 @@ import 'package:nososova/ui/tiles/dialog_tile.dart';
 import '../../blocs/events/wallet_events.dart';
 import '../../utils/files_const.dart';
 import '../common/route/dialog_router.dart';
+import '../common/widgets/custom/dialog_title_dropdown.dart';
 import '../config/responsive.dart';
 import '../theme/style/text_style.dart';
 
@@ -26,6 +27,7 @@ class DialogWalletActions extends StatefulWidget {
 
 class _DialogWalletActionsState extends State<DialogWalletActions> {
   late WalletBloc walletBloc;
+  bool isVisibleAction = false;
 
   @override
   void initState() {
@@ -36,65 +38,70 @@ class _DialogWalletActionsState extends State<DialogWalletActions> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WalletBloc, WalletState>(builder: (context, state) {
-      var isEnableExport = state.wallet.address
-          .isNotEmpty; // && state.wallet.consensusStatus == ConsensusStatus.sync
+      var isEnableExport = state.wallet.address.isNotEmpty;
       return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 20.0, horizontal: 20.0),
-                child: Text(
-                  AppLocalizations.of(context)!.actionWallet,
-                  style: AppTextStyles.dialogTitle,
-                )),
-            SingleChildScrollView(
-                child: ListView(
-              shrinkWrap: true,
-              children: [
-                buildListTileSvg(
-                    Assets.iconsWallet,
-                    AppLocalizations.of(context)!.genNewKeyPair,
-                    () => _createNewAddress(context)),
-                buildListTileSvg(
-                    Assets.iconsText,
-                    AppLocalizations.of(context)!.importKeysPair,
-                    () => _importToKeysPair(context)),
-                if (Platform.isAndroid || Platform.isIOS)
+            DialogTitleDropdown(
+              titleDialog: AppLocalizations.of(context)!.actionWallet,
+              activeMobile: !Responsive.isMobile(context),
+              isVisible: isVisibleAction,
+              setVisible: () => setState(
+                () {
+                  isVisibleAction = !isVisibleAction;
+                },
+              ),
+            ),
+            if (Responsive.isMobile(context) || isVisibleAction)
+              SingleChildScrollView(
+                  child: ListView(
+                shrinkWrap: true,
+                children: [
                   buildListTileSvg(
-                      Assets.iconsScan,
-                      AppLocalizations.of(context)!.scanQrCode,
-                      () => DialogRouter.showDialogScanQr(context)),
-                if (Responsive.isMobile(context))
+                      Assets.iconsWallet,
+                      AppLocalizations.of(context)!.genNewKeyPair,
+                      () => _createNewAddress(context)),
+                  buildListTileSvg(
+                      Assets.iconsText,
+                      AppLocalizations.of(context)!.importKeysPair,
+                      () => _importToKeysPair(context)),
+                  if (Platform.isAndroid || Platform.isIOS)
+                    buildListTileSvg(
+                        Assets.iconsScan,
+                        AppLocalizations.of(context)!.scanQrCode,
+                        () => DialogRouter.showDialogScanQr(context)),
+                  if (Responsive.isMobile(context))
+                    ListTile(
+                        title: Text(AppLocalizations.of(context)!.fileWallet,
+                            style: AppTextStyles.dialogTitle)),
                   ListTile(
-                      title: Text(AppLocalizations.of(context)!.fileWallet,
-                          style: AppTextStyles.dialogTitle)),
-                ListTile(
-                    leading: SvgPicture.asset(Assets.iconsImport,
-                        height: 32, width: 32),
-                    title: Text(AppLocalizations.of(context)!.importFile,
-                        style: AppTextStyles.itemStyle
-                            .copyWith(fontFamily: "GilroySemiBold")),
-                    subtitle: Text(
-                        AppLocalizations.of(context)!.importFileSubtitle,
-                        style: AppTextStyles.itemStyle.copyWith(fontSize: 16)),
-                    onTap: () => _importWalletFile(context)),
-                ListTile(
-                    enabled: isEnableExport,
-                    leading: SvgPicture.asset(Assets.iconsExport,
-                        height: 32, width: 32),
-                    title: Text(AppLocalizations.of(context)!.exportFile,
-                        style: AppTextStyles.itemStyle
-                            .copyWith(fontFamily: "GilroySemiBold")),
-                    subtitle: Text(
-                        AppLocalizations.of(context)!.exportFileSubtitle,
-                        style: AppTextStyles.itemStyle.copyWith(fontSize: 16)),
-                    onTap: () =>
-                        _exportWalletFile(context, FormatWalletFile.pkw)),
-                const SizedBox(height: 10)
-              ],
-            )),
+                      leading: SvgPicture.asset(Assets.iconsImport,
+                          height: 32, width: 32),
+                      title: Text(AppLocalizations.of(context)!.importFile,
+                          style: AppTextStyles.itemStyle
+                              .copyWith(fontFamily: "GilroySemiBold")),
+                      subtitle: Text(
+                          AppLocalizations.of(context)!.importFileSubtitle,
+                          style:
+                              AppTextStyles.itemStyle.copyWith(fontSize: 16)),
+                      onTap: () => _importWalletFile(context)),
+                  ListTile(
+                      enabled: isEnableExport,
+                      leading: SvgPicture.asset(Assets.iconsExport,
+                          height: 32, width: 32),
+                      title: Text(AppLocalizations.of(context)!.exportFile,
+                          style: AppTextStyles.itemStyle
+                              .copyWith(fontFamily: "GilroySemiBold")),
+                      subtitle: Text(
+                          AppLocalizations.of(context)!.exportFileSubtitle,
+                          style:
+                              AppTextStyles.itemStyle.copyWith(fontSize: 16)),
+                      onTap: () =>
+                          _exportWalletFile(context, FormatWalletFile.pkw)),
+                  const SizedBox(height: 10)
+                ],
+              )),
           ]);
     });
   }

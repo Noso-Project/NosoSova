@@ -11,7 +11,7 @@ import '../../../../models/app/stats.dart';
 import '../../../../utils/date_utils.dart';
 import '../../../../utils/network_const.dart';
 import '../../../common/components/info_item.dart';
-import '../../../common/widgets/dasher_divider.dart';
+import '../../../common/widgets/custom/dasher_divider.dart';
 import '../../../config/responsive.dart';
 import '../../../theme/style/text_style.dart';
 
@@ -26,6 +26,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int selectIndexTab = 0;
+  bool isVisibleAction = true;
 
   @override
   void initState() {
@@ -52,9 +53,31 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      AppLocalizations.of(context)!.nosoPrice,
-                      style: AppTextStyles.itemStyle.copyWith(fontSize: 20),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.nosoPrice,
+                          style: AppTextStyles.itemStyle.copyWith(fontSize: 20),
+                        ),
+                        if (!Responsive.isMobile(context))
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              setState(() {
+                                isVisibleAction = !isVisibleAction;
+                              });
+                            },
+                            icon: Icon(
+                              isVisibleAction
+                                  ? Icons.expand_less
+                                  : Icons.expand_more_outlined,
+                              size: 22,
+                              color:  Colors.black,
+                            ),
+                          ),
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,8 +121,9 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                                   : CustomColors.positiveBalance,
                           fontSize: 20),
                     ),
-                    const SizedBox(height: 20),
-                    SizedBox(
+
+                    if(Responsive.isMobile(context) || isVisibleAction)  const SizedBox(height: 20),
+                    if(Responsive.isMobile(context) || isVisibleAction)   SizedBox(
                       height: 120,
                       width: double.infinity,
                       child: LineChart(
@@ -172,7 +196,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                 )),
             const SizedBox(height: 10)
           ] else ...[
-            Tooltip(
+            if(Responsive.isMobile(context) || isVisibleAction)    Tooltip(
                 message: AppLocalizations.of(context)!.updatePriceMinute,
                 child: InfoItem().itemInfo(
                     AppLocalizations.of(context)!.updateTim,
@@ -180,7 +204,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                     srinkin: infoCoin.apiStatus == ApiStatus.loading))
           ],
           if (!Responsive.isMobile(context)) ...[
-            const Padding(
+            if(Responsive.isMobile(context) || isVisibleAction) ...[     const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: DasherDivider(color: Colors.grey)),
             InfoItem().itemInfo(
@@ -193,6 +217,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
             const SizedBox(
               height: 10,
             )
+      ]
           ],
           if (Responsive.isMobile(context)) ...[
             const Padding(

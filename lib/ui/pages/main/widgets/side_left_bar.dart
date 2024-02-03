@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
 
 import '../../../../l10n/app_localizations.dart';
-import '../../../theme/style/text_style.dart';
+import '../../../common/widgets/custom/dialog_title_dropdown.dart';
+import '../../../config/responsive.dart';
 import '../../info/screen/widget_info_coin.dart';
 import '../../node/screens/body_stats_nodes.dart';
 
-class SideLeftBarDesktop extends StatelessWidget {
-  const SideLeftBarDesktop({super.key});
+class SideLeftBarDesktop extends StatefulWidget {
+  const SideLeftBarDesktop({Key? key}) : super(key: key);
+
+  @override
+  State createState() => _SideLeftBarDesktopState();
+}
+
+class _SideLeftBarDesktopState extends State<SideLeftBarDesktop> {
+  bool isVisibleAction = false;
 
   @override
   Widget build(BuildContext context) {
@@ -16,31 +24,40 @@ class SideLeftBarDesktop extends StatelessWidget {
       height: double.infinity,
       color: CustomColors.barBg,
       child: SingleChildScrollView(
-          child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  const Card(child: WidgetInfoCoin()),
-                  const SizedBox(height: 10),
-                  Card(
-                      color: const Color(0xFF363957),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.informMyNodes,
-                                style: AppTextStyles.dialogTitle
-                                    .copyWith(color: Colors.white),
-                              ),
-                              const SizedBox(height: 20),
-                              const StatsNodesUser(),
-                            ]),
-                      )),
-                ],
-              ))),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              const Card(child: WidgetInfoCoin()),
+              const SizedBox(height: 10),
+              Card(
+                color: const Color(0xFF363957),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DialogTitleDropdown(
+                      titleDialog: AppLocalizations.of(context)!.informMyNodes,
+                      activeMobile: !Responsive.isMobile(context),
+                      isDark: false,
+                      isVisible: isVisibleAction,
+                      setVisible: () {
+                        setState(() {
+                          isVisibleAction = !isVisibleAction;
+                        });
+                      },
+                    ),
+                    if (isVisibleAction)
+                      const Padding(
+                          padding: EdgeInsets.all(20), child: StatsNodesUser()),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
+
 }

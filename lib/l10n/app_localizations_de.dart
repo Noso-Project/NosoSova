@@ -411,4 +411,34 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get unknownError => 'Ein Fehler ist passiert';
+
+  @override
+  String get appVersions => 'App-Version';
+
+  @override
+  String get developer => 'Entwickler';
+
+  @override
+  String get socialLinks => 'Links zu sozialen Netzwerken';
+
+  @override
+  String get openSettings => 'Einstellungen öffnen';
+
+  @override
+  String get mainSet => 'Haupteinstellungen';
+
+  @override
+  String get expertSet => 'Experteneinstellungen';
+
+  @override
+  String get darkTheme => 'Dunkles Thema';
+
+  @override
+  String get selLanguage => 'Sprache auswählen';
+
+  @override
+  String get updateListSet => 'Update List Seeds';
+
+  @override
+  String get updateListSetSubtitle => 'Aktualisieren der Liste der Knoten, verwenden, wenn die App nicht mit dem Netzwerk verbunden ist';
 }

@@ -10,7 +10,7 @@ import '../../../models/rest_api/transaction_history.dart';
 import '../../../utils/other_utils.dart';
 import '../../config/responsive.dart';
 import '../../theme/style/text_style.dart';
-import 'dasher_divider.dart';
+import 'custom/dasher_divider.dart';
 
 class TransactionWidgetInfo extends StatefulWidget {
   final TransactionHistory transaction;

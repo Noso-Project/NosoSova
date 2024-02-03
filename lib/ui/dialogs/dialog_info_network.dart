@@ -10,8 +10,9 @@ import '../../ui/tiles/seed_tile.dart';
 import '../../utils/date_utils.dart';
 import '../../utils/network_const.dart';
 import '../common/route/dialog_router.dart';
+import '../common/widgets/custom/dialog_title_dropdown.dart';
+import '../common/widgets/custom/shimmer.dart';
 import '../common/widgets/node_status.dart';
-import '../common/widgets/shimmer.dart';
 import '../config/responsive.dart';
 import '../theme/style/colors.dart';
 import '../theme/style/icons_style.dart';
@@ -25,6 +26,8 @@ class DialogInfoNetwork extends StatefulWidget {
 }
 
 class DialogInfoNetworkState extends State<DialogInfoNetwork> {
+  bool isVisibleAction = true;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppDataBloc, AppDataState>(builder: (context, state) {
@@ -32,94 +35,103 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-              child: Text(
-                AppLocalizations.of(context)!.titleInfoNetwork,
-                style: AppTextStyles.dialogTitle,
-              )),
-          Row(
-            children: [
-              Expanded(
-                child: SeedListItem(
-                  seed: state.node.seed,
-                  statusConnected: state.statusConnected,
-                ),
-              ),
-              if (state.statusConnected != StatusConnectNodes.error)
-                IconButton(
-                    tooltip: AppLocalizations.of(context)!.updateInfo,
-                    icon: const Icon(Icons.restart_alt_outlined),
-                    onPressed: () {
-                      return context
-                          .read<AppDataBloc>()
-                          .add(ReconnectSeed(true));
-                    }),
-              IconButton(
-                  tooltip: AppLocalizations.of(context)!.chanceNode,
-                  icon: const Icon(Icons.navigate_next),
-                  onPressed: () {
-                    return context
-                        .read<AppDataBloc>()
-                        .add(ReconnectSeed(false));
-                  }),
-              const SizedBox(width: 10)
-            ],
-          ),
-          if (state.statusConnected == StatusConnectNodes.error)
-            Tooltip(
-                message: AppLocalizations.of(context)!.hintConnectStop,
-                child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 8),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: CustomColors.negativeBalance.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(10),
-                        border:
-                        Border.all(color: CustomColors.negativeBalance),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 8),
-                        child: Text(
-                          AppLocalizations.of(context)!.errorStopSync,
-                          style: AppTextStyles.walletAddress.copyWith(
-                              fontSize: 14,
-                              color: CustomColors.negativeBalance),
-                        ),
-                      ),
-                    ))),
-            ListTile(
-              leading: AppIconsStyle.icon3x2(Assets.iconsDebugI),
-              title: Text(
-                AppLocalizations.of(context)!.debugInfo,
-                style: AppTextStyles.itemStyle,
-              ),
-              onTap: () => DialogRouter.showDialogDebug(context),
+          DialogTitleDropdown(
+            titleDialog: AppLocalizations.of(context)!.titleInfoNetwork,
+            activeMobile: !Responsive.isMobile(context),
+            isVisible: isVisibleAction,
+            setVisible: () => setState(
+              () {
+                isVisibleAction = !isVisibleAction;
+              },
             ),
-
-            if (state.statusConnected != StatusConnectNodes.error) ...[
-              itemInfo(
-                  AppLocalizations.of(context)!.status,
-                  NodeStatusUi.getNodeDescriptionString(
-                      context, state.statusConnected, state.node.seed),
-                  StatusConnectNodes.connected),
-            ],
-
-          if (state.statusConnected != StatusConnectNodes.error) ...[
-            itemInfo(AppLocalizations.of(context)!.nodeType,
-                getNetworkType(state.node), state.statusConnected),
-            itemInfo(AppLocalizations.of(context)!.lastBlock,
-                state.node.lastblock.toString(), state.statusConnected),
-            itemInfo(AppLocalizations.of(context)!.version,
-                state.node.version.toString(), state.statusConnected),
-            itemInfo(AppLocalizations.of(context)!.utcTime,
-                DateUtil.getUtcTime(state.node.utcTime), state.statusConnected),
-          ],
-          const SizedBox(height: 20),
+          ),
+          if (Responsive.isMobile(context) || isVisibleAction)
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: SeedListItem(
+                        seed: state.node.seed,
+                        statusConnected: state.statusConnected,
+                      ),
+                    ),
+                    if (state.statusConnected != StatusConnectNodes.error)
+                      IconButton(
+                          tooltip: AppLocalizations.of(context)!.updateInfo,
+                          icon: const Icon(Icons.restart_alt_outlined),
+                          onPressed: () {
+                            return context
+                                .read<AppDataBloc>()
+                                .add(ReconnectSeed(true));
+                          }),
+                    IconButton(
+                        tooltip: AppLocalizations.of(context)!.chanceNode,
+                        icon: const Icon(Icons.navigate_next),
+                        onPressed: () {
+                          return context
+                              .read<AppDataBloc>()
+                              .add(ReconnectSeed(false));
+                        }),
+                    const SizedBox(width: 10)
+                  ],
+                ),
+                if (state.statusConnected == StatusConnectNodes.error)
+                  Tooltip(
+                      message: AppLocalizations.of(context)!.hintConnectStop,
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 8),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color:
+                                  CustomColors.negativeBalance.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: CustomColors.negativeBalance),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 8),
+                              child: Text(
+                                AppLocalizations.of(context)!.errorStopSync,
+                                style: AppTextStyles.walletAddress.copyWith(
+                                    fontSize: 14,
+                                    color: CustomColors.negativeBalance),
+                              ),
+                            ),
+                          ))),
+                ListTile(
+                  leading: AppIconsStyle.icon3x2(Assets.iconsDebugI),
+                  title: Text(
+                    AppLocalizations.of(context)!.debugInfo,
+                    style: AppTextStyles.itemStyle,
+                  ),
+                  onTap: () => DialogRouter.showDialogDebug(context),
+                ),
+                if (state.statusConnected != StatusConnectNodes.error) ...[
+                  itemInfo(
+                      AppLocalizations.of(context)!.status,
+                      NodeStatusUi.getNodeDescriptionString(
+                          context, state.statusConnected, state.node.seed),
+                      StatusConnectNodes.connected),
+                ],
+                if (state.statusConnected != StatusConnectNodes.error) ...[
+                  itemInfo(AppLocalizations.of(context)!.nodeType,
+                      getNetworkType(state.node), state.statusConnected),
+                  itemInfo(AppLocalizations.of(context)!.lastBlock,
+                      state.node.lastblock.toString(), state.statusConnected),
+                  itemInfo(AppLocalizations.of(context)!.version,
+                      state.node.version.toString(), state.statusConnected),
+                  itemInfo(
+                      AppLocalizations.of(context)!.utcTime,
+                      DateUtil.getUtcTime(state.node.utcTime),
+                      state.statusConnected),
+                ],
+                const SizedBox(height: 20),
+              ],
+            )
         ],
       );
     });

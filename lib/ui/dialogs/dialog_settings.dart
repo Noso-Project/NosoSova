@@ -3,13 +3,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../generated/assets.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/style/colors.dart';
 import '../theme/style/text_style.dart';
 
 class DialogSettings {
+
+
   static void showDialogSettings(BuildContext context) {
-    const double _pagePadding = 16.0;
-    const double _pageBreakpoint = 768.0;
+    const double pagePadding = 16.0;
+    const double pageBreakpoint = 768.0;
     final pageIndexNotifier = ValueNotifier(0);
 
     SliverWoltModalSheetPage pageHomeInformation(
@@ -18,7 +21,7 @@ class DialogSettings {
         hasSabGradient: false,
         enableDrag: false,
         stickyActionBar: Padding(
-          padding: const EdgeInsets.all(_pagePadding),
+          padding: const EdgeInsets.all(pagePadding),
           child: Column(
             children: [
               const SizedBox(height: 8),
@@ -32,27 +35,27 @@ class DialogSettings {
                   height: 56.0,
                   width: double.infinity,
                   child: Center(
-                      child: Text('Open Settings',
+                      child: Text(AppLocalizations.of(context)!.openSettings,
                           style: AppTextStyles.dialogTitle
-                              .copyWith(fontSize: 22, color: Colors.white))),
+                              .copyWith(fontSize: 20, color: Colors.white))),
                 ),
               ),
             ],
           ),
         ),
-        topBarTitle: Text('Settings',
-            style: AppTextStyles.dialogTitle.copyWith(fontSize: 22)),
+        topBarTitle: Text(AppLocalizations.of(context)!.settings,
+            style: AppTextStyles.dialogTitle),
         isTopBarLayerAlwaysVisible: true,
         trailingNavBarWidget: IconButton(
-          padding: const EdgeInsets.all(_pagePadding),
+          padding: const EdgeInsets.all(pagePadding),
           icon: const Icon(Icons.close),
           onPressed: Navigator.of(modalSheetContext).pop,
         ),
         child: Padding(
             padding: const EdgeInsets.fromLTRB(
-              _pagePadding,
-              _pagePadding,
-              _pagePadding,
+              pagePadding,
+              pagePadding,
+              pagePadding,
               100,
             ),
             child: Column(
@@ -60,20 +63,20 @@ class DialogSettings {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Information",
+                  AppLocalizations.of(context)!.information,
                   style: AppTextStyles.dialogTitle.copyWith(fontSize: 22),
                 ),
                 Text(
-                  "App version: v.0.2.4-beta",
-                  style: AppTextStyles.itemStyle.copyWith(fontSize: 20),
+                  "${AppLocalizations.of(context)!.appVersions}: v.0.2.4-beta",
+                  style: AppTextStyles.itemStyle.copyWith(fontSize: 18),
                 ),
                 Text(
-                  "Developer: @pasichDev (Noso-Project)",
-                  style: AppTextStyles.itemStyle.copyWith(fontSize: 20),
+                  "${AppLocalizations.of(context)!.developer}: @pasichDev (Noso-Project)",
+                  style: AppTextStyles.itemStyle.copyWith(fontSize: 18),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "Social Links",
+                  AppLocalizations.of(context)!.socialLinks,
                   style: AppTextStyles.dialogTitle.copyWith(fontSize: 22),
                 ),
                 Row(
@@ -110,21 +113,14 @@ class DialogSettings {
         BuildContext modalSheetContext, TextTheme textTheme) {
       return SliverWoltModalSheetPage(
         enableDrag: false,
-        pageTitle: Padding(
-          padding: const EdgeInsets.all(_pagePadding),
-          child: Text(
-            'App Settings',
-            style: AppTextStyles.dialogTitle.copyWith(fontSize: 22),
-          ),
-        ),
         leadingNavBarWidget: IconButton(
-          padding: const EdgeInsets.all(_pagePadding),
+          padding: const EdgeInsets.all(pagePadding),
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () =>
               pageIndexNotifier.value = pageIndexNotifier.value - 1,
         ),
         trailingNavBarWidget: IconButton(
-          padding: const EdgeInsets.all(_pagePadding),
+          padding: const EdgeInsets.all(pagePadding),
           icon: const Icon(Icons.close),
           onPressed: () {
             Navigator.of(modalSheetContext).pop();
@@ -141,13 +137,13 @@ class DialogSettings {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "General",
+                        AppLocalizations.of(context)!.mainSet,
                         style: AppTextStyles.dialogTitle.copyWith(fontSize: 24),
                       ),
                       ListTile(
                         contentPadding: EdgeInsets.zero,
                         title: Text(
-                          "Dark Theme",
+                            AppLocalizations.of(context)!.darkTheme,
                           style: AppTextStyles.itemStyle.copyWith(fontSize: 20),
                         ),
                         trailing:
@@ -156,38 +152,27 @@ class DialogSettings {
                       ListTile(
                         contentPadding: EdgeInsets.zero,
                         title: Text(
-                          "Select language",
+                          AppLocalizations.of(context)!.selLanguage,
                           style: AppTextStyles.itemStyle.copyWith(fontSize: 20),
                         ),
                       ),
                       Text(
-                        "Expert",
+                        AppLocalizations.of(context)!.expertSet,
                         style: AppTextStyles.dialogTitle.copyWith(fontSize: 24),
                       ),
                       ListTile(
                         contentPadding: EdgeInsets.zero,
                         title: Text(
-                          "Update List Seeds",
+                          AppLocalizations.of(context)!.updateListSet,
                           style: AppTextStyles.walletAddress
                               .copyWith(fontSize: 20),
                         ),
                         subtitle: Text(
-                          "Refreshing the list of nodes, use when the app is not connected to the network.",
+                          AppLocalizations.of(context)!.updateListSetSubtitle,
                           style: AppTextStyles.itemStyle.copyWith(fontSize: 16),
                         ),
                       ),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(
-                          "Restore start session",
-                          style: AppTextStyles.walletAddress
-                              .copyWith(fontSize: 20),
-                        ),
-                        subtitle: Text(
-                          "When you launch the application, a backup copy of your wallet is created, so you can restore to the beginning of the session.",
-                          style: AppTextStyles.itemStyle.copyWith(fontSize: 16),
-                        ),
-                      ),
+
                     ],
                   )),
             ),
@@ -208,7 +193,7 @@ class DialogSettings {
       },
       modalTypeBuilder: (context) {
         final size = MediaQuery.of(context).size.width;
-        if (size < _pageBreakpoint) {
+        if (size < pageBreakpoint) {
           return WoltModalType.bottomSheet;
         } else {
           return WoltModalType.dialog;

@@ -5,7 +5,7 @@ import 'package:nososova/ui/theme/style/text_style.dart';
 
 import '../../utils/network_const.dart';
 import '../common/widgets/node_status.dart';
-import '../common/widgets/shimmer.dart';
+import '../common/widgets/custom/shimmer.dart';
 import '../config/responsive.dart';
 
 class SeedListItem extends StatelessWidget {

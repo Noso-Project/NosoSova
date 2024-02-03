@@ -411,4 +411,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknownError => 'An error occurred';
+
+  @override
+  String get appVersions => 'App version';
+
+  @override
+  String get developer => 'Developer';
+
+  @override
+  String get socialLinks => 'Links to social networks';
+
+  @override
+  String get openSettings => 'Open Settings';
+
+  @override
+  String get mainSet => 'Main settings';
+
+  @override
+  String get expertSet => 'Expert settings';
+
+  @override
+  String get darkTheme => 'Dark Theme';
+
+  @override
+  String get selLanguage => 'Select language';
+
+  @override
+  String get updateListSet => 'Update List Seeds';
+
+  @override
+  String get updateListSetSubtitle => 'Refreshing the list of nodes, use when the app is not connected to the network';
 }

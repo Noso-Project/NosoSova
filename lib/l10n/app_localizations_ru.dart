@@ -411,4 +411,34 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get unknownError => 'Произошла ошибка';
+
+  @override
+  String get appVersions => 'Версия приложения';
+
+  @override
+  String get developer => 'Разработчик';
+
+  @override
+  String get socialLinks => 'Ссылки на социальные сети';
+
+  @override
+  String get openSettings => 'Открыть настройки';
+
+  @override
+  String get mainSet => 'Основные настройки';
+
+  @override
+  String get expertSet => 'Экспертные настройки';
+
+  @override
+  String get darkTheme => 'Темная тема';
+
+  @override
+  String get selLanguage => 'Выбрать язык';
+
+  @override
+  String get updateListSet => 'Обновить семена списков';
+
+  @override
+  String get updateListSetSubtitle => 'Обновление списка узлов, использовать когда приложение не подключено к сети';
 }

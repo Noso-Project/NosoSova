@@ -296,7 +296,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     await for (final addressList in addressStream) {
       if (isFirstInit) {
         isFirstInit = false;
-        createBackup(addressList);
+        if (addressList.isNotEmpty) createBackup(addressList);
         emit(state.copyWith(
             wallet: state.wallet.copyWith(address: addressList)));
       } else {

@@ -134,5 +134,16 @@
   "errorPathSaveAddress": "Fehler: Ungültige Adresse oder keine Berechtigung zum Schreiben der Datei",
   "hintConnectStop": "Die Verbindung wird aufgrund der Instabilität des Hauptnetzes unterbrochen. Um sie weiter zu nutzen, klicken Sie auf Knoten wechseln",
   "stopSync": "Verbindung verloren",
-  "errorLastTime": "Ihre Zeit ist im Rückstand, aktualisieren Sie Ihre Zeit"
+  "errorLastTime": "Ihre Zeit ist im Rückstand, aktualisieren Sie Ihre Zeit",
+  "appVersions": "App-Version",
+  "developer": "Entwickler",
+  "socialLinks": "Links zu sozialen Netzwerken",
+  "openSettings": "Einstellungen öffnen",
+  "mainSet": "Haupteinstellungen",
+  "expertSet": "Experteneinstellungen",
+  "darkTheme": "Dunkles Thema",
+  "selLanguage": "Sprache auswählen",
+  "updateListSet": "Update List Seeds",
+  "updateListSetSubtitle": "Aktualisieren der Liste der Knoten, verwenden, wenn die App nicht mit dem Netzwerk verbunden ist"
+
 }

@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 
 class AppTextStyles {
   static const TextStyle dialogTitle = TextStyle(
-      fontSize: 22.0,
+      fontSize: 20.0,
       color: Colors.black,
-      fontFamily: "GilroyBold");
+      fontFamily: "GilroySemiBold");
 
   static const TextStyle bodyText = TextStyle(
     fontSize: 16.0,
     color: Colors.grey,
   );
-
   static const TextStyle categoryStyle =
       TextStyle(fontSize: 24.0, color: Colors.black, fontFamily: "GilroyBold");
 

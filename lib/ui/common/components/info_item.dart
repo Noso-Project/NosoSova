@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/style/text_style.dart';
-import '../widgets/shimmer.dart';
+import '../widgets/custom/shimmer.dart';
 
 
 class InfoItem {

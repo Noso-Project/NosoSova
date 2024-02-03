@@ -134,5 +134,15 @@
   "errorPathSaveAddress": "Error: Invalid address or no permission to write file",
   "errorStopSync": "Connection lost due to errors",
   "stopSync": "Connection lost",
-  "unknownError": "An error occurred"
+  "unknownError": "An error occurred",
+  "appVersions": "App version",
+  "developer": "Developer",
+  "socialLinks": "Links to social networks",
+  "openSettings": "Open Settings",
+  "mainSet": "Main settings",
+  "expertSet": "Expert settings",
+  "darkTheme": "Dark Theme",
+  "selLanguage": "Select language",
+  "updateListSet": "Update List Seeds",
+  "updateListSetSubtitle": "Refreshing the list of nodes, use when the app is not connected to the network"
 }

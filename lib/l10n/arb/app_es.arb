@@ -134,5 +134,15 @@
   "errorPathSaveAddress": "Error: Dirección errónea o no tienes permisos para escribir en el fichero",
   "errorStopSync": "Connexión interrumpida",
   "stopSync": "Connexión perdida",
-  "unknownError": "Error desconocido"
+  "unknownError": "Error desconocido",
+  "appVersions": "App version",
+  "developer": "Desarrollador",
+  "socialLinks": "Enlaces a redes sociales",
+  "openSettings": "Abrir ajustes",
+  "mainSet": "Ajustes principales",
+  "expertSet": "Ajustes expertos",
+  "darkTheme": "Dark Theme",
+  "selLanguage": "Seleccionar idioma",
+  "updateListSet": "Actualizar Semillas de Lista",
+  "updateListSetSubtitle": "Actualizar la lista de nodos, utilizar cuando la app no está conectada a la red"
 }

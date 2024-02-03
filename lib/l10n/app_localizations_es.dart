@@ -411,4 +411,34 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get unknownError => 'Error desconocido';
+
+  @override
+  String get appVersions => 'App version';
+
+  @override
+  String get developer => 'Desarrollador';
+
+  @override
+  String get socialLinks => 'Enlaces a redes sociales';
+
+  @override
+  String get openSettings => 'Abrir ajustes';
+
+  @override
+  String get mainSet => 'Ajustes principales';
+
+  @override
+  String get expertSet => 'Ajustes expertos';
+
+  @override
+  String get darkTheme => 'Dark Theme';
+
+  @override
+  String get selLanguage => 'Seleccionar idioma';
+
+  @override
+  String get updateListSet => 'Actualizar Semillas de Lista';
+
+  @override
+  String get updateListSetSubtitle => 'Actualizar la lista de nodos, utilizar cuando la app no está conectada a la red';
 }
