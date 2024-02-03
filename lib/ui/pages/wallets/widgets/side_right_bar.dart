@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nososova/ui/theme/style/colors.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../dialogs/dialog_info_network.dart';
@@ -16,21 +15,21 @@ class SideRightBarDesktop extends StatelessWidget {
     return Container(
       width: 370,
       height: double.infinity,
-      color: CustomColors.barBg,
+      color: Theme.of(context).colorScheme.surface,
       child: SingleChildScrollView(
           child: Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
-                  const Card(color: Colors.white, child: DialogInfoNetwork()),
+                  const Card(child: DialogInfoNetwork()),
                   const SizedBox(height: 10),
                   const Card(
-                    color: Colors.white,
+
                     child: DialogWalletActions(),
                   ),
                   const SizedBox(height: 10),
                   Card(
-                      color: Colors.white,
+
                       child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(
                             vertical: 5,

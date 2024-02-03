@@ -428,17 +428,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mainSet => 'Main settings';
 
   @override
-  String get expertSet => 'Expert settings';
-
-  @override
   String get darkTheme => 'Dark Theme';
 
   @override
   String get selLanguage => 'Select language';
-
-  @override
-  String get updateListSet => 'Update List Seeds';
-
-  @override
-  String get updateListSetSubtitle => 'Refreshing the list of nodes, use when the app is not connected to the network';
 }

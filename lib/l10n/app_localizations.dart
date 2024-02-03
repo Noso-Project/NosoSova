@@ -945,12 +945,6 @@ abstract class AppLocalizations {
   /// **'Main settings'**
   String get mainSet;
 
-  /// No description provided for @expertSet.
-  ///
-  /// In en, this message translates to:
-  /// **'Expert settings'**
-  String get expertSet;
-
   /// No description provided for @darkTheme.
   ///
   /// In en, this message translates to:
@@ -962,18 +956,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select language'**
   String get selLanguage;
-
-  /// No description provided for @updateListSet.
-  ///
-  /// In en, this message translates to:
-  /// **'Update List Seeds'**
-  String get updateListSet;
-
-  /// No description provided for @updateListSetSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Refreshing the list of nodes, use when the app is not connected to the network'**
-  String get updateListSetSubtitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

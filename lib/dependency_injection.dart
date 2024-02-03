@@ -14,6 +14,7 @@ import 'package:nososova/services/explorer_stats_service.dart';
 import 'package:nososova/services/file_service.dart';
 import 'package:nososova/services/node_service.dart';
 import 'package:nososova/services/shared_service.dart';
+import 'package:nososova/ui/notifer/app_settings_notifer.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -21,6 +22,7 @@ Future<void> setupLocator() async {
   /// shared & drift(sql)
   locator.registerLazySingleton<SharedService>(() => SharedService());
   locator.registerLazySingleton<MyDatabase>(() => MyDatabase());
+  locator.registerLazySingleton<AppSettings>(() => AppSettings());
 
   /// repo && services
   locator.registerLazySingleton<FileService>(() => FileService());

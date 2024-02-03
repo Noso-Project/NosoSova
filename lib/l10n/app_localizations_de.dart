@@ -428,17 +428,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mainSet => 'Haupteinstellungen';
 
   @override
-  String get expertSet => 'Experteneinstellungen';
-
-  @override
   String get darkTheme => 'Dunkles Thema';
 
   @override
   String get selLanguage => 'Sprache auswählen';
-
-  @override
-  String get updateListSet => 'Update List Seeds';
-
-  @override
-  String get updateListSetSubtitle => 'Aktualisieren der Liste der Knoten, verwenden, wenn die App nicht mit dem Netzwerk verbunden ist';
 }

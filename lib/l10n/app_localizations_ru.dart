@@ -428,17 +428,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mainSet => 'Основные настройки';
 
   @override
-  String get expertSet => 'Экспертные настройки';
-
-  @override
   String get darkTheme => 'Темная тема';
 
   @override
   String get selLanguage => 'Выбрать язык';
-
-  @override
-  String get updateListSet => 'Обновить семена списков';
-
-  @override
-  String get updateListSetSubtitle => 'Обновление списка узлов, использовать когда приложение не подключено к сети';
 }

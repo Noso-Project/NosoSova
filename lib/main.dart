@@ -13,7 +13,9 @@ import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/l10n/app_localizations.dart';
 import 'package:nososova/ui/config/responsive.dart';
+import 'package:nososova/ui/notifer/app_settings_notifer.dart';
 import 'package:nososova/ui/pages/main/main_page.dart';
+import 'package:nososova/ui/theme/color_schemes.g.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'blocs/events/app_data_events.dart';
@@ -37,11 +39,14 @@ Future<void> main() async {
       await windowManager.focus();
     });
   }
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final AppSettings _appSettings = locator<AppSettings>();
+
 
   Future testWindowFunctions() async {}
 
@@ -60,29 +65,40 @@ class MyApp extends StatelessWidget {
       ScreenUtil.init(context, designSize: const Size(414, 896));
     }
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider<DebugBloc>(create: (context) => locator<DebugBloc>()),
-          BlocProvider<CoinInfoBloc>(create: (context) {
-            var bloc = locator<CoinInfoBloc>();
-            bloc.add(InitBloc());
-            return bloc;
-          }),
-          BlocProvider<WalletBloc>(
-            create: (context) => locator<WalletBloc>(),
-          ),
-          BlocProvider<AppDataBloc>(create: (context) {
-            final appDataBloc = locator<AppDataBloc>();
-            appDataBloc.add(InitialConnect());
-            return appDataBloc;
-          }),
-        ],
-        child: const MainPage(),
-      ),
-    );
+    return ListenableBuilder(
+        listenable: _appSettings,
+        builder: (BuildContext context, Widget? child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+            darkTheme:
+                ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+            themeMode:
+                _appSettings.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: Locale(_appSettings.selectLanguage),
+            home: MultiBlocProvider(
+              providers: [
+                BlocProvider<DebugBloc>(
+                    create: (context) => locator<DebugBloc>()),
+                BlocProvider<CoinInfoBloc>(create: (context) {
+                  var bloc = locator<CoinInfoBloc>();
+                  bloc.add(InitBloc());
+                  return bloc;
+                }),
+                BlocProvider<WalletBloc>(
+                  create: (context) => locator<WalletBloc>(),
+                ),
+                BlocProvider<AppDataBloc>(create: (context) {
+                  final appDataBloc = locator<AppDataBloc>();
+                  appDataBloc.add(InitialConnect());
+                  return appDataBloc;
+                }),
+              ],
+              child: const MainPage(),
+            ),
+          );
+        });
   }
 }

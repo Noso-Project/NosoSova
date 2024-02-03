@@ -140,10 +140,7 @@
   "socialLinks": "Links zu sozialen Netzwerken",
   "openSettings": "Einstellungen öffnen",
   "mainSet": "Haupteinstellungen",
-  "expertSet": "Experteneinstellungen",
   "darkTheme": "Dunkles Thema",
-  "selLanguage": "Sprache auswählen",
-  "updateListSet": "Update List Seeds",
-  "updateListSetSubtitle": "Aktualisieren der Liste der Knoten, verwenden, wenn die App nicht mit dem Netzwerk verbunden ist"
+  "selLanguage": "Sprache auswählen"
 
 }

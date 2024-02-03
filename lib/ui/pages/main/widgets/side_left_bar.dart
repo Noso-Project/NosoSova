@@ -22,7 +22,6 @@ class _SideLeftBarDesktopState extends State<SideLeftBarDesktop> {
     return Container(
       width: 400,
       height: double.infinity,
-      color: CustomColors.barBg,
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),

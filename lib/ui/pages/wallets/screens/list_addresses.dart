@@ -23,7 +23,6 @@ class ListAddresses extends StatelessWidget {
               child:Container(
                 padding: const EdgeInsets.all(20),
                 width: double.infinity,
-                color: Colors.white,
                 child: Center(
                     child: EmptyWidget(
                         title: AppLocalizations.of(context)!.empty,

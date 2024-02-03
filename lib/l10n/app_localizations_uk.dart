@@ -428,17 +428,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mainSet => 'Основні налаштування';
 
   @override
-  String get expertSet => 'Експертні налаштування';
-
-  @override
   String get darkTheme => 'Темна тема';
 
   @override
   String get selLanguage => 'Виберіть мову';
-
-  @override
-  String get updateListSet => 'Оновити список насіння';
-
-  @override
-  String get updateListSetSubtitle => 'Оновлення списку вузлів, використовувати, коли додаток не підключено до мережі';
 }
