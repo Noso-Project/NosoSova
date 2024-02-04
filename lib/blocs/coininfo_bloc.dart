@@ -46,7 +46,6 @@ class CoinInfoBloc extends Bloc<CoinInfoEvent, CoinInfoState> {
   ) async {
     BlockInfo blockInfo = event.blockInfo;
 
-    print(blockInfo.blockId);
     emit(state.copyWith(
         statisticsCoin: state.statisticsCoin.copyWith(
             lastBlock: blockInfo.blockId,
