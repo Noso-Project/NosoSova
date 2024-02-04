@@ -5,4 +5,13 @@ class OtherUtils {
     }
     return hash;
   }
+
+  static String hashObfuscationLong(String hash) {
+    if (hash.length >= 25) {
+      return "...${hash.substring(10, hash.length)}";
+    }
+
+
+    return hash;
+  }
 }

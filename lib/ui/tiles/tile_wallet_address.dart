@@ -111,7 +111,7 @@ class AddressListTileState extends State<AddressListTile> {
       return AppLocalizations.of(context)!.hintStatusNodeRun;
     }
 
-    if (!widget.address.nodeStatusOn && widget.address.nodeStatusOn) {
+    if (!widget.address.nodeStatusOn) {
       return AppLocalizations.of(context)!.hintStatusNodeNonRun;
     }
 

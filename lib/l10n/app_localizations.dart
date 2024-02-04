@@ -366,25 +366,25 @@ abstract class AppLocalizations {
   /// No description provided for @numberOfMinedCoins.
   ///
   /// In en, this message translates to:
-  /// **'Number of mined coins'**
+  /// **'Coins mined'**
   String get numberOfMinedCoins;
 
   /// No description provided for @coinsLocked.
   ///
   /// In en, this message translates to:
-  /// **'Coins Locked'**
+  /// **'Locked coins'**
   String get coinsLocked;
 
   /// No description provided for @marketcap.
   ///
   /// In en, this message translates to:
-  /// **'Noso Marketcap'**
+  /// **'Market capitalisation'**
   String get marketcap;
 
   /// No description provided for @tvl.
   ///
   /// In en, this message translates to:
-  /// **'Total Value Locked'**
+  /// **'Locked Assets'**
   String get tvl;
 
   /// No description provided for @maxPriceStory.
@@ -399,34 +399,28 @@ abstract class AppLocalizations {
   /// **'Active nodes'**
   String get activeNodes;
 
-  /// No description provided for @tmr.
-  ///
-  /// In en, this message translates to:
-  /// **'Total MasterNode Reward'**
-  String get tmr;
-
   /// No description provided for @nbr.
   ///
   /// In en, this message translates to:
-  /// **'Node Block Reward'**
+  /// **'For one block'**
   String get nbr;
 
   /// No description provided for @nr24.
   ///
   /// In en, this message translates to:
-  /// **'24hr Reward'**
+  /// **'For 24 hour'**
   String get nr24;
 
   /// No description provided for @nr7.
   ///
   /// In en, this message translates to:
-  /// **'7 day Reward'**
+  /// **'For 7 day'**
   String get nr7;
 
   /// No description provided for @nr30.
   ///
   /// In en, this message translates to:
-  /// **'30 day Reward'**
+  /// **'For 30 day'**
   String get nr30;
 
   /// No description provided for @nosoPrice.
@@ -434,6 +428,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Noso Price'**
   String get nosoPrice;
+
+  /// No description provided for @rewardNode.
+  ///
+  /// In en, this message translates to:
+  /// **'Reward for masternode:'**
+  String get rewardNode;
 
   /// No description provided for @launched.
   ///
@@ -956,6 +956,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select language'**
   String get selLanguage;
+
+  /// No description provided for @nodeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Information about Node'**
+  String get nodeInfo;
+
+  /// No description provided for @consecutivePayments.
+  ///
+  /// In en, this message translates to:
+  /// **'Consecutive payments'**
+  String get consecutivePayments;
+
+  /// No description provided for @uptimePercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Uptime'**
+  String get uptimePercent;
+
+  /// No description provided for @monthlyEarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly earning'**
+  String get monthlyEarning;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

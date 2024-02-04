@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSettings with ChangeNotifier {
@@ -8,12 +9,14 @@ class AppSettings with ChangeNotifier {
   final String _languagePref = "languageSelected";
   bool _isDarkTheme = false;
   String _selectLanguage = "en";
+  String _appVersion = "";
 
   bool get isDarkTheme => _isDarkTheme;
 
   String get selectLanguage => _selectLanguage;
 
   String get getSelectLanguage => localeList[_selectLanguage] ?? "English";
+  String get getAppVersion => _appVersion;
 
   final Map<String, String> localeList = {
     'de': 'Deutsch',
@@ -51,9 +54,11 @@ class AppSettings with ChangeNotifier {
 
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _isDarkTheme = prefs.getBool(_isDarkThemePref) ?? false;
     _selectLanguage =
         prefs.getString(_languagePref) ?? Platform.localeName.split("_")[0];
+    _appVersion = packageInfo.version;
     notifyListeners();
   }
 

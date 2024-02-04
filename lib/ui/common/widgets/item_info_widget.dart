@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/style/text_style.dart';
-import '../widgets/custom/shimmer.dart';
+import 'custom/shimmer.dart';
 
+class ItemInfoWidget extends StatelessWidget {
+  final String nameItem;
+  final String value;
+  final bool onShimmer;
+  final bool isBoldTitle;
 
-class InfoItem {
-  itemInfo(String nameItem, String value, {String twoValue = "", bool srinkin = false}) {
+  const ItemInfoWidget({
+    super.key,
+    required this.nameItem,
+    required this.value,
+    this.onShimmer = false,
+    this.isBoldTitle = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Row(
@@ -14,11 +27,9 @@ class InfoItem {
         children: [
           Text(
             nameItem,
-            style: AppTextStyles.itemStyle
-                .copyWith(color: Colors.black.withOpacity(0.5), fontSize: 18),
+            style: isBoldTitle ? AppTextStyles.walletAddress.copyWith(color: Colors.black) : AppTextStyles.itemStyle.copyWith(color: Colors.black.withOpacity(0.5)),
           ),
-          const SizedBox(width: 5),
-          if(srinkin) ...[
+          if (onShimmer)
             Container(
               margin: EdgeInsets.zero,
               child: ShimmerPro.sized(
@@ -29,22 +40,12 @@ class InfoItem {
                 height: 20,
               ),
             )
-          ] else ...[
-
-
-          Row(children: [
+          else
             Text(
               value,
               style: AppTextStyles.walletAddress
                   .copyWith(color: Colors.black, fontSize: 18),
             ),
-            if (twoValue.isNotEmpty)
-              Text(
-                " / $twoValue",
-                style: AppTextStyles.walletAddress
-                    .copyWith(color: Colors.black, fontSize: 18),
-              )
-          ])]
         ],
       ),
     );

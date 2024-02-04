@@ -81,7 +81,7 @@ class DialogSettings {
                   style: AppTextStyles.dialogTitle.copyWith(fontSize: 22),
                 ),
                 Text(
-                  "${AppLocalizations.of(context)!.appVersions}: v.0.2.4-beta",
+                  "${AppLocalizations.of(context)!.appVersions}: ${appSettings.getAppVersion}",
                   style: AppTextStyles.itemStyle.copyWith(fontSize: 18),
                 ),
                 Text(

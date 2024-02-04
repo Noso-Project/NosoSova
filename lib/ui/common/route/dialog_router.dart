@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:nososova/ui/dialogs/address_action/dialog_view_keyspair.dart';
+import 'package:nososova/ui/dialogs/dialog_info_node.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../../blocs/app_data_bloc.dart';
@@ -268,7 +269,7 @@ class DialogRouter {
               topBarTitle: Text(
                   AppLocalizations.of(context)!.pendingTransaction,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.walletAddress.copyWith(fontSize: 22)),
+                  style: AppTextStyles.dialogTitle),
               isTopBarLayerAlwaysVisible: true,
               trailingNavBarWidget: IconButton(
                 padding: const EdgeInsets.all(20),
@@ -281,6 +282,33 @@ class DialogRouter {
         ];
       },
     );
+  }
+
+  static void showDialogNodeInfo(BuildContext context, Address targetAddress) {
+    WoltModalSheet.show(
+      context: context,
+      showDragHandle: false,
+      minDialogWidth: 500,
+      pageListBuilder: (BuildContext _) {
+        return [
+          WoltModalSheetPage(
+              backgroundColor: Colors.white,
+              hasSabGradient: false,
+              topBarTitle: Text(
+                  AppLocalizations.of(context)!.nodeInfo,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.dialogTitle),
+              isTopBarLayerAlwaysVisible: true,
+              trailingNavBarWidget: IconButton(
+                padding: const EdgeInsets.all(20),
+                icon: const Icon(Icons.close),
+                onPressed: Navigator.of(context).pop,
+              ),
+              child:DialogInfoNode(address: targetAddress)),
+        ];
+      },
+    );
+
   }
 
   static void showDialogSellAddress(

@@ -455,14 +455,24 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     List<String> nodesList = totalNodes.split(',');
     var nodeRewardDay = coinInfoBloc.state.statisticsCoin.getBlockDayNodeReward;
 
+    String containsSeedWallet(String address) {
+      for (var itemNode in nodesList) {
+        List<String> parts = itemNode.split("|");
+        if (parts.length == 2 && parts[1] == address) {
+          return parts[0];
+        }
+      }
+      return "";
+    }
+
     if (nodesList.isNotEmpty) {
       List<Address> listUserNodes = [];
-      bool containsSeedWallet(String address) =>
-          nodesList.any((itemNode) => address == itemNode.split("|")[1]);
 
       for (Address address in listAddresses) {
         if (address.balance >= NosoUtility.getCountMonetToRunNode()) {
-          address.nodeStatusOn = containsSeedWallet(address.hash);
+          var seedNodeOn = containsSeedWallet(address.hash);
+          address.nodeStatusOn = seedNodeOn.isNotEmpty;
+          address.seedNodeOn = seedNodeOn;
           address.rewardDay = address.nodeStatusOn ? nodeRewardDay : 0;
           listUserNodes.add(address);
         } else {

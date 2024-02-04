@@ -10,8 +10,8 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../models/app/stats.dart';
 import '../../../../utils/date_utils.dart';
 import '../../../../utils/network_const.dart';
-import '../../../common/components/info_item.dart';
 import '../../../common/widgets/custom/dasher_divider.dart';
+import '../../../common/widgets/item_info_widget.dart';
 import '../../../config/responsive.dart';
 import '../../../theme/style/text_style.dart';
 
@@ -53,7 +53,6 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -74,7 +73,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                                   ? Icons.expand_less
                                   : Icons.expand_more_outlined,
                               size: 22,
-                              color:  Colors.black,
+                              color: Colors.black,
                             ),
                           ),
                       ],
@@ -121,57 +120,58 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                                   : CustomColors.positiveBalance,
                           fontSize: 20),
                     ),
-
-                    if(Responsive.isMobile(context) || isVisibleAction)  const SizedBox(height: 20),
-                    if(Responsive.isMobile(context) || isVisibleAction)   SizedBox(
-                      height: 120,
-                      width: double.infinity,
-                      child: LineChart(
-                        LineChartData(
-                          gridData: const FlGridData(
-                            show: false,
-                          ),
-                          titlesData: const FlTitlesData(
-                            show: false,
-                          ),
-                          lineTouchData: const LineTouchData(enabled: true),
-                          borderData: FlBorderData(
-                            show: false,
-                          ),
-                          lineBarsData: [
-                            LineChartBarData(
-                              spots: infoCoin
-                                  .getIntervalPrices(30)
-                                  .asMap()
-                                  .entries
-                                  .map((entry) {
-                                return FlSpot(
-                                  entry.key.toDouble(),
-                                  entry.value.price,
-                                );
-                              }).toList(),
-                              isCurved: true,
-                              gradient: LinearGradient(
-                                colors: gradient,
-                              ),
-                              barWidth: 2,
-                              isStrokeCapRound: true,
-                              dotData: const FlDotData(
-                                show: false,
-                              ),
-                              belowBarData: BarAreaData(
-                                show: true,
+                    if (Responsive.isMobile(context) || isVisibleAction)
+                      const SizedBox(height: 20),
+                    if (Responsive.isMobile(context) || isVisibleAction)
+                      SizedBox(
+                        height: 120,
+                        width: double.infinity,
+                        child: LineChart(
+                          LineChartData(
+                            gridData: const FlGridData(
+                              show: false,
+                            ),
+                            titlesData: const FlTitlesData(
+                              show: false,
+                            ),
+                            lineTouchData: const LineTouchData(enabled: true),
+                            borderData: FlBorderData(
+                              show: false,
+                            ),
+                            lineBarsData: [
+                              LineChartBarData(
+                                spots: infoCoin
+                                    .getIntervalPrices(30)
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
+                                  return FlSpot(
+                                    entry.key.toDouble(),
+                                    entry.value.price,
+                                  );
+                                }).toList(),
+                                isCurved: true,
                                 gradient: LinearGradient(
-                                  colors: gradient
-                                      .map((color) => color.withOpacity(0.3))
-                                      .toList(),
+                                  colors: gradient,
+                                ),
+                                barWidth: 2,
+                                isStrokeCapRound: true,
+                                dotData: const FlDotData(
+                                  show: false,
+                                ),
+                                belowBarData: BarAreaData(
+                                  show: true,
+                                  gradient: LinearGradient(
+                                    colors: gradient
+                                        .map((color) => color.withOpacity(0.3))
+                                        .toList(),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                     const SizedBox(height: 10),
                   ])),
           if (infoCoin.apiStatus == ApiStatus.error) ...[
@@ -196,28 +196,33 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                 )),
             const SizedBox(height: 10)
           ] else ...[
-            if(Responsive.isMobile(context) || isVisibleAction)    Tooltip(
-                message: AppLocalizations.of(context)!.updatePriceMinute,
-                child: InfoItem().itemInfo(
-                    AppLocalizations.of(context)!.updateTim,
-                    DateUtil.getTime(infoCoin.lastTimeUpdatePrice),
-                    srinkin: infoCoin.apiStatus == ApiStatus.loading))
+            if (Responsive.isMobile(context) || isVisibleAction)
+              Tooltip(
+                  message: AppLocalizations.of(context)!.updatePriceMinute,
+                  child: ItemInfoWidget(
+                      nameItem: AppLocalizations.of(context)!.updateTim,
+                      value: DateUtil.getTime(infoCoin.lastTimeUpdatePrice),
+                      onShimmer: infoCoin.apiStatus == ApiStatus.loading))
           ],
           if (!Responsive.isMobile(context)) ...[
-            if(Responsive.isMobile(context) || isVisibleAction) ...[     const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: DasherDivider(color: Colors.grey)),
-            InfoItem().itemInfo(
-                AppLocalizations.of(context)!.numberOfMinedCoins,
-                NumberFormat.compact().format(infoCoin.getTotalCoin)),
-            InfoItem().itemInfo(AppLocalizations.of(context)!.marketcap,
-                "\$${NumberFormat.compact().format(infoCoin.getMarketCap)}"),
-            InfoItem().itemInfo(AppLocalizations.of(context)!.activeNodes,
-                infoCoin.totalNodes.toString()),
-            const SizedBox(
-              height: 10,
-            )
-      ]
+            if (Responsive.isMobile(context) || isVisibleAction) ...[
+              const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: DasherDivider(color: Colors.grey)),
+              ItemInfoWidget(
+                  nameItem: AppLocalizations.of(context)!.numberOfMinedCoins,
+                  value: NumberFormat.compact().format(infoCoin.getTotalCoin)),
+              ItemInfoWidget(
+                  nameItem: AppLocalizations.of(context)!.marketcap,
+                  value:
+                      "\$${NumberFormat.compact().format(infoCoin.getMarketCap)}"),
+              ItemInfoWidget(
+                  nameItem: AppLocalizations.of(context)!.activeNodes,
+                  value: infoCoin.totalNodes.toString()),
+              const SizedBox(
+                height: 10,
+              )
+            ]
           ],
           if (Responsive.isMobile(context)) ...[
             const Padding(
@@ -277,17 +282,23 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        InfoItem().itemInfo(AppLocalizations.of(context)!.daysUntilNextHalving,
-            infoCoin.getHalvingTimer.days.toString()),
-        InfoItem().itemInfo(AppLocalizations.of(context)!.numberOfMinedCoins,
-            NumberFormat.compact().format(infoCoin.getTotalCoin),
-            twoValue: "21M"),
-        InfoItem().itemInfo(AppLocalizations.of(context)!.coinsLocked,
-            NumberFormat.compact().format(infoCoin.getCoinLockNoso)),
-        InfoItem().itemInfo(AppLocalizations.of(context)!.marketcap,
-            "\$${NumberFormat.compact().format(infoCoin.getMarketCap)}"),
-        InfoItem().itemInfo(AppLocalizations.of(context)!.tvl,
-            "\$${NumberFormat.compact().format(infoCoin.getCoinLockPrice)}"),
+        ItemInfoWidget(
+            nameItem: AppLocalizations.of(context)!.daysUntilNextHalving,
+            value: infoCoin.getHalvingTimer.days.toString()),
+        ItemInfoWidget(
+            nameItem: AppLocalizations.of(context)!.numberOfMinedCoins,
+            value:
+                "${NumberFormat.compact().format(infoCoin.getTotalCoin)}/21M"),
+        ItemInfoWidget(
+            nameItem: AppLocalizations.of(context)!.coinsLocked,
+            value: NumberFormat.compact().format(infoCoin.getCoinLockNoso)),
+        ItemInfoWidget(
+            nameItem: AppLocalizations.of(context)!.marketcap,
+            value: "\$${NumberFormat.compact().format(infoCoin.getMarketCap)}"),
+        ItemInfoWidget(
+            nameItem: AppLocalizations.of(context)!.tvl,
+            value:
+                "\$${NumberFormat.compact().format(infoCoin.getCoinLockPrice)}"),
       ],
     ));
   }
@@ -298,18 +309,27 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        InfoItem().itemInfo(AppLocalizations.of(context)!.activeNodes,
-            infoCoin.totalNodes.toString()),
-        InfoItem().itemInfo(AppLocalizations.of(context)!.tmr,
-            "${infoCoin.getBlockSummaryReward.toStringAsFixed(5)} NOSO"),
-        InfoItem().itemInfo(AppLocalizations.of(context)!.nbr,
-            "${infoCoin.getBlockOneNodeReward.toStringAsFixed(5)} NOSO"),
-        InfoItem().itemInfo(AppLocalizations.of(context)!.nr24,
-            "${infoCoin.getBlockDayNodeReward.toStringAsFixed(5)} NOSO"),
-        InfoItem().itemInfo(AppLocalizations.of(context)!.nr7,
-            "${infoCoin.getBlockWeekNodeReward.toStringAsFixed(5)} NOSO"),
-        InfoItem().itemInfo(AppLocalizations.of(context)!.nr30,
-            "${infoCoin.getBlockMonthNodeReward.toStringAsFixed(5)} NOSO")
+        ItemInfoWidget(
+            nameItem: AppLocalizations.of(context)!.activeNodes,
+            value: infoCoin.totalNodes.toString()),
+        ItemInfoWidget(
+            nameItem: AppLocalizations.of(context)!.rewardNode,
+            value: "",
+            isBoldTitle: true),
+        ItemInfoWidget(
+            nameItem: AppLocalizations.of(context)!.nbr,
+            value: "${infoCoin.getBlockOneNodeReward.toStringAsFixed(5)} NOSO"),
+        ItemInfoWidget(
+            nameItem: AppLocalizations.of(context)!.nr24,
+            value: "${infoCoin.getBlockDayNodeReward.toStringAsFixed(5)} NOSO"),
+        ItemInfoWidget(
+            nameItem: AppLocalizations.of(context)!.nr7,
+            value:
+                "${infoCoin.getBlockWeekNodeReward.toStringAsFixed(5)} NOSO"),
+        ItemInfoWidget(
+            nameItem: AppLocalizations.of(context)!.nr30,
+            value:
+                "${infoCoin.getBlockMonthNodeReward.toStringAsFixed(5)} NOSO")
       ],
     ));
   }

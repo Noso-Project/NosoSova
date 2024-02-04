@@ -33,4 +33,8 @@ class NetworkRepository {
   Future<ResponseApi> fetchLastBlockInfo() {
     return _explorerStatsService.fetchLastBlockInfo();
   }
+
+  Future<ResponseApi> fetchNodeStatus(String targetHash) {
+    return _explorerStatsService.fetchNodeStatus(targetHash);
+  }
 }

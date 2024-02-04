@@ -17,6 +17,8 @@ class Address extends AddressObject {
   /// Returns the obfuscated hash of the address.
   get hashPublic => OtherUtils.hashObfuscation(hash);
 
+  String seedNodeOn = "";
+
   Address({
     required String hash,
     String? custom,

@@ -137,16 +137,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get daysUntilNextHalving => 'Днів до наступного халвінгу';
 
   @override
-  String get numberOfMinedCoins => 'Кількість видобутих монет';
+  String get numberOfMinedCoins => 'Видобутих монет';
 
   @override
   String get coinsLocked => 'Заблоковані монети';
 
   @override
-  String get marketcap => 'Ринкова капіталізація Noso';
+  String get marketcap => 'Ринкова капіталізація';
 
   @override
-  String get tvl => 'Загальна вартість заблокованих активів';
+  String get tvl => 'Заблокованих активів';
 
   @override
   String get maxPriceStory => 'Максимальна ціна в історії';
@@ -155,22 +155,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get activeNodes => 'Активні вузли';
 
   @override
-  String get tmr => 'Загальна винагорода за блок';
+  String get nbr => 'За блок';
 
   @override
-  String get nbr => 'Винагорода для одного вузла за блок';
+  String get nr24 => 'За 24 години';
 
   @override
-  String get nr24 => 'Винагорода за 24 години';
+  String get nr7 => 'За 7 днів';
 
   @override
-  String get nr7 => 'Винагорода за 7 днів';
-
-  @override
-  String get nr30 => 'Винагорода за 30 днів';
+  String get nr30 => 'За 30 днів';
 
   @override
   String get nosoPrice => 'Вартість Noso';
+
+  @override
+  String get rewardNode => 'Винагорода за мастерноду:';
 
   @override
   String get launched => 'Запущені';
@@ -432,4 +432,16 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get selLanguage => 'Виберіть мову';
+
+  @override
+  String get nodeInfo => 'Інформація про вузол';
+
+  @override
+  String get consecutivePayments => 'Послідовні платежі';
+
+  @override
+  String get uptimePercent => 'Безвідмовна робота';
+
+  @override
+  String get monthlyEarning => 'Щомісячний заробіток';
 }

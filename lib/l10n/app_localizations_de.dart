@@ -137,16 +137,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get daysUntilNextHalving => 'Tage bis zum nächsten Halving';
 
   @override
-  String get numberOfMinedCoins => 'Anzahl an mined Coins';
+  String get numberOfMinedCoins => 'Abgebaute münzen';
 
   @override
-  String get coinsLocked => 'Gesperrte Coins';
+  String get coinsLocked => 'Gesperrte münzen';
 
   @override
-  String get marketcap => 'Noso Marketcap';
+  String get marketcap => 'Marktkapitalisierung';
 
   @override
-  String get tvl => 'Gesamtwert der gesperrten Coins';
+  String get tvl => 'Gesperrten vermögenswerte';
 
   @override
   String get maxPriceStory => 'Maximaler Preis pro Geschichte';
@@ -155,22 +155,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get activeNodes => 'Active Nodes';
 
   @override
-  String get tmr => 'Gesamte Masternode Belohnung';
+  String get nbr => 'Pro Block';
 
   @override
-  String get nbr => 'Node Block Belohnung';
+  String get nr24 => 'In 24 Stunden';
 
   @override
-  String get nr24 => '24 Stunden Belohnung';
+  String get nr7 => 'In 7 Tage';
 
   @override
-  String get nr7 => '7 Tage Belohnung';
-
-  @override
-  String get nr30 => '30 Tage Belohnung';
+  String get nr30 => 'In 30 Tage';
 
   @override
   String get nosoPrice => 'Noso Preis';
+
+  @override
+  String get rewardNode => 'Belohnung für Beherrschung:';
 
   @override
   String get launched => 'Läuft';
@@ -432,4 +432,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get selLanguage => 'Sprache auswählen';
+
+  @override
+  String get nodeInfo => 'Informationen über den Knoten';
+
+  @override
+  String get consecutivePayments => 'aufeinanderfolgende Zahlungen';
+
+  @override
+  String get uptimePercent => 'Uptime';
+
+  @override
+  String get monthlyEarning => 'Monatlicher Verdienst';
 }

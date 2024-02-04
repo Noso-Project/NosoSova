@@ -41,17 +41,17 @@ class _TilePendingTransactionState extends State<TilePendingTransaction> {
                   style: AppTextStyles.walletAddress.copyWith(fontSize: 18),
                 ),
                 Text(
-                  "Sender: ${widget.pending.sender}",
+                  "${AppLocalizations.of(context)!.sender}: ${widget.pending.sender}",
                   style: AppTextStyles.itemStyle.copyWith(fontSize: 16),
                 ),
                 Text(
-                  "Receiver: ${widget.pending.receiver}",
+                  "${AppLocalizations.of(context)!.receiver}: ${widget.pending.receiver}",
                   style: AppTextStyles.itemStyle.copyWith(fontSize: 16),
                 ),
                 Text(
                   isCustom
                       ? AppLocalizations.of(context)!.editCustom
-                      : "Amount: ${widget.pending.amountTransfer}",
+                      : "${AppLocalizations.of(context)!.amount}: ${widget.pending.amountTransfer.toStringAsFixed(8)}",
                   style: AppTextStyles.walletAddress.copyWith(fontSize: 18),
                 )
               ],

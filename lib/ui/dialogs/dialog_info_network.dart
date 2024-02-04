@@ -11,7 +11,7 @@ import '../../utils/date_utils.dart';
 import '../../utils/network_const.dart';
 import '../common/route/dialog_router.dart';
 import '../common/widgets/custom/dialog_title_dropdown.dart';
-import '../common/widgets/custom/shimmer.dart';
+import '../common/widgets/item_info_widget.dart';
 import '../common/widgets/node_status.dart';
 import '../config/responsive.dart';
 import '../theme/style/colors.dart';
@@ -31,6 +31,9 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppDataBloc, AppDataState>(builder: (context, state) {
+      var onShimmer = state.statusConnected == StatusConnectNodes.searchNode ||
+          state.statusConnected == StatusConnectNodes.sync ||
+          state.statusConnected == StatusConnectNodes.consensus;
       return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,23 +114,28 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
                   onTap: () => DialogRouter.showDialogDebug(context),
                 ),
                 if (state.statusConnected != StatusConnectNodes.error) ...[
-                  itemInfo(
-                      AppLocalizations.of(context)!.status,
-                      NodeStatusUi.getNodeDescriptionString(
-                          context, state.statusConnected, state.node.seed),
-                      StatusConnectNodes.connected),
+                  ItemInfoWidget(
+                      nameItem: AppLocalizations.of(context)!.status,
+                      value: NodeStatusUi.getNodeDescriptionString(
+                          context, state.statusConnected, state.node.seed)),
                 ],
                 if (state.statusConnected != StatusConnectNodes.error) ...[
-                  itemInfo(AppLocalizations.of(context)!.nodeType,
-                      getNetworkType(state.node), state.statusConnected),
-                  itemInfo(AppLocalizations.of(context)!.lastBlock,
-                      state.node.lastblock.toString(), state.statusConnected),
-                  itemInfo(AppLocalizations.of(context)!.version,
-                      state.node.version.toString(), state.statusConnected),
-                  itemInfo(
-                      AppLocalizations.of(context)!.utcTime,
-                      DateUtil.getUtcTime(state.node.utcTime),
-                      state.statusConnected),
+                  ItemInfoWidget(
+                      nameItem: AppLocalizations.of(context)!.nodeType,
+                      value: getNetworkType(state.node),
+                      onShimmer: onShimmer),
+                  ItemInfoWidget(
+                      nameItem: AppLocalizations.of(context)!.lastBlock,
+                      value: state.node.lastblock.toString(),
+                      onShimmer: onShimmer),
+                  ItemInfoWidget(
+                      nameItem: AppLocalizations.of(context)!.version,
+                      value: state.node.version.toString(),
+                      onShimmer: onShimmer),
+                  ItemInfoWidget(
+                      nameItem: AppLocalizations.of(context)!.utcTime,
+                      value: DateUtil.getUtcTime(state.node.utcTime),
+                      onShimmer: onShimmer),
                 ],
                 const SizedBox(height: 20),
               ],
@@ -141,41 +149,5 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
     bool isDev = NetworkConst.getSeedList()
         .any((item) => item.toTokenizer == node.seed.toTokenizer);
     return isDev ? "Verified node" : "Custom node";
-  }
-
-  itemInfo(String nameItem, String value, StatusConnectNodes statusConnected) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            nameItem,
-            style: AppTextStyles.itemStyle
-                .copyWith(color: Colors.black.withOpacity(0.5), fontSize: 18),
-          ),
-          if (statusConnected == StatusConnectNodes.searchNode ||
-              statusConnected == StatusConnectNodes.sync ||
-              statusConnected == StatusConnectNodes.consensus)
-            Container(
-              margin: EdgeInsets.zero,
-              child: ShimmerPro.sized(
-                depth: 16,
-                scaffoldBackgroundColor: Colors.grey.shade100.withOpacity(0.5),
-                width: 100,
-                borderRadius: 3,
-                height: 20,
-              ),
-            )
-          else
-            Text(
-              value,
-              style: AppTextStyles.walletAddress
-                  .copyWith(color: Colors.black, fontSize: 18),
-            ),
-        ],
-      ),
-    );
   }
 }

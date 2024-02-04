@@ -137,16 +137,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get daysUntilNextHalving => 'Days until Next Halving';
 
   @override
-  String get numberOfMinedCoins => 'Number of mined coins';
+  String get numberOfMinedCoins => 'Coins mined';
 
   @override
-  String get coinsLocked => 'Coins Locked';
+  String get coinsLocked => 'Locked coins';
 
   @override
-  String get marketcap => 'Noso Marketcap';
+  String get marketcap => 'Market capitalisation';
 
   @override
-  String get tvl => 'Total Value Locked';
+  String get tvl => 'Locked Assets';
 
   @override
   String get maxPriceStory => 'Maximum price per story';
@@ -155,22 +155,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeNodes => 'Active nodes';
 
   @override
-  String get tmr => 'Total MasterNode Reward';
+  String get nbr => 'For one block';
 
   @override
-  String get nbr => 'Node Block Reward';
+  String get nr24 => 'For 24 hour';
 
   @override
-  String get nr24 => '24hr Reward';
+  String get nr7 => 'For 7 day';
 
   @override
-  String get nr7 => '7 day Reward';
-
-  @override
-  String get nr30 => '30 day Reward';
+  String get nr30 => 'For 30 day';
 
   @override
   String get nosoPrice => 'Noso Price';
+
+  @override
+  String get rewardNode => 'Reward for masternode:';
 
   @override
   String get launched => 'Running';
@@ -432,4 +432,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selLanguage => 'Select language';
+
+  @override
+  String get nodeInfo => 'Information about Node';
+
+  @override
+  String get consecutivePayments => 'Consecutive payments';
+
+  @override
+  String get uptimePercent => 'Uptime';
+
+  @override
+  String get monthlyEarning => 'Monthly earning';
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../theme/style/colors.dart';
 
@@ -9,9 +10,13 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-        child: Padding(padding: EdgeInsets.symmetric(vertical: 50), child: CircularProgressIndicator(
-      color: CustomColors.primaryColor,
-    )));
+    return Container(
+        padding: const EdgeInsets.symmetric(
+            vertical: 40, horizontal: 20),
+        child: Center(
+            child: LoadingAnimationWidget.staggeredDotsWave(
+              color: CustomColors.primaryColor,
+              size: 80,
+            )));
   }
 }
