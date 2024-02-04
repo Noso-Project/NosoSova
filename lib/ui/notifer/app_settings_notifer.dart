@@ -22,8 +22,8 @@ class AppSettings with ChangeNotifier {
     'de': 'Deutsch',
     'en': 'English',
     'es': 'Español',
-    'ru': 'Русский',
     'pt': 'Português',
+    'ru': 'Русский',
     'uk': 'Українська',
   };
 
