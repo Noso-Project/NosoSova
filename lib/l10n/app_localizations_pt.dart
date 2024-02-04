@@ -1,14 +1,8 @@
 import 'app_localizations.dart';
 
-<<<<<<< HEAD
-/// The translations for English (`en`).
-class AppLocalizationsEn extends AppLocalizations {
-  AppLocalizationsEn([String locale = 'en']) : super(locale);
-=======
 /// The translations for Portuguese (`pt`).
 class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get incoming => 'Recebendo';
@@ -32,15 +26,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get genNewKeyPair => 'Criar nova conta';
 
   @override
-<<<<<<< HEAD
-  String get scanQrCode => 'Ler código Code';
-
-  @override
-  String get historyPayments => 'Transacções recentes';
-
-  @override
-  String get titleScannerCode => 'Leitor de códigod Qr';
-=======
   String get scanQrCode => 'Ler código QR';
 
   @override
@@ -48,7 +33,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get titleScannerCode => 'Leitor de código QR';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get foundAddresses => 'Contas encontradas';
@@ -69,11 +53,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get connections => 'Conexões';
 
   @override
-<<<<<<< HEAD
-  String get lastBlock => 'Último Block';
-=======
   String get lastBlock => 'Último Bloco';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get pendings => 'Pendentes';
@@ -100,11 +80,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get connection => 'Procurando nó...';
 
   @override
-<<<<<<< HEAD
-  String get errorConnection => 'Erro de connexão';
-=======
   String get errorConnection => 'Erro de conexão';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get address => 'Conta';
@@ -158,11 +134,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get blocksRemaining => 'Blocos Restantes';
 
   @override
-<<<<<<< HEAD
-  String get daysUntilNextHalving => 'Dias para o próximo "Halving"';
-=======
   String get daysUntilNextHalving => 'Dias para o próximo \'Halving\'';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get numberOfMinedCoins => 'Moedas minadas';
@@ -183,21 +155,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get activeNodes => 'Nós ativos';
 
   @override
-<<<<<<< HEAD
-  String get tmr => 'Recompensa Total MasterNode';
-
-  @override
-  String get nbr => 'Recompensa Bloco de Nó';
-
-  @override
-  String get nr24 => 'Recompensa em 24 horas';
-
-  @override
-  String get nr7 => 'Recompensa em 7 dias';
-
-  @override
-  String get nr30 => 'Recompensa em 30 diaa';
-=======
   String get nbr => 'Bloco de Nó';
 
   @override
@@ -208,18 +165,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get nr30 => 'Em 30 dias';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get nosoPrice => 'Preço de Noso';
 
   @override
-<<<<<<< HEAD
-=======
   String get rewardNode => 'Recompensa para masternode:';
 
   @override
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
   String get launched => 'Correndo';
 
   @override
@@ -247,17 +200,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get importKeysPair => 'Importar de par de chaves';
 
   @override
-<<<<<<< HEAD
-  String get catHistoryTransaction => 'Histórico de Transacções';
-
-  @override
-  String get transactionInfo => 'Informação sobre Transacções';
-=======
   String get catHistoryTransaction => 'Histórico de Transações';
 
   @override
   String get transactionInfo => 'Informação sobre Transações';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get block => 'Bloco';
@@ -275,11 +221,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get openToExplorer => 'Abrir no Explorador Noso';
 
   @override
-<<<<<<< HEAD
-  String get shareTransaction => 'Partilhar Transacção';
-=======
   String get shareTransaction => 'Partilhar Transação';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get message => 'Mensagem';
@@ -291,11 +233,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get errorLoading => 'Erro do servidor';
 
   @override
-<<<<<<< HEAD
-  String get catActionAddress => 'Acções para contas';
-=======
   String get catActionAddress => 'Ações para contas';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get customNameAdd => 'Definir Pseudónimo';
@@ -319,21 +257,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get alias => 'Pseudónimo';
 
   @override
-<<<<<<< HEAD
-  String get consensusCheck => 'Resoluçaão de consenso';
-=======
   String get consensusCheck => 'Resolução de consenso';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get save => 'Gravar';
 
   @override
-<<<<<<< HEAD
-  String get nodeType => 'Typo do Nó';
-=======
   String get nodeType => 'Tipo do Nó';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get status => 'Estado';
@@ -342,11 +272,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get balance => 'Saldo';
 
   @override
-<<<<<<< HEAD
-  String get actionWallet => 'Acções para contas';
-=======
   String get actionWallet => 'Ações para contas';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get confirm => 'Confirmar';
@@ -364,15 +290,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get chanceNode => 'Mudar o nó';
 
   @override
-<<<<<<< HEAD
-  String get viewQr => 'Mostrar o código Qr';
-
-  @override
-  String get infoTotalPriceUst => 'Slado USDT';
-
-  @override
-  String get updateInfo => 'Actualizar informação';
-=======
   String get viewQr => 'Mostrar o código QR';
 
   @override
@@ -380,7 +297,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get updateInfo => 'Atualizar informação';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get copyAddress => 'Copiar a conta';
@@ -401,11 +317,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get sendCoins => 'Enviar fundos';
 
   @override
-<<<<<<< HEAD
-  String get sellAddress => 'Seleccionar uma conta';
-=======
   String get sellAddress => 'Selecionar uma conta';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get offline => 'Offline';
@@ -417,15 +329,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get successSaveExportFile => 'A sua carteira foi exportada com sucesso';
 
   @override
-<<<<<<< HEAD
-  String get displayPendingTransactions => 'Transacções pendentes são listadas aqui';
-
-  @override
-  String get updatePriceMinute => 'Informações actualizada a cada minuto';
-
-  @override
-  String get pendingTransaction => 'Transacções Pendentes';
-=======
   String get displayPendingTransactions => 'Transações pendentes são listadas aqui';
 
   @override
@@ -433,34 +336,17 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get pendingTransaction => 'Transações Pendentes';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get updateTim => 'Atualizado';
 
   @override
-<<<<<<< HEAD
-  String get hintConnectStop => 'Devido a flutuações na rede principal a conexão pode ser perdida. Para continuação de uso, é favor cliquar em "Mudar o nó"';
-=======
   String get hintConnectStop => 'Devido a flutuações na rede principal, a conexão pode ser perdida. Para continuação de uso, é favor clicar em \'Mudar o nó\'';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get emptyListAddress => 'Gerar novas contas para seu uso';
 
   @override
-<<<<<<< HEAD
-  String get aliasMessage => 'O pseudónimo pode ser definido de 3 a 32 caracteres. É favor não esquecer que esta acção custa uma taxa de transacção.';
-
-  @override
-  String get errorNoFoundCoinsTransaction => 'O seu saldo não permite esta transacção';
-
-  @override
-  String get errorInformationIncorrect => 'Os dados introduzidos estão incorrectos';
-
-  @override
-  String get errorImportAddresses => 'Devido à existência de duplição não foi possível addicionar as contas';
-=======
   String get aliasMessage => 'O pseudónimo pode ser definido de 3 a 32 caracteres. É favor não esquecer que esta ação custa uma taxa de transação.';
 
   @override
@@ -471,7 +357,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get errorImportAddresses => 'Devido à existência de duplicação, não foi possível adicionar as contas';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get errorDefaultErrorAlias => 'Erro ao tentar definir o pseudónimo';
@@ -480,11 +365,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get priceInfoErrorServer => 'Informação de preço não disponível';
 
   @override
-<<<<<<< HEAD
-  String get errorEmptyHistoryTransactions => 'Não existe informação sobre transacções nesta conta';
-=======
   String get errorEmptyHistoryTransactions => 'Não existe informação sobre transações nesta conta';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get errorNoValidAddress => 'Erro, conta inválida';
@@ -508,17 +389,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get warringMessageSetAlias => 'Esta operação só pode ser feita uma única vez';
 
   @override
-<<<<<<< HEAD
-  String get successSetAlias => 'O seu pedido foi efectuado com sucesso e foi processado';
-
-  @override
-  String get errorEmptyListWallet => 'O ficheoro não contêm contas';
-=======
   String get successSetAlias => 'O seu pedido foi efetuado com sucesso e foi processado';
 
   @override
   String get errorEmptyListWallet => 'O ficheiro não contêm contas';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get errorNotSupportedWallet => 'Este tipo de ficheiro não é suportado';
@@ -527,11 +401,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get errorLastTime => 'Existe uma diferença no relógio do sistema, por favor atualize o relógio do sistema';
 
   @override
-<<<<<<< HEAD
-  String get errorPathSaveAddress => 'Erro: Conta inválida pu falta de permissões para alterar o ficheiro';
-=======
   String get errorPathSaveAddress => 'Erro: Conta inválida ou falta de permissões para alterar o ficheiro';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 
   @override
   String get errorStopSync => 'Conexão perdida devido a erros';
@@ -540,9 +410,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get stopSync => 'Conexão perdida';
 
   @override
-<<<<<<< HEAD
-  String get unknownError => 'Ocurreu um erro';
-=======
   String get unknownError => 'Ocorreu um erro';
 
   @override
@@ -577,5 +444,4 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get monthlyEarning => 'Ganhos Mensais';
->>>>>>> 3961876 (feat: Add Spain && Portugal Language)
 }
