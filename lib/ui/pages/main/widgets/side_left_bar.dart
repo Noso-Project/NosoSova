@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nososova/ui/theme/style/colors.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../common/widgets/custom/dialog_title_dropdown.dart';
@@ -22,6 +21,7 @@ class _SideLeftBarDesktopState extends State<SideLeftBarDesktop> {
     return Container(
       width: 400,
       height: double.infinity,
+      color: Theme.of(context).colorScheme.background,
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -58,5 +58,4 @@ class _SideLeftBarDesktopState extends State<SideLeftBarDesktop> {
       ),
     );
   }
-
 }

@@ -54,7 +54,7 @@ class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
 
               return Container(
                   width: double.infinity,
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   child: Column(
                     children: [
                       Padding(
@@ -91,10 +91,7 @@ class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
                                     title: Text(
                                         _getFormattedDate(
                                             transaction.timestamp),
-                                        style: AppTextStyles.itemStyle.copyWith(
-                                            color:
-                                                Colors.black.withOpacity(0.9),
-                                            fontSize: 18)),
+                                        style: AppTextStyles.infoItemValue),
                                   ),
                                   TransactionTile(
                                     transactionHistory: transaction,
@@ -125,7 +122,7 @@ class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
   getStackMessage(Widget widget) {
     return Container(
         width: double.infinity,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         child: Stack(children: [
           Padding(
               padding: const EdgeInsets.only(

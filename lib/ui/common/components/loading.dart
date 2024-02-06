@@ -15,7 +15,7 @@ class LoadingWidget extends StatelessWidget {
             vertical: 40, horizontal: 20),
         child: Center(
             child: LoadingAnimationWidget.staggeredDotsWave(
-              color: CustomColors.primaryColor,
+              color: Theme.of(context).colorScheme.primary,
               size: 80,
             )));
   }

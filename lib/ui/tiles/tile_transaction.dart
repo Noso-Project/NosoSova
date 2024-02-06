@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:nososova/ui/theme/style/icons_style.dart';
 import 'package:nososova/ui/theme/style/text_style.dart';
 
@@ -53,19 +52,16 @@ class TransactionTileState extends State<TransactionTile> {
         children: [
           Expanded(
             child: Text(
-              OtherUtils.hashObfuscation(widget.receiver
-                  ? widget.transactionHistory.sender
-                  : widget.transactionHistory.receiver),
-              style: AppTextStyles.walletAddress.copyWith(
-                fontFamily: "GilroyRegular",
-              ),
-            ),
+                OtherUtils.hashObfuscation(widget.receiver
+                    ? widget.transactionHistory.sender
+                    : widget.transactionHistory.receiver),
+                style: AppTextStyles.walletHash),
           ),
           Text(
             widget.receiver
                 ? "+${double.parse(widget.transactionHistory.amount).toStringAsFixed(3)}"
                 : "-${(double.parse(widget.transactionHistory.amount) + double.parse(widget.transactionHistory.fee)).toStringAsFixed(3)}",
-            style: AppTextStyles.walletAddress.copyWith(
+            style: AppTextStyles.walletBalance.copyWith(
               color: widget.receiver
                   ? CustomColors.positiveBalance
                   : CustomColors.negativeBalance,
@@ -76,36 +72,4 @@ class TransactionTileState extends State<TransactionTile> {
       onTap: widget.onTap,
     );
   }
-
-/*
-  getOrderAmount(){
-    return   Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            widget.address.balance.toStringAsFixed(3),
-            style: AppTextStyles.walletAddress,
-          ),
-          if (widget.address.incoming > 0)
-            Text(
-              "+ ${widget.address.incoming}",
-              style: AppTextStyles.itemStyle.copyWith(
-                  fontSize: 16,
-                  fontFamily: "GilroySemiBold",
-                  color: Colors.green),
-            ),
-          const SizedBox(width: 5),
-          if (widget.address.outgoing > 0)
-            Text(
-              "- ${widget.address.outgoing}",
-              style: AppTextStyles.itemStyle.copyWith(
-                  fontSize: 16,
-                  fontFamily: "GilroySemiBold",
-                  color: Colors.red),
-            ),
-        ]);
-  }
-
- */
 }

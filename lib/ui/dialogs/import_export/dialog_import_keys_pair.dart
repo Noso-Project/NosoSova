@@ -55,7 +55,7 @@ class DialogImportKeysPairState extends State<DialogImportKeysPair> {
                 maxLength: 133,
                 focusNode: _focusNode,
                 controller: _textEditingController,
-                style: AppTextStyles.textFieldStyle,
+                style: AppTextStyles.textField,
                 decoration:
                     AppTextFiledDecoration.defaultDecoration("Keys Pair"),
               ),

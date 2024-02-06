@@ -15,7 +15,7 @@ class SideRightBarDesktop extends StatelessWidget {
     return Container(
       width: 370,
       height: double.infinity,
-      color: Theme.of(context).colorScheme.surface,
+      color: Theme.of(context).colorScheme.background,
       child: SingleChildScrollView(
           child: Padding(
               padding: const EdgeInsets.all(10),
@@ -24,25 +24,23 @@ class SideRightBarDesktop extends StatelessWidget {
                   const Card(child: DialogInfoNetwork()),
                   const SizedBox(height: 10),
                   const Card(
-
                     child: DialogWalletActions(),
                   ),
                   const SizedBox(height: 10),
                   Card(
-
                       child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: CustomSizes.paddingDialogVertical),
-                        title: Text(AppLocalizations.of(context)!.settings,
-                            style: AppTextStyles.dialogTitle),
-                        onTap: () => DialogSettings.showDialogSettings(context),
-                        trailing: const Icon(
-                          Icons.navigate_next,
-                          size: 28,
-                          color: Colors.black,
-                        ),
-                      )),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: CustomSizes.paddingDialogVertical),
+                    title: Text(AppLocalizations.of(context)!.settings,
+                        style: AppTextStyles.dialogTitle),
+                    onTap: () => DialogSettings.showDialogSettings(context),
+                    trailing: Icon(
+                      Icons.navigate_next,
+                      size: 28,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  )),
                 ],
               ))),
     );

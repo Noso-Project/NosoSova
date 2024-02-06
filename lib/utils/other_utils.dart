@@ -10,8 +10,6 @@ class OtherUtils {
     if (hash.length >= 25) {
       return "...${hash.substring(10, hash.length)}";
     }
-
-
     return hash;
   }
 }

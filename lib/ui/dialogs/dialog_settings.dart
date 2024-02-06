@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nososova/utils/social_links.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,7 +10,6 @@ import '../../generated/assets.dart';
 import '../../l10n/app_localizations.dart';
 import '../config/responsive.dart';
 import '../notifer/app_settings_notifer.dart';
-import '../theme/style/colors.dart';
 import '../theme/style/sizes.dart';
 import '../theme/style/text_style.dart';
 
@@ -41,7 +41,7 @@ class DialogSettings {
               const SizedBox(height: 8),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: CustomColors.primaryColor,
+                  primary: Theme.of(context).colorScheme.primary,
                 ),
                 onPressed: () =>
                     pageIndexNotifier.value = pageIndexNotifier.value + 1,
@@ -50,8 +50,9 @@ class DialogSettings {
                   width: double.infinity,
                   child: Center(
                       child: Text(AppLocalizations.of(context)!.openSettings,
-                          style: AppTextStyles.dialogTitle
-                              .copyWith(fontSize: 20, color: Colors.white))),
+                          style: AppTextStyles.dialogTitle.copyWith(
+                              fontSize: 16.sp,
+                              color: Theme.of(context).colorScheme.onPrimary))),
                 ),
               ),
             ],
@@ -78,15 +79,15 @@ class DialogSettings {
               children: [
                 Text(
                   AppLocalizations.of(context)!.information,
-                  style: AppTextStyles.dialogTitle.copyWith(fontSize: 22),
+                  style: AppTextStyles.dialogTitle,
                 ),
                 Text(
                   "${AppLocalizations.of(context)!.appVersions}: ${appSettings.getAppVersion}",
-                  style: AppTextStyles.itemStyle.copyWith(fontSize: 18),
+                  style: AppTextStyles.infoItemTitle,
                 ),
                 Text(
                   "${AppLocalizations.of(context)!.developer}: @pasichDev (Noso-Project)",
-                  style: AppTextStyles.itemStyle.copyWith(fontSize: 18),
+                  style: AppTextStyles.infoItemTitle,
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -165,14 +166,12 @@ class DialogSettings {
                                     horizontal: 15, vertical: 10),
                                 child: Text(
                                   AppLocalizations.of(context)!.mainSet,
-                                  style: AppTextStyles.dialogTitle
-                                      .copyWith(fontSize: 22),
+                                  style: AppTextStyles.dialogTitle,
                                 )),
                             ListTile(
                               title: Text(
                                 AppLocalizations.of(context)!.darkTheme,
-                                style: AppTextStyles.itemStyle
-                                    .copyWith(fontSize: 20),
+                                style: AppTextStyles.itemMedium,
                               ),
                               trailing: Switch(
                                   value: appSettings.isDarkTheme,
@@ -183,10 +182,12 @@ class DialogSettings {
                             ListTile(
                                 title: Text(
                                   AppLocalizations.of(context)!.selLanguage,
-                                  style: AppTextStyles.itemStyle
-                                      .copyWith(fontSize: 20),
+                                  style: AppTextStyles.itemMedium,
                                 ),
-                                subtitle: Text(appSettings.getSelectLanguage),
+                                subtitle: Text(
+                                  appSettings.getSelectLanguage,
+                                  style: AppTextStyles.textHiddenSmall(context),
+                                ),
                                 onTap: () {
                                   pageIndexNotifier.value =
                                       pageIndexNotifier.value + 1;
@@ -240,8 +241,7 @@ class DialogSettings {
                                         CustomSizes.paddingDialogVertical),
                                 child: Text(
                                   AppLocalizations.of(context)!.selLanguage,
-                                  style: AppTextStyles.dialogTitle
-                                      .copyWith(color: Colors.black),
+                                  style: AppTextStyles.dialogTitle,
                                 )),
                             ListView.builder(
                               shrinkWrap: true,

@@ -41,8 +41,7 @@ class DialogViewKeysPairState extends State<DialogViewKeysPair> {
         children: [
           Text(
             nameItem,
-            style: AppTextStyles.itemStyle
-                .copyWith(color: Colors.black.withOpacity(0.5), fontSize: 18),
+            style: AppTextStyles.textHiddenMedium(context),
           ),
           InkWell(
               onTap: () => Clipboard.setData(ClipboardData(text: value)),
@@ -53,8 +52,7 @@ class DialogViewKeysPairState extends State<DialogViewKeysPair> {
                   child: Text(
                     value,
                     textAlign: TextAlign.start,
-                    style: AppTextStyles.walletAddress
-                        .copyWith(color: Colors.black, fontSize: 18),
+                    style: AppTextStyles.infoItemValue,
                   ),
                 ),
                 const SizedBox(width: 10),

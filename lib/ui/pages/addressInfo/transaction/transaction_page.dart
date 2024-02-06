@@ -34,9 +34,8 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: Colors.white,
           title: Text(
             AppLocalizations.of(context)!.transactionInfo,
             style: AppTextStyles.dialogTitle,
@@ -46,7 +45,6 @@ class _TransactionPageState extends State<TransactionPage> {
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back,
-              color: Colors.black,
             ),
             onPressed: () {
               Navigator.of(context).pop();
@@ -54,21 +52,19 @@ class _TransactionPageState extends State<TransactionPage> {
           ),
         ),
         body: SingleChildScrollView(
-            child: Column(
-          children: [
-            TransactionWidgetInfo(
-              transaction: widget.transaction,
-              isReceiver: widget.isReceiver,
-            ),
-            const SizedBox(height: 20),
-            buttonAction(AppLocalizations.of(context)!.openToExplorer,
-                () => runExplorer()),
-            const SizedBox(height: 10),
-            buttonAction(AppLocalizations.of(context)!.shareTransaction,
-                () => shareLinkExplorer()),
-            const SizedBox(height: 20)
-          ],
-        )));
+            child: Column(children: [
+          TransactionWidgetInfo(
+            transaction: widget.transaction,
+            isReceiver: widget.isReceiver,
+          ),
+          const SizedBox(height: 20),
+          buttonAction(AppLocalizations.of(context)!.openToExplorer,
+              () => runExplorer()),
+          const SizedBox(height: 10),
+          buttonAction(AppLocalizations.of(context)!.shareTransaction,
+              () => shareLinkExplorer()),
+          const SizedBox(height: 20)
+        ])));
   }
 
   buttonAction(String text, Function onTap) {
@@ -76,21 +72,20 @@ class _TransactionPageState extends State<TransactionPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         width: double.infinity,
         child: OutlinedButton(
-          onPressed: () => onTap(),
-          style: OutlinedButton.styleFrom(
-            side: BorderSide(color: Colors.black.withOpacity(0.2)),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-          ),
-          child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                text,
-                style: AppTextStyles.walletAddress
-                    .copyWith(color: Colors.black, fontSize: 18),
-              )),
-        ));
+            onPressed: () => onTap(),
+            style: OutlinedButton.styleFrom(
+                side: BorderSide(
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.5)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                )),
+            child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  text,
+                  style: AppTextStyles.infoItemValue,
+                ))));
   }
 
   runExplorer() async {

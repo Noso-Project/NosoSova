@@ -25,10 +25,12 @@ class ItemInfoWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            nameItem,
-            style: isBoldTitle ? AppTextStyles.walletAddress.copyWith(color: Colors.black) : AppTextStyles.itemStyle.copyWith(color: Colors.black.withOpacity(0.5)),
-          ),
+          Expanded(
+              flex: 3,
+              child: Text(nameItem,
+                  style: isBoldTitle
+                      ? AppTextStyles.infoItemValue
+                      : AppTextStyles.infoItemTitle)),
           if (onShimmer)
             Container(
               margin: EdgeInsets.zero,
@@ -43,8 +45,7 @@ class ItemInfoWidget extends StatelessWidget {
           else
             Text(
               value,
-              style: AppTextStyles.walletAddress
-                  .copyWith(color: Colors.black, fontSize: 18),
+              style: AppTextStyles.infoItemValue,
             ),
         ],
       ),

@@ -36,11 +36,11 @@ class AddressListTileState extends State<AddressNodeTile> {
       leading: _iconAddress(),
       title: Text(
         OtherUtils.hashObfuscationLong(widget.address.hash),
-        style: AppTextStyles.walletAddress,
+        style: AppTextStyles.walletHash,
       ),
       subtitle: Text(
         "${messageSubtitle()} (${widget.address.seedNodeOn})",
-        style: AppTextStyles.itemStyle,
+        style: AppTextStyles.textHiddenSmall(context),
       ),
       onTap: () => DialogRouter.showDialogNodeInfo(context, widget.address),
     );

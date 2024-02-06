@@ -19,7 +19,6 @@ import '../../../../models/rest_api/transaction_history.dart';
 import '../../../common/responses_util/response_widget_id.dart';
 import '../../../common/responses_util/snackbar_message.dart';
 import '../../../common/widgets/widget_transaction.dart';
-import '../../../theme/style/colors.dart';
 import '../../../theme/style/text_style.dart';
 import '../../../tiles/tile_select_address.dart';
 
@@ -140,8 +139,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         Text(
                           AppLocalizations.of(context)!.sender,
                           textAlign: TextAlign.start,
-                          style:
-                              AppTextStyles.dialogTitle.copyWith(fontSize: 20),
+                          style: AppTextStyles.itemMedium
+                              .copyWith(fontWeight: FontWeight.w600),
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -171,12 +170,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   ),
                           ),
                         ),
-
                         Text(
                           AppLocalizations.of(context)!.receiver,
                           textAlign: TextAlign.start,
-                          style:
-                              AppTextStyles.dialogTitle.copyWith(fontSize: 20),
+                          style: AppTextStyles.itemMedium
+                              .copyWith(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 10),
                         TextField(
@@ -187,16 +185,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               FilteringTextInputFormatter.allow(
                                   RegExp(r'[a-zA-Z0-9@*+\-_:]')),
                             ],
-                            style: AppTextStyles.textFieldStyle,
+                            style: AppTextStyles.textField,
                             decoration:
                                 AppTextFiledDecoration.defaultDecoration(
                                     AppLocalizations.of(context)!.receiver)),
-                 //       const SizedBox(height: 10),
                         Text(
                           AppLocalizations.of(context)!.amount,
                           textAlign: TextAlign.start,
-                          style:
-                              AppTextStyles.dialogTitle.copyWith(fontSize: 20),
+                          style: AppTextStyles.itemMedium
+                              .copyWith(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 10),
                         TextField(
@@ -219,7 +216,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             ],
                             keyboardType: const TextInputType.numberWithOptions(
                                 decimal: true),
-                            style: AppTextStyles.textFieldStyle,
+                            style: AppTextStyles.textField,
                             decoration:
                                 AppTextFiledDecoration.defaultDecoration(
                                     "0.0000000")),
@@ -237,9 +234,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         TextField(
                             maxLength: 120,
                             controller: messageController,
-                            style: AppTextStyles.textFieldStyle,
+                            style: AppTextStyles.textField,
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[a-zA-Z0-9]')),
                             ],
                             decoration:
                                 AppTextFiledDecoration.defaultDecoration(
@@ -251,15 +249,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             children: [
                               Text(
                                 AppLocalizations.of(context)!.commission,
-                                style: AppTextStyles.walletAddress.copyWith(
-                                    color: Colors.black.withOpacity(1),
-                                    fontSize: 18),
+                                style: AppTextStyles.infoItemTitle,
                               ),
                               const SizedBox(height: 5),
                               Text(
                                 (commission).toStringAsFixed(8),
-                                style: AppTextStyles.walletAddress.copyWith(
-                                    color: Colors.black, fontSize: 18),
+                                style: AppTextStyles.infoItemValue,
                               ),
                             ]),
                         const SizedBox(height: 30),
@@ -274,7 +269,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 Icons.arrow_forward_ios_rounded,
                                 color: Colors.grey,
                               ),
-                              activeColor: const Color(0xFF2B2F4F),
+                              activeColor: Theme.of(context).colorScheme.primary,
                               onWaitingProcess: () => sendOrder(),
                               onFinish: () {},
                             )),
@@ -354,11 +349,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
         style: OutlinedButton.styleFrom(
           backgroundColor:
               selButton == double.parse(valueAmount.toStringAsFixed(7))
-                  ? CustomColors.primaryColor.withOpacity(0.3)
+                  ? Theme.of(context).colorScheme.primary
                   : Colors.transparent,
           side: BorderSide(
               color: selButton == double.parse(valueAmount.toStringAsFixed(7))
-                  ? CustomColors.primaryColor.withOpacity(0.5)
+                  ? Theme.of(context).colorScheme.background.withOpacity(0.5)
                   : Colors.grey),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
@@ -375,7 +370,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         : FontWeight.normal,
                     color: selButton ==
                             double.parse(valueAmount.toStringAsFixed(7))
-                        ? CustomColors.primaryColor.withOpacity(0.9)
-                        : Colors.black))));
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Theme.of(context).colorScheme.onSurface))));
   }
 }

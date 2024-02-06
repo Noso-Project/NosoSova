@@ -20,12 +20,12 @@ class PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar:  AppBar(title:  Text(
-          AppLocalizations.of(context)!.createPayment,
-          textAlign: TextAlign.start,
-          style: AppTextStyles.dialogTitle.copyWith(fontSize: 22),
-        ),),
-        body:  PaymentScreen(address: widget.address, receiver: widget.receiver));
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.createPayment,
+                textAlign: TextAlign.start,
+                style: AppTextStyles.dialogTitle.copyWith(fontSize: 22))),
+        body:
+            PaymentScreen(address: widget.address, receiver: widget.receiver));
   }
 }

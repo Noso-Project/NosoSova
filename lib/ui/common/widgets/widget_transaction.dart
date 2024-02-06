@@ -46,7 +46,7 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.all(20),
             width: double.infinity,
             child: Column(
@@ -69,7 +69,7 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
                                 ? Assets.iconsExport
                                 : Assets.iconsImport,
                         colorCustom: isCustom
-                            ? Colors.black
+                            ? Theme.of(context).colorScheme.onSurface
                             : widget.isReceiver
                                 ? CustomColors.positiveBalance
                                 : CustomColors.negativeBalance)),
@@ -79,13 +79,11 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
                         ? AppLocalizations.of(context)!.editCustom
                         : "${widget.isReceiver ? "+" : "-"}${amount.toStringAsFixed(5)} ${NosoConst.coinName}",
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.titleMax
-                        .copyWith(color: Colors.black, fontSize: 36)),
+                    style: AppTextStyles.balance),
                 const SizedBox(height: 20),
                 Text(
                     "${AppLocalizations.of(context)!.block}: ${widget.transaction.blockId.toString()}",
-                    style: AppTextStyles.walletAddress
-                        .copyWith(color: Colors.black, fontSize: 20)),
+                    style: AppTextStyles.infoItemValue),
                 const SizedBox(height: 10),
                 if (!widget.isProcess) ...[
                   Text(widget.transaction.timestamp,
@@ -137,8 +135,7 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
         children: [
           Text(
             nameItem,
-            style: AppTextStyles.itemStyle
-                .copyWith(color: Colors.black.withOpacity(0.5), fontSize: 18),
+            style: AppTextStyles.textHiddenMedium(context),
           ),
           if (copy) ...[
             InkWell(
@@ -151,8 +148,7 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
                         flex: 3,
                         child: Text(
                           value,
-                          style: AppTextStyles.walletAddress
-                              .copyWith(color: Colors.black, fontSize: 18),
+                          style: AppTextStyles.infoItemValue,
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -166,8 +162,7 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
               Text(
                 value,
                 textAlign: TextAlign.start,
-                style: AppTextStyles.walletAddress
-                    .copyWith(color: Colors.black, fontSize: 18),
+                style: AppTextStyles.infoItemValue,
               ),
             ]),
           ]

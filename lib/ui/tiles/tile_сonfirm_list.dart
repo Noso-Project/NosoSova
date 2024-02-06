@@ -40,7 +40,7 @@ class _TileConfirmListStateState extends State<TileConfirmList> {
       leading: AppIconsStyle.icon3x2(
         widget.iconData,
         colorFilter: ColorFilter.mode(
-          _clicked ? CustomColors.negativeBalance : Colors.black,
+          _clicked ? CustomColors.negativeBalance : Colors.grey,
           BlendMode.srcIn,
         ),
       ),

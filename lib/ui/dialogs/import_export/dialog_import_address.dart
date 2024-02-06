@@ -70,7 +70,7 @@ class DialogImportAddressState extends State<DialogImportAddress> {
                   },
                   contentPadding: const EdgeInsets.all(0),
                   title: Text(item.custom != null ? item.custom ?? "" : OtherUtils.hashObfuscation(item.hash),
-                      style: AppTextStyles.itemStyle.copyWith(fontSize: 16)),
+                      style: AppTextStyles.walletHash),
                   leading: Checkbox(
                     activeColor: CustomColors.primaryColor,
                     value: isSelected,

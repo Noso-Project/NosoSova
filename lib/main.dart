@@ -62,7 +62,9 @@ class MyApp extends StatelessWidget {
         .addFont(rootBundle.load(Assets.fontsGilroyRegular));
 
     if (Responsive.isMobile(context)) {
-      ScreenUtil.init(context, designSize: const Size(414, 896));
+      ScreenUtil.init(context, designSize: const Size(360, 690));
+    }else {
+      ScreenUtil.init(context, designSize: const Size(1000, 800));
     }
 
     return ListenableBuilder(

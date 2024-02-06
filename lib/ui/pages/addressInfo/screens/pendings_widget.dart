@@ -37,13 +37,12 @@ class _PendingsWidgetState extends State<PendingsWidget> {
                     child: Column(
                       children: [
                         Text(AppLocalizations.of(context)!.incoming,
-                            style: AppTextStyles.itemStyle
+                            style: AppTextStyles.infoItemValue
                                 .copyWith(color: Colors.white)),
                         BlinkingWidget(
                             widget: Text(
                                 "${isIncoming ? "+" : ""}${widget.address.incoming.toStringAsFixed(6)}",
-                                style: AppTextStyles.categoryStyle.copyWith(
-                                    fontSize: 18,
+                                style: AppTextStyles.infoItemValue.copyWith(
                                     color: isIncoming
                                         ? CustomColors.positiveBalance
                                         : Colors.white.withOpacity(0.8))),
@@ -57,13 +56,12 @@ class _PendingsWidgetState extends State<PendingsWidget> {
                     child: Column(
                       children: [
                         Text(AppLocalizations.of(context)!.outgoing,
-                            style: AppTextStyles.itemStyle
+                            style: AppTextStyles.infoItemValue
                                 .copyWith(color: Colors.white)),
                         BlinkingWidget(
                             widget: Text(
                                 "${isOutgoing ? "-" : ""}${widget.address.outgoing.toStringAsFixed(6)}",
-                                style: AppTextStyles.categoryStyle.copyWith(
-                                    fontSize: 18,
+                                style: AppTextStyles.infoItemValue.copyWith(
                                     color: isOutgoing
                                         ? CustomColors.negativeBalance
                                         : Colors.white.withOpacity(0.8))),

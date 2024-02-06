@@ -46,13 +46,12 @@ class _DialogDebugState extends State<DialogDebug> {
                     padding: EdgeInsets.symmetric(
                         vertical: item.type != DebugType.inform ? 10 : 0),
                     child: Text("${item.time}: ${item.message}",
-                        style: AppTextStyles.itemStyle.copyWith(
-                            fontSize: 16,
+                        style: AppTextStyles.infoItemTitle.copyWith(
                             color: item.type != DebugType.inform
                                 ? item.type != DebugType.error
                                     ? CustomColors.positiveBalance
                                     : CustomColors.negativeBalance
-                                : Colors.black)),
+                                : Theme.of(context).colorScheme.onSurface)),
                   );
                 },
               ),

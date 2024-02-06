@@ -24,7 +24,7 @@ class AddressActionsWidget extends StatelessWidget {
     return Container(
         height: MediaQuery.of(context).size.height * 0.5,
         width: double.infinity,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         child: SingleChildScrollView(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

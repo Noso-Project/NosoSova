@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/generated/assets.dart';
 import 'package:nososova/l10n/app_localizations.dart';
+import 'package:nososova/ui/theme/style/icons_style.dart';
 import 'package:nososova/ui/tiles/dialog_tile.dart';
 
 import '../../blocs/events/wallet_events.dart';
@@ -76,27 +77,23 @@ class _DialogWalletActionsState extends State<DialogWalletActions> {
                         title: Text(AppLocalizations.of(context)!.fileWallet,
                             style: AppTextStyles.dialogTitle)),
                   ListTile(
-                      leading: SvgPicture.asset(Assets.iconsImport,
-                          height: 32, width: 32),
+                      leading: AppIconsStyle.icon3x2(Assets.iconsImport),
                       title: Text(AppLocalizations.of(context)!.importFile,
-                          style: AppTextStyles.itemStyle
-                              .copyWith(fontFamily: "GilroySemiBold")),
+                          style: AppTextStyles.infoItemValue),
                       subtitle: Text(
                           AppLocalizations.of(context)!.importFileSubtitle,
                           style:
-                              AppTextStyles.itemStyle.copyWith(fontSize: 16)),
+                              AppTextStyles.textHiddenSmall(context)),
                       onTap: () => _importWalletFile(context)),
                   ListTile(
                       enabled: isEnableExport,
-                      leading: SvgPicture.asset(Assets.iconsExport,
-                          height: 32, width: 32),
+                      leading: AppIconsStyle.icon3x2(Assets.iconsExport),
                       title: Text(AppLocalizations.of(context)!.exportFile,
-                          style: AppTextStyles.itemStyle
-                              .copyWith(fontFamily: "GilroySemiBold")),
+                          style: AppTextStyles.infoItemValue),
                       subtitle: Text(
                           AppLocalizations.of(context)!.exportFileSubtitle,
                           style:
-                              AppTextStyles.itemStyle.copyWith(fontSize: 16)),
+                              AppTextStyles.textHiddenSmall(context)),
                       onTap: () =>
                           _exportWalletFile(context, FormatWalletFile.pkw)),
                   const SizedBox(height: 10)

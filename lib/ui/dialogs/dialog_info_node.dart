@@ -3,7 +3,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/models/address_wallet.dart';
 import 'package:nososova/ui/common/components/empty_list_widget.dart';
-import 'package:nososova/ui/theme/style/colors.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../models/rest_api/node_info.dart';
@@ -46,7 +45,7 @@ class _DialogInfoNodeState extends State<DialogInfoNode> {
                         vertical: 40, horizontal: 20),
                     child: Center(
                         child: LoadingAnimationWidget.staggeredDotsWave(
-                      color: CustomColors.primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 80,
                     )));
               } else if (snapshot.hasError || snapshot.data == null) {

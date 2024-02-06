@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../blocs/wallet_bloc.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -31,14 +32,14 @@ class StatsNodesUser extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context)!.available,
-                        style: AppTextStyles.itemStyle
-                            .copyWith(color: Colors.white, fontSize: 16),
+                        style: AppTextStyles.infoItemTitle
+                            .copyWith(color: Colors.white),
                       ),
                       const SizedBox(height: 5),
                       Text(
                         state.stateNodes.nodes.length.toString(),
-                        style: AppTextStyles.walletAddress
-                            .copyWith(color: Colors.white, fontSize: 22),
+                        style: AppTextStyles.infoItemValue
+                            .copyWith(color: Colors.white, fontSize: 18.sp),
                       )
                     ],
                   ),
@@ -57,14 +58,14 @@ class StatsNodesUser extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context)!.launched,
-                        style: AppTextStyles.itemStyle
-                            .copyWith(color: Colors.white, fontSize: 16),
+                        style: AppTextStyles.infoItemTitle
+                            .copyWith(color: Colors.white),
                       ),
                       const SizedBox(height: 5),
                       Text(
                         state.stateNodes.launchedNodes.toString(),
-                        style: AppTextStyles.walletAddress
-                            .copyWith(color: Colors.white, fontSize: 22),
+                        style: AppTextStyles.infoItemValue
+                            .copyWith(color: Colors.white, fontSize: 18.sp),
                       )
                     ],
                   ),
@@ -86,14 +87,14 @@ class StatsNodesUser extends StatelessWidget {
                 Text(
                   AppLocalizations.of(context)!.nr24,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.itemStyle
-                      .copyWith(color: Colors.white, fontSize: 14),
+                  style: AppTextStyles.infoItemTitle
+                      .copyWith(color: Colors.white),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   "${state.stateNodes.rewardDay.toStringAsFixed(6)} NOSO",
-                  style: AppTextStyles.walletAddress
-                      .copyWith(color: Colors.white, fontSize: 22),
+                  style: AppTextStyles.infoItemValue
+                      .copyWith(color: Colors.white, fontSize: 18.sp),
                 )
               ],
             ),

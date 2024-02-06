@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
@@ -58,7 +59,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                       children: [
                         Text(
                           AppLocalizations.of(context)!.nosoPrice,
-                          style: AppTextStyles.itemStyle.copyWith(fontSize: 20),
+                          style: AppTextStyles.textHiddenMedium(context),
                         ),
                         if (!Responsive.isMobile(context))
                           IconButton(
@@ -73,7 +74,6 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                                   ? Icons.expand_less
                                   : Icons.expand_more_outlined,
                               size: 22,
-                              color: Colors.black,
                             ),
                           ),
                       ],
@@ -88,14 +88,13 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                           children: [
                             Text(
                               infoCoin.getCurrentPrice.toStringAsFixed(6),
-                              style: AppTextStyles.titleMin
-                                  .copyWith(fontSize: 36, color: Colors.black),
+                              style:
+                                  AppTextStyles.priceValue,
                             ),
                             const SizedBox(width: 5),
                             Text(
                               "USDT",
-                              style: AppTextStyles.titleMin
-                                  .copyWith(color: Colors.black),
+                              style: AppTextStyles.priceValue.copyWith(fontSize: 22.sp),
                             ),
                           ],
                         ),
@@ -112,19 +111,19 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                     ),
                     Text(
                       "${diff < 0 ? "" : "+"}${diff.toStringAsFixed(2)}%",
-                      style: AppTextStyles.titleMin.copyWith(
+                      style: AppTextStyles.priceValue.copyWith(
                           color: diff == 0
-                              ? Colors.black
+                              ? Theme.of(context).colorScheme.outline
                               : diff < 0
                                   ? CustomColors.negativeBalance
                                   : CustomColors.positiveBalance,
-                          fontSize: 20),
+                          fontSize: 18.sp),
                     ),
                     if (Responsive.isMobile(context) || isVisibleAction)
                       const SizedBox(height: 20),
                     if (Responsive.isMobile(context) || isVisibleAction)
                       SizedBox(
-                        height: 120,
+                        height: 80.h,
                         width: double.infinity,
                         child: LineChart(
                           LineChartData(
@@ -206,9 +205,10 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
           ],
           if (!Responsive.isMobile(context)) ...[
             if (Responsive.isMobile(context) || isVisibleAction) ...[
-              const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: DasherDivider(color: Colors.grey)),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: DasherDivider(
+                      color: Theme.of(context).colorScheme.outline)),
               ItemInfoWidget(
                   nameItem: AppLocalizations.of(context)!.numberOfMinedCoins,
                   value: NumberFormat.compact().format(infoCoin.getTotalCoin)),
@@ -225,13 +225,9 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
             ]
           ],
           if (Responsive.isMobile(context)) ...[
-            const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: DasherDivider(color: Colors.grey)),
             const SizedBox(height: 20),
             TabBar(
               controller: _tabController,
-              indicatorColor: const Color(0xFF2B2F4F).withOpacity(0.4),
               indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
               onTap: (index) {
                 setState(() {
@@ -241,22 +237,20 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
               tabs: [
                 Tab(
                   child: Text(
+                    textScaleFactor: ScreenUtil().textScaleFactor,
                     AppLocalizations.of(context)!.information,
                     style: selectIndexTab == 0
-                        ? AppTextStyles.walletAddress
-                            .copyWith(color: Colors.black, fontSize: 20)
-                        : AppTextStyles.itemStyle
-                            .copyWith(color: Colors.black, fontSize: 20),
+                        ? AppTextStyles.tabActive
+                        : AppTextStyles.tabInActive,
                   ),
                 ),
                 Tab(
                   child: Text(
+                    textScaleFactor: ScreenUtil().textScaleFactor,
                     AppLocalizations.of(context)!.masternodes,
                     style: selectIndexTab == 1
-                        ? AppTextStyles.walletAddress
-                            .copyWith(color: Colors.black, fontSize: 20)
-                        : AppTextStyles.itemStyle
-                            .copyWith(color: Colors.black, fontSize: 20),
+                        ? AppTextStyles.tabActive
+                        : AppTextStyles.tabInActive,
                   ),
                 ),
               ],

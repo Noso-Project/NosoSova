@@ -44,7 +44,7 @@ class _DialogTitleDropdownState extends State<DialogTitleDropdown> {
         children: [
           Text(
             widget.titleDialog,
-            style: AppTextStyles.dialogTitle.copyWith(color: widget.isDark ? Colors.black : Colors.white),
+            style: AppTextStyles.dialogTitle.copyWith(color: widget.isDark ? Theme.of(context).colorScheme.onSurface : Colors.white),
           ),
           if (widget.activeMobile)
             IconButton(
@@ -60,7 +60,7 @@ class _DialogTitleDropdownState extends State<DialogTitleDropdown> {
                     ? Icons.expand_less
                     : Icons.expand_more_outlined,
                 size: 28,
-                color: widget.isDark ? Colors.black : Colors.white.withOpacity(0.7),
+                color: widget.isDark ? Theme.of(context).colorScheme.onSurface : Colors.white.withOpacity(0.7),
               ),
             ),
         ],

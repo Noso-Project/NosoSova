@@ -51,7 +51,6 @@ class DialogRouter {
   /// The dialog that displays the status of the network connection and actions on it
   static void showDialogInfoNetwork(BuildContext context) {
     showModalBottomSheet(
-        backgroundColor: Colors.white,
         shape: DialogStyle.borderShape,
         context: context,
         builder: (_) => MultiBlocProvider(
@@ -74,7 +73,6 @@ class DialogRouter {
       pageListBuilder: (BuildContext _) {
         return [
           WoltModalSheetPage(
-              backgroundColor: Colors.white,
               hasSabGradient: false,
               topBarTitle: Text(AppLocalizations.of(context)!.importKeysPair,
                   textAlign: TextAlign.center,
@@ -108,7 +106,6 @@ class DialogRouter {
         pageListBuilder: (BuildContext _) {
           return [
             WoltModalSheetPage(
-                backgroundColor: Colors.white,
                 hasSabGradient: false,
                 topBarTitle: Text(address.hashPublic,
                     textAlign: TextAlign.center,
@@ -140,7 +137,6 @@ class DialogRouter {
         pageListBuilder: (BuildContext _) {
           return [
             WoltModalSheetPage(
-                backgroundColor: Colors.white,
                 hasSabGradient: false,
                 topBarTitle: Text(address.hashPublic,
                     textAlign: TextAlign.center,
@@ -175,7 +171,6 @@ class DialogRouter {
         pageListBuilder: (BuildContext _) {
           return [
             WoltModalSheetPage(
-                backgroundColor: Colors.white,
                 hasSabGradient: false,
                 topBarTitle: Text(AppLocalizations.of(context)!.customNameAdd,
                     textAlign: TextAlign.center,
@@ -204,7 +199,6 @@ class DialogRouter {
       pageListBuilder: (BuildContext _) {
         return [
           WoltModalSheetPage(
-              backgroundColor: Colors.white,
               hasSabGradient: false,
               topBarTitle: Text(AppLocalizations.of(context)!.debugInfo,
                   textAlign: TextAlign.center,
@@ -243,7 +237,6 @@ class DialogRouter {
       pageListBuilder: (BuildContext _) {
         return [
           WoltModalSheetPage(
-            backgroundColor: Colors.white,
             hasSabGradient: false,
             topBarTitle: Text("Secret keys",
                 textAlign: TextAlign.center,
@@ -264,7 +257,6 @@ class DialogRouter {
       pageListBuilder: (BuildContext _) {
         return [
           WoltModalSheetPage(
-              backgroundColor: Colors.white,
               hasSabGradient: false,
               topBarTitle: Text(
                   AppLocalizations.of(context)!.pendingTransaction,
@@ -292,7 +284,6 @@ class DialogRouter {
       pageListBuilder: (BuildContext _) {
         return [
           WoltModalSheetPage(
-              backgroundColor: Colors.white,
               hasSabGradient: false,
               topBarTitle: Text(
                   AppLocalizations.of(context)!.nodeInfo,

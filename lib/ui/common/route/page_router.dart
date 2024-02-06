@@ -42,7 +42,6 @@ class PageRouter {
                   icon: const Icon(Icons.close),
                   onPressed: Navigator.of(context).pop,
                 ),
-                backgroundColor: Colors.white,
                 hasSabGradient: false,
                 isTopBarLayerAlwaysVisible: true,
                 child: BlocProvider.value(

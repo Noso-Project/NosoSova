@@ -58,6 +58,18 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 flutter:
   fonts:
+    - family: Gilroy
+      fonts:
+          - asset: assets/fonts/Gilroy-Regular.ttf
+            weight: 400
+          - asset: assets/fonts/Gilroy-SemiBold.ttf
+            weight: 600
+          - asset: assets/fonts/Gilroy-Bold.ttf
+            weight: 700
+          - asset: assets/fonts/Gilroy-Heavy.ttf
+            weight: 800
+
+
     - family: GilroyHeavy
       fonts:
         - asset: assets/fonts/Gilroy-Heavy.ttf

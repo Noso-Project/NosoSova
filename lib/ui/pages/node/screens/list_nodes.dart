@@ -17,26 +17,26 @@ class ListNodes extends StatelessWidget {
         if (nodes.isEmpty) {
           return Expanded(
               flex: 2,
-              child:Container(
-            padding: const EdgeInsets.all(20),
-            width: double.infinity,
-            color: Colors.white,
-            child: Center(
-                child: EmptyWidget(
-                    title: AppLocalizations.of(context)!.empty,
-                    descrpt: AppLocalizations.of(context)!.emptyNodesError)),
-          ));
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                width: double.infinity,
+                child: Center(
+                    child: EmptyWidget(
+                        title: AppLocalizations.of(context)!.empty,
+                        descrpt:
+                            AppLocalizations.of(context)!.emptyNodesError)),
+              ));
         } else {
-          return  ListView.builder(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 0.0, vertical: 0.0),
-                  itemCount: nodes.length,
-                  itemBuilder: (context, index) {
-                    return AddressNodeTile(
-                      address: nodes[index],
-                    );
-                  });
+          return ListView.builder(
+              shrinkWrap: true,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
+              itemCount: nodes.length,
+              itemBuilder: (context, index) {
+                return AddressNodeTile(
+                  address: nodes[index],
+                );
+              });
         }
       },
     );

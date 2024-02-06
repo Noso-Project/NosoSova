@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:noso_dart/const.dart';
 import 'package:nososova/ui/common/route/dialog_router.dart';
 
@@ -78,8 +79,7 @@ class _CardBodyState extends State<CardBody> {
           children: [
             Text(
               AppLocalizations.of(context)!.balance,
-              style: AppTextStyles.walletAddress.copyWith(
-                fontSize: 22,
+              style: AppTextStyles.infoItemValue.copyWith(
                 color: Colors.white.withOpacity(0.5),
               ),
             ),
@@ -89,12 +89,12 @@ class _CardBodyState extends State<CardBody> {
               children: [
                 Text(
                   state.wallet.balanceTotal.toStringAsFixed(2),
-                  style: AppTextStyles.titleMax,
+                  style: AppTextStyles.balance,
                 ),
                 const SizedBox(width: 5),
                 Text(
                   NosoConst.coinName,
-                  style: AppTextStyles.titleMin,
+                  style: AppTextStyles.nosoName,
                 ),
               ],
             ),
@@ -113,16 +113,15 @@ class _CardBodyState extends State<CardBody> {
                       children: [
                         Text(
                           AppLocalizations.of(context)!.incoming,
-                          style: AppTextStyles.titleMin.copyWith(
-                            fontSize: 16.0,
+                          style: AppTextStyles.infoItemValue.copyWith(
+                            fontSize: 14.sp,
                             color: Colors.white.withOpacity(0.5),
                           ),
                         ),
                         BlinkingWidget(
                           widget: Text(
                             state.wallet.totalIncoming.toStringAsFixed(8),
-                            style: AppTextStyles.categoryStyle.copyWith(
-                              fontSize: 16,
+                            style: AppTextStyles.infoItemValue.copyWith(
                               color: isIncoming
                                   ? CustomColors.positiveBalance
                                   : Colors.white.withOpacity(0.8),
@@ -139,16 +138,15 @@ class _CardBodyState extends State<CardBody> {
                       children: [
                         Text(
                           AppLocalizations.of(context)!.outgoing,
-                          style: AppTextStyles.titleMin.copyWith(
-                            fontSize: 16.0,
+                          style: AppTextStyles.infoItemValue.copyWith(
+                            fontSize: 14.sp,
                             color: Colors.white.withOpacity(0.5),
                           ),
                         ),
                         BlinkingWidget(
                           widget: Text(
                             state.wallet.totalOutgoing.toStringAsFixed(8),
-                            style: AppTextStyles.categoryStyle.copyWith(
-                              fontSize: 16,
+                            style: AppTextStyles.infoItemValue.copyWith(
                               color: isOutgoing
                                   ? CustomColors.negativeBalance
                                   : Colors.white.withOpacity(0.8),
@@ -161,17 +159,20 @@ class _CardBodyState extends State<CardBody> {
                     ),
                   ],
                 ),
-            if(Responsive.isMobile(context))    IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isVisibleAction = !isVisibleAction;
-                      });
-                    },
-                    icon: Icon(
-                      isVisibleAction ?Icons.expand_less : Icons.expand_more_outlined,
-                      size: 32,
-                      color: Colors.white.withOpacity(0.4),
-                    ))
+                if (Responsive.isMobile(context))
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isVisibleAction = !isVisibleAction;
+                        });
+                      },
+                      icon: Icon(
+                        isVisibleAction
+                            ? Icons.expand_less
+                            : Icons.expand_more_outlined,
+                        size: 32,
+                        color: Colors.white.withOpacity(0.4),
+                      ))
               ],
             ),
             const SizedBox(height: 20),
@@ -234,8 +235,7 @@ class _CardBodyState extends State<CardBody> {
               const SizedBox(width: 10),
               Text(
                 title,
-                style: AppTextStyles.itemStyle.copyWith(
-                  fontSize: 18,
+                style: AppTextStyles.infoItemValue.copyWith(
                   color: Colors.white.withOpacity(0.8),
                 ),
               ),

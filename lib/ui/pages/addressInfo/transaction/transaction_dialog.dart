@@ -10,9 +10,9 @@ import '../../../theme/style/text_style.dart';
 class TransactionDialog {
   WoltModalSheetPage showDialog(BuildContext modalSheetContext, TransactionHistory transaction, bool isReceiver) {
     return WoltModalSheetPage(
-      backgroundColor: Colors.white,
+    backgroundColor: Theme.of(modalSheetContext).colorScheme.surface,
         hasSabGradient: false,
-        topBarTitle: Text( AppLocalizations.of(modalSheetContext)!.transactionInfo, textAlign: TextAlign.center, style: AppTextStyles.walletAddress.copyWith()),
+        topBarTitle: Text(AppLocalizations.of(modalSheetContext)!.transactionInfo, textAlign: TextAlign.center, style: AppTextStyles.dialogTitle),
         isTopBarLayerAlwaysVisible: true,
         trailingNavBarWidget: IconButton(
           padding: const EdgeInsets.all(20),
