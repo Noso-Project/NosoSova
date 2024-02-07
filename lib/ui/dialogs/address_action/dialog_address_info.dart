@@ -63,6 +63,10 @@ class AddressInfoState extends State<AddressInfo> {
                   Assets.iconsTextTwo,
                   AppLocalizations.of(context)!.copyAddress,
                   () => _copy(context)),
+              buildListTileSvg(
+                  Assets.iconsNodeI,
+                  AppLocalizations.of(context)!.openNodeInfo,
+                      () => _showNodeInfo(context)),
               TileConfirmList(
                   iconData: Assets.iconsDelete,
                   title: AppLocalizations.of(context)!.removeAddress,
@@ -79,6 +83,11 @@ class AddressInfoState extends State<AddressInfo> {
   void _copy(BuildContext context) {
     Navigator.pop(context);
     Clipboard.setData(ClipboardData(text: widget.address.hash));
+  }
+
+  void _showNodeInfo(BuildContext context) {
+    Navigator.pop(context);
+    DialogRouter.showDialogNodeInfo(context, widget.address);
   }
 
   void _viewQr(BuildContext context) {

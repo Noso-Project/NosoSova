@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
+import 'package:nososova/ui/config/responsive.dart';
 import 'package:nososova/ui/theme/anim/blinkin_widget.dart';
 import 'package:nososova/ui/theme/style/text_style.dart';
 
@@ -35,7 +36,7 @@ class _AddressListTileState extends State<AddressListTile> {
                 contentPadding: const EdgeInsets.only(left: 10, right: 15),
                 leading: _iconAddress(),
                 title: Text(
-                  widget.address.hashPublic,
+                 Responsive.isMobile(context) ?  widget.address.hashPublic :  widget.address.hash,
                   style: AppTextStyles.walletHash,
                 ),
                 subtitle: Text(

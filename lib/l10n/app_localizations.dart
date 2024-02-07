@@ -982,6 +982,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Monthly earning'**
   String get monthlyEarning;
+
+  /// No description provided for @openNodeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Information about Node'**
+  String get openNodeInfo;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -145,5 +145,6 @@
   "nodeInfo": "Información sobre el nodo",
   "consecutivePayments": "Pagos consecutivos",
   "uptimePercent": "Uptime",
-  "monthlyEarning": "Ganancias mensuales"
+  "monthlyEarning": "Ganancias mensuales",
+  "openNodeInfo": "Información sobre el Nodo"
 }

@@ -145,6 +145,7 @@
   "nodeInfo": "Informationen über den Knoten",
   "consecutivePayments": "aufeinanderfolgende Zahlungen",
   "uptimePercent": "Uptime",
-  "monthlyEarning": "Monatlicher Verdienst"
+  "monthlyEarning": "Monatlicher Verdienst",
+  "openNodeInfo": "Informationen zum Knotenpunkt"
 
 }

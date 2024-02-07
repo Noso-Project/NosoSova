@@ -54,15 +54,20 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
-    if (Responsive.isMobile(context)) {
+  if (Platform.isAndroid && Platform.isIOS) {
       ScreenUtil.init(context, designSize: const Size(360, 690));
     } else {
-      ScreenUtil.init(context, designSize: const Size(1000, 800));
+      ScreenUtil.init(context, designSize: const Size(1000, 800), minTextAdapt: true);
+      ScreenUtil().setSp(20);
     }
+
+
+
 
     return ListenableBuilder(
         listenable: _appSettings,
         builder: (BuildContext context, Widget? child) {
+
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),

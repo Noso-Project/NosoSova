@@ -444,4 +444,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get monthlyEarning => 'Щомісячний заробіток';
+
+  @override
+  String get openNodeInfo => 'Інформація про Ноду';
 }

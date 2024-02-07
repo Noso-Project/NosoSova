@@ -146,5 +146,6 @@
   "nodeInfo": "Інформація про вузол",
   "consecutivePayments": "Послідовні платежі",
   "uptimePercent": "Безвідмовна робота",
-  "monthlyEarning": "Щомісячний заробіток"
+  "monthlyEarning": "Щомісячний заробіток",
+  "openNodeInfo": "Інформація про Ноду"
 }

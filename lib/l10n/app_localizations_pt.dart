@@ -444,4 +444,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get monthlyEarning => 'Ganhos Mensais';
+
+  @override
+  String get openNodeInfo => 'Informações sobre o Node';
 }

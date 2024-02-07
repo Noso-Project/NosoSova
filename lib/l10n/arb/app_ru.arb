@@ -145,5 +145,6 @@
   "nodeInfo": "Информация об узле",
   "consecutivePayments": "Последовательные платежи",
   "uptimePercent": "Безотказная работа",
-  "monthlyEarning": "Ежемесячный заработок"
+  "monthlyEarning": "Ежемесячный заработок",
+  "openNodeInfo": "Информация о Node"
 }

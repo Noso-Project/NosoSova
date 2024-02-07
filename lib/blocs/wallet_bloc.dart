@@ -717,7 +717,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         ? "wallet.nososova"
         : "wallet.pkw";
 
-    if (Platform.isIOS || Platform.isAndroid || Platform.isMacOS) {
+    if (Platform.isIOS || Platform.isAndroid ) {
       var bytes = FileHandler.writeWalletFile(state.wallet.address);
 
       /// also, bytes == null. return error
@@ -738,7 +738,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
               idWidget: ResponseWidgetsIds.widgetImportAddress,
               codeMessage: 16,
               snackBarType: SnackBarType.success)));
-    } else if (Platform.isLinux || Platform.isWindows) {
+    } else if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
       _responseStatusStream.add(ResponseListenerPage(
           idWidget: ResponseWidgetsIds.widgetImportAddress,
           codeMessage: 0,

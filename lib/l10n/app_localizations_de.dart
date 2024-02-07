@@ -444,4 +444,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get monthlyEarning => 'Monatlicher Verdienst';
+
+  @override
+  String get openNodeInfo => 'Informationen zum Knotenpunkt';
 }
