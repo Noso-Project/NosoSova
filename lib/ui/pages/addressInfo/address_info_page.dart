@@ -8,7 +8,7 @@ import 'package:noso_dart/const.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:nososova/ui/pages/addressInfo/screens/address_actions.dart';
 import 'package:nososova/ui/pages/addressInfo/screens/history_transaction.dart';
-import 'package:nososova/ui/pages/addressInfo/screens/pendings_widget.dart';
+import 'package:nososova/ui/common/widgets/pending/pendings_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../blocs/events/history_transactions_events.dart';
@@ -16,9 +16,9 @@ import '../../../blocs/history_transactions_bloc.dart';
 import '../../../blocs/wallet_bloc.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/address_wallet.dart';
-import '../../common/widgets/app_bar_other_page.dart';
 import '../../common/responses_util/response_widget_id.dart';
 import '../../common/responses_util/snackbar_message.dart';
+import '../../common/widgets/app_bar_other_page.dart';
 import '../../common/widgets/node_light_status.dart';
 import '../../config/responsive.dart';
 import '../../theme/anim/transform_widget.dart';
@@ -133,7 +133,7 @@ class _AddressInfoPageState extends State<AddressInfoPage> {
                               NosoUtility.getCountMonetToRunNode())
                             NodeLightStatus(address: address)
                           else
-                            PendingsWidget(address: address),
+                            PendingWidget(address: address),
                           Expanded(
                               flex: 2,
                               child: ClipRRect(

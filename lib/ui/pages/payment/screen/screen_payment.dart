@@ -18,7 +18,7 @@ import '../../../../models/app/response_page_listener.dart';
 import '../../../../models/rest_api/transaction_history.dart';
 import '../../../common/responses_util/response_widget_id.dart';
 import '../../../common/responses_util/snackbar_message.dart';
-import '../../../common/widgets/widget_transaction.dart';
+import '../../transaction/screen/widget_transaction.dart';
 import '../../../theme/style/text_style.dart';
 import '../../../tiles/tile_select_address.dart';
 

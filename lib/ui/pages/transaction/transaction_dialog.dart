@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:nososova/ui/common/widgets/widget_transaction.dart';
+import 'package:nososova/ui/pages/transaction/screen/widget_transaction.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-import '../../../../l10n/app_localizations.dart';
-import '../../../../models/rest_api/transaction_history.dart';
-import '../../../theme/style/text_style.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../models/rest_api/transaction_history.dart';
+import '../../theme/style/text_style.dart';
 
 class TransactionDialog {
   WoltModalSheetPage showDialog(BuildContext modalSheetContext, TransactionHistory transaction, bool isReceiver) {

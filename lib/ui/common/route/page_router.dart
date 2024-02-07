@@ -11,8 +11,8 @@ import '../../../models/rest_api/transaction_history.dart';
 import '../../../repositories/repositories.dart';
 import '../../config/responsive.dart';
 import '../../pages/addressInfo/address_info_page.dart';
-import '../../pages/addressInfo/transaction/transaction_dialog.dart';
-import '../../pages/addressInfo/transaction/transaction_page.dart';
+import '../../pages/transaction/transaction_dialog.dart';
+import '../../pages/transaction/transaction_page.dart';
 import '../../pages/payment/payment_page.dart';
 import '../../pages/payment/screen/screen_payment.dart';
 

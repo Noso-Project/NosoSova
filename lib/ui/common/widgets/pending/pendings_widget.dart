@@ -6,16 +6,16 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../models/address_wallet.dart';
 import '../../../theme/style/text_style.dart';
 
-class PendingsWidget extends StatefulWidget {
+class PendingWidget extends StatefulWidget {
   final Address address;
 
-  const PendingsWidget({super.key, required this.address});
+  const PendingWidget({super.key, required this.address});
 
   @override
-  State createState() => _PendingsWidgetState();
+  State createState() => _PendingWidgetState();
 }
 
-class _PendingsWidgetState extends State<PendingsWidget> {
+class _PendingWidgetState extends State<PendingWidget> {
   @override
   Widget build(BuildContext context) {
     var isOutgoing = widget.address.outgoing > 0;

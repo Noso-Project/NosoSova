@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:noso_dart/const.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
 import 'package:nososova/ui/theme/style/icons_style.dart';
 
-import '../../../generated/assets.dart';
-import '../../../l10n/app_localizations.dart';
-import '../../../models/rest_api/transaction_history.dart';
-import '../../../utils/other_utils.dart';
-import '../../config/responsive.dart';
-import '../../theme/style/text_style.dart';
-import 'custom/dasher_divider.dart';
+import '../../../../generated/assets.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../../models/rest_api/transaction_history.dart';
+import '../../../theme/style/text_style.dart';
+import '../../../common/widgets/custom/dasher_divider.dart';
+import '../../../common/widgets/item_info_widget.dart';
 
 class TransactionWidgetInfo extends StatefulWidget {
   final TransactionHistory transaction;
@@ -87,8 +85,7 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
                 const SizedBox(height: 10),
                 if (!widget.isProcess) ...[
                   Text(widget.transaction.timestamp,
-                      style:
-                          AppTextStyles.textHiddenMedium(context)),
+                      style: AppTextStyles.textHiddenMedium(context)),
                 ] else ...[
                   Text(AppLocalizations.of(context)!.sendProcess,
                       style: AppTextStyles.textHiddenMedium(context)),
@@ -98,75 +95,29 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
                   color: Colors.grey,
                 ),
                 const SizedBox(height: 20),
-                itemInfo(AppLocalizations.of(context)!.orderId,
-                    widget.transaction.id,
+                ItemInfoWidgetVertical(
+                    nameItem: AppLocalizations.of(context)!.orderId,
+                    value: widget.transaction.id,
                     copy: true),
                 if (!widget.isReceiver && !isCustom)
-                  itemInfo(
-                      AppLocalizations.of(context)!.receiver,
-                      !Responsive.isMobile(context)
-                          ? widget.transaction.receiver
-                          : OtherUtils.hashObfuscation(
-                              widget.transaction.receiver)),
+                  ItemInfoWidgetVertical(
+                      nameItem: AppLocalizations.of(context)!.receiver,
+                      value: widget.transaction.receiver),
                 if (widget.isReceiver)
-                  itemInfo(
-                      AppLocalizations.of(context)!.sender,
-                      !Responsive.isMobile(context)
-                          ? widget.transaction.sender
-                          : OtherUtils.hashObfuscation(
-                              widget.transaction.sender)),
+                  ItemInfoWidgetVertical(
+                      nameItem: AppLocalizations.of(context)!.sender,
+                      value: widget.transaction.sender),
                 if (!widget.isReceiver)
-                  itemInfo(AppLocalizations.of(context)!.commission,
-                      "${widget.transaction.fee} ${NosoConst.coinName}"),
+                  ItemInfoWidgetVertical(
+                      nameItem: AppLocalizations.of(context)!.commission,
+                      value: "${widget.transaction.fee} ${NosoConst.coinName}"),
                 if (isCustom)
-                  itemInfo(AppLocalizations.of(context)!.message, "CUSTOM"),
+                  ItemInfoWidgetVertical(
+                      nameItem: AppLocalizations.of(context)!.message,
+                      value: "CUSTOM"),
               ],
             )),
       ],
-    );
-  }
-
-  itemInfo(String nameItem, String value, {bool copy = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            nameItem,
-            style: AppTextStyles.textHiddenMedium(context),
-          ),
-          if (copy) ...[
-            InkWell(
-                onTap: () => Clipboard.setData(
-                    ClipboardData(text: widget.transaction.id)),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          value,
-                          style: AppTextStyles.infoItemValue,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      const Icon(
-                        Icons.copy,
-                        size: 22,
-                      ),
-                    ]))
-          ] else ...[
-            Row(children: [
-              Text(
-                value,
-                textAlign: TextAlign.start,
-                style: AppTextStyles.infoItemValue,
-              ),
-            ]),
-          ]
-        ],
-      ),
     );
   }
 }

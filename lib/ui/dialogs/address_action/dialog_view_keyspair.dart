@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:nososova/ui/common/widgets/item_info_widget.dart';
 
 import '../../../models/address_wallet.dart';
-import '../../theme/style/text_style.dart';
 
 class DialogViewKeysPair extends StatefulWidget {
   final Address address;
@@ -10,10 +9,10 @@ class DialogViewKeysPair extends StatefulWidget {
   const DialogViewKeysPair({super.key, required this.address});
 
   @override
-  State createState() => DialogViewKeysPairState();
+  State createState() => _DialogViewKeysPairState();
 }
 
-class DialogViewKeysPairState extends State<DialogViewKeysPair> {
+class _DialogViewKeysPairState extends State<DialogViewKeysPair> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -22,45 +21,18 @@ class DialogViewKeysPairState extends State<DialogViewKeysPair> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          itemInfo("Hash:", widget.address.hash),
-          itemInfo("Public key:", widget.address.publicKey),
-          itemInfo("Private key:", widget.address.privateKey)
-        ],
-      ),
-    );
-  }
-
-  itemInfo(
-    String nameItem,
-    String value,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            nameItem,
-            style: AppTextStyles.textHiddenMedium(context),
-          ),
-          InkWell(
-              onTap: () => Clipboard.setData(ClipboardData(text: value)),
-              child:
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Expanded(
-                  flex: 3,
-                  child: Text(
-                    value,
-                    textAlign: TextAlign.start,
-                    style: AppTextStyles.infoItemValue,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                const Icon(
-                  Icons.copy,
-                  size: 22,
-                ),
-              ]))
+          ItemInfoWidgetVertical(
+              nameItem: "Hash:", value: widget.address.hash, copy: true),
+          const SizedBox(height: 10),
+          ItemInfoWidgetVertical(
+              nameItem: "Public key:",
+              value: widget.address.publicKey,
+              copy: true),
+          const SizedBox(height: 10),
+          ItemInfoWidgetVertical(
+              nameItem: "Private key:",
+              value: widget.address.privateKey,
+              copy: true)
         ],
       ),
     );
