@@ -13,8 +13,8 @@ import '../../../config/responsive.dart';
 import '../../../theme/anim/blinkin_widget.dart';
 import '../../../theme/decoration/standart_gradient_decoration.dart';
 import '../../../theme/decoration/standart_gradient_decoration_round.dart';
+import '../../../theme/style/button_style.dart';
 import '../../../theme/style/colors.dart';
-import '../../../theme/style/icons_style.dart';
 import '../../../theme/style/text_style.dart';
 import '../widgets/total_usdt_price.dart';
 
@@ -181,7 +181,7 @@ class _CardBodyState extends State<CardBody> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    buttonAction(
+                    AppButtonStyle.buttonAction(
                       context,
                       Assets.iconsOutput,
                       AppLocalizations.of(context)!.sendCoins,
@@ -191,7 +191,7 @@ class _CardBodyState extends State<CardBody> {
                       ),
                     ),
                     const SizedBox(width: 20),
-                    buttonAction(
+                    AppButtonStyle.buttonAction(
                       context,
                       Assets.iconsPendingTransaction,
                       AppLocalizations.of(context)!.pendingTransaction,
@@ -205,45 +205,6 @@ class _CardBodyState extends State<CardBody> {
           ],
         );
       },
-    );
-  }
-
-  Widget buttonAction(
-      BuildContext context, String icon, String title, Function methodAction) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-      child: OutlinedButton(
-        onPressed: () => methodAction(),
-        style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          side: BorderSide(
-            color: const Color(0xFF621359).withOpacity(0.9),
-          ),
-          backgroundColor: const Color(0xFF621359).withOpacity(0.3),
-        ),
-        child: Padding(
-          padding: Responsive.isMobile(context)
-              ? const EdgeInsets.symmetric(horizontal: 3, vertical: 5)
-              : const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          child: Row(
-            children: [
-              AppIconsStyle.icon2x4(icon,
-                  colorCustom: Colors.white.withOpacity(0.6)),
-              const SizedBox(width: 10),
-              Text(
-                title,
-                style: AppTextStyles.infoItemValue.copyWith(
-                  color: Colors.white.withOpacity(0.8),
-                ),
-              ),
-              const SizedBox(width: 5),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

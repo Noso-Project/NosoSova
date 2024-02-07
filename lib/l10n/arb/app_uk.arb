@@ -147,6 +147,6 @@
   "consecutivePayments": "Послідовні платежі",
   "uptimePercent": "Безвідмовна робота",
   "monthlyEarning": "Щомісячний заробіток",
-  "openNodeInfo": "Інформація про Ноду",
+  "openNodeInfo": "Інформація про вузол",
   "errorConnectionApi": "На жаль, ми не можемо обробити ваш запит в даний час"
 }

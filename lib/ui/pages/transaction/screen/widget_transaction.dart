@@ -77,7 +77,7 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
                         ? AppLocalizations.of(context)!.editCustom
                         : "${widget.isReceiver ? "+" : "-"}${amount.toStringAsFixed(5)} ${NosoConst.coinName}",
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.balance),
+                    style: AppTextStyles.balance.copyWith(color: Theme.of(context).colorScheme.onSurface)),
                 const SizedBox(height: 20),
                 Text(
                     "${AppLocalizations.of(context)!.block}: ${widget.transaction.blockId.toString()}",
