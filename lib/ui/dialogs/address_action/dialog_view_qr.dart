@@ -32,6 +32,7 @@ class _ScannerWidgetState extends State<DialogViewQrWidget> {
                 ? widget.address.hash
                 : "${widget.address.publicKey} ${widget.address.privateKey}",
             version: QrVersions.auto,
+            backgroundColor: Theme.of(context).colorScheme.outline,
             size: MediaQuery.of(context).size.height * 0.4,
           ),
         ),
@@ -41,8 +42,9 @@ class _ScannerWidgetState extends State<DialogViewQrWidget> {
           children: [
             OutlinedButton(
               style: OutlinedButton.styleFrom(
+                side: BorderSide.none,
                 backgroundColor: selectedOption == 1
-                    ? CustomColors.primaryColor
+                    ? Theme.of(context).colorScheme.primary
                     : Colors.transparent,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -59,15 +61,16 @@ class _ScannerWidgetState extends State<DialogViewQrWidget> {
               child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(AppLocalizations.of(context)!.address,
-                      style: AppTextStyles.walletAddress.copyWith(
+                      style: AppTextStyles.infoItemValue.copyWith(
                           color: selectedOption == 1
-                              ? Colors.white
-                              : CustomColors.primaryColor))),
+                              ? Theme.of(context).colorScheme.onPrimary
+                              : Theme.of(context).colorScheme.primary))),
             ),
             OutlinedButton(
               style: OutlinedButton.styleFrom(
+                side: BorderSide.none,
                 backgroundColor: selectedOption == 2
-                    ? CustomColors.primaryColor
+                    ? Theme.of(context).colorScheme.primary
                     : Colors.transparent,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -84,10 +87,10 @@ class _ScannerWidgetState extends State<DialogViewQrWidget> {
               child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(AppLocalizations.of(context)!.keys,
-                      style: AppTextStyles.walletAddress.copyWith(
+                      style: AppTextStyles.infoItemValue.copyWith(
                           color: selectedOption == 2
-                              ? Colors.white
-                              : CustomColors.primaryColor))),
+                              ? Theme.of(context).colorScheme.onPrimary
+                              : Theme.of(context).colorScheme.primary))),
               //    ),
             ),
           ],
@@ -104,8 +107,7 @@ class _ScannerWidgetState extends State<DialogViewQrWidget> {
             child: Padding(
               padding: const EdgeInsets.all(15),
               child: Text(AppLocalizations.of(context)!.cancel,
-                  style: AppTextStyles.walletAddress
-                      .copyWith(color: Colors.white)),
+                  style: AppTextStyles.buttonText),
             ),
           ),
       ],

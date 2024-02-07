@@ -35,8 +35,8 @@ class ItemTotalPrice extends StatelessWidget {
               Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                 Text(
                   "${totalUsdtBalance.toStringAsFixed(2)} USDT",
-                  style: AppTextStyles.infoItemValue
-                      .copyWith(color: Colors.white.withOpacity(0.8), fontSize: 18.sp),
+                  style: AppTextStyles.infoItemValue.copyWith(
+                      color: Colors.white.withOpacity(0.8), fontSize: 18.sp),
                 ),
                 const SizedBox(width: 10),
                 Tooltip(
@@ -64,7 +64,7 @@ class ItemTotalPrice extends StatelessWidget {
         if (state.statisticsCoin.apiStatus == ApiStatus.error)
           Text(
             "${AppLocalizations.of(context)!.priceInfoErrorServer} ",
-            style: AppTextStyles.itemStyle
+            style: AppTextStyles.infoItemTitle
                 .copyWith(color: Colors.white.withOpacity(0.8), fontSize: 16),
           ),
       ]);

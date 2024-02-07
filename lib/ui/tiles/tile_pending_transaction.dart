@@ -38,21 +38,21 @@ class _TilePendingTransactionState extends State<TilePendingTransaction> {
               children: [
                 Text(
                   OtherUtils.hashObfuscation(widget.pending.orderId),
-                  style: AppTextStyles.walletAddress.copyWith(fontSize: 18),
+                  style: AppTextStyles.infoItemValue,
                 ),
                 Text(
                   "${AppLocalizations.of(context)!.sender}: ${widget.pending.sender}",
-                  style: AppTextStyles.itemStyle.copyWith(fontSize: 16),
+                  style: AppTextStyles.textHiddenSmall(context),
                 ),
                 Text(
                   "${AppLocalizations.of(context)!.receiver}: ${widget.pending.receiver}",
-                  style: AppTextStyles.itemStyle.copyWith(fontSize: 16),
+                  style: AppTextStyles.textHiddenSmall(context),
                 ),
                 Text(
                   isCustom
                       ? AppLocalizations.of(context)!.editCustom
                       : "${AppLocalizations.of(context)!.amount}: ${widget.pending.amountTransfer.toStringAsFixed(8)}",
-                  style: AppTextStyles.walletAddress.copyWith(fontSize: 18),
+                  style: AppTextStyles.infoItemValue,
                 )
               ],
             ),

@@ -76,7 +76,7 @@ class _ScannerQrWidgetState extends State<ScannerQrWidget> {
                 child: Text(
                   AppLocalizations.of(context)!.cancel,
                   style:
-                      AppTextStyles.walletAddress.copyWith(color: Colors.white),
+                      AppTextStyles.buttonText,
                 )),
           ),
         )

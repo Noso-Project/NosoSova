@@ -76,7 +76,7 @@ class DialogRouter {
               hasSabGradient: false,
               topBarTitle: Text(AppLocalizations.of(context)!.importKeysPair,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.walletAddress.copyWith(fontSize: 20)),
+                  style: AppTextStyles.dialogTitle),
               isTopBarLayerAlwaysVisible: true,
               child: BlocProvider.value(
                 value: BlocProvider.of<WalletBloc>(context),
@@ -109,7 +109,7 @@ class DialogRouter {
                 hasSabGradient: false,
                 topBarTitle: Text(address.hashPublic,
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.walletAddress.copyWith(fontSize: 20)),
+                    style: AppTextStyles.dialogTitle),
                 isTopBarLayerAlwaysVisible: true,
                 child: BlocProvider.value(
                     value: BlocProvider.of<WalletBloc>(context),
@@ -140,7 +140,7 @@ class DialogRouter {
                 hasSabGradient: false,
                 topBarTitle: Text(address.hashPublic,
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.walletAddress.copyWith(fontSize: 20)),
+                    style: AppTextStyles.dialogTitle),
                 isTopBarLayerAlwaysVisible: true,
                 child: DialogViewQrWidget(address: address))
           ];
@@ -174,7 +174,7 @@ class DialogRouter {
                 hasSabGradient: false,
                 topBarTitle: Text(AppLocalizations.of(context)!.customNameAdd,
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.walletAddress.copyWith(fontSize: 20)),
+                    style: AppTextStyles.dialogTitle),
                 isTopBarLayerAlwaysVisible: true,
                 child: MultiBlocProvider(
                   providers: [
@@ -202,7 +202,7 @@ class DialogRouter {
               hasSabGradient: false,
               topBarTitle: Text(AppLocalizations.of(context)!.debugInfo,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.walletAddress.copyWith(fontSize: 22)),
+                  style: AppTextStyles.dialogTitle),
               isTopBarLayerAlwaysVisible: true,
               trailingNavBarWidget: IconButton(
                 padding: const EdgeInsets.all(20),
@@ -239,8 +239,7 @@ class DialogRouter {
           WoltModalSheetPage(
             hasSabGradient: false,
             topBarTitle: Text("Secret keys",
-                textAlign: TextAlign.center,
-                style: AppTextStyles.walletAddress.copyWith(fontSize: 20)),
+                textAlign: TextAlign.center, style: AppTextStyles.dialogTitle),
             isTopBarLayerAlwaysVisible: true,
             child: DialogViewKeysPair(address: address),
           )
@@ -285,8 +284,7 @@ class DialogRouter {
         return [
           WoltModalSheetPage(
               hasSabGradient: false,
-              topBarTitle: Text(
-                  AppLocalizations.of(context)!.nodeInfo,
+              topBarTitle: Text(AppLocalizations.of(context)!.nodeInfo,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.dialogTitle),
               isTopBarLayerAlwaysVisible: true,
@@ -295,11 +293,10 @@ class DialogRouter {
                 icon: const Icon(Icons.close),
                 onPressed: Navigator.of(context).pop,
               ),
-              child:DialogInfoNode(address: targetAddress)),
+              child: DialogInfoNode(address: targetAddress)),
         ];
       },
     );
-
   }
 
   static void showDialogSellAddress(

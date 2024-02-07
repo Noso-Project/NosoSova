@@ -46,7 +46,7 @@ class SeedListItem extends StatelessWidget {
                   children: [
                     Text(
                       seed.toTokenizer,
-                      style: AppTextStyles.walletAddress.copyWith(fontSize: 16),
+                      style: AppTextStyles.walletHash,
                     ),
                   ],
                 ),

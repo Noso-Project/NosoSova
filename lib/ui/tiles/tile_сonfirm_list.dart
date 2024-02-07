@@ -47,10 +47,10 @@ class _TileConfirmListStateState extends State<TileConfirmList> {
       title: Text(
         _clicked ? widget.confirm : widget.title,
         style: _clicked
-            ? AppTextStyles.walletAddress.copyWith(
+            ? AppTextStyles.snackBarMessage.copyWith(
                 color: CustomColors.negativeBalance,
               )
-            : AppTextStyles.itemStyle,
+            : AppTextStyles.infoItemTitle,
       ),
       onTap: () {
         if (mounted) {

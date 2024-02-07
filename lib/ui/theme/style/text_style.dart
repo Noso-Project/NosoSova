@@ -2,17 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTextStyles {
-  ///TODO DELLLLL
-  static TextStyle walletAddress =
-      const TextStyle(fontSize: 18.0, fontFamily: "GilroySemiBold");
-  ///TODO DELLLLL
-  static TextStyle itemStyle = const TextStyle(
-      fontSize: 18.0,
-      //  color: Colors.black,
-      fontFamily: "GilroyRegular");
-
-  /// NEW
-
   static TextStyle textHiddenSmall(BuildContext context) {
     return TextStyle(
         fontSize: 12.sp,
@@ -82,4 +71,13 @@ class AppTextStyles {
 
   static TextStyle textFieldHiddenStyle = TextStyle(
       fontSize: 14.sp, fontFamily: "Gilroy", fontWeight: FontWeight.w700);
+
+  static TextStyle snackBarMessage = TextStyle(
+      fontSize: 14.sp, fontFamily: "Gilroy", fontWeight: FontWeight.w600);
+
+  static TextStyle buttonText = TextStyle(
+      fontSize: 15.sp,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w600,
+      color: Colors.white);
 }

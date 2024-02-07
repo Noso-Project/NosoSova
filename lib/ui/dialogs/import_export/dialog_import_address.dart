@@ -122,8 +122,7 @@ class DialogImportAddressState extends State<DialogImportAddress> {
                 child: Padding(
                     padding: const EdgeInsets.all(15),
                     child: Text(AppLocalizations.of(context)!.cancel,
-                        style: AppTextStyles.walletAddress
-                            .copyWith(color: Colors.white))),
+                        style: AppTextStyles.buttonText)),
               ),
               const SizedBox(width: 20),
               ElevatedButton(
@@ -139,8 +138,7 @@ class DialogImportAddressState extends State<DialogImportAddress> {
                 child: Padding(
                   padding: const EdgeInsets.all(15),
                   child: Text(AppLocalizations.of(context)!.addToWallet,
-                      style: AppTextStyles.walletAddress
-                          .copyWith(color: Colors.white)),
+                      style: AppTextStyles.buttonText),
                 ),
               ),
             ],

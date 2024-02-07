@@ -99,8 +99,7 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
                                   horizontal: 10, vertical: 8),
                               child: Text(
                                 AppLocalizations.of(context)!.errorStopSync,
-                                style: AppTextStyles.walletAddress.copyWith(
-                                    fontSize: 14,
+                                style: AppTextStyles.snackBarMessage.copyWith(
                                     color: CustomColors.negativeBalance),
                               ),
                             ),
@@ -109,7 +108,7 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
                   leading: AppIconsStyle.icon3x2(Assets.iconsDebugI),
                   title: Text(
                     AppLocalizations.of(context)!.debugInfo,
-                    style: AppTextStyles.itemStyle,
+                    style: AppTextStyles.infoItemTitle,
                   ),
                   onTap: () => DialogRouter.showDialogDebug(context),
                 ),

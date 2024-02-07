@@ -84,7 +84,7 @@ class DialogImportKeysPairState extends State<DialogImportKeysPair> {
                 padding: const EdgeInsets.all(15),
                 child: Text(
                   AppLocalizations.of(context)!.addToWallet,
-                  style: AppTextStyles.walletAddress.copyWith(
+                  style: AppTextStyles.buttonText.copyWith(
                       color: isButtonEnabled ? Colors.white : Colors.black),
                 ),
               ),

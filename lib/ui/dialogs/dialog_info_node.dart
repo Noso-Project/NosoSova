@@ -65,11 +65,11 @@ class _DialogInfoNodeState extends State<DialogInfoNode> {
                               StatusConnectNodes.connected)),
                       title: Text(
                         widget.address.seedNodeOn,
-                        style: AppTextStyles.walletAddress,
+                        style: AppTextStyles.walletHash,
                       ),
                       subtitle: Text(
                         snapshot.data!.address,
-                        style: AppTextStyles.itemStyle.copyWith(fontSize: 16),
+                        style: AppTextStyles.textHiddenSmall(context),
                       ),
                       onTap: null,
                     ),

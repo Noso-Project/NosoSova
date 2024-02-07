@@ -88,11 +88,10 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
                 if (!widget.isProcess) ...[
                   Text(widget.transaction.timestamp,
                       style:
-                          AppTextStyles.itemStyle.copyWith(color: Colors.grey)),
+                          AppTextStyles.textHiddenMedium(context)),
                 ] else ...[
                   Text(AppLocalizations.of(context)!.sendProcess,
-                      style: AppTextStyles.itemStyle
-                          .copyWith(color: Colors.grey, fontSize: 20)),
+                      style: AppTextStyles.textHiddenMedium(context)),
                 ],
                 const SizedBox(height: 20),
                 const DasherDivider(

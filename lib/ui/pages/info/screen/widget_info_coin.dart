@@ -188,8 +188,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     child: Text(
                       AppLocalizations.of(context)!.stopSync,
-                      style: AppTextStyles.walletAddress.copyWith(
-                          fontSize: 14, color: CustomColors.negativeBalance),
+                      style: AppTextStyles.infoItemValue.copyWith(color: CustomColors.negativeBalance),
                     ),
                   ),
                 )),

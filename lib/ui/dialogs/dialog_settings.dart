@@ -259,10 +259,8 @@ class DialogSettings {
                                   title: Text(
                                     languageName,
                                     style: isSelected
-                                        ? AppTextStyles.walletAddress
-                                            .copyWith(fontSize: 20)
-                                        : AppTextStyles.itemStyle
-                                            .copyWith(fontSize: 20),
+                                        ? AppTextStyles.infoItemTitle
+                                        : AppTextStyles.infoItemValue,
                                   ),
                                   onTap: () {
                                     appSettings.setLanguage(locale);
