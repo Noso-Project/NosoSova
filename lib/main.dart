@@ -47,23 +47,16 @@ class MyApp extends StatelessWidget {
 
   final AppSettings _appSettings = locator<AppSettings>();
 
-
   Future testWindowFunctions() async {}
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    FontLoader("GilroyHeavy").addFont(rootBundle.load(Assets.fontsGilroyHeavy));
-    FontLoader("GilroyBold").addFont(rootBundle.load(Assets.fontsGilroyBold));
-    FontLoader("GilroyRegular")
-        .addFont(rootBundle.load(Assets.fontsGilroyRegular));
-    FontLoader("GilroySemiBold")
-        .addFont(rootBundle.load(Assets.fontsGilroyRegular));
 
     if (Responsive.isMobile(context)) {
       ScreenUtil.init(context, designSize: const Size(360, 690));
-    }else {
+    } else {
       ScreenUtil.init(context, designSize: const Size(1000, 800));
     }
 

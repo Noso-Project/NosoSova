@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 
 import '../../../../l10n/app_localizations.dart';
-import '../../../common/components/empty_list_widget.dart';
+import '../../../common/widgets/empty_list_widget.dart';
 import '../../../common/route/dialog_router.dart';
 import '../../../common/route/page_router.dart';
 import '../../../tiles/tile_wallet_address.dart';

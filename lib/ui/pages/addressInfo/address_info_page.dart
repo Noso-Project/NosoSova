@@ -16,7 +16,7 @@ import '../../../blocs/history_transactions_bloc.dart';
 import '../../../blocs/wallet_bloc.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/address_wallet.dart';
-import '../../common/components/app_bar_other_page.dart';
+import '../../common/widgets/app_bar_other_page.dart';
 import '../../common/responses_util/response_widget_id.dart';
 import '../../common/responses_util/snackbar_message.dart';
 import '../../common/widgets/node_light_status.dart';

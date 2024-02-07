@@ -21,10 +21,10 @@ class AddressListTile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  AddressListTileState createState() => AddressListTileState();
+  State createState() => _AddressListTileState();
 }
 
-class AddressListTileState extends State<AddressListTile> {
+class _AddressListTileState extends State<AddressListTile> {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
@@ -43,7 +43,7 @@ class AddressListTileState extends State<AddressListTile> {
                   style: AppTextStyles.textHiddenSmall(context),
                 ),
                 trailing: Text(
-                  widget.address.availableBalance.toStringAsFixed(5),
+                  widget.address.balance.toStringAsFixed(5),
                   style: AppTextStyles.walletBalance,
                 ),
                 onLongPress: widget.onLong,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/models/address_wallet.dart';
-import 'package:nososova/ui/common/components/empty_list_widget.dart';
+import 'package:nososova/ui/common/widgets/empty_list_widget.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../models/rest_api/node_info.dart';
