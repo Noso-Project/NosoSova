@@ -7,9 +7,9 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../models/address_wallet.dart';
 import '../../../../models/rest_api/transaction_history.dart';
 import '../../../../utils/network_const.dart';
+import '../../../common/route/page_router.dart';
 import '../../../common/widgets/empty_list_widget.dart';
 import '../../../common/widgets/loading.dart';
-import '../../../common/route/page_router.dart';
 import '../../../theme/style/text_style.dart';
 import '../../../tiles/tile_transaction.dart';
 
@@ -28,7 +28,6 @@ class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -41,10 +40,15 @@ class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
               var listHistory = state.transactions;
               listHistory.sort((a, b) => b.blockId.compareTo(a.blockId));
 
-              if (state.apiStatus == ApiStatus.error ||
-                  listHistory.isEmpty && state.apiStatus != ApiStatus.loading) {
+              if (state.apiStatus == ApiStatus.error) {
                 return getStackMessage(EmptyWidget(
                     title: AppLocalizations.of(context)!.unknownError,
+                    descrpt: AppLocalizations.of(context)!.errorConnectionApi));
+              }
+
+              if (listHistory.isEmpty && state.apiStatus != ApiStatus.loading) {
+                return getStackMessage(EmptyWidget(
+                    title: AppLocalizations.of(context)!.empty,
                     descrpt: AppLocalizations.of(context)!
                         .errorEmptyHistoryTransactions));
               }

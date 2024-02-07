@@ -146,5 +146,6 @@
   "consecutivePayments": "Consecutive payments",
   "uptimePercent": "Uptime",
   "monthlyEarning": "Monthly earning",
-  "openNodeInfo": "Information about Node"
+  "openNodeInfo": "Information about Node",
+  "errorConnectionApi": "Sorry, we are unable to process your request at this time"
 }

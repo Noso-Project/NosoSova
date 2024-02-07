@@ -447,4 +447,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get openNodeInfo => 'Informationen zum Knotenpunkt';
+
+  @override
+  String get errorConnectionApi => 'Tut uns leid, wir können Ihre Anfrage derzeit nicht bearbeiten';
 }

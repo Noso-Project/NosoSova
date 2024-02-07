@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:noso_dart/utils/noso_utility.dart';
 
 import '../../../../blocs/events/wallet_events.dart';
 import '../../../../blocs/wallet_bloc.dart';
@@ -20,7 +21,8 @@ class AddressActionsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var walletBloc = BlocProvider.of<WalletBloc>(context);
-    var isCustomPending = walletBloc.state.wallet.pendings.any((pending) => pending.sender == address.hash);
+    var isCustomPending = walletBloc.state.wallet.pendings
+        .any((pending) => pending.sender == address.hash);
     return Container(
         height: MediaQuery.of(context).size.height * 0.5,
         width: double.infinity,
@@ -47,6 +49,11 @@ class AddressActionsWidget extends StatelessWidget {
               Assets.iconsLock,
               AppLocalizations.of(context)!.getKeysPair,
               () => DialogRouter.showDialogViewKeysPair(context, address)),
+          if (address.balance >= NosoUtility.getCountMonetToRunNode())
+            buildListTileSvg(
+                Assets.iconsNodeI,
+                AppLocalizations.of(context)!.openNodeInfo,
+                () => DialogRouter.showDialogNodeInfo(context, address)),
           TileConfirmList(
               iconData: Assets.iconsDelete,
               title: AppLocalizations.of(context)!.removeAddress,
@@ -57,6 +64,4 @@ class AddressActionsWidget extends StatelessWidget {
               }),
         ])));
   }
-
-
 }

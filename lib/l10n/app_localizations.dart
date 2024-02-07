@@ -988,6 +988,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Information about Node'**
   String get openNodeInfo;
+
+  /// No description provided for @errorConnectionApi.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, we are unable to process your request at this time'**
+  String get errorConnectionApi;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

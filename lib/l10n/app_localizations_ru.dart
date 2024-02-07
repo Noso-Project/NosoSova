@@ -447,4 +447,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get openNodeInfo => 'Информация о Node';
+
+  @override
+  String get errorConnectionApi => 'Извините, мы не можем обработать ваш запрос в данный момент';
 }

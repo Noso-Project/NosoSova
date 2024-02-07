@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
       ScreenUtil.init(context, designSize: const Size(360, 690));
     } else {
       ScreenUtil.init(context, designSize: const Size(1000, 800), minTextAdapt: true);
-      ScreenUtil().setSp(20);
+      ScreenUtil().setSp(22);
     }
 
 

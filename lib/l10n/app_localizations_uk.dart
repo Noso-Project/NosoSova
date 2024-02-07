@@ -447,4 +447,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get openNodeInfo => 'Інформація про Ноду';
+
+  @override
+  String get errorConnectionApi => 'На жаль, ми не можемо обробити ваш запит в даний час';
 }

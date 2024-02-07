@@ -59,7 +59,9 @@ class HistoryTransactionsBloc
       emit(state.copyWith(
           transactions: response.value, apiStatus: ApiStatus.connected));
     } else {
-      emit(state.copyWith(apiStatus: ApiStatus.error));
+      var errorCode = int.parse(response.errors?.split(":")[1] ?? "0");
+      emit(state.copyWith(
+          apiStatus: errorCode == 406 ? ApiStatus.connected : ApiStatus.error));
     }
   }
 

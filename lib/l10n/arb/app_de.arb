@@ -146,6 +146,7 @@
   "consecutivePayments": "aufeinanderfolgende Zahlungen",
   "uptimePercent": "Uptime",
   "monthlyEarning": "Monatlicher Verdienst",
-  "openNodeInfo": "Informationen zum Knotenpunkt"
+  "openNodeInfo": "Informationen zum Knotenpunkt",
+  "errorConnectionApi": "Tut uns leid, wir können Ihre Anfrage derzeit nicht bearbeiten"
 
 }

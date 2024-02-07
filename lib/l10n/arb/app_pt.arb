@@ -146,5 +146,6 @@
   "consecutivePayments": "Pagamentos Consecutivos",
   "uptimePercent": "Tempo de Atividade",
   "monthlyEarning": "Ganhos Mensais",
-  "openNodeInfo": "Informações sobre o Node"
+  "openNodeInfo": "Informações sobre o Node",
+  "errorConnectionApi": "Lamentamos, mas não nos é possível processar o seu pedido neste momento"
 }

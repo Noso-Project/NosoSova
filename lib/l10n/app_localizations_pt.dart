@@ -447,4 +447,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get openNodeInfo => 'Informações sobre o Node';
+
+  @override
+  String get errorConnectionApi => 'Lamentamos, mas não nos é possível processar o seu pedido neste momento';
 }

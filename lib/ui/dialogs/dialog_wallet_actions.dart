@@ -81,8 +81,7 @@ class _DialogWalletActionsState extends State<DialogWalletActions> {
                           style: AppTextStyles.infoItemValue),
                       subtitle: Text(
                           AppLocalizations.of(context)!.importFileSubtitle,
-                          style:
-                              AppTextStyles.textHiddenSmall(context)),
+                          style: AppTextStyles.textHiddenSmall(context)),
                       onTap: () => _importWalletFile(context)),
                   ListTile(
                       enabled: isEnableExport,
@@ -91,8 +90,7 @@ class _DialogWalletActionsState extends State<DialogWalletActions> {
                           style: AppTextStyles.infoItemValue),
                       subtitle: Text(
                           AppLocalizations.of(context)!.exportFileSubtitle,
-                          style:
-                              AppTextStyles.textHiddenSmall(context)),
+                          style: AppTextStyles.textHiddenSmall(context)),
                       onTap: () =>
                           _exportWalletFile(context, FormatWalletFile.pkw)),
                   const SizedBox(height: 10)

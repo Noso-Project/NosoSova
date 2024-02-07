@@ -40,7 +40,6 @@ class ExplorerStatsService {
       return response;
     } else {
       List<TransactionHistory> list = [];
-
       if (response.value['error'] != null) {
         return ResponseApi(errors: response.value['error']);
       } else {

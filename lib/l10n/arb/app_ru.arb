@@ -146,5 +146,6 @@
   "consecutivePayments": "Последовательные платежи",
   "uptimePercent": "Безотказная работа",
   "monthlyEarning": "Ежемесячный заработок",
-  "openNodeInfo": "Информация о Node"
+  "openNodeInfo": "Информация о Node",
+  "errorConnectionApi": "Извините, мы не можем обработать ваш запрос в данный момент"
 }
