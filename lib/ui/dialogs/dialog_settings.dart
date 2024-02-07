@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nososova/utils/social_links.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,6 +9,7 @@ import '../../generated/assets.dart';
 import '../../l10n/app_localizations.dart';
 import '../config/responsive.dart';
 import '../notifer/app_settings_notifer.dart';
+import '../theme/style/button_style.dart';
 import '../theme/style/sizes.dart';
 import '../theme/style/text_style.dart';
 
@@ -39,22 +39,10 @@ class DialogSettings {
           child: Column(
             children: [
               const SizedBox(height: 8),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).colorScheme.primary,
-                ),
-                onPressed: () =>
-                    pageIndexNotifier.value = pageIndexNotifier.value + 1,
-                child: SizedBox(
-                  height: 56.0,
-                  width: double.infinity,
-                  child: Center(
-                      child: Text(AppLocalizations.of(context)!.openSettings,
-                          style: AppTextStyles.dialogTitle.copyWith(
-                              fontSize: 16.sp,
-                              color: Theme.of(context).colorScheme.onPrimary))),
-                ),
-              ),
+              AppButtonStyle.buttonDefault(
+                  context,
+                  AppLocalizations.of(context)!.openSettings,
+                  () => pageIndexNotifier.value = pageIndexNotifier.value + 1)
             ],
           ),
         ),
@@ -259,8 +247,8 @@ class DialogSettings {
                                   title: Text(
                                     languageName,
                                     style: isSelected
-                                        ? AppTextStyles.infoItemTitle
-                                        : AppTextStyles.infoItemValue,
+                                        ? AppTextStyles.infoItemValue
+                                        : AppTextStyles.infoItemTitle,
                                   ),
                                   onTap: () {
                                     appSettings.setLanguage(locale);

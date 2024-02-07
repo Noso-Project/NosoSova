@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../../models/rest_api/transaction_history.dart';
+import '../../theme/style/button_style.dart';
 import '../../theme/style/text_style.dart';
 
 class TransactionPage extends StatefulWidget {
@@ -21,14 +22,11 @@ class TransactionPage extends StatefulWidget {
 
 class _TransactionPageState extends State<TransactionPage> {
   bool isCustom = false;
-  late Uri urlShare;
 
   @override
   void initState() {
     super.initState();
     isCustom = widget.transaction.type == "CUSTOM";
-    urlShare = Uri.parse(
-        "https://explorer.nosocoin.com/getordersinfo.html?orderid=${widget.transaction.id}");
   }
 
   @override
@@ -58,37 +56,26 @@ class _TransactionPageState extends State<TransactionPage> {
             isReceiver: widget.isReceiver,
           ),
           const SizedBox(height: 20),
-          buttonAction(AppLocalizations.of(context)!.openToExplorer,
-              () => runExplorer()),
-          const SizedBox(height: 10),
-          buttonAction(AppLocalizations.of(context)!.shareTransaction,
-              () => shareLinkExplorer()),
+          Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: AppButtonStyle.buttonOutlined(
+                  context,
+                  AppLocalizations.of(context)!.openToExplorer,
+                  () => runExplorer())),
+          const SizedBox(height: 20),
+          Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: AppButtonStyle.buttonOutlined(
+                  context,
+                  AppLocalizations.of(context)!.shareTransaction,
+                  () => shareLinkExplorer())),
           const SizedBox(height: 20)
         ])));
   }
 
-  buttonAction(String text, Function onTap) {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        width: double.infinity,
-        child: OutlinedButton(
-            onPressed: () => onTap(),
-            style: OutlinedButton.styleFrom(
-                side: BorderSide(
-                    color:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.5)),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                )),
-            child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  text,
-                  style: AppTextStyles.infoItemValue,
-                ))));
-  }
-
   runExplorer() async {
+    var urlShare = Uri.parse(
+        "https://explorer.nosocoin.com/getordersinfo.html?orderid=${widget.transaction.id}");
     if (await canLaunchUrl(urlShare)) {
       await launchUrl(urlShare);
     } else {
@@ -97,6 +84,7 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   shareLinkExplorer() async {
-    Share.share(urlShare.toString());
+    Share.share(
+        "https://explorer.nosocoin.com/getordersinfo.html?orderid=${widget.transaction.id}");
   }
 }

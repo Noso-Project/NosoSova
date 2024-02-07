@@ -30,7 +30,7 @@ class AppTextStyles {
   static TextStyle infoItemTitle = TextStyle(
       fontSize: 14.sp, fontFamily: "Gilroy", fontWeight: FontWeight.w400);
 
-  static TextStyle priceValue = TextStyle(
+  static TextStyle priceValue = TextStyle( color: Colors.white,
       fontSize: 32.sp, fontFamily: "Gilroy", fontWeight: FontWeight.w600);
 
   static TextStyle categoryStyle = TextStyle(
@@ -80,4 +80,12 @@ class AppTextStyles {
       fontFamily: "Gilroy",
       fontWeight: FontWeight.w600,
       color: Colors.white);
+
+  static TextStyle buttonTextDefault(BuildContext context) {
+    return TextStyle(
+        fontSize: 15.sp,
+        color: Theme.of(context).colorScheme.onPrimary,
+        fontFamily: "Gilroy",
+        fontWeight: FontWeight.w600);
+  }
 }
