@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:nososova/ui/common/route/dialog_router.dart';
 import 'package:nososova/ui/theme/decoration/textfield_decoration.dart';
@@ -414,7 +413,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             padding: const EdgeInsets.all(5),
             child: Text("$percent%",
                 style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: 14,
                     fontWeight: selButton ==
                             double.parse(valueAmount.toStringAsFixed(7))
                         ? FontWeight.bold

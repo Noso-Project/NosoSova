@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
@@ -53,13 +52,15 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
-    if (Platform.isAndroid || Platform.isIOS) {
+  /*  if (Platform.isAndroid || Platform.isIOS) {
       ScreenUtil.init(context, designSize: const Size(360, 690));
     } else {
       ScreenUtil.init(context,
           designSize: const Size(1000, 800), minTextAdapt: true, );
       ScreenUtil().setSp(22);
     }
+
+   */
 
     return ListenableBuilder(
         listenable: _appSettings,

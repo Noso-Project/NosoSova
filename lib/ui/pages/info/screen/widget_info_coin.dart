@@ -1,7 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
@@ -94,7 +93,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                             const SizedBox(width: 5),
                             Text(
                               "USDT",
-                              style: AppTextStyles.priceValue.copyWith(fontSize: 22.sp),
+                              style: AppTextStyles.priceValue.copyWith(fontSize: 22),
                             ),
                           ],
                         ),
@@ -117,13 +116,13 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                               : diff < 0
                                   ? CustomColors.negativeBalance
                                   : CustomColors.positiveBalance,
-                          fontSize: 18.sp),
+                          fontSize: 18),
                     ),
                     if (Responsive.isMobile(context) || isVisibleAction)
                       const SizedBox(height: 20),
                     if (Responsive.isMobile(context) || isVisibleAction)
                       SizedBox(
-                        height: 80.h,
+                        height: 80,
                         width: double.infinity,
                         child: LineChart(
                           LineChartData(
@@ -236,7 +235,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
               tabs: [
                 Tab(
                   child: Text(
-                    textScaleFactor: ScreenUtil().textScaleFactor,
+
                     AppLocalizations.of(context)!.information,
                     style: selectIndexTab == 0
                         ? AppTextStyles.tabActive
@@ -245,7 +244,6 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                 ),
                 Tab(
                   child: Text(
-                    textScaleFactor: ScreenUtil().textScaleFactor,
                     AppLocalizations.of(context)!.masternodes,
                     style: selectIndexTab == 1
                         ? AppTextStyles.tabActive

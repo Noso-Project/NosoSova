@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../blocs/wallet_bloc.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -39,7 +38,7 @@ class StatsNodesUser extends StatelessWidget {
                       Text(
                         state.stateNodes.nodes.length.toString(),
                         style: AppTextStyles.infoItemValue
-                            .copyWith(color: Colors.white, fontSize: 18.sp),
+                            .copyWith(color: Colors.white, fontSize: 18),
                       )
                     ],
                   ),
@@ -65,7 +64,7 @@ class StatsNodesUser extends StatelessWidget {
                       Text(
                         state.stateNodes.launchedNodes.toString(),
                         style: AppTextStyles.infoItemValue
-                            .copyWith(color: Colors.white, fontSize: 18.sp),
+                            .copyWith(color: Colors.white, fontSize: 18),
                       )
                     ],
                   ),
@@ -94,7 +93,7 @@ class StatsNodesUser extends StatelessWidget {
                 Text(
                   "${state.stateNodes.rewardDay.toStringAsFixed(6)} NOSO",
                   style: AppTextStyles.infoItemValue
-                      .copyWith(color: Colors.white, fontSize: 18.sp),
+                      .copyWith(color: Colors.white, fontSize: 18),
                 )
               ],
             ),

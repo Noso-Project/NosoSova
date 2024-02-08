@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nososova/blocs/coininfo_bloc.dart';
 
@@ -27,7 +26,7 @@ class ItemTotalPrice extends StatelessWidget {
         Text(
           AppLocalizations.of(context)!.infoTotalPriceUst,
           style: AppTextStyles.infoItemValue
-              .copyWith(color: Colors.white.withOpacity(0.5), fontSize: 14.sp),
+              .copyWith(color: Colors.white.withOpacity(0.5), fontSize: 14),
         ),
         if (state.statisticsCoin.apiStatus != ApiStatus.error) ...[
           Row(
@@ -36,7 +35,7 @@ class ItemTotalPrice extends StatelessWidget {
                 Text(
                   "${totalUsdtBalance.toStringAsFixed(2)} USDT",
                   style: AppTextStyles.infoItemValue.copyWith(
-                      color: Colors.white.withOpacity(0.8), fontSize: 18.sp),
+                      color: Colors.white.withOpacity(0.8), fontSize: 18),
                 ),
                 const SizedBox(width: 10),
                 Tooltip(

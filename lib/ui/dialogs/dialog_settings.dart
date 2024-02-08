@@ -78,10 +78,8 @@ class DialogSettings {
                   style: AppTextStyles.infoItemTitle,
                 ),
                 const SizedBox(height: 20),
-                Text(
-                  AppLocalizations.of(context)!.socialLinks,
-                  style: AppTextStyles.dialogTitle.copyWith(fontSize: 22),
-                ),
+                Text(AppLocalizations.of(context)!.socialLinks,
+                    style: AppTextStyles.dialogTitle),
                 Row(
                   children: [
                     IconButton(
@@ -247,7 +245,10 @@ class DialogSettings {
                                   title: Text(
                                     languageName,
                                     style: isSelected
-                                        ? AppTextStyles.infoItemValue
+                                        ? AppTextStyles.infoItemValue.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary)
                                         : AppTextStyles.infoItemTitle,
                                   ),
                                   onTap: () {

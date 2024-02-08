@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:noso_dart/const.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:nososova/ui/pages/addressInfo/screens/address_actions.dart';
@@ -279,8 +278,7 @@ class _AddressInfoPageState extends State<AddressInfoPage> {
               Tooltip(
                   message: AppLocalizations.of(context)!.balance,
                   child: Text(targetAddress.balance.toStringAsFixed(8),
-                      style:
-                          AppTextStyles.priceValue.copyWith(fontSize: 24.sp))),
+                      style: AppTextStyles.priceValue.copyWith(fontSize: 24))),
               const SizedBox(height: 15),
               Tooltip(
                   message: AppLocalizations.of(context)!.copyAddress,

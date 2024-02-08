@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:noso_dart/const.dart';
 import 'package:nososova/ui/common/route/dialog_router.dart';
 
@@ -114,7 +113,7 @@ class _CardBodyState extends State<CardBody> {
                         Text(
                           AppLocalizations.of(context)!.incoming,
                           style: AppTextStyles.infoItemValue.copyWith(
-                            fontSize: 14.sp,
+                            fontSize: 14,
                             color: Colors.white.withOpacity(0.5),
                           ),
                         ),
@@ -139,7 +138,7 @@ class _CardBodyState extends State<CardBody> {
                         Text(
                           AppLocalizations.of(context)!.outgoing,
                           style: AppTextStyles.infoItemValue.copyWith(
-                            fontSize: 14.sp,
+                            fontSize: 14,
                             color: Colors.white.withOpacity(0.5),
                           ),
                         ),
