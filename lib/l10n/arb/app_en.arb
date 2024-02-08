@@ -147,5 +147,12 @@
   "uptimePercent": "Uptime",
   "monthlyEarning": "Monthly earning",
   "openNodeInfo": "Information about Node",
-  "errorConnectionApi": "Sorry, we are unable to process your request at this time"
+  "errorConnectionApi": "Sorry, we are unable to process your request at this time",
+  "contact": "Contacts",
+  "contactEmpty": "Your contacts will be displayed here",
+  "newContact": "Create contacts",
+  "addContact": "Add to contacts",
+  "tooltipSelMyWallet": "Select from my wallet",
+  "tooltipSelContact": "Select from Contact",
+  "tooltipPasteFromBuffer": "Paste from Buffer"
 }

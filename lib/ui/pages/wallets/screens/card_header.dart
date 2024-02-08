@@ -183,6 +183,13 @@ class _CardBodyState extends State<CardBody> {
                   children: [
                     AppButtonStyle.buttonAction(
                       context,
+                      Assets.iconsContact,
+                      AppLocalizations.of(context)!.contact,
+                          () => PageRouter.routeContacts(context),
+                    ),
+                    const SizedBox(width: 20),
+                    AppButtonStyle.buttonAction(
+                      context,
                       Assets.iconsOutput,
                       AppLocalizations.of(context)!.sendCoins,
                       () => PageRouter.routePaymentPage(
@@ -197,6 +204,8 @@ class _CardBodyState extends State<CardBody> {
                       AppLocalizations.of(context)!.pendingTransaction,
                       () => DialogRouter.showDialogPendingTransaction(context),
                     ),
+
+
                     const SizedBox(width: 20),
                   ],
                 ),

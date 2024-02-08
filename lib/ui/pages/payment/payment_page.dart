@@ -24,7 +24,7 @@ class PaymentPageState extends State<PaymentPage> {
         appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.createPayment,
                 textAlign: TextAlign.start,
-                style: AppTextStyles.dialogTitle.copyWith(fontSize: 22))),
+                style: AppTextStyles.dialogTitle)),
         body:
             PaymentScreen(address: widget.address, receiver: widget.receiver));
   }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
+import 'package:nososova/blocs/contacts_block.dart';
+import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/ui/dialogs/address_action/dialog_view_keyspair.dart';
 import 'package:nososova/ui/dialogs/dialog_info_node.dart';
+import 'package:nososova/ui/dialogs/dialog_sel_contact.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../../blocs/app_data_bloc.dart';
@@ -10,6 +13,7 @@ import '../../../blocs/debug_bloc.dart';
 import '../../../blocs/wallet_bloc.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/address_wallet.dart';
+import '../../../models/contact.dart';
 import '../../config/responsive.dart';
 import '../../dialogs/address_action/dialog_address_info.dart';
 import '../../dialogs/address_action/dialog_custom_name.dart';
@@ -300,7 +304,8 @@ class DialogRouter {
   }
 
   static void showDialogSellAddress(
-      BuildContext context, Address targetAddress, Function(Address) selected) {
+      BuildContext context, Address targetAddress, Function(Address) selected,
+      {bool isReceiver = false}) {
     showModalBottomSheet(
         shape: DialogStyle.borderShape,
         context: context,
@@ -309,6 +314,20 @@ class DialogRouter {
               child: DialogSellAddress(
                 targetAddress: targetAddress,
                 selected: selected,
+                isReceiver: isReceiver,
+              ),
+            ));
+  }
+
+  static void showDialogSellContact(
+      BuildContext context, Function(ContactModel) selected) {
+    showModalBottomSheet(
+        shape: DialogStyle.borderShape,
+        context: context,
+        builder: (_) => BlocProvider.value(
+              value: locator<ContactsBloc>(),
+              child: DialogSellContact(
+                selected: (model) => selected(model),
               ),
             ));
   }

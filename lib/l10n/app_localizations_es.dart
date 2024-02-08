@@ -450,4 +450,25 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get errorConnectionApi => 'Lo sentimos, no podemos procesar su solicitud en este momento';
+
+  @override
+  String get contact => 'Contactos';
+
+  @override
+  String get contactEmpty => 'Tus contactos se mostrarán aquí';
+
+  @override
+  String get newContact => 'Crear contacto';
+
+  @override
+  String get addContact => 'Añadir a contactos';
+
+  @override
+  String get tooltipSelMyWallet => 'Seleccionar de mi cartera';
+
+  @override
+  String get tooltipSelContact => 'Seleccionar desde Contacto';
+
+  @override
+  String get tooltipPasteFromBuffer => 'Pegar desde Buffer';
 }

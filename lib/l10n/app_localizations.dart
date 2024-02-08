@@ -994,6 +994,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sorry, we are unable to process your request at this time'**
   String get errorConnectionApi;
+
+  /// No description provided for @contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get contact;
+
+  /// No description provided for @contactEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your contacts will be displayed here'**
+  String get contactEmpty;
+
+  /// No description provided for @newContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Create contacts'**
+  String get newContact;
+
+  /// No description provided for @addContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to contacts'**
+  String get addContact;
+
+  /// No description provided for @tooltipSelMyWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Select from my wallet'**
+  String get tooltipSelMyWallet;
+
+  /// No description provided for @tooltipSelContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Select from Contact'**
+  String get tooltipSelContact;
+
+  /// No description provided for @tooltipPasteFromBuffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste from Buffer'**
+  String get tooltipPasteFromBuffer;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -450,4 +450,25 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get errorConnectionApi => 'Tut uns leid, wir können Ihre Anfrage derzeit nicht bearbeiten';
+
+  @override
+  String get contact => 'Kontakte';
+
+  @override
+  String get contactEmpty => 'Ihre Kontakte werden hier angezeigt';
+
+  @override
+  String get newContact => 'Kontakt erstellen';
+
+  @override
+  String get addContact => 'Zu den Kontakten hinzufügen';
+
+  @override
+  String get tooltipSelMyWallet => 'Aus meiner Brieftasche auswählen';
+
+  @override
+  String get tooltipSelContact => 'Aus Kontakt auswählen';
+
+  @override
+  String get tooltipPasteFromBuffer => 'Aus Puffer einfügen';
 }

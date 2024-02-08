@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:nososova/ui/common/route/dialog_router.dart';
 import 'package:nososova/ui/theme/decoration/textfield_decoration.dart';
@@ -18,9 +19,9 @@ import '../../../../models/app/response_page_listener.dart';
 import '../../../../models/rest_api/transaction_history.dart';
 import '../../../common/responses_util/response_widget_id.dart';
 import '../../../common/responses_util/snackbar_message.dart';
-import '../../transaction/screen/widget_transaction.dart';
 import '../../../theme/style/text_style.dart';
 import '../../../tiles/tile_select_address.dart';
+import '../../transaction/screen/widget_transaction.dart';
 
 class PaymentScreen extends StatefulWidget {
   final Address address;
@@ -124,6 +125,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
     });
   }
 
+  void refreshReceiver(String hash) {
+    setState(() {
+      receiverController.text = hash;
+    });
+    checkButtonActive(null);
+  }
+
+  Future<void> pasteReceiver() async {
+    ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (data != null && data.text != null) {
+      setState(() {
+        receiverController.text = data.text!;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
@@ -170,12 +187,45 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   ),
                           ),
                         ),
-                        Text(
-                          AppLocalizations.of(context)!.receiver,
-                          textAlign: TextAlign.start,
-                          style: AppTextStyles.itemMedium
-                              .copyWith(fontWeight: FontWeight.w600),
-                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.receiver,
+                                textAlign: TextAlign.start,
+                                style: AppTextStyles.itemMedium
+                                    .copyWith(fontWeight: FontWeight.w600),
+                              ),
+                              Row(children: [
+                                IconButton(
+                                    tooltip: AppLocalizations.of(context)!
+                                        .tooltipSelMyWallet,
+                                    onPressed: () =>
+                                        DialogRouter.showDialogSellAddress(
+                                            context,
+                                            Address(
+                                                hash: "",
+                                                publicKey: "",
+                                                privateKey: ""),
+                                            isReceiver: true,
+                                            (selAddress) => refreshReceiver(
+                                                selAddress.hash)),
+                                    icon: const Icon(Icons.credit_card)),
+                                IconButton(
+                                    tooltip: AppLocalizations.of(context)!
+                                        .tooltipSelContact,
+                                    onPressed: () =>
+                                        DialogRouter.showDialogSellContact(
+                                            context,
+                                            (p0) => refreshReceiver(p0.hash)),
+                                    icon: const Icon(Icons.contacts)),
+                                IconButton(
+                                    tooltip: AppLocalizations.of(context)!
+                                        .tooltipPasteFromBuffer,
+                                    onPressed: () => pasteReceiver(),
+                                    icon: const Icon(Icons.paste))
+                              ])
+                            ]),
                         const SizedBox(height: 10),
                         TextField(
                             maxLength: 33,
@@ -269,7 +319,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 Icons.arrow_forward_ios_rounded,
                                 color: Colors.grey,
                               ),
-                              activeColor: Theme.of(context).colorScheme.primary,
+                              activeColor:
+                                  Theme.of(context).colorScheme.primary,
                               onWaitingProcess: () => sendOrder(),
                               onFinish: () {},
                             )),
@@ -363,7 +414,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             padding: const EdgeInsets.all(5),
             child: Text("$percent%",
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 12.sp,
                     fontWeight: selButton ==
                             double.parse(valueAmount.toStringAsFixed(7))
                         ? FontWeight.bold

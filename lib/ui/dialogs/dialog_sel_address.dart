@@ -10,9 +10,13 @@ import '../tiles/tile_wallet_address.dart';
 class DialogSellAddress extends StatefulWidget {
   final Address targetAddress;
   final Function(Address) selected;
+  final isReceiver;
 
   const DialogSellAddress(
-      {super.key, required this.targetAddress, required this.selected});
+      {super.key,
+      required this.targetAddress,
+      required this.selected,
+      this.isReceiver = false});
 
   @override
   State createState() => DialogSellAddressState();
@@ -32,10 +36,18 @@ class DialogSellAddressState extends State<DialogSellAddress> {
           Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-              child: Text(
-                AppLocalizations.of(context)!.sellAddress,
-                style: AppTextStyles.dialogTitle,
-              )),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.sellAddress,
+                      style: AppTextStyles.dialogTitle,
+                    ),
+                    Text(
+                      "(${widget.isReceiver ? AppLocalizations.of(context)!.receiver : AppLocalizations.of(context)!.sender})",
+                      style: AppTextStyles.textHiddenMedium(context),
+                    )
+                  ])),
           const SizedBox(height: 0),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),

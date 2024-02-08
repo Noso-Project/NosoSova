@@ -450,4 +450,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorConnectionApi => 'Sorry, we are unable to process your request at this time';
+
+  @override
+  String get contact => 'Contacts';
+
+  @override
+  String get contactEmpty => 'Your contacts will be displayed here';
+
+  @override
+  String get newContact => 'Create contacts';
+
+  @override
+  String get addContact => 'Add to contacts';
+
+  @override
+  String get tooltipSelMyWallet => 'Select from my wallet';
+
+  @override
+  String get tooltipSelContact => 'Select from Contact';
+
+  @override
+  String get tooltipPasteFromBuffer => 'Paste from Buffer';
 }

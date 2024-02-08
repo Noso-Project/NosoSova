@@ -147,5 +147,12 @@
   "uptimePercent": "Безотказная работа",
   "monthlyEarning": "Ежемесячный заработок",
   "openNodeInfo": "Информация о Node",
-  "errorConnectionApi": "Извините, мы не можем обработать ваш запрос в данный момент"
+  "errorConnectionApi": "Извините, мы не можем обработать ваш запрос в данный момент",
+  "contact": "Контакты",
+  "contactEmpty": "Здесь будут отображаться ваши контакты",
+  "newContact": "Создать контакт",
+  "addContact": "Добавить в контакты",
+  "tooltipSelMyWallet": "Выбрать из моего кошелька",
+  "tooltipSelContact": "Выбрать из списка контактов",
+  "tooltipPasteFromBuffer": "Вставить из буфера"
 }

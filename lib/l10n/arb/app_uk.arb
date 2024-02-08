@@ -148,5 +148,12 @@
   "uptimePercent": "Безвідмовна робота",
   "monthlyEarning": "Щомісячний заробіток",
   "openNodeInfo": "Інформація про вузол",
-  "errorConnectionApi": "На жаль, ми не можемо обробити ваш запит в даний час"
+  "errorConnectionApi": "На жаль, ми не можемо обробити ваш запит в даний час",
+  "contact": "Контакти",
+  "contactEmpty": "Тут будуть відображені ваші контакти",
+  "newContact": "Створити контакт",
+  "addContact": "Додати до контактів",
+  "tooltipSelMyWallet": "Вибрати з мого гаманця",
+  "tooltipSelContact": "Вибрати з контактів",
+  "tooltipPasteFromBuffer": "Вставити з буфера"
 }

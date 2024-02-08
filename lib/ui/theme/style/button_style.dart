@@ -9,12 +9,12 @@ class AppButtonStyle {
   static const double _buttonRadius = 20.0;
 
   static buttonDefault(BuildContext context, String text, Function onTap,
-      {bool isEnabled = true}) {
+      {bool isEnabled = true, bool isCancel = false}) {
     return MaterialButton(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(_buttonRadius),
       ),
-      color: isEnabled ? Theme.of(context).colorScheme.primary : Colors.grey,
+      color: isEnabled && !isCancel ? Theme.of(context).colorScheme.primary : Colors.grey,
       onPressed: () => isEnabled ? onTap() : null,
       child: SizedBox(
         height: _heightButton,

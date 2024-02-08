@@ -12,7 +12,6 @@ import 'package:nososova/blocs/events/coininfo_events.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/l10n/app_localizations.dart';
-import 'package:nososova/ui/config/responsive.dart';
 import 'package:nososova/ui/notifer/app_settings_notifer.dart';
 import 'package:nososova/ui/pages/main/main_page.dart';
 import 'package:nososova/ui/theme/color_schemes.g.dart';
@@ -54,17 +53,17 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
-  if (Platform.isAndroid || Platform.isIOS) {
+    if (Platform.isAndroid || Platform.isIOS) {
       ScreenUtil.init(context, designSize: const Size(360, 690));
     } else {
-      ScreenUtil.init(context, designSize: const Size(1000, 800), minTextAdapt: true);
+      ScreenUtil.init(context,
+          designSize: const Size(1000, 800), minTextAdapt: true, );
       ScreenUtil().setSp(22);
     }
 
     return ListenableBuilder(
         listenable: _appSettings,
         builder: (BuildContext context, Widget? child) {
-
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),

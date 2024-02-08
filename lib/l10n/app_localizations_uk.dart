@@ -450,4 +450,25 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get errorConnectionApi => 'На жаль, ми не можемо обробити ваш запит в даний час';
+
+  @override
+  String get contact => 'Контакти';
+
+  @override
+  String get contactEmpty => 'Тут будуть відображені ваші контакти';
+
+  @override
+  String get newContact => 'Створити контакт';
+
+  @override
+  String get addContact => 'Додати до контактів';
+
+  @override
+  String get tooltipSelMyWallet => 'Вибрати з мого гаманця';
+
+  @override
+  String get tooltipSelContact => 'Вибрати з контактів';
+
+  @override
+  String get tooltipPasteFromBuffer => 'Вставити з буфера';
 }

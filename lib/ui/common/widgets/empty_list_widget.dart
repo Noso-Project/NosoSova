@@ -27,7 +27,7 @@ class EmptyWidget extends StatelessWidget {
                 Text(
                   descrpt,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.subTitleMessage,
+                  style: AppTextStyles.textHiddenMedium(context),
                 )
             ],
           )),

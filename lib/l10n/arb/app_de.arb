@@ -98,7 +98,7 @@
   "informMyNodes": "Status meiner Nodes",
   "emptyListAddress": "Erstelle eine neue Adresse",
   "getKeysPair": "Schlüssel anzeigen",
-  "reward" : "Belohnen",
+  "reward": "Belohnen",
   "online": "Online",
   "offline": "Offline",
   "sendCoins": "Senden Mittel",
@@ -147,6 +147,12 @@
   "uptimePercent": "Uptime",
   "monthlyEarning": "Monatlicher Verdienst",
   "openNodeInfo": "Informationen zum Knotenpunkt",
-  "errorConnectionApi": "Tut uns leid, wir können Ihre Anfrage derzeit nicht bearbeiten"
-
+  "errorConnectionApi": "Tut uns leid, wir können Ihre Anfrage derzeit nicht bearbeiten",
+  "contact": "Kontakte",
+  "contactEmpty": "Ihre Kontakte werden hier angezeigt",
+  "newContact": "Kontakt erstellen",
+  "addContact": "Zu den Kontakten hinzufügen",
+  "tooltipSelMyWallet": "Aus meiner Brieftasche auswählen",
+  "tooltipSelContact": "Aus Kontakt auswählen",
+  "tooltipPasteFromBuffer": "Aus Puffer einfügen"
 }

@@ -147,5 +147,13 @@
   "uptimePercent": "Tempo de Atividade",
   "monthlyEarning": "Ganhos Mensais",
   "openNodeInfo": "Informações sobre o Node",
-  "errorConnectionApi": "Lamentamos, mas não nos é possível processar o seu pedido neste momento"
+  "errorConnectionApi": "Lamentamos, mas não nos é possível processar o seu pedido neste momento",
+  "contact": "Contactos",
+  "contactEmpty": "Os seus contactos serão apresentados aqui",
+  "newContact": "Criar contacto",
+  "addContact": "Adicionar aos contactos",
+  "tooltipSelMyWallet": "Selecionar da minha carteira",
+  "tooltipSelContact": "Selecionar a partir de Contacto",
+  "tooltipPasteFromBuffer": "Colar do buffer"
+
 }
