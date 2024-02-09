@@ -18,8 +18,8 @@ import '../theme/style/text_style.dart';
 
 class DialogWalletActions extends StatefulWidget {
   final GlobalKey<ScaffoldState>? scaffoldKey;
-
-  const DialogWalletActions({super.key, this.scaffoldKey});
+  final bool isVisibleDropInfo;
+  const DialogWalletActions({super.key, this.scaffoldKey, this.isVisibleDropInfo = false});
 
   @override
   State createState() => _DialogWalletActionsState();
@@ -35,6 +35,7 @@ class _DialogWalletActionsState extends State<DialogWalletActions> {
     walletBloc = BlocProvider.of<WalletBloc>(context);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WalletBloc, WalletState>(builder: (context, state) {
@@ -43,7 +44,7 @@ class _DialogWalletActionsState extends State<DialogWalletActions> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            DialogTitleDropdown(
+            if (widget.isVisibleDropInfo)    DialogTitleDropdown(
                 titleDialog: AppLocalizations.of(context)!.actionWallet,
                 activeMobile: !Responsive.isMobile(context),
                 isVisible: isVisibleAction,
@@ -51,8 +52,7 @@ class _DialogWalletActionsState extends State<DialogWalletActions> {
                       isVisibleAction = !isVisibleAction;
                     })),
             if (Responsive.isMobile(context) || isVisibleAction)
-              SingleChildScrollView(
-                  child: ListView(shrinkWrap: true, children: [
+            ListView(shrinkWrap: true, children: [
                 buildListTileSvg(
                     Assets.iconsWallet,
                     AppLocalizations.of(context)!.genNewKeyPair,
@@ -89,7 +89,7 @@ class _DialogWalletActionsState extends State<DialogWalletActions> {
                     onTap: () =>
                         _exportWalletFile(context, FormatWalletFile.pkw)),
                 const SizedBox(height: 10)
-              ]))
+              ])
           ]);
     });
   }

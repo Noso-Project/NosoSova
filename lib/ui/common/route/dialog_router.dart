@@ -44,30 +44,71 @@ class DialogRouter {
   /// The dialog that displays possible actions on the wallet
   static void showDialogActionWallet(
       BuildContext context, GlobalKey<ScaffoldState> scaffoldKey) {
-    showModalBottomSheet(
+    WoltModalSheet.show(
+      context: context,
+      showDragHandle: false,
+      pageListBuilder: (BuildContext _) {
+        return [
+          WoltModalSheetPage(
+              hasSabGradient: false,
+              trailingNavBarWidget: IconButton(
+                padding: const EdgeInsets.all(20),
+                icon: const Icon(Icons.close),
+                onPressed: Navigator.of(context).pop,
+              ),
+              topBarTitle: Text(AppLocalizations.of(context)!.actionWallet,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.dialogTitle),
+              isTopBarLayerAlwaysVisible: true,
+              child: BlocProvider.value(
+                value: BlocProvider.of<WalletBloc>(context),
+                child:  DialogWalletActions(scaffoldKey: scaffoldKey),
+              ))
+        ];
+      },
+    );
+  /*  showModalBottomSheet(
         shape: DialogStyle.borderShape,
         context: context,
         builder: (_) => BlocProvider.value(
             value: BlocProvider.of<WalletBloc>(context),
             child: DialogWalletActions(scaffoldKey: scaffoldKey)));
+
+   */
   }
 
   /// The dialog that displays the status of the network connection and actions on it
   static void showDialogInfoNetwork(BuildContext context) {
-    showModalBottomSheet(
-        shape: DialogStyle.borderShape,
-        context: context,
-        builder: (_) => MultiBlocProvider(
-              providers: [
-                BlocProvider.value(
-                  value: BlocProvider.of<AppDataBloc>(context),
-                ),
-                BlocProvider.value(
-                  value: BlocProvider.of<DebugBloc>(context),
-                ),
-              ],
-              child: const DialogInfoNetwork(),
-            ));
+    WoltModalSheet.show(
+      context: context,
+      showDragHandle: false,
+      pageListBuilder: (BuildContext _) {
+        return [
+          WoltModalSheetPage(
+              hasSabGradient: false,
+              trailingNavBarWidget: IconButton(
+                padding: const EdgeInsets.all(20),
+                icon: const Icon(Icons.close),
+                onPressed: Navigator.of(context).pop,
+              ),
+              topBarTitle: Text(AppLocalizations.of(context)!.titleInfoNetwork,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.dialogTitle),
+              isTopBarLayerAlwaysVisible: true,
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(
+                    value: BlocProvider.of<AppDataBloc>(context),
+                  ),
+                  BlocProvider.value(
+                    value: BlocProvider.of<DebugBloc>(context),
+                  ),
+                ],
+                child: const DialogInfoNetwork(),
+              ))
+        ];
+      },
+    );
   }
 
   /// The dialog that can be used to restore the address with a pair of keys

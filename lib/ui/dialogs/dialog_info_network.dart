@@ -19,7 +19,9 @@ import '../theme/style/icons_style.dart';
 import '../theme/style/text_style.dart';
 
 class DialogInfoNetwork extends StatefulWidget {
-  const DialogInfoNetwork({super.key});
+  final bool isVisibleDropInfo;
+
+  const DialogInfoNetwork({super.key, this.isVisibleDropInfo = false});
 
   @override
   DialogInfoNetworkState createState() => DialogInfoNetworkState();
@@ -38,16 +40,15 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DialogTitleDropdown(
-            titleDialog: AppLocalizations.of(context)!.titleInfoNetwork,
-            activeMobile: !Responsive.isMobile(context),
-            isVisible: isVisibleAction,
-            setVisible: () => setState(
-              () {
-                isVisibleAction = !isVisibleAction;
-              },
-            ),
-          ),
+          if (widget.isVisibleDropInfo)
+            DialogTitleDropdown(
+                titleDialog: AppLocalizations.of(context)!.titleInfoNetwork,
+                activeMobile: !Responsive.isMobile(context),
+                isVisible: isVisibleAction,
+                setVisible: () => setState(() {
+                      isVisibleAction = !isVisibleAction;
+                    })),
+          if (!widget.isVisibleDropInfo) const SizedBox(height: 20),
           if (Responsive.isMobile(context) || isVisibleAction)
             Column(
               children: [

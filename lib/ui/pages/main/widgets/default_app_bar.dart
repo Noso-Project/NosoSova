@@ -20,6 +20,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         ? AppBar(
             elevation: 0,
             iconTheme: const IconThemeData(color: Colors.white),
+            centerTitle: false,
             title: NetworkInfo(
                 nodeStatusDialog: () =>
                     DialogRouter.showDialogInfoNetwork(context)),

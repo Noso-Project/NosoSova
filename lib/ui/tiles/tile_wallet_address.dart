@@ -36,7 +36,9 @@ class _AddressListTileState extends State<AddressListTile> {
                 contentPadding: const EdgeInsets.only(left: 10, right: 15),
                 leading: _iconAddress(),
                 title: Text(
-                 Responsive.isMobile(context) ?  widget.address.hashPublic :  widget.address.hash,
+                  Responsive.isMobile(context)
+                      ? widget.address.hashPublic
+                      : widget.address.hash,
                   style: AppTextStyles.walletHash,
                 ),
                 subtitle: Text(
@@ -44,7 +46,9 @@ class _AddressListTileState extends State<AddressListTile> {
                   style: AppTextStyles.textHiddenSmall(context),
                 ),
                 trailing: Text(
-                  widget.address.balance.toStringAsFixed(5),
+                  widget.address.balance == 0
+                      ? "0.00"
+                      : widget.address.balance.toStringAsFixed(5),
                   style: AppTextStyles.walletBalance,
                 ),
                 onLongPress: widget.onLong,

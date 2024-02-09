@@ -270,6 +270,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 AppTextFiledDecoration.defaultDecoration(
                                     "0.0000000")),
                         const SizedBox(height: 20),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

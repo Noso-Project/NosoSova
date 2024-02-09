@@ -18,6 +18,7 @@ class AddressActionsWidget extends StatelessWidget {
 
   const AddressActionsWidget({super.key, required this.address});
 
+
   @override
   Widget build(BuildContext context) {
     var walletBloc = BlocProvider.of<WalletBloc>(context);

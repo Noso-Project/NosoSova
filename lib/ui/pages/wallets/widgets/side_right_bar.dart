@@ -20,9 +20,9 @@ class SideRightBarDesktop extends StatelessWidget {
           child: Padding(
               padding: const EdgeInsets.all(10),
               child: Column(children: [
-                const Card(child: DialogInfoNetwork()),
+                const Card(child: DialogInfoNetwork(isVisibleDropInfo: true)),
                 const SizedBox(height: 10),
-                const Card(child: DialogWalletActions()),
+                const Card(child: DialogWalletActions(isVisibleDropInfo: true)),
                 const SizedBox(height: 10),
                 Card(
                     child: ListTile(

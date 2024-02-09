@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nososova/blocs/contacts_block.dart';
+import 'package:nososova/blocs/debug_bloc.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../../blocs/app_data_bloc.dart';
@@ -71,6 +72,9 @@ class PageRouter {
             ),
             BlocProvider.value(
               value: locator<AppDataBloc>(),
+            ),
+            BlocProvider.value(
+              value: locator<DebugBloc>(),
             ),
             BlocProvider<HistoryTransactionsBloc>(
               create: (BuildContext context) => HistoryTransactionsBloc.create(

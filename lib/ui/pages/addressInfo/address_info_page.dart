@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noso_dart/const.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
+import 'package:nososova/ui/common/widgets/pending/pendings_widget.dart';
 import 'package:nososova/ui/pages/addressInfo/screens/address_actions.dart';
 import 'package:nososova/ui/pages/addressInfo/screens/history_transaction.dart';
-import 'package:nososova/ui/common/widgets/pending/pendings_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../blocs/events/history_transactions_events.dart';
@@ -17,6 +17,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../models/address_wallet.dart';
 import '../../common/responses_util/response_widget_id.dart';
 import '../../common/responses_util/snackbar_message.dart';
+import '../../common/route/dialog_router.dart';
 import '../../common/widgets/app_bar_other_page.dart';
 import '../../common/widgets/node_light_status.dart';
 import '../../config/responsive.dart';
@@ -81,7 +82,9 @@ class _AddressInfoPageState extends State<AddressInfoPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         extendBodyBehindAppBar: true,
-        appBar: CustomAppBar(onNodeStatusDialog: () {}),
+        appBar: CustomAppBar(
+            onNodeStatusDialog: () =>
+                DialogRouter.showDialogInfoNetwork(context)),
         body: BlocBuilder<WalletBloc, WalletState>(builder: (context, state) {
           return Container(
               decoration: Responsive.isMobile(context)
@@ -193,7 +196,7 @@ class _AddressInfoPageState extends State<AddressInfoPage> {
                                           });
                                         },
                                         child: Padding(
-                                            padding: const EdgeInsets.all(10),
+                                            padding: const EdgeInsets.all(5),
                                             child: Text(
                                                 AppLocalizations.of(context)!
                                                     .address,
@@ -222,7 +225,7 @@ class _AddressInfoPageState extends State<AddressInfoPage> {
                                           });
                                         },
                                         child: Padding(
-                                            padding: const EdgeInsets.all(10),
+                                            padding: const EdgeInsets.all(5),
                                             child: Text(
                                                 AppLocalizations.of(context)!
                                                     .keys,
@@ -278,7 +281,8 @@ class _AddressInfoPageState extends State<AddressInfoPage> {
               Tooltip(
                   message: AppLocalizations.of(context)!.balance,
                   child: Text(targetAddress.balance.toStringAsFixed(8),
-                      style: AppTextStyles.priceValue.copyWith(fontSize: 24, color: Colors.white))),
+                      style: AppTextStyles.priceValue
+                          .copyWith(fontSize: 24, color: Colors.white))),
               const SizedBox(height: 15),
               Tooltip(
                   message: AppLocalizations.of(context)!.copyAddress,
