@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nososova/ui/theme/style/sizes.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../config/responsive.dart';
 import '../../../theme/style/text_style.dart';
 
@@ -36,35 +37,38 @@ class _DialogTitleDropdownState extends State<DialogTitleDropdown> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.symmetric(
-          vertical: Responsive.isMobile(context) ? CustomSizes.paddingDialogMobile : CustomSizes.paddingDialogDesktop,
-          horizontal: CustomSizes.paddingDialogVertical),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            widget.titleDialog,
-            style: AppTextStyles.dialogTitle.copyWith(color: widget.isDark ? Theme.of(context).colorScheme.onSurface : Colors.white),
-          ),
+        padding: EdgeInsets.symmetric(
+            vertical: Responsive.isMobile(context)
+                ? CustomSizes.paddingDialogMobile
+                : CustomSizes.paddingDialogDesktop,
+            horizontal: CustomSizes.paddingDialogVertical),
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(widget.titleDialog,
+              style: AppTextStyles.dialogTitle.copyWith(
+                  color: widget.isDark
+                      ? Theme.of(context).colorScheme.onSurface
+                      : Colors.white)),
           if (widget.activeMobile)
             IconButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                setState(() {
-                  isVisibleAction = !isVisibleAction;
-                });
-                widget.setVisible();
-              },
-              icon: Icon(
-                isVisibleAction
-                    ? Icons.expand_less
-                    : Icons.expand_more_outlined,
-                size: 28,
-                color: widget.isDark ? Theme.of(context).colorScheme.onSurface : Colors.white.withOpacity(0.7),
-              ),
-            ),
-        ],
-      ),
-    );
+                tooltip: isVisibleAction
+                    ? AppLocalizations.of(context)!.hideMoreInfo
+                    : AppLocalizations.of(context)!.showMoreInfo,
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  setState(() {
+                    isVisibleAction = !isVisibleAction;
+                  });
+                  widget.setVisible();
+                },
+                icon: Icon(
+                    isVisibleAction
+                        ? Icons.expand_less
+                        : Icons.expand_more_outlined,
+                    size: 28,
+                    color: widget.isDark
+                        ? Theme.of(context).colorScheme.onSurface
+                        : Colors.white.withOpacity(0.7)))
+        ]));
   }
 }

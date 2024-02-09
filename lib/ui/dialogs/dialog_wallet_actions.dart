@@ -44,58 +44,52 @@ class _DialogWalletActionsState extends State<DialogWalletActions> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             DialogTitleDropdown(
-              titleDialog: AppLocalizations.of(context)!.actionWallet,
-              activeMobile: !Responsive.isMobile(context),
-              isVisible: isVisibleAction,
-              setVisible: () => setState(
-                () {
-                  isVisibleAction = !isVisibleAction;
-                },
-              ),
-            ),
+                titleDialog: AppLocalizations.of(context)!.actionWallet,
+                activeMobile: !Responsive.isMobile(context),
+                isVisible: isVisibleAction,
+                setVisible: () => setState(() {
+                      isVisibleAction = !isVisibleAction;
+                    })),
             if (Responsive.isMobile(context) || isVisibleAction)
               SingleChildScrollView(
-                  child: ListView(
-                shrinkWrap: true,
-                children: [
+                  child: ListView(shrinkWrap: true, children: [
+                buildListTileSvg(
+                    Assets.iconsWallet,
+                    AppLocalizations.of(context)!.genNewKeyPair,
+                    () => _createNewAddress(context)),
+                buildListTileSvg(
+                    Assets.iconsText,
+                    AppLocalizations.of(context)!.importKeysPair,
+                    () => _importToKeysPair(context)),
+                if (Platform.isAndroid || Platform.isIOS)
                   buildListTileSvg(
-                      Assets.iconsWallet,
-                      AppLocalizations.of(context)!.genNewKeyPair,
-                      () => _createNewAddress(context)),
-                  buildListTileSvg(
-                      Assets.iconsText,
-                      AppLocalizations.of(context)!.importKeysPair,
-                      () => _importToKeysPair(context)),
-                  if (Platform.isAndroid || Platform.isIOS)
-                    buildListTileSvg(
-                        Assets.iconsScan,
-                        AppLocalizations.of(context)!.scanQrCode,
-                        () => DialogRouter.showDialogScanQr(context)),
-                  if (Responsive.isMobile(context))
-                    ListTile(
-                        title: Text(AppLocalizations.of(context)!.fileWallet,
-                            style: AppTextStyles.dialogTitle)),
+                      Assets.iconsScan,
+                      AppLocalizations.of(context)!.scanQrCode,
+                      () => DialogRouter.showDialogScanQr(context)),
+                if (Responsive.isMobile(context))
                   ListTile(
-                      leading: AppIconsStyle.icon3x2(Assets.iconsImport),
-                      title: Text(AppLocalizations.of(context)!.importFile,
-                          style: AppTextStyles.infoItemValue),
-                      subtitle: Text(
-                          AppLocalizations.of(context)!.importFileSubtitle,
-                          style: AppTextStyles.textHiddenSmall(context)),
-                      onTap: () => _importWalletFile(context)),
-                  ListTile(
-                      enabled: isEnableExport,
-                      leading: AppIconsStyle.icon3x2(Assets.iconsExport),
-                      title: Text(AppLocalizations.of(context)!.exportFile,
-                          style: AppTextStyles.infoItemValue),
-                      subtitle: Text(
-                          AppLocalizations.of(context)!.exportFileSubtitle,
-                          style: AppTextStyles.textHiddenSmall(context)),
-                      onTap: () =>
-                          _exportWalletFile(context, FormatWalletFile.pkw)),
-                  const SizedBox(height: 10)
-                ],
-              )),
+                      title: Text(AppLocalizations.of(context)!.fileWallet,
+                          style: AppTextStyles.dialogTitle)),
+                ListTile(
+                    leading: AppIconsStyle.icon3x2(Assets.iconsImport),
+                    title: Text(AppLocalizations.of(context)!.importFile,
+                        style: AppTextStyles.infoItemValue),
+                    subtitle: Text(
+                        AppLocalizations.of(context)!.importFileSubtitle,
+                        style: AppTextStyles.textHiddenSmall(context)),
+                    onTap: () => _importWalletFile(context)),
+                ListTile(
+                    enabled: isEnableExport,
+                    leading: AppIconsStyle.icon3x2(Assets.iconsExport),
+                    title: Text(AppLocalizations.of(context)!.exportFile,
+                        style: AppTextStyles.infoItemValue),
+                    subtitle: Text(
+                        AppLocalizations.of(context)!.exportFileSubtitle,
+                        style: AppTextStyles.textHiddenSmall(context)),
+                    onTap: () =>
+                        _exportWalletFile(context, FormatWalletFile.pkw)),
+                const SizedBox(height: 10)
+              ]))
           ]);
     });
   }

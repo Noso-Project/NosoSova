@@ -474,4 +474,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get secretKeys => 'Chaves secretas';
+
+  @override
+  String get showMoreInfo => 'Mostrar informações adicionais';
+
+  @override
+  String get hideMoreInfo => 'Ocultar informação';
 }

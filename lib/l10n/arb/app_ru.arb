@@ -155,5 +155,7 @@
   "tooltipSelMyWallet": "Выбрать из моего кошелька",
   "tooltipSelContact": "Выбрать из списка контактов",
   "tooltipPasteFromBuffer": "Вставить из буфера",
-  "secretKeys": "Секретные ключи"
+  "secretKeys": "Секретные ключи",
+  "showMoreInfo": "Отображать дополнительную информацию",
+  "hideMoreInfo": "Скрыть информацию"
 }

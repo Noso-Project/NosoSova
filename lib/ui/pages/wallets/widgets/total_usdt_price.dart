@@ -29,18 +29,15 @@ class ItemTotalPrice extends StatelessWidget {
               .copyWith(color: Colors.white.withOpacity(0.5), fontSize: 14),
         ),
         if (state.statisticsCoin.apiStatus != ApiStatus.error) ...[
-          Row(
-            children: [
-              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Text(
-                  "${totalUsdtBalance.toStringAsFixed(2)} USDT",
-                  style: AppTextStyles.infoItemValue.copyWith(
-                      color: Colors.white.withOpacity(0.8), fontSize: 18),
-                ),
-                const SizedBox(width: 10),
-                Tooltip(
-                    message: AppLocalizations.of(context)!.pnlDay,
-                    child: Text(
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text("${totalUsdtBalance.toStringAsFixed(2)} USDT",
+                style: AppTextStyles.infoItemValue.copyWith(
+                    color: Colors.white.withOpacity(0.8), fontSize: 20)),
+            const SizedBox(width: 10),
+            Row(children: [
+              Tooltip(
+                  message: AppLocalizations.of(context)!.pnlDay,
+                  child: Text(
                       "${state.statisticsCoin.getDiff < 0 ? "" : "+"}${priceDif.toStringAsFixed(2)} USDT",
                       style: AppTextStyles.infoItemValue.copyWith(
                           color: diff == 0
@@ -48,24 +45,18 @@ class ItemTotalPrice extends StatelessWidget {
                               : diff < 0
                                   ? CustomColors.negativeBalance
                                   : CustomColors.positiveBalance,
-                          fontSize: 16),
-                    )),
-              ]),
-              const SizedBox(width: 20),
+                          fontSize: 14))),
+              const SizedBox(width: 10),
               if (state.statisticsCoin.apiStatus == ApiStatus.loading)
                 LoadingAnimationWidget.prograssiveDots(
-                  color: Colors.white.withOpacity(0.5),
-                  size: 28,
-                ),
-            ],
-          ),
+                    color: Colors.white.withOpacity(0.5), size: 16)
+            ])
+          ])
         ],
         if (state.statisticsCoin.apiStatus == ApiStatus.error)
-          Text(
-            "${AppLocalizations.of(context)!.priceInfoErrorServer} ",
-            style: AppTextStyles.infoItemTitle
-                .copyWith(color: Colors.white.withOpacity(0.8), fontSize: 16),
-          ),
+          Text("${AppLocalizations.of(context)!.priceInfoErrorServer} ",
+              style: AppTextStyles.infoItemTitle
+                  .copyWith(color: Colors.white.withOpacity(0.8), fontSize: 16))
       ]);
     });
   }

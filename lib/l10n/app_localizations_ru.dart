@@ -474,4 +474,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get secretKeys => 'Секретные ключи';
+
+  @override
+  String get showMoreInfo => 'Отображать дополнительную информацию';
+
+  @override
+  String get hideMoreInfo => 'Скрыть информацию';
 }

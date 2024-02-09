@@ -24,7 +24,7 @@ class StatisticsCoin {
 
   double get getCurrentPrice => historyCoin?.reversed.toList().first.price ?? 0;
 
-  Halving get getHalvingTimer => Halving().getHalvingTimer(lastBlock);
+  Halving get getHalvingTimer => lastBlock == 0 ? Halving(days: 0) : Halving().getHalvingTimer(lastBlock);
 
   get getTotalCoin => totalCoin;
 

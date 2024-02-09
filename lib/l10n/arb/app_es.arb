@@ -155,5 +155,7 @@
   "tooltipSelMyWallet": "Seleccionar de mi cartera",
   "tooltipSelContact": "Seleccionar desde Contacto",
   "tooltipPasteFromBuffer": "Pegar desde Buffer",
-  "secretKeys": "Claves secretas"
+  "secretKeys": "Claves secretas",
+  "showMoreInfo": "Mostrar información adicional",
+  "hideMoreInfo": "Ocultar información"
 }

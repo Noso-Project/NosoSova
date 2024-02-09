@@ -19,30 +19,23 @@ class SideRightBarDesktop extends StatelessWidget {
       child: SingleChildScrollView(
           child: Padding(
               padding: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  const Card(child: DialogInfoNetwork()),
-                  const SizedBox(height: 10),
-                  const Card(
-                    child: DialogWalletActions(),
-                  ),
-                  const SizedBox(height: 10),
-                  Card(
-                      child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: CustomSizes.paddingDialogVertical),
-                    title: Text(AppLocalizations.of(context)!.settings,
-                        style: AppTextStyles.dialogTitle),
-                    onTap: () => DialogSettings.showDialogSettings(context),
-                    trailing: Icon(
-                      Icons.navigate_next,
-                      size: 28,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  )),
-                ],
-              ))),
+              child: Column(children: [
+                const Card(child: DialogInfoNetwork()),
+                const SizedBox(height: 10),
+                const Card(child: DialogWalletActions()),
+                const SizedBox(height: 10),
+                Card(
+                    child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: CustomSizes.paddingDialogVertical),
+                        title: Text(AppLocalizations.of(context)!.settings,
+                            style: AppTextStyles.dialogTitle),
+                        onTap: () => DialogSettings.showDialogSettings(context),
+                        trailing: Icon(Icons.navigate_next,
+                            size: 28,
+                            color: Theme.of(context).colorScheme.onSurface)))
+              ]))),
     );
   }
 }

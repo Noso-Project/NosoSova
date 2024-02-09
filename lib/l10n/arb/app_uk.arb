@@ -156,5 +156,7 @@
   "tooltipSelMyWallet": "Вибрати з мого гаманця",
   "tooltipSelContact": "Вибрати з контактів",
   "tooltipPasteFromBuffer": "Вставити з буфера",
-  "secretKeys": "Секретні ключі"
+  "secretKeys": "Секретні ключі",
+  "showMoreInfo": "Показати додаткову інформацію",
+  "hideMoreInfo": "Приховати інформацію"
 }

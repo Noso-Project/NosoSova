@@ -474,4 +474,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get secretKeys => 'Secret keys';
+
+  @override
+  String get showMoreInfo => 'Display additional information';
+
+  @override
+  String get hideMoreInfo => 'Hide information';
 }

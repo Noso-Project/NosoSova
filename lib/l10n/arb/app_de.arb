@@ -155,5 +155,7 @@
   "tooltipSelMyWallet": "Aus meiner Brieftasche auswählen",
   "tooltipSelContact": "Aus Kontakt auswählen",
   "tooltipPasteFromBuffer": "Aus Puffer einfügen",
-  "secretKeys": "Geheime Schlüssel"
+  "secretKeys": "Geheime Schlüssel",
+  "showMoreInfo": "Zusätzliche Informationen anzeigen",
+  "hideMoreInfo": "Informationen ausblenden"
 }

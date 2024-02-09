@@ -56,15 +56,15 @@ class ShimmerPro extends StatefulWidget {
   ///[textSize] is [ShimmerPro.text]'s text size.Defoult 14.
   ShimmerPro.text(
       {super.key,
-        this.depth = 20,
-        this.duration = const Duration(seconds: 1),
-        this.maxLine = 3,
-        this.textSize = 14,
-        this.borderRadius = 10,
-        this.alignment = Alignment.center,
-        this.light = ShimmerProLight.darker,
-        required this.scaffoldBackgroundColor,
-        this.width}) {
+      this.depth = 20,
+      this.duration = const Duration(seconds: 1),
+      this.maxLine = 3,
+      this.textSize = 14,
+      this.borderRadius = 10,
+      this.alignment = Alignment.center,
+      this.light = ShimmerProLight.darker,
+      required this.scaffoldBackgroundColor,
+      this.width}) {
     isText = true;
   }
 
@@ -78,15 +78,15 @@ class ShimmerPro extends StatefulWidget {
   ///[child] must be [Column] or [Row] for best seen.
   ShimmerPro.generated(
       {super.key,
-        this.depth = 20,
-        this.duration = const Duration(seconds: 1),
-        this.borderRadius = 10,
-        this.alignment = Alignment.center,
-        this.light = ShimmerProLight.darker,
-        required this.scaffoldBackgroundColor,
-        this.width,
-        this.height,
-        required this.child}) {
+      this.depth = 20,
+      this.duration = const Duration(seconds: 1),
+      this.borderRadius = 10,
+      this.alignment = Alignment.center,
+      this.light = ShimmerProLight.darker,
+      required this.scaffoldBackgroundColor,
+      this.width,
+      this.height,
+      required this.child}) {
     isGenerated = true;
   }
 
@@ -110,34 +110,36 @@ class _ShimmerProState extends State<ShimmerPro> {
     _colorInt = _brightness == Brightness.dark
         ? 5
         : (_brightness == Brightness.light
-        ? -50
-        : (_brightness == Brightness.dark ? 5 : -50));
-    // _brightness == Brightness.light ? widget.depth = widget.depth + 10 : null;
+            ? -50
+            : (_brightness == Brightness.dark ? 5 : -50));
 
     onReady();
-    // log(name: "BatuShimmer", '\x1B[32mInitialized\x1B[0m');
 
     super.initState();
   }
 
   onReady() async {
     await Future.delayed(const Duration(microseconds: 1));
-    setState(() {
-      if (_isStart) {
-        _colorInt = _colorInt + widget.depth;
-      } else {
-        _colorInt = _colorInt - widget.depth;
-      }
-    });
-    _timer = Timer.periodic(widget.duration, (timer) {
+    if (mounted) {
       setState(() {
         if (_isStart) {
-          _colorInt = _colorInt - widget.depth;
-        } else {
           _colorInt = _colorInt + widget.depth;
+        } else {
+          _colorInt = _colorInt - widget.depth;
         }
-        _isStart = !_isStart;
       });
+    }
+    _timer = Timer.periodic(widget.duration, (timer) {
+      if (mounted) {
+        setState(() {
+          if (_isStart) {
+            _colorInt = _colorInt - widget.depth;
+          } else {
+            _colorInt = _colorInt + widget.depth;
+          }
+          _isStart = !_isStart;
+        });
+      }
     });
   }
 
@@ -148,7 +150,6 @@ class _ShimmerProState extends State<ShimmerPro> {
     if (_timer.isActive) {
       _timer.cancel();
     }
-    //  log(name: "BatuShimmer", '\x1B[32mDeleted\x1B[0m');
   }
 
   @override
@@ -214,22 +215,22 @@ class _ShimmerProState extends State<ShimmerPro> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
                 widget.maxLine!,
-                    (index) => AnimatedContainer(
-                  duration: widget.duration,
-                  decoration: BoxDecoration(
-                    borderRadius:
-                    BorderRadius.circular(widget.borderRadius!),
-                    color: textWColorTextAndSize,
-                  ),
-                  margin: const EdgeInsets.only(
-                      right: 10, left: 10, bottom: 5, top: 5),
-                  height: widget.textSize,
-                  width: (widget.maxLine! - 1) == index
-                      ? (widget.maxLine != 1
-                      ? (widget.width ?? double.maxFinite) / 3
-                      : null)
-                      : null,
-                ))
+                (index) => AnimatedContainer(
+                      duration: widget.duration,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(widget.borderRadius!),
+                        color: textWColorTextAndSize,
+                      ),
+                      margin: const EdgeInsets.only(
+                          right: 10, left: 10, bottom: 5, top: 5),
+                      height: widget.textSize,
+                      width: (widget.maxLine! - 1) == index
+                          ? (widget.maxLine != 1
+                              ? (widget.width ?? double.maxFinite) / 3
+                              : null)
+                          : null,
+                    ))
               ..insert(
                   0,
                   const SizedBox(

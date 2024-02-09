@@ -474,4 +474,10 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get secretKeys => 'Секретні ключі';
+
+  @override
+  String get showMoreInfo => 'Показати додаткову інформацію';
+
+  @override
+  String get hideMoreInfo => 'Приховати інформацію';
 }

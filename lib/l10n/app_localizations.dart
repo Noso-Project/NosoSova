@@ -1042,6 +1042,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Secret keys'**
   String get secretKeys;
+
+  /// No description provided for @showMoreInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Display additional information'**
+  String get showMoreInfo;
+
+  /// No description provided for @hideMoreInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide information'**
+  String get hideMoreInfo;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

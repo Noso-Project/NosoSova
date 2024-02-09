@@ -50,9 +50,8 @@ class WalletsPageState extends State<WalletsPage> {
 
         if (response.action == ActionsFileWallet.walletExportDialog) {
           String? outputFile = await FilePicker.platform.saveFile(
-            dialogTitle: 'Please select an wallet file:',
-            fileName: response.actionValue,
-          );
+              dialogTitle: 'Please select an wallet file:',
+              fileName: response.actionValue);
 
           if (outputFile != null) {
             walletBloc.add(ExportWallet(outputFile));
@@ -93,9 +92,7 @@ class WalletsPageState extends State<WalletsPage> {
                     const CardHeader(),
                     Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 10.0,
-                        ),
+                            horizontal: 20.0, vertical: 10.0),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -114,7 +111,7 @@ class WalletsPageState extends State<WalletsPage> {
                                               context, _scaffoldKey))
                               ])
                             ])),
-                    ListAddresses(scaffoldKey: _scaffoldKey),
+                    ListAddresses(scaffoldKey: _scaffoldKey)
                   ])),
               if (!Responsive.isMobile(context)) const SideRightBarDesktop()
             ]));
