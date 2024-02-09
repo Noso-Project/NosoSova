@@ -154,5 +154,6 @@
   "addContact": "Añadir a contactos",
   "tooltipSelMyWallet": "Seleccionar de mi cartera",
   "tooltipSelContact": "Seleccionar desde Contacto",
-  "tooltipPasteFromBuffer": "Pegar desde Buffer"
+  "tooltipPasteFromBuffer": "Pegar desde Buffer",
+  "secretKeys": "Claves secretas"
 }

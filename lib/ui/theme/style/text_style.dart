@@ -34,8 +34,7 @@ class AppTextStyles {
   static TextStyle infoItemTitle = TextStyle(
       fontSize: _mediumSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w400);
 
-  static TextStyle priceValue = TextStyle(
-      color: Colors.white,
+  static TextStyle priceValue = const TextStyle(
       fontSize: 32,
       fontFamily: "Gilroy",
       fontWeight: FontWeight.w600);

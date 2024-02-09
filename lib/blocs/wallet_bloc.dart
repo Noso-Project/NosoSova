@@ -717,7 +717,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         ? "wallet.nososova"
         : "wallet.pkw";
 
-    if (Platform.isIOS || Platform.isAndroid ) {
+    if (Platform.isIOS || Platform.isAndroid) {
       var bytes = FileHandler.writeWalletFile(state.wallet.address);
 
       /// also, bytes == null. return error

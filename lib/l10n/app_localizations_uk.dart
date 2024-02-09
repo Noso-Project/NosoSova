@@ -471,4 +471,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get tooltipPasteFromBuffer => 'Вставити з буфера';
+
+  @override
+  String get secretKeys => 'Секретні ключі';
 }

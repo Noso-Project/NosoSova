@@ -278,7 +278,7 @@ class _AddressInfoPageState extends State<AddressInfoPage> {
               Tooltip(
                   message: AppLocalizations.of(context)!.balance,
                   child: Text(targetAddress.balance.toStringAsFixed(8),
-                      style: AppTextStyles.priceValue.copyWith(fontSize: 24))),
+                      style: AppTextStyles.priceValue.copyWith(fontSize: 24, color: Colors.white))),
               const SizedBox(height: 15),
               Tooltip(
                   message: AppLocalizations.of(context)!.copyAddress,

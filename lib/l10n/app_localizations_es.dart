@@ -471,4 +471,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tooltipPasteFromBuffer => 'Pegar desde Buffer';
+
+  @override
+  String get secretKeys => 'Claves secretas';
 }

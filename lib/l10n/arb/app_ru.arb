@@ -154,5 +154,6 @@
   "addContact": "Добавить в контакты",
   "tooltipSelMyWallet": "Выбрать из моего кошелька",
   "tooltipSelContact": "Выбрать из списка контактов",
-  "tooltipPasteFromBuffer": "Вставить из буфера"
+  "tooltipPasteFromBuffer": "Вставить из буфера",
+  "secretKeys": "Секретные ключи"
 }

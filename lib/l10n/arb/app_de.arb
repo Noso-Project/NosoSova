@@ -154,5 +154,6 @@
   "addContact": "Zu den Kontakten hinzufügen",
   "tooltipSelMyWallet": "Aus meiner Brieftasche auswählen",
   "tooltipSelContact": "Aus Kontakt auswählen",
-  "tooltipPasteFromBuffer": "Aus Puffer einfügen"
+  "tooltipPasteFromBuffer": "Aus Puffer einfügen",
+  "secretKeys": "Geheime Schlüssel"
 }

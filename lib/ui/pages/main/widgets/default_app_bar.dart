@@ -25,9 +25,8 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                     DialogRouter.showDialogInfoNetwork(context)),
             actions: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(children: [
                     if (Platform.isAndroid || Platform.isIOS)
                       IconButton(
                         icon: AppIconsStyle.icon3x2(Assets.iconsScan,
@@ -43,9 +42,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                       onPressed: () =>
                           DialogSettings.showDialogSettings(context),
                     )
-                  ],
-                ),
-              ),
+                  ]))
             ],
             backgroundColor: Colors.transparent,
           )

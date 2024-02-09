@@ -1036,6 +1036,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Paste from Buffer'**
   String get tooltipPasteFromBuffer;
+
+  /// No description provided for @secretKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'Secret keys'**
+  String get secretKeys;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

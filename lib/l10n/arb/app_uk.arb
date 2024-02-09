@@ -155,5 +155,6 @@
   "addContact": "Додати до контактів",
   "tooltipSelMyWallet": "Вибрати з мого гаманця",
   "tooltipSelContact": "Вибрати з контактів",
-  "tooltipPasteFromBuffer": "Вставити з буфера"
+  "tooltipPasteFromBuffer": "Вставити з буфера",
+  "secretKeys": "Секретні ключі"
 }

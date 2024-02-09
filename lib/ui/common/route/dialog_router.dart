@@ -242,7 +242,7 @@ class DialogRouter {
         return [
           WoltModalSheetPage(
             hasSabGradient: false,
-            topBarTitle: Text("Secret keys",
+            topBarTitle: Text(AppLocalizations.of(context)!.secretKeys,
                 textAlign: TextAlign.center, style: AppTextStyles.dialogTitle),
             isTopBarLayerAlwaysVisible: true,
             child: DialogViewKeysPair(address: address),

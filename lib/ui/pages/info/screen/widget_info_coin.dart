@@ -87,8 +87,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                           children: [
                             Text(
                               infoCoin.getCurrentPrice.toStringAsFixed(6),
-                              style:
-                                  AppTextStyles.priceValue,
+                              style: AppTextStyles.priceValue,
                             ),
                             const SizedBox(width: 5),
                             Text(
