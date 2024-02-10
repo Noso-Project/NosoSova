@@ -14,13 +14,19 @@ class AppButtonStyle {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(_buttonRadius),
       ),
-      color: isEnabled && !isCancel ? Theme.of(context).colorScheme.primary : Colors.grey,
+      color: isEnabled && !isCancel
+          ? Theme.of(context).colorScheme.primary
+          : Colors.grey.withOpacity(0.7),
       onPressed: () => isEnabled ? onTap() : null,
       child: SizedBox(
         height: _heightButton,
         width: double.infinity,
         child: Center(
-            child: Text(text, style: AppTextStyles.buttonTextDefault(context))),
+            child: Text(
+          text,
+          style: AppTextStyles.buttonTextDefault(context),
+          textAlign: TextAlign.center,
+        )),
       ),
     );
   }

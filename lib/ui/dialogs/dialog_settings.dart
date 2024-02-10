@@ -289,7 +289,6 @@ class DialogSettings {
         }
       },
       onModalDismissedWithBarrierTap: () {
-        debugPrint('Closed modal sheet with barrier tap');
         Navigator.of(context).pop();
         pageIndexNotifier.value = 0;
       },

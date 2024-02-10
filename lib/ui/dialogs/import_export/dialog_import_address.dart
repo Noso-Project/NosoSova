@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:nososova/l10n/app_localizations.dart';
-import 'package:nososova/ui/config/responsive.dart';
+import 'package:nososova/ui/theme/style/button_style.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
 import 'package:nososova/utils/other_utils.dart';
 
 import '../../../blocs/events/wallet_events.dart';
 import '../../../blocs/wallet_bloc.dart';
+import '../../config/responsive.dart';
 import '../../theme/style/text_style.dart';
 
 typedef OnCancelButtonPressed = void Function();
@@ -36,115 +37,96 @@ class DialogImportAddressState extends State<DialogImportAddress> {
   @override
   Widget build(BuildContext context) {
     var addresses = widget.address;
-    return SafeArea(
-        child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (Responsive.isMobile(context)) const SizedBox(height: 60),
-          Text(
-            AppLocalizations.of(context)!.foundAddresses,
-            style: AppTextStyles.dialogTitle,
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: false,
-              itemCount: addresses.length,
-              itemBuilder: (BuildContext context, int index) {
-                final item = addresses[index];
-                bool isSelected = selectedItems.contains(item);
+    return SizedBox(
+        height: Responsive.isMobile(context)
+            ? MediaQuery.of(context).size.height / 1.3
+            : MediaQuery.of(context).size.height / 1.5,
+        child: Stack(children: [
+          Column(children: [
+            Expanded(
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: addresses.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final item = addresses[index];
+                      bool isSelected = selectedItems.contains(item);
 
-                return ListTile(
-                  onTap: () {
-                    setState(() {
-                      isSelected = !isSelected;
-                      if (isSelected) {
-                        selectedItems.add(item);
-                      } else {
-                        selectedItems.remove(item);
-                      }
-                    });
-                  },
-                  contentPadding: const EdgeInsets.all(0),
-                  title: Text(item.custom != null ? item.custom ?? "" : OtherUtils.hashObfuscation(item.hash),
-                      style: AppTextStyles.walletHash),
-                  leading: Checkbox(
-                    activeColor: CustomColors.primaryColor,
-                    value: isSelected,
-                    onChanged: (value) {
-                      setState(() {
-                        if (value != null && value) {
-                          selectedItems.add(item);
-                        } else {
-                          selectedItems.remove(item);
-                        }
-                      });
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 10),
-          ListTile(
-            contentPadding: const EdgeInsets.all(0),
-            leading: IconButton(
-              icon: Icon(!selectAll ? Icons.select_all : Icons.deselect),
-              onPressed: () {
-                setState(() {
-                  if (selectAll) {
-                    selectedItems.clear();
-                  } else {
-                    selectedItems.addAll(addresses);
-                  }
-                  selectAll = !selectAll;
-                });
-              },
-            ),
-            title: Text(
-              "${AppLocalizations.of(context)!.searchAddressResult}: ${addresses.length}",
-            ),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.negativeBalance,
+                      return ListTile(
+                          onTap: () {
+                            setState(() {
+                              isSelected = !isSelected;
+                              if (isSelected) {
+                                selectedItems.add(item);
+                              } else {
+                                selectedItems.remove(item);
+                              }
+                            });
+                          },
+                          contentPadding: const EdgeInsets.all(0),
+                          title: Text(
+                            item.custom != null
+                                ? item.custom ?? ""
+                                : OtherUtils.hashObfuscation(item.hash),
+                            style: AppTextStyles.walletHash,
+                          ),
+                          leading: Checkbox(
+                              activeColor: CustomColors.primaryColor,
+                              value: isSelected,
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value != null && value) {
+                                    selectedItems.add(item);
+                                  } else {
+                                    selectedItems.remove(item);
+                                  }
+                                });
+                              }));
+                    })),
+            const SizedBox(height: 20),
+            Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).colorScheme.surfaceVariant,
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Text(AppLocalizations.of(context)!.cancel,
-                        style: AppTextStyles.buttonText)),
-              ),
-              const SizedBox(width: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.primaryColor,
-                ),
-                onPressed: () {
-                  if (selectedItems.isNotEmpty) {
-                    walletBloc.add(AddAddresses(selectedItems));
-                  }
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Text(AppLocalizations.of(context)!.addToWallet,
-                      style: AppTextStyles.buttonText),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ));
+                padding: const EdgeInsets.all(20.0),
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                              !selectAll ? Icons.select_all : Icons.deselect),
+                          onPressed: () {
+                            setState(() {
+                              if (selectAll) {
+                                selectedItems.clear();
+                              } else {
+                                selectedItems.addAll(addresses);
+                              }
+                              selectAll = !selectAll;
+                            });
+                          }),
+                      title: Text(
+                        "${AppLocalizations.of(context)!.searchAddressResult}: ${addresses.length}",
+                      )),
+                  const SizedBox(height: 20),
+                  AppButtonStyle.buttonDefault(
+                      context, AppLocalizations.of(context)!.addToWallet, () {
+                    if (selectedItems.isNotEmpty) {
+                      walletBloc.add(AddAddresses(selectedItems));
+                    }
+                    Navigator.pop(context);
+                  }),
+                  /*  const SizedBox(height: 10),
+                  AppButtonStyle.buttonDefault(
+                      context,
+                      AppLocalizations.of(context)!.cancel,
+                      () => Navigator.pop(context),
+                      isCancel: true)
+
+                 */
+                ]))
+          ])
+        ]));
   }
 }

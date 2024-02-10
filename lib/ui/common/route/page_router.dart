@@ -140,7 +140,6 @@ class PageRouter {
     } else {
       WoltModalSheet.show(
         context: context,
-       // minDialogWidth: 550,
         pageListBuilder: (BuildContext _) {
           return [
             WoltModalSheetPage(

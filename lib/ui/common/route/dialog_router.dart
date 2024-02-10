@@ -257,13 +257,29 @@ class DialogRouter {
   /// Dialog in which list address to import file
   static void showDialogImportFile(
       BuildContext context, List<AddressObject> address) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        shape: DialogStyle.borderShape,
-        context: context,
-        builder: (_) => BlocProvider.value(
-            value: BlocProvider.of<WalletBloc>(context),
-            child: DialogImportAddress(address: address)));
+    WoltModalSheet.show(
+      context: context,
+      showDragHandle: false,
+      minDialogWidth: 600,
+      pageListBuilder: (BuildContext _) {
+        return [
+          WoltModalSheetPage(
+            hasSabGradient: false,
+            trailingNavBarWidget: IconButton(
+              padding: const EdgeInsets.all(20),
+              icon: const Icon(Icons.close),
+              onPressed: Navigator.of(context).pop,
+            ),
+            topBarTitle: Text(AppLocalizations.of(context)!.foundAddresses,
+                textAlign: TextAlign.center, style: AppTextStyles.dialogTitle),
+            isTopBarLayerAlwaysVisible: true,
+            child: BlocProvider.value(
+                value: BlocProvider.of<WalletBloc>(context),
+                child: DialogImportAddress(address: address)),
+          )
+        ];
+      },
+    );
   }
 
   static void showDialogViewKeysPair(BuildContext context, Address address) {

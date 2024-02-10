@@ -78,7 +78,7 @@ class AppTextStyles {
   static TextStyle textFieldHiddenStyle = TextStyle(
       fontSize: _mediumSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w700);
 
-  static TextStyle snackBarMessage = TextStyle(
+  static TextStyle snackBarMessage = const TextStyle(
       fontSize: _mediumSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w600);
 
   static TextStyle buttonText = const TextStyle(
@@ -89,7 +89,7 @@ class AppTextStyles {
 
   static TextStyle buttonTextDefault(BuildContext context) {
     return TextStyle(
-        fontSize: 18,
+        fontSize: 16,
         color: Theme.of(context).colorScheme.onPrimary,
         fontFamily: "Gilroy",
         fontWeight: FontWeight.w600);
