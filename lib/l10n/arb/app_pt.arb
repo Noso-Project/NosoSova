@@ -157,6 +157,9 @@
   "tooltipPasteFromBuffer": "Colar do buffer",
   "secretKeys": "Chaves secretas",
   "showMoreInfo": "Mostrar informações adicionais",
-  "hideMoreInfo": "Ocultar informação"
+  "hideMoreInfo": "Ocultar informação",
+  "yes": "Sim",
+  "no": "Não",
+  "issueDialogDeleteContact": "Deseja mesmo apagar o contacto?"
 
 }

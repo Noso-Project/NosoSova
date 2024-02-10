@@ -480,4 +480,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get hideMoreInfo => 'Скрыть информацию';
+
+  @override
+  String get yes => 'Да';
+
+  @override
+  String get no => 'Нет';
+
+  @override
+  String get issueDialogDeleteContact => 'Вы действительно хотите удалить контакт?';
 }

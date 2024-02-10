@@ -1054,6 +1054,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hide information'**
   String get hideMoreInfo;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @issueDialogDeleteContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to delete contact?'**
+  String get issueDialogDeleteContact;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

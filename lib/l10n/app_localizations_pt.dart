@@ -480,4 +480,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hideMoreInfo => 'Ocultar informação';
+
+  @override
+  String get yes => 'Sim';
+
+  @override
+  String get no => 'Não';
+
+  @override
+  String get issueDialogDeleteContact => 'Deseja mesmo apagar o contacto?';
 }

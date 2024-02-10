@@ -61,11 +61,10 @@ class _ContactsScreenState extends State<ContactsScreen> {
         if (contacts.isEmpty)
           Flexible(
               child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40),
-            child: EmptyWidget(
-                title: AppLocalizations.of(context)!.empty,
-                descrpt: AppLocalizations.of(context)!.contactEmpty)
-          )),
+                  padding: const EdgeInsets.symmetric(vertical: 40),
+                  child: EmptyWidget(
+                      title: AppLocalizations.of(context)!.empty,
+                      descrpt: AppLocalizations.of(context)!.contactEmpty))),
         if (contacts.isNotEmpty)
           Flexible(
               child: ListView.builder(
@@ -80,28 +79,53 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                 .substring(0, 1)
                                 .toUpperCase() !=
                             currentGroup;
-                    var isDismissible = false;
                     return Column(children: [
                       if (isFirstItemInGroup)
                         ListTile(
-                          title: Text(currentGroup,
-                              style: AppTextStyles.titleMessage)
-                        ),
+                            title: Text(currentGroup,
+                                style: AppTextStyles.titleMessage)),
                       Dismissible(
                           key: Key(item.hash),
                           direction: DismissDirection.horizontal,
-                          confirmDismiss: (_) {
-                            return Future.value(isDismissible);
-                          },
-                          onDismissed: (direction) {
-                            if (direction == DismissDirection.endToStart) {
+                          confirmDismiss: (DismissDirection direction) async {
+                            bool? confirmed = false;
+                            if (direction == DismissDirection.startToEnd) {
+                              confirmed = await showDialog<bool>(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                        title: Text(
+                                            AppLocalizations.of(context)!
+                                                .issueDialogDeleteContact),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context, false),
+                                              child: Text(
+                                                  AppLocalizations.of(context)!
+                                                      .no)),
+                                          TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context, true),
+                                              child: Text(
+                                                  AppLocalizations.of(context)!
+                                                      .yes))
+                                        ]);
+                                  });
+                            } else if (direction ==
+                                DismissDirection.endToStart) {
                               PageRouter.routePaymentPage(
                                   context,
                                   Address(
                                       hash: "", publicKey: "", privateKey: ""),
                                   receiver: item.hash);
-                            } else if (direction ==
-                                DismissDirection.startToEnd) {
+                              return false;
+                            }
+
+                            return confirmed;
+                          },
+                          onDismissed: (direction) {
+                            if (direction == DismissDirection.startToEnd) {
                               _deleteContact(item);
                             }
                           },
@@ -109,18 +133,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               color: CustomColors.negativeBalance,
                               padding: const EdgeInsets.all(20),
                               alignment: Alignment.centerLeft,
-                              child: const Icon(
-                                Icons.delete,
-                                color: Colors.white
-                              )),
+                              child: const Icon(Icons.delete,
+                                  color: Colors.white)),
                           secondaryBackground: Container(
                               color: CustomColors.positiveBalance,
                               alignment: Alignment.centerRight,
                               padding: const EdgeInsets.all(20),
-                              child: const Icon(
-                                Icons.payment_rounded,
-                                color: Colors.white
-                              )),
+                              child: const Icon(Icons.payment_rounded,
+                                  color: Colors.white)),
                           child: ContactTile(contact: item, onTap: () => null))
                     ]);
                   })),

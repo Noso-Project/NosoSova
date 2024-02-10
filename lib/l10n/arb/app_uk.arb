@@ -158,5 +158,8 @@
   "tooltipPasteFromBuffer": "Вставити з буфера",
   "secretKeys": "Секретні ключі",
   "showMoreInfo": "Показати додаткову інформацію",
-  "hideMoreInfo": "Приховати інформацію"
+  "hideMoreInfo": "Приховати інформацію",
+  "yes": "Так",
+  "no": "Ні",
+  "issueDialogDeleteContact": "Ви дійсно хочете видалити контакт?"
 }

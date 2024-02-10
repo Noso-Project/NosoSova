@@ -157,5 +157,8 @@
   "tooltipPasteFromBuffer": "Aus Puffer einfügen",
   "secretKeys": "Geheime Schlüssel",
   "showMoreInfo": "Zusätzliche Informationen anzeigen",
-  "hideMoreInfo": "Informationen ausblenden"
+  "hideMoreInfo": "Informationen ausblenden",
+  "yes": "Ja",
+  "no": "Nein",
+  "issueDialogDeleteContact": "Möchten Sie den Kontakt wirklich löschen?"
 }

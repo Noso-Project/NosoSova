@@ -480,4 +480,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get hideMoreInfo => 'Приховати інформацію';
+
+  @override
+  String get yes => 'Так';
+
+  @override
+  String get no => 'Ні';
+
+  @override
+  String get issueDialogDeleteContact => 'Ви дійсно хочете видалити контакт?';
 }
