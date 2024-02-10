@@ -152,51 +152,45 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 10),
-                        Text(
-                          AppLocalizations.of(context)!.sender,
-                          textAlign: TextAlign.start,
-                          style: AppTextStyles.itemMedium
-                              .copyWith(fontWeight: FontWeight.w600),
-                        ),
+                        Text(AppLocalizations.of(context)!.sender,
+                            textAlign: TextAlign.start,
+                            style: AppTextStyles.itemMedium
+                                .copyWith(fontWeight: FontWeight.w600)),
                         Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          width: double.infinity,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            child: targetAddress.hash.isEmpty
-                                ? SelectAddressListTile(
-                                    onTap: () =>
-                                        DialogRouter.showDialogSellAddress(
-                                            context,
-                                            targetAddress,
-                                            (selAddress) =>
-                                                refreshAddress(selAddress)))
-                                : AddressListTile(
-                                    address: targetAddress,
-                                    onLong: () {},
-                                    onTap: () =>
-                                        DialogRouter.showDialogSellAddress(
-                                            context,
-                                            targetAddress,
-                                            (selAddress) =>
-                                                refreshAddress(selAddress)),
-                                  ),
-                          ),
-                        ),
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(5.0)),
+                            width: double.infinity,
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                child: targetAddress.hash.isEmpty
+                                    ? SelectAddressListTile(
+                                        onTap: () =>
+                                            DialogRouter.showDialogSellAddress(
+                                                context,
+                                                targetAddress,
+                                                (selAddress) =>
+                                                    refreshAddress(selAddress)))
+                                    : AddressListTile(
+                                        address: targetAddress,
+                                        onLong: () {},
+                                        onTap: () =>
+                                            DialogRouter.showDialogSellAddress(
+                                                context,
+                                                targetAddress,
+                                                (selAddress) => refreshAddress(
+                                                    selAddress))))),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                AppLocalizations.of(context)!.receiver,
-                                textAlign: TextAlign.start,
-                                style: AppTextStyles.itemMedium
-                                    .copyWith(fontWeight: FontWeight.w600),
-                              ),
+                              Text(AppLocalizations.of(context)!.receiver,
+                                  textAlign: TextAlign.start,
+                                  style: AppTextStyles.itemMedium
+                                      .copyWith(fontWeight: FontWeight.w600)),
                               Row(children: [
                                 IconButton(
+                                    padding: EdgeInsets.zero,
                                     tooltip: AppLocalizations.of(context)!
                                         .tooltipSelMyWallet,
                                     onPressed: () =>
@@ -211,6 +205,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                 selAddress.hash)),
                                     icon: const Icon(Icons.credit_card)),
                                 IconButton(
+                                    padding: EdgeInsets.zero,
                                     tooltip: AppLocalizations.of(context)!
                                         .tooltipSelContact,
                                     onPressed: () =>
@@ -219,6 +214,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                             (p0) => refreshReceiver(p0.hash)),
                                     icon: const Icon(Icons.contacts)),
                                 IconButton(
+                                    padding: EdgeInsets.zero,
                                     tooltip: AppLocalizations.of(context)!
                                         .tooltipPasteFromBuffer,
                                     onPressed: () => pasteReceiver(),
@@ -270,16 +266,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 AppTextFiledDecoration.defaultDecoration(
                                     "0.0000000")),
                         const SizedBox(height: 20),
-
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            buttonPercent(25),
-                            buttonPercent(50),
-                            buttonPercent(75),
-                            buttonPercent(100),
-                          ],
-                        ),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              buttonPercent(25),
+                              buttonPercent(50),
+                              buttonPercent(75),
+                              buttonPercent(100)
+                            ]),
                         const SizedBox(height: 30),
                         TextField(
                             maxLength: 120,
@@ -287,7 +281,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             style: AppTextStyles.textField,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
-                                  RegExp(r'[a-zA-Z0-9]')),
+                                  RegExp(r'[a-zA-Z0-9]'))
                             ],
                             decoration:
                                 AppTextFiledDecoration.defaultDecoration(
@@ -302,28 +296,25 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 style: AppTextStyles.infoItemTitle,
                               ),
                               const SizedBox(height: 5),
-                              Text(
-                                (commission).toStringAsFixed(8),
-                                style: AppTextStyles.infoItemValue,
-                              ),
+                              Text((commission).toStringAsFixed(8),
+                                  style: AppTextStyles.infoItemValue)
                             ]),
                         const SizedBox(height: 30),
                         Center(
                             key: containerKey,
                             child: SwipeableButtonView(
-                              isActive: statusConsensus == ConsensusStatus.error
-                                  ? false
-                                  : isActiveButtonSend,
-                              buttonText: AppLocalizations.of(context)!.send,
-                              buttonWidget: const Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                color: Colors.grey,
-                              ),
-                              activeColor:
-                                  Theme.of(context).colorScheme.primary,
-                              onWaitingProcess: () => sendOrder(),
-                              onFinish: () {},
-                            )),
+                                isActive:
+                                    statusConsensus == ConsensusStatus.error
+                                        ? false
+                                        : isActiveButtonSend,
+                                buttonText: AppLocalizations.of(context)!.send,
+                                buttonWidget: const Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: Colors.grey),
+                                activeColor:
+                                    Theme.of(context).colorScheme.primary,
+                                onWaitingProcess: () => sendOrder(),
+                                onFinish: () {})),
                         const SizedBox(height: 30),
                       ]),
                 ),
@@ -331,8 +322,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             : TransactionWidgetInfo(
                 transaction: transactionHistory,
                 isReceiver: false,
-                isProcess: true,
-              ));
+                isProcess: true));
   }
 
   int doubleToIndianInt(double value) {
@@ -407,14 +397,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ? Theme.of(context).colorScheme.background.withOpacity(0.5)
                   : Colors.grey),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(15.0),
           ),
         ),
         child: Padding(
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(0),
             child: Text("$percent%",
                 style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: selButton ==
                             double.parse(valueAmount.toStringAsFixed(7))
                         ? FontWeight.bold
