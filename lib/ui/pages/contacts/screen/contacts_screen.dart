@@ -61,10 +61,10 @@ class _ContactsScreenState extends State<ContactsScreen> {
         if (contacts.isEmpty)
           Flexible(
               child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 40),
+            padding: const EdgeInsets.symmetric(vertical: 40),
             child: EmptyWidget(
                 title: AppLocalizations.of(context)!.empty,
-                descrpt: AppLocalizations.of(context)!.contactEmpty),
+                descrpt: AppLocalizations.of(context)!.contactEmpty)
           )),
         if (contacts.isNotEmpty)
           Flexible(
@@ -85,7 +85,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                       if (isFirstItemInGroup)
                         ListTile(
                           title: Text(currentGroup,
-                              style: AppTextStyles.titleMessage),
+                              style: AppTextStyles.titleMessage)
                         ),
                       Dismissible(
                           key: Key(item.hash),
@@ -111,7 +111,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               alignment: Alignment.centerLeft,
                               child: const Icon(
                                 Icons.delete,
-                                color: Colors.white,
+                                color: Colors.white
                               )),
                           secondaryBackground: Container(
                               color: CustomColors.positiveBalance,
@@ -119,7 +119,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               padding: const EdgeInsets.all(20),
                               child: const Icon(
                                 Icons.payment_rounded,
-                                color: Colors.white,
+                                color: Colors.white
                               )),
                           child: ContactTile(contact: item, onTap: () => null))
                     ]);

@@ -62,19 +62,11 @@ class DialogRouter {
               isTopBarLayerAlwaysVisible: true,
               child: BlocProvider.value(
                 value: BlocProvider.of<WalletBloc>(context),
-                child:  DialogWalletActions(scaffoldKey: scaffoldKey),
+                child: DialogWalletActions(scaffoldKey: scaffoldKey),
               ))
         ];
       },
     );
-  /*  showModalBottomSheet(
-        shape: DialogStyle.borderShape,
-        context: context,
-        builder: (_) => BlocProvider.value(
-            value: BlocProvider.of<WalletBloc>(context),
-            child: DialogWalletActions(scaffoldKey: scaffoldKey)));
-
-   */
   }
 
   /// The dialog that displays the status of the network connection and actions on it

@@ -39,6 +39,7 @@ class AddressInfoPage extends StatefulWidget {
 class _AddressInfoPageState extends State<AddressInfoPage> {
   var isReverse = false;
   var isMiddleChange = false;
+  var isFullVisible = false;
   int selectedIndexChild = 0;
   int selectedOption = 1;
   late Address address;
@@ -103,9 +104,13 @@ class _AddressInfoPageState extends State<AddressInfoPage> {
                                   topRight: Radius.circular(30.0),
                                 ),
                           child: !Responsive.isMobile(context)
-                              ? HistoryTransactionsWidget(address: address)
+                              ? HistoryTransactionsWidget(
+                                  address: address,
+                                  activeMobile: false,
+                                  setVisible: () {})
                               : selectedIndexChild == 0
-                                  ? HistoryTransactionsWidget(address: address)
+                                  ? HistoryTransactionsWidget(
+                                      address: address, setVisible: () {})
                                   : AddressActionsWidget(address: address))),
                 Expanded(
                     flex: 3,
@@ -117,25 +122,25 @@ class _AddressInfoPageState extends State<AddressInfoPage> {
                           if (!Responsive.isMobile(context))
                             const DefaultAppBar(isVisible: true),
                           Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: TransformWidget(
-                              widget: _cardAddress(address),
-                              changer: (reverse) {},
-                              middleChanger: (middle) {
-                                if (mounted) {
-                                  setState(() {
-                                    selectedIndexChild =
-                                        selectedIndexChild == 0 ? 1 : 0;
-                                  });
-                                }
-                              },
-                            ),
-                          ),
-                          if (address.availableBalance >=
-                              NosoUtility.getCountMonetToRunNode())
-                            NodeLightStatus(address: address)
-                          else
-                            PendingWidget(address: address),
+                              padding: const EdgeInsets.all(20),
+                              child: TransformWidget(
+                                  widget: _cardAddress(address),
+                                  changer: (reverse) {},
+                                  middleChanger: (middle) {
+                                    if (mounted) {
+                                      setState(() {
+                                        selectedIndexChild =
+                                            selectedIndexChild == 0 ? 1 : 0;
+                                      });
+                                    }
+                                  })),
+                          if (!isFullVisible) ...[
+                            if (address.availableBalance >=
+                                NosoUtility.getCountMonetToRunNode())
+                              NodeLightStatus(address: address)
+                            else
+                              PendingWidget(address: address)
+                          ],
                           Expanded(
                               flex: 2,
                               child: ClipRRect(
@@ -149,6 +154,12 @@ class _AddressInfoPageState extends State<AddressInfoPage> {
                                       ? AddressActionsWidget(address: address)
                                       : selectedIndexChild == 0
                                           ? HistoryTransactionsWidget(
+                                              setVisible: () {
+                                                setState(() {
+                                                  isFullVisible =
+                                                      !isFullVisible;
+                                                });
+                                              },
                                               address: address)
                                           : AddressActionsWidget(
                                               address: address)))
