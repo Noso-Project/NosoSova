@@ -20,7 +20,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get node => 'Node';
 
   @override
-  String get myAddresses => 'Addresses';
+  String get myAddresses => 'Adressen';
 
   @override
   String get genNewKeyPair => 'Generiere eine neue Adresse';
@@ -137,64 +137,64 @@ class AppLocalizationsDe extends AppLocalizations {
   String get daysUntilNextHalving => 'Tage bis zum nächsten Halving';
 
   @override
-  String get numberOfMinedCoins => 'Abgebaute münzen';
+  String get numberOfMinedCoins => 'Anzahl mined Noso';
 
   @override
-  String get coinsLocked => 'Gesperrte münzen';
+  String get coinsLocked => 'Gesperrte Noso';
 
   @override
   String get marketcap => 'Marktkapitalisierung';
 
   @override
-  String get tvl => 'Gesperrten vermögenswerte';
+  String get tvl => 'Gesperrte Vermögenswerte';
 
   @override
-  String get maxPriceStory => 'Maximaler Preis pro Geschichte';
+  String get maxPriceStory => 'Maximaler Preis in der Historie';
 
   @override
-  String get activeNodes => 'Active Nodes';
+  String get activeNodes => 'Aktive Nodes';
 
   @override
-  String get nbr => 'Pro Block';
+  String get nbr => 'pro Block';
 
   @override
-  String get nr24 => 'In 24 Stunden';
+  String get nr24 => 'in 24 Stunden';
 
   @override
-  String get nr7 => 'In 7 Tage';
+  String get nr7 => 'in 7 Tage';
 
   @override
-  String get nr30 => 'In 30 Tage';
+  String get nr30 => 'in 30 Tage';
 
   @override
   String get nosoPrice => 'Noso Preis';
 
   @override
-  String get rewardNode => 'Belohnung für Beherrschung:';
+  String get rewardNode => 'Node Prämie:';
 
   @override
-  String get launched => 'Läuft';
+  String get launched => 'läuft';
 
   @override
-  String get available => 'Verfügbar';
+  String get available => 'verfügbar';
 
   @override
   String get masternode => 'Masternode';
 
   @override
-  String get empty => 'Leer';
+  String get empty => 'leer';
 
   @override
   String get hintAddress => 'Adresse anzeigen';
 
   @override
-  String get hintStatusNodeRun => 'Knoten ist online';
+  String get hintStatusNodeRun => 'Node ist online';
 
   @override
-  String get hintStatusNodeNonRun => 'Knoten ist offline';
+  String get hintStatusNodeNonRun => 'Node ist offline';
 
   @override
-  String get emptyNodesError => 'Es sind keine Adressen verfügbar, um eine Masternde zu starten..';
+  String get emptyNodesError => 'Es sind keine Adressen verfügbar, um eine Masternode zu starten..';
 
   @override
   String get importKeysPair => 'Importiere Schlüsselpaar';
@@ -227,7 +227,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get message => 'Nachricht';
 
   @override
-  String get editCustom => 'Aliasing-Änderung';
+  String get editCustom => 'Alias änderen';
 
   @override
   String get errorLoading => 'Serverfehler';
@@ -239,10 +239,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get customNameAdd => 'Alias setzen';
 
   @override
-  String get today => 'Heute';
+  String get today => 'heute';
 
   @override
-  String get yesterday => 'Gestern';
+  String get yesterday => 'gestern';
 
   @override
   String get sender => 'Sender';
@@ -275,7 +275,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get actionWallet => 'Wallet Actions';
 
   @override
-  String get confirm => 'Bestätigen';
+  String get confirm => 'bestätigen';
 
   @override
   String get createPayment => 'Zahlung erstellen';
@@ -293,7 +293,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get viewQr => 'QR Code zeigen';
 
   @override
-  String get infoTotalPriceUst => 'Kontostand in USDT';
+  String get infoTotalPriceUst => 'Kontostand in USD';
 
   @override
   String get updateInfo => 'Information updaten';
@@ -308,40 +308,40 @@ class AppLocalizationsDe extends AppLocalizations {
   String get getKeysPair => 'Schlüssel anzeigen';
 
   @override
-  String get reward => 'Belohnen';
+  String get reward => 'Prämie';
 
   @override
   String get online => 'Online';
 
   @override
-  String get sendCoins => 'Senden Mittel';
+  String get sendCoins => 'senden';
 
   @override
-  String get sellAddress => 'Wählen Sie eine Adresse aus';
+  String get sellAddress => 'Wähle eine Adresse aus';
 
   @override
-  String get offline => 'Offline';
+  String get offline => 'offline';
 
   @override
   String get pnlDay => 'PnL pro Tag';
 
   @override
-  String get successSaveExportFile => 'Ihre Brieftasche wurde erfolgreich exportiert';
+  String get successSaveExportFile => 'Die Brieftasche wurde erfolgreich exportiert';
 
   @override
-  String get displayPendingTransactions => 'Hier werden Ihre ausstehenden Transaktionen angezeigt';
+  String get displayPendingTransactions => 'Hier werden ausstehende Transaktionen angezeigt';
 
   @override
   String get updatePriceMinute => 'Die Informationen werden jede Minute aktualisiert';
 
   @override
-  String get pendingTransaction => 'Transacciones pendientes';
+  String get pendingTransaction => 'ausstehende Transaktionen';
 
   @override
-  String get updateTim => 'Aktualisiert';
+  String get updateTim => 'aktualisiert';
 
   @override
-  String get hintConnectStop => 'Die Verbindung wird aufgrund der Instabilität des Hauptnetzes unterbrochen. Um sie weiter zu nutzen, klicken Sie auf Knoten wechseln';
+  String get hintConnectStop => 'Die Verbindung musste aufgrund eines Problmes unterbrochen werden. Um sie weiter zu nutzen, wechsel die Node';
 
   @override
   String get emptyListAddress => 'Erstelle eine neue Adresse';
@@ -371,7 +371,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get errorNoValidAddress => 'Fehler; ungültige Adresse';
 
   @override
-  String get errorNoSync => 'Die App is nicht mit dem Mainnet synchronisiert';
+  String get errorNoSync => 'Die App ist nicht mit dem Mainnet synchronisiert';
 
   @override
   String get errorAddressBlock => 'Adresse blockiert, Zahlung wurde abgebrochen';
@@ -395,10 +395,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get errorEmptyListWallet => 'Diese Datei enthält keine Adressen';
 
   @override
-  String get errorNotSupportedWallet => 'Diese Datei ist nicht unterstützt';
+  String get errorNotSupportedWallet => 'Diese Datei wird nicht unterstützt';
 
   @override
-  String get errorLastTime => 'Ihre Zeit ist im Rückstand, aktualisieren Sie Ihre Zeit';
+  String get errorLastTime => 'Aktualisierung notwendig';
 
   @override
   String get errorPathSaveAddress => 'Fehler: Ungültige Adresse oder keine Berechtigung zum Schreiben der Datei';
@@ -410,7 +410,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get stopSync => 'Verbindung verloren';
 
   @override
-  String get unknownError => 'Ein Fehler ist passiert';
+  String get unknownError => 'Ein unerwarteter Fehler ist aufgetaucht';
 
   @override
   String get appVersions => 'App-Version';
@@ -434,7 +434,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get selLanguage => 'Sprache auswählen';
 
   @override
-  String get nodeInfo => 'Informationen über den Knoten';
+  String get nodeInfo => 'Informationen über die Node';
 
   @override
   String get consecutivePayments => 'aufeinanderfolgende Zahlungen';
@@ -443,19 +443,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get uptimePercent => 'Uptime';
 
   @override
-  String get monthlyEarning => 'Monatlicher Verdienst';
+  String get monthlyEarning => 'monatlicher Verdienst';
 
   @override
   String get openNodeInfo => 'Informationen zum Knotenpunkt';
 
   @override
-  String get errorConnectionApi => 'Tut uns leid, wir können Ihre Anfrage derzeit nicht bearbeiten';
+  String get errorConnectionApi => 'Tut uns leid, wir können die Anfrage derzeit nicht bearbeiten';
 
   @override
   String get contact => 'Kontakte';
 
   @override
-  String get contactEmpty => 'Ihre Kontakte werden hier angezeigt';
+  String get contactEmpty => 'Kontakte werden hier angezeigt';
 
   @override
   String get newContact => 'Kontakt erstellen';
@@ -467,7 +467,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tooltipSelMyWallet => 'Aus meiner Brieftasche auswählen';
 
   @override
-  String get tooltipSelContact => 'Aus Kontakt auswählen';
+  String get tooltipSelContact => 'Von Kontakten auswählen';
 
   @override
   String get tooltipPasteFromBuffer => 'Aus Puffer einfügen';
