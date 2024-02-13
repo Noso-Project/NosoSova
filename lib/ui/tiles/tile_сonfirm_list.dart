@@ -40,17 +40,17 @@ class _TileConfirmListStateState extends State<TileConfirmList> {
       leading: AppIconsStyle.icon3x2(
         widget.iconData,
         colorFilter: ColorFilter.mode(
-          _clicked ? CustomColors.negativeBalance : Colors.black,
+          _clicked ? CustomColors.negativeBalance : Colors.grey,
           BlendMode.srcIn,
         ),
       ),
       title: Text(
         _clicked ? widget.confirm : widget.title,
         style: _clicked
-            ? AppTextStyles.walletAddress.copyWith(
+            ? AppTextStyles.snackBarMessage.copyWith(
                 color: CustomColors.negativeBalance,
               )
-            : AppTextStyles.itemStyle,
+            : AppTextStyles.infoItemTitle,
       ),
       onTap: () {
         if (mounted) {

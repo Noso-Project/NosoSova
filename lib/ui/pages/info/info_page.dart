@@ -15,6 +15,7 @@ class InfoPageState extends State<InfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: null,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Container(
             decoration: const OtherGradientDecoration(),
             child: SafeArea(
@@ -27,7 +28,7 @@ class InfoPageState extends State<InfoPage> {
                     ),
                     child: Container(
                         height: MediaQuery.of(context).size.height * 0.8,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         child: const WidgetInfoCoin()),
                   )),
             )));

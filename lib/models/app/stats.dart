@@ -9,7 +9,6 @@ class StatisticsCoin {
   int lastBlock;
   int lastTimeUpdatePrice;
   double reward;
-  double total;
   List<PriceData>? historyCoin;
   ApiStatus apiStatus;
 
@@ -18,15 +17,14 @@ class StatisticsCoin {
     this.totalNodes = 0,
     this.lastBlock = 0,
     this.lastTimeUpdatePrice = 0,
-    this.reward = 0,
-    this.total = 0,
+    this.reward = 0.15,
     this.historyCoin,
     this.apiStatus = ApiStatus.loading,
   });
 
   double get getCurrentPrice => historyCoin?.reversed.toList().first.price ?? 0;
 
-  Halving get getHalvingTimer => Halving().getHalvingTimer(lastBlock);
+  Halving get getHalvingTimer => lastBlock == 0 ? Halving(days: 0) : Halving().getHalvingTimer(lastBlock);
 
   get getTotalCoin => totalCoin;
 
@@ -78,7 +76,6 @@ class StatisticsCoin {
     int? lastBlock,
     int? lastTimeUpdatePrice,
     double? reward,
-    double? total,
     ApiStatus? apiStatus,
     List<PriceData>? historyCoin,
   }) {
@@ -88,7 +85,6 @@ class StatisticsCoin {
       lastBlock: lastBlock ?? this.lastBlock,
       lastTimeUpdatePrice: lastTimeUpdatePrice ?? this.lastTimeUpdatePrice,
       reward: reward ?? this.reward,
-      total: total ?? this.total,
       apiStatus: apiStatus ?? this.apiStatus,
       historyCoin: historyCoin ?? this.historyCoin,
     );

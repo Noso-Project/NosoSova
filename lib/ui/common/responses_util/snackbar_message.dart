@@ -23,9 +23,8 @@ class SnackBarWidgetResponse {
     return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         ResponsesErrors.getCodeToTextMessages(context, response.codeMessage),
-        style: AppTextStyles.walletAddress.copyWith(
+        style: AppTextStyles.snackBarMessage.copyWith(
           color: Colors.white,
-          fontSize: 16,
         ),
       ),
       backgroundColor: snackBarBackgroundColor,

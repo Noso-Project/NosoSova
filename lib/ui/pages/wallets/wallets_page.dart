@@ -8,7 +8,6 @@ import 'package:nososova/l10n/app_localizations.dart';
 import 'package:nososova/ui/pages/wallets/screens/card_header.dart';
 import 'package:nososova/ui/pages/wallets/screens/list_addresses.dart';
 import 'package:nososova/ui/pages/wallets/widgets/side_right_bar.dart';
-import 'package:nososova/ui/theme/style/colors.dart';
 import 'package:nososova/ui/theme/style/icons_style.dart';
 
 import '../../../blocs/events/wallet_events.dart';
@@ -51,9 +50,8 @@ class WalletsPageState extends State<WalletsPage> {
 
         if (response.action == ActionsFileWallet.walletExportDialog) {
           String? outputFile = await FilePicker.platform.saveFile(
-            dialogTitle: 'Please select an wallet file:',
-            fileName: response.actionValue,
-          );
+              dialogTitle: 'Please select an wallet file:',
+              fileName: response.actionValue);
 
           if (outputFile != null) {
             walletBloc.add(ExportWallet(outputFile));
@@ -81,48 +79,41 @@ class WalletsPageState extends State<WalletsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      key: _scaffoldKey,
-      appBar: null,
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-              flex: 4,
-              child: Column(
-                children: [
-                  const CardHeader(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 10.0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(AppLocalizations.of(context)!.myAddresses,
-                            style: AppTextStyles.categoryStyle),
-                        Row(
-                          children: [
-                            if (Responsive.isMobile(context))
-                              IconButton(
-                                  icon: AppIconsStyle.icon2x4(Assets.iconsMenu,
-                                      colorCustom: CustomColors.primaryColor),
-                                  onPressed: () =>
-                                      DialogRouter.showDialogActionWallet(
-                                          context, _scaffoldKey)),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  ListAddresses(scaffoldKey: _scaffoldKey),
-                ],
-              )),
-          if (!Responsive.isMobile(context)) const SideRightBarDesktop()
-        ],
-      ),
-    );
+        backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+        key: _scaffoldKey,
+        appBar: null,
+        body: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                  flex: 4,
+                  child: Column(children: [
+                    const CardHeader(),
+                    Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 10.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(AppLocalizations.of(context)!.myAddresses,
+                                  style: AppTextStyles.categoryStyle),
+                              Row(children: [
+                                if (Responsive.isMobile(context))
+                                  IconButton(
+                                      icon: AppIconsStyle.icon2x4(
+                                          Assets.iconsMenu,
+                                          colorCustom: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                      onPressed: () =>
+                                          DialogRouter.showDialogActionWallet(
+                                              context, _scaffoldKey))
+                              ])
+                            ])),
+                    ListAddresses(scaffoldKey: _scaffoldKey)
+                  ])),
+              if (!Responsive.isMobile(context)) const SideRightBarDesktop()
+            ]));
   }
 }

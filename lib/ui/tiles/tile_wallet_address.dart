@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:noso_dart/utils/noso_utility.dart';
+import 'package:nososova/ui/config/responsive.dart';
 import 'package:nososova/ui/theme/anim/blinkin_widget.dart';
 import 'package:nososova/ui/theme/style/text_style.dart';
 
@@ -20,15 +22,12 @@ class AddressListTile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  AddressListTileState createState() => AddressListTileState();
+  State createState() => _AddressListTileState();
 }
 
-class AddressListTileState extends State<AddressListTile> {
+class _AddressListTileState extends State<AddressListTile> {
   @override
   Widget build(BuildContext context) {
-    double netAmount = widget.address.incoming - widget.address.outgoing;
-    String netAmountText = netAmount.toStringAsFixed(5);
-    Color netAmountColor = netAmount >= 0 ? Colors.green : Colors.red;
     return Tooltip(
         message: messageTooltip(),
         child: GestureDetector(
@@ -36,45 +35,24 @@ class AddressListTileState extends State<AddressListTile> {
             child: ListTile(
                 contentPadding: const EdgeInsets.only(left: 10, right: 15),
                 leading: _iconAddress(),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.address.hashPublic,
-                          style: AppTextStyles.walletAddress
-                              .copyWith(fontSize: 18),
-                        ),
-                        if (widget.address.custom != null)
-                          Text(
-                            widget.address.custom ?? "",
-                            style:
-                                AppTextStyles.itemStyle.copyWith(fontSize: 16),
-                          )
-                      ],
-                    ),
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            widget.address.balance.toStringAsFixed(5),
-                            style: AppTextStyles.walletAddress,
-                          ),
-                          const SizedBox(height: 5),
-                          if (netAmount != 0)
-                            Text(
-                              "${netAmount >= 0 ? '+' : ''}$netAmountText",
-                              style: AppTextStyles.walletAddress.copyWith(
-                                  fontSize: 16, color: netAmountColor),
-                            ),
-                        ]),
-                  ],
+                title: Text(
+                  Responsive.isMobile(context)
+                      ? widget.address.hashPublic
+                      : widget.address.hash,
+                  style: AppTextStyles.walletHash,
+                ),
+                subtitle: Text(
+                  widget.address.custom ?? "",
+                  style: AppTextStyles.textHiddenSmall(context),
+                ),
+                trailing: Text(
+                  widget.address.balance == 0
+                      ? "0.00"
+                      : widget.address.balance.toStringAsFixed(5),
+                  style: AppTextStyles.walletBalance,
                 ),
                 onLongPress: widget.onLong,
+                dense: true,
                 onTap: widget.onTap)));
   }
 
@@ -111,7 +89,8 @@ class AddressListTileState extends State<AddressListTile> {
       return AppLocalizations.of(context)!.hintStatusNodeRun;
     }
 
-    if (!widget.address.nodeStatusOn && widget.address.nodeStatusOn) {
+    if (!widget.address.nodeStatusOn &&
+        widget.address.balance >= NosoUtility.getCountMonetToRunNode()) {
       return AppLocalizations.of(context)!.hintStatusNodeNonRun;
     }
 

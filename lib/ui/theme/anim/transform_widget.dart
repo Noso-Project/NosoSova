@@ -7,18 +7,22 @@ class TransformWidget extends StatefulWidget {
   final Function(bool) changer;
   final Function(bool) middleChanger;
 
-  const TransformWidget({Key? key, required this.widget, required this.changer, required this.middleChanger})
+  const TransformWidget(
+      {Key? key,
+      required this.widget,
+      required this.changer,
+      required this.middleChanger})
       : super(key: key);
 
   @override
-  TransformWidgetState createState() => TransformWidgetState();
+  State createState() => _TransformWidgetState();
 }
 
-class TransformWidgetState extends State<TransformWidget> {
+class _TransformWidgetState extends State<TransformWidget> {
   double _rotationValue = 0.0;
   double _scaleValue = 1.0;
-  double _stepTransformation = 0.01;
-  int _duration = 2;
+  final double _stepTransformation = 0.01;
+  final int _duration = 2;
   Timer? _timer;
 
   bool middleChanger = false;
@@ -36,7 +40,7 @@ class TransformWidgetState extends State<TransformWidget> {
           if (_rotationValue < 3.1) {
             _rotationValue += _stepTransformation;
             _scaleChange(1.5);
-            if(_rotationValue > 1.5 && !middleChanger){
+            if (_rotationValue > 1.5 && !middleChanger) {
               middleChanger = true;
               widget.middleChanger(true);
             }
@@ -57,7 +61,7 @@ class TransformWidgetState extends State<TransformWidget> {
           if (_rotationValue < 6.3) {
             _rotationValue += _stepTransformation;
             _scaleChange(4.6);
-            if(_rotationValue > 4.6 && middleChanger){
+            if (_rotationValue > 4.6 && middleChanger) {
               middleChanger = false;
               widget.middleChanger(false);
             }

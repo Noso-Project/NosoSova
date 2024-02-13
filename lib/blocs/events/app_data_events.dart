@@ -18,16 +18,6 @@ class SyncSuccess extends AppDataEvent {
   SyncSuccess();
 }
 
-class UpdateSupply extends AppDataEvent {
-  final double supply;
-
-  UpdateSupply(this.supply);
-}
-
 class ReconnectFromError extends AppDataEvent {
   ReconnectFromError();
-}
-
-class LoadPriceHistory extends AppDataEvent {
-  LoadPriceHistory();
 }

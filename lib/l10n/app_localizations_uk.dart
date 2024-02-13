@@ -137,16 +137,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get daysUntilNextHalving => 'Днів до наступного халвінгу';
 
   @override
-  String get numberOfMinedCoins => 'Кількість видобутих монет';
+  String get numberOfMinedCoins => 'Видобутих монет';
 
   @override
   String get coinsLocked => 'Заблоковані монети';
 
   @override
-  String get marketcap => 'Ринкова капіталізація Noso';
+  String get marketcap => 'Ринкова капіталізація';
 
   @override
-  String get tvl => 'Загальна вартість заблокованих активів';
+  String get tvl => 'Заблокованих активів';
 
   @override
   String get maxPriceStory => 'Максимальна ціна в історії';
@@ -155,22 +155,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get activeNodes => 'Активні вузли';
 
   @override
-  String get tmr => 'Загальна винагорода за блок';
+  String get nbr => 'За блок';
 
   @override
-  String get nbr => 'Винагорода для одного вузла за блок';
+  String get nr24 => 'За 24 години';
 
   @override
-  String get nr24 => 'Винагорода за 24 години';
+  String get nr7 => 'За 7 днів';
 
   @override
-  String get nr7 => 'Винагорода за 7 днів';
-
-  @override
-  String get nr30 => 'Винагорода за 30 днів';
+  String get nr30 => 'За 30 днів';
 
   @override
   String get nosoPrice => 'Вартість Noso';
+
+  @override
+  String get rewardNode => 'Винагорода за мастерноду:';
 
   @override
   String get launched => 'Запущені';
@@ -398,7 +398,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get errorNotSupportedWallet => 'Цей файл не підтримується';
 
   @override
-  String get errorLastTime => 'Ваша час відстає, оновіть ваш час';
+  String get errorLastTime => 'Ваш час відстає, оновіть його будь-ласка';
 
   @override
   String get errorPathSaveAddress => 'Помилка: Невірна адреса або немає дозволу на запис файлу';
@@ -411,4 +411,82 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get unknownError => 'Виникла помилка';
+
+  @override
+  String get appVersions => 'Версія програми';
+
+  @override
+  String get developer => 'Розробник';
+
+  @override
+  String get socialLinks => 'Посилання на соціальні мережі';
+
+  @override
+  String get openSettings => 'Відкрити налаштування';
+
+  @override
+  String get mainSet => 'Основні налаштування';
+
+  @override
+  String get darkTheme => 'Темна тема';
+
+  @override
+  String get selLanguage => 'Виберіть мову';
+
+  @override
+  String get nodeInfo => 'Інформація про вузол';
+
+  @override
+  String get consecutivePayments => 'Послідовні платежі';
+
+  @override
+  String get uptimePercent => 'Безвідмовна робота';
+
+  @override
+  String get monthlyEarning => 'Щомісячний заробіток';
+
+  @override
+  String get openNodeInfo => 'Інформація про вузол';
+
+  @override
+  String get errorConnectionApi => 'На жаль, ми не можемо обробити ваш запит в даний час';
+
+  @override
+  String get contact => 'Контакти';
+
+  @override
+  String get contactEmpty => 'Тут будуть відображені ваші контакти';
+
+  @override
+  String get newContact => 'Створити контакт';
+
+  @override
+  String get addContact => 'Додати до контактів';
+
+  @override
+  String get tooltipSelMyWallet => 'Вибрати з мого гаманця';
+
+  @override
+  String get tooltipSelContact => 'Вибрати з контактів';
+
+  @override
+  String get tooltipPasteFromBuffer => 'Вставити з буфера';
+
+  @override
+  String get secretKeys => 'Секретні ключі';
+
+  @override
+  String get showMoreInfo => 'Показати додаткову інформацію';
+
+  @override
+  String get hideMoreInfo => 'Приховати інформацію';
+
+  @override
+  String get yes => 'Так';
+
+  @override
+  String get no => 'Ні';
+
+  @override
+  String get issueDialogDeleteContact => 'Ви дійсно хочете видалити контакт?';
 }

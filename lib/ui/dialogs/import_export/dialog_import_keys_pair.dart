@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nososova/ui/theme/style/colors.dart';
 
 import '../../../blocs/events/wallet_events.dart';
 import '../../../blocs/wallet_bloc.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../theme/decoration/textfield_decoration.dart';
+import '../../theme/style/button_style.dart';
 import '../../theme/style/text_style.dart';
 
 class DialogImportKeysPair extends StatefulWidget {
@@ -55,41 +55,19 @@ class DialogImportKeysPairState extends State<DialogImportKeysPair> {
                 maxLength: 133,
                 focusNode: _focusNode,
                 controller: _textEditingController,
-                style: AppTextStyles.textFieldStyle,
+                style: AppTextStyles.textField,
                 decoration:
                     AppTextFiledDecoration.defaultDecoration("Keys Pair"),
               ),
             ),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                backgroundColor: isButtonEnabled
-                    ? CustomColors.primaryColor
-                    : Colors.grey, // Adjust the disabled button color
-              ),
-              onPressed: isButtonEnabled
-                  ? () {
-                      Navigator.pop(context);
-                      BlocProvider.of<WalletBloc>(context)
-                          .add(ImportWalletQr(_textEditingController.text));
-                    }
-                  : null,
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Text(
-                  AppLocalizations.of(context)!.addToWallet,
-                  style: AppTextStyles.walletAddress.copyWith(
-                      color: isButtonEnabled ? Colors.white : Colors.black),
-                ),
-              ),
-            ),
-          )
+          AppButtonStyle.buttonDefault(
+              context, AppLocalizations.of(context)!.addToWallet, () {
+            Navigator.pop(context);
+            BlocProvider.of<WalletBloc>(context)
+                .add(ImportWalletQr(_textEditingController.text));
+          }, isEnabled: isButtonEnabled)
         ],
       ),
     );

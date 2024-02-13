@@ -18,10 +18,9 @@ import '../../../../models/app/response_page_listener.dart';
 import '../../../../models/rest_api/transaction_history.dart';
 import '../../../common/responses_util/response_widget_id.dart';
 import '../../../common/responses_util/snackbar_message.dart';
-import '../../../common/widgets/widget_transaction.dart';
-import '../../../theme/style/colors.dart';
 import '../../../theme/style/text_style.dart';
 import '../../../tiles/tile_select_address.dart';
+import '../../transaction/screen/widget_transaction.dart';
 
 class PaymentScreen extends StatefulWidget {
   final Address address;
@@ -125,6 +124,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
     });
   }
 
+  void refreshReceiver(String hash) {
+    setState(() {
+      receiverController.text = hash;
+    });
+    checkButtonActive(null);
+  }
+
+  Future<void> pasteReceiver() async {
+    ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (data != null && data.text != null) {
+      setState(() {
+        receiverController.text = data.text!;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
@@ -137,47 +152,75 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 10),
-                        Text(
-                          AppLocalizations.of(context)!.sender,
-                          textAlign: TextAlign.start,
-                          style:
-                              AppTextStyles.dialogTitle.copyWith(fontSize: 20),
-                        ),
+                        Text(AppLocalizations.of(context)!.sender,
+                            textAlign: TextAlign.start,
+                            style: AppTextStyles.itemMedium
+                                .copyWith(fontWeight: FontWeight.w600)),
                         Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          width: double.infinity,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            child: targetAddress.hash.isEmpty
-                                ? SelectAddressListTile(
-                                    onTap: () =>
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(5.0)),
+                            width: double.infinity,
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                child: targetAddress.hash.isEmpty
+                                    ? SelectAddressListTile(
+                                        onTap: () =>
+                                            DialogRouter.showDialogSellAddress(
+                                                context,
+                                                targetAddress,
+                                                (selAddress) =>
+                                                    refreshAddress(selAddress)))
+                                    : AddressListTile(
+                                        address: targetAddress,
+                                        onLong: () {},
+                                        onTap: () =>
+                                            DialogRouter.showDialogSellAddress(
+                                                context,
+                                                targetAddress,
+                                                (selAddress) => refreshAddress(
+                                                    selAddress))))),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(AppLocalizations.of(context)!.receiver,
+                                  textAlign: TextAlign.start,
+                                  style: AppTextStyles.itemMedium
+                                      .copyWith(fontWeight: FontWeight.w600)),
+                              Row(children: [
+                                IconButton(
+                                    padding: EdgeInsets.zero,
+                                    tooltip: AppLocalizations.of(context)!
+                                        .tooltipSelMyWallet,
+                                    onPressed: () =>
                                         DialogRouter.showDialogSellAddress(
                                             context,
-                                            targetAddress,
-                                            (selAddress) =>
-                                                refreshAddress(selAddress)))
-                                : AddressListTile(
-                                    address: targetAddress,
-                                    onLong: () {},
-                                    onTap: () =>
-                                        DialogRouter.showDialogSellAddress(
+                                            Address(
+                                                hash: "",
+                                                publicKey: "",
+                                                privateKey: ""),
+                                            isReceiver: true,
+                                            (selAddress) => refreshReceiver(
+                                                selAddress.hash)),
+                                    icon: const Icon(Icons.credit_card)),
+                                IconButton(
+                                    padding: EdgeInsets.zero,
+                                    tooltip: AppLocalizations.of(context)!
+                                        .tooltipSelContact,
+                                    onPressed: () =>
+                                        DialogRouter.showDialogSellContact(
                                             context,
-                                            targetAddress,
-                                            (selAddress) =>
-                                                refreshAddress(selAddress)),
-                                  ),
-                          ),
-                        ),
-
-                        Text(
-                          AppLocalizations.of(context)!.receiver,
-                          textAlign: TextAlign.start,
-                          style:
-                              AppTextStyles.dialogTitle.copyWith(fontSize: 20),
-                        ),
+                                            (p0) => refreshReceiver(p0.hash)),
+                                    icon: const Icon(Icons.contacts)),
+                                IconButton(
+                                    padding: EdgeInsets.zero,
+                                    tooltip: AppLocalizations.of(context)!
+                                        .tooltipPasteFromBuffer,
+                                    onPressed: () => pasteReceiver(),
+                                    icon: const Icon(Icons.paste))
+                              ])
+                            ]),
                         const SizedBox(height: 10),
                         TextField(
                             maxLength: 33,
@@ -187,16 +230,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               FilteringTextInputFormatter.allow(
                                   RegExp(r'[a-zA-Z0-9@*+\-_:]')),
                             ],
-                            style: AppTextStyles.textFieldStyle,
+                            style: AppTextStyles.textField,
                             decoration:
                                 AppTextFiledDecoration.defaultDecoration(
                                     AppLocalizations.of(context)!.receiver)),
-                 //       const SizedBox(height: 10),
                         Text(
                           AppLocalizations.of(context)!.amount,
                           textAlign: TextAlign.start,
-                          style:
-                              AppTextStyles.dialogTitle.copyWith(fontSize: 20),
+                          style: AppTextStyles.itemMedium
+                              .copyWith(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 10),
                         TextField(
@@ -219,27 +261,27 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             ],
                             keyboardType: const TextInputType.numberWithOptions(
                                 decimal: true),
-                            style: AppTextStyles.textFieldStyle,
+                            style: AppTextStyles.textField,
                             decoration:
                                 AppTextFiledDecoration.defaultDecoration(
                                     "0.0000000")),
                         const SizedBox(height: 20),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            buttonPercent(25),
-                            buttonPercent(50),
-                            buttonPercent(75),
-                            buttonPercent(100),
-                          ],
-                        ),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              buttonPercent(25),
+                              buttonPercent(50),
+                              buttonPercent(75),
+                              buttonPercent(100)
+                            ]),
                         const SizedBox(height: 30),
                         TextField(
                             maxLength: 120,
                             controller: messageController,
-                            style: AppTextStyles.textFieldStyle,
+                            style: AppTextStyles.textField,
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[a-zA-Z0-9]'))
                             ],
                             decoration:
                                 AppTextFiledDecoration.defaultDecoration(
@@ -251,33 +293,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             children: [
                               Text(
                                 AppLocalizations.of(context)!.commission,
-                                style: AppTextStyles.walletAddress.copyWith(
-                                    color: Colors.black.withOpacity(1),
-                                    fontSize: 18),
+                                style: AppTextStyles.infoItemTitle,
                               ),
                               const SizedBox(height: 5),
-                              Text(
-                                (commission).toStringAsFixed(8),
-                                style: AppTextStyles.walletAddress.copyWith(
-                                    color: Colors.black, fontSize: 18),
-                              ),
+                              Text((commission).toStringAsFixed(8),
+                                  style: AppTextStyles.infoItemValue)
                             ]),
                         const SizedBox(height: 30),
                         Center(
                             key: containerKey,
                             child: SwipeableButtonView(
-                              isActive: statusConsensus == ConsensusStatus.error
-                                  ? false
-                                  : isActiveButtonSend,
-                              buttonText: AppLocalizations.of(context)!.send,
-                              buttonWidget: const Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                color: Colors.grey,
-                              ),
-                              activeColor: const Color(0xFF2B2F4F),
-                              onWaitingProcess: () => sendOrder(),
-                              onFinish: () {},
-                            )),
+                                isActive:
+                                    statusConsensus == ConsensusStatus.error
+                                        ? false
+                                        : isActiveButtonSend,
+                                buttonText: AppLocalizations.of(context)!.send,
+                                buttonWidget: const Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: Colors.grey),
+                                activeColor:
+                                    Theme.of(context).colorScheme.primary,
+                                onWaitingProcess: () => sendOrder(),
+                                onFinish: () {})),
                         const SizedBox(height: 30),
                       ]),
                 ),
@@ -285,8 +322,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             : TransactionWidgetInfo(
                 transaction: transactionHistory,
                 isReceiver: false,
-                isProcess: true,
-              ));
+                isProcess: true));
   }
 
   int doubleToIndianInt(double value) {
@@ -354,28 +390,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
         style: OutlinedButton.styleFrom(
           backgroundColor:
               selButton == double.parse(valueAmount.toStringAsFixed(7))
-                  ? CustomColors.primaryColor.withOpacity(0.3)
+                  ? Theme.of(context).colorScheme.primary
                   : Colors.transparent,
           side: BorderSide(
               color: selButton == double.parse(valueAmount.toStringAsFixed(7))
-                  ? CustomColors.primaryColor.withOpacity(0.5)
+                  ? Theme.of(context).colorScheme.background.withOpacity(0.5)
                   : Colors.grey),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(15.0),
           ),
         ),
         child: Padding(
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(0),
             child: Text("$percent%",
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 12,
                     fontWeight: selButton ==
                             double.parse(valueAmount.toStringAsFixed(7))
                         ? FontWeight.bold
                         : FontWeight.normal,
                     color: selButton ==
                             double.parse(valueAmount.toStringAsFixed(7))
-                        ? CustomColors.primaryColor.withOpacity(0.9)
-                        : Colors.black))));
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Theme.of(context).colorScheme.onSurface))));
   }
 }

@@ -76,13 +76,12 @@ class _DialogCustomNameState extends State<DialogCustomName> {
                 ],
                 Text(
                   AppLocalizations.of(context)!.aliasMessage,
-                  style: AppTextStyles.itemStyle.copyWith(fontSize: 18),
+                  style: AppTextStyles.infoItemTitle,
                 ),
                 const SizedBox(height: 20),
                 Text(
                   AppLocalizations.of(context)!.warringMessageSetAlias,
-                  style: AppTextStyles.walletAddress.copyWith(
-                      fontSize: 18, color: CustomColors.negativeBalance),
+                  style: AppTextStyles.infoItemValue.copyWith(color: CustomColors.negativeBalance),
                 ),
                 const SizedBox(height: 20),
                 TextField(
@@ -93,7 +92,7 @@ class _DialogCustomNameState extends State<DialogCustomName> {
                           RegExp(r'[a-zA-Z0-9@*+\-_:]')),
                     ],
                     controller: customNameController,
-                    style: AppTextStyles.textFieldStyle,
+                    style: AppTextStyles.textField,
                     onChanged: (text) => _checkAliasText(text),
                     decoration: AppTextFiledDecoration.defaultDecoration(
                         AppLocalizations.of(context)!.alias)),
@@ -104,15 +103,13 @@ class _DialogCustomNameState extends State<DialogCustomName> {
                     children: [
                       Text(
                         AppLocalizations.of(context)!.commission,
-                        style: AppTextStyles.walletAddress.copyWith(
-                            color: Colors.black.withOpacity(1), fontSize: 18),
+                        style: AppTextStyles.infoItemTitle,
                       ),
                       const SizedBox(height: 5),
                       Text(
                         (NosoConst.customizationFee / 100000000)
                             .toStringAsFixed(8),
-                        style: AppTextStyles.walletAddress
-                            .copyWith(color: Colors.black, fontSize: 18),
+                        style: AppTextStyles.infoItemValue,
                       ),
                     ]),
                 const SizedBox(height: 20),
@@ -124,9 +121,7 @@ class _DialogCustomNameState extends State<DialogCustomName> {
                       Icons.arrow_forward_ios_rounded,
                       color: Colors.grey,
                     ),
-                    activeColor: const Color(0xFF2B2F4F),
-                    //   isFinished: isFinished,
-
+                    activeColor: Theme.of(context).colorScheme.primary,
                     onWaitingProcess: () {
                       isWaiting = false;
                       walletBloc.add(SetAlias(

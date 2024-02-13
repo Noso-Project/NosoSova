@@ -137,16 +137,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get daysUntilNextHalving => 'Days until Next Halving';
 
   @override
-  String get numberOfMinedCoins => 'Number of mined coins';
+  String get numberOfMinedCoins => 'Coins mined';
 
   @override
-  String get coinsLocked => 'Coins Locked';
+  String get coinsLocked => 'Locked coins';
 
   @override
-  String get marketcap => 'Noso Marketcap';
+  String get marketcap => 'Market capitalisation';
 
   @override
-  String get tvl => 'Total Value Locked';
+  String get tvl => 'Locked Assets';
 
   @override
   String get maxPriceStory => 'Maximum price per story';
@@ -155,22 +155,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeNodes => 'Active nodes';
 
   @override
-  String get tmr => 'Total MasterNode Reward';
+  String get nbr => 'For one block';
 
   @override
-  String get nbr => 'Node Block Reward';
+  String get nr24 => 'For 24 hour';
 
   @override
-  String get nr24 => '24hr Reward';
+  String get nr7 => 'For 7 day';
 
   @override
-  String get nr7 => '7 day Reward';
-
-  @override
-  String get nr30 => '30 day Reward';
+  String get nr30 => 'For 30 day';
 
   @override
   String get nosoPrice => 'Noso Price';
+
+  @override
+  String get rewardNode => 'Reward for masternode:';
 
   @override
   String get launched => 'Running';
@@ -411,4 +411,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknownError => 'An error occurred';
+
+  @override
+  String get appVersions => 'App version';
+
+  @override
+  String get developer => 'Developer';
+
+  @override
+  String get socialLinks => 'Links to social networks';
+
+  @override
+  String get openSettings => 'Open Settings';
+
+  @override
+  String get mainSet => 'Main settings';
+
+  @override
+  String get darkTheme => 'Dark Theme';
+
+  @override
+  String get selLanguage => 'Select language';
+
+  @override
+  String get nodeInfo => 'Information about Node';
+
+  @override
+  String get consecutivePayments => 'Consecutive payments';
+
+  @override
+  String get uptimePercent => 'Uptime';
+
+  @override
+  String get monthlyEarning => 'Monthly earning';
+
+  @override
+  String get openNodeInfo => 'Information about Node';
+
+  @override
+  String get errorConnectionApi => 'Sorry, we are unable to process your request at this time';
+
+  @override
+  String get contact => 'Contacts';
+
+  @override
+  String get contactEmpty => 'Your contacts will be displayed here';
+
+  @override
+  String get newContact => 'Create contacts';
+
+  @override
+  String get addContact => 'Add to contacts';
+
+  @override
+  String get tooltipSelMyWallet => 'Select from my wallet';
+
+  @override
+  String get tooltipSelContact => 'Select from Contact';
+
+  @override
+  String get tooltipPasteFromBuffer => 'Paste from Buffer';
+
+  @override
+  String get secretKeys => 'Secret keys';
+
+  @override
+  String get showMoreInfo => 'Display additional information';
+
+  @override
+  String get hideMoreInfo => 'Hide information';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get issueDialogDeleteContact => 'Do you really want to delete contact?';
 }

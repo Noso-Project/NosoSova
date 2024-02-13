@@ -30,7 +30,7 @@ class NodeLightStatus extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(AppLocalizations.of(context)!.status,
-                            style: AppTextStyles.itemStyle
+                            style: AppTextStyles.infoItemTitle
                                 .copyWith(color: Colors.white)),
                         BlinkingWidget(
                             widget: Text(
@@ -54,9 +54,9 @@ class NodeLightStatus extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(AppLocalizations.of(context)!.reward,
-                                style: AppTextStyles.itemStyle
+                                style: AppTextStyles.infoItemTitle
                                     .copyWith(color: Colors.white)),
-                            Text(address.rewardDay.toStringAsFixed(7),
+                            Text(address.rewardDay.toStringAsFixed(5),
                                 style: AppTextStyles.categoryStyle.copyWith(
                                     fontSize: 18,
                                     color: Colors.white.withOpacity(0.8))),

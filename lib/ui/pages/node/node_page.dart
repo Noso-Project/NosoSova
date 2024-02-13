@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nososova/ui/pages/node/screens/body_stats_nodes.dart';
 import 'package:nososova/ui/pages/node/screens/list_nodes.dart';
-import 'package:nososova/ui/theme/style/icons_style.dart';
 import 'package:nososova/ui/theme/style/text_style.dart';
 
-import '../../../generated/assets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../theme/decoration/other_gradient_decoration.dart';
-import '../../theme/style/colors.dart';
 
 class NodePage extends StatelessWidget {
   const NodePage({super.key});
@@ -25,6 +22,7 @@ class NodeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: null,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Container(
             decoration: const OtherGradientDecoration(),
             child: SafeArea(
@@ -48,7 +46,7 @@ class NodeBody extends StatelessWidget {
                                   topRight: Radius.circular(30.0),
                                 ),
                                 child: Container(
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.surface,
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -70,13 +68,9 @@ class NodeBody extends StatelessWidget {
                                                       .masternode,
                                                   style: AppTextStyles
                                                       .categoryStyle),
-                                              AppIconsStyle.icon2x4(
-                                                  Assets.iconsInfo,
-                                                  colorCustom:
-                                                      CustomColors.primaryColor)
                                             ]),
                                       ),
-                                      // const SizedBox(height: 10),
+
                                       const ListNodes()
                                     ],
                                   ),

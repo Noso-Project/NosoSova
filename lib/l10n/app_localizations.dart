@@ -7,6 +7,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_pt.dart';
 import 'app_localizations_ru.dart';
 import 'app_localizations_uk.dart';
 
@@ -93,6 +95,8 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('de'),
     Locale('en'),
+    Locale('es'),
+    Locale('pt'),
     Locale('ru'),
     Locale('uk')
   ];
@@ -364,25 +368,25 @@ abstract class AppLocalizations {
   /// No description provided for @numberOfMinedCoins.
   ///
   /// In en, this message translates to:
-  /// **'Number of mined coins'**
+  /// **'Coins mined'**
   String get numberOfMinedCoins;
 
   /// No description provided for @coinsLocked.
   ///
   /// In en, this message translates to:
-  /// **'Coins Locked'**
+  /// **'Locked coins'**
   String get coinsLocked;
 
   /// No description provided for @marketcap.
   ///
   /// In en, this message translates to:
-  /// **'Noso Marketcap'**
+  /// **'Market capitalisation'**
   String get marketcap;
 
   /// No description provided for @tvl.
   ///
   /// In en, this message translates to:
-  /// **'Total Value Locked'**
+  /// **'Locked Assets'**
   String get tvl;
 
   /// No description provided for @maxPriceStory.
@@ -397,34 +401,28 @@ abstract class AppLocalizations {
   /// **'Active nodes'**
   String get activeNodes;
 
-  /// No description provided for @tmr.
-  ///
-  /// In en, this message translates to:
-  /// **'Total MasterNode Reward'**
-  String get tmr;
-
   /// No description provided for @nbr.
   ///
   /// In en, this message translates to:
-  /// **'Node Block Reward'**
+  /// **'For one block'**
   String get nbr;
 
   /// No description provided for @nr24.
   ///
   /// In en, this message translates to:
-  /// **'24hr Reward'**
+  /// **'For 24 hour'**
   String get nr24;
 
   /// No description provided for @nr7.
   ///
   /// In en, this message translates to:
-  /// **'7 day Reward'**
+  /// **'For 7 day'**
   String get nr7;
 
   /// No description provided for @nr30.
   ///
   /// In en, this message translates to:
-  /// **'30 day Reward'**
+  /// **'For 30 day'**
   String get nr30;
 
   /// No description provided for @nosoPrice.
@@ -432,6 +430,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Noso Price'**
   String get nosoPrice;
+
+  /// No description provided for @rewardNode.
+  ///
+  /// In en, this message translates to:
+  /// **'Reward for masternode:'**
+  String get rewardNode;
 
   /// No description provided for @launched.
   ///
@@ -912,6 +916,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An error occurred'**
   String get unknownError;
+
+  /// No description provided for @appVersions.
+  ///
+  /// In en, this message translates to:
+  /// **'App version'**
+  String get appVersions;
+
+  /// No description provided for @developer.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer'**
+  String get developer;
+
+  /// No description provided for @socialLinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Links to social networks'**
+  String get socialLinks;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettings;
+
+  /// No description provided for @mainSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Main settings'**
+  String get mainSet;
+
+  /// No description provided for @darkTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Theme'**
+  String get darkTheme;
+
+  /// No description provided for @selLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select language'**
+  String get selLanguage;
+
+  /// No description provided for @nodeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Information about Node'**
+  String get nodeInfo;
+
+  /// No description provided for @consecutivePayments.
+  ///
+  /// In en, this message translates to:
+  /// **'Consecutive payments'**
+  String get consecutivePayments;
+
+  /// No description provided for @uptimePercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Uptime'**
+  String get uptimePercent;
+
+  /// No description provided for @monthlyEarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly earning'**
+  String get monthlyEarning;
+
+  /// No description provided for @openNodeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Information about Node'**
+  String get openNodeInfo;
+
+  /// No description provided for @errorConnectionApi.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, we are unable to process your request at this time'**
+  String get errorConnectionApi;
+
+  /// No description provided for @contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get contact;
+
+  /// No description provided for @contactEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your contacts will be displayed here'**
+  String get contactEmpty;
+
+  /// No description provided for @newContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Create contacts'**
+  String get newContact;
+
+  /// No description provided for @addContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to contacts'**
+  String get addContact;
+
+  /// No description provided for @tooltipSelMyWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Select from my wallet'**
+  String get tooltipSelMyWallet;
+
+  /// No description provided for @tooltipSelContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Select from Contact'**
+  String get tooltipSelContact;
+
+  /// No description provided for @tooltipPasteFromBuffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste from Buffer'**
+  String get tooltipPasteFromBuffer;
+
+  /// No description provided for @secretKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'Secret keys'**
+  String get secretKeys;
+
+  /// No description provided for @showMoreInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Display additional information'**
+  String get showMoreInfo;
+
+  /// No description provided for @hideMoreInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide information'**
+  String get hideMoreInfo;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @issueDialogDeleteContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to delete contact?'**
+  String get issueDialogDeleteContact;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -923,7 +1083,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'ru', 'uk'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'pt', 'ru', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -936,6 +1096,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'de': return AppLocalizationsDe();
     case 'en': return AppLocalizationsEn();
+    case 'es': return AppLocalizationsEs();
+    case 'pt': return AppLocalizationsPt();
     case 'ru': return AppLocalizationsRu();
     case 'uk': return AppLocalizationsUk();
   }

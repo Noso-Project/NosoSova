@@ -44,7 +44,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addToWallet => 'Добавить в кошелёк';
 
   @override
-  String get titleInfoNetwork => 'Подключение к сети.';
+  String get titleInfoNetwork => 'Подключение к сети';
 
   @override
   String get debugInfo => 'Отладка';
@@ -137,16 +137,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get daysUntilNextHalving => 'Дней до следующего Халвинга';
 
   @override
-  String get numberOfMinedCoins => 'Количество добытых монет';
+  String get numberOfMinedCoins => 'Добыто/лимит монет';
 
   @override
   String get coinsLocked => 'Монет заблокировано';
 
   @override
-  String get marketcap => 'Капитализация NOSO';
+  String get marketcap => 'Капитализация';
 
   @override
-  String get tvl => 'Всего заблокировано';
+  String get tvl => 'Заблокированно (USDT)';
 
   @override
   String get maxPriceStory => 'Максимальная цена';
@@ -155,22 +155,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get activeNodes => 'Активные ноды';
 
   @override
-  String get tmr => 'Общая награда';
+  String get nbr => 'За блок';
 
   @override
-  String get nbr => 'Награда за блок';
+  String get nr24 => 'За сутки';
 
   @override
-  String get nr24 => 'Вознаграждение за сутки';
+  String get nr7 => 'За неделю';
 
   @override
-  String get nr7 => 'Вознаграждение за неделю';
-
-  @override
-  String get nr30 => 'Вознаграждение за 30 дней';
+  String get nr30 => 'За 30 дней';
 
   @override
   String get nosoPrice => 'Стоимость NOSO';
+
+  @override
+  String get rewardNode => 'Вознаграждение за мастерноду:';
 
   @override
   String get launched => 'Запущено';
@@ -308,7 +308,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get getKeysPair => 'Просмотр ключей';
 
   @override
-  String get reward => 'Вознаграждение';
+  String get reward => 'Прибыль';
 
   @override
   String get online => 'В сети';
@@ -411,4 +411,82 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get unknownError => 'Произошла ошибка';
+
+  @override
+  String get appVersions => 'Версия приложения';
+
+  @override
+  String get developer => 'Разработчик';
+
+  @override
+  String get socialLinks => 'Ссылки на социальные сети';
+
+  @override
+  String get openSettings => 'Открыть настройки';
+
+  @override
+  String get mainSet => 'Основные настройки';
+
+  @override
+  String get darkTheme => 'Темная тема';
+
+  @override
+  String get selLanguage => 'Выбрать язык';
+
+  @override
+  String get nodeInfo => 'Информация об узле';
+
+  @override
+  String get consecutivePayments => 'Последовательные платежи';
+
+  @override
+  String get uptimePercent => 'Безотказная работа';
+
+  @override
+  String get monthlyEarning => 'Ежемесячный заработок';
+
+  @override
+  String get openNodeInfo => 'Информация о Node';
+
+  @override
+  String get errorConnectionApi => 'Извините, мы не можем обработать ваш запрос в данный момент';
+
+  @override
+  String get contact => 'Контакты';
+
+  @override
+  String get contactEmpty => 'Здесь будут отображаться ваши контакты';
+
+  @override
+  String get newContact => 'Создать контакт';
+
+  @override
+  String get addContact => 'Добавить в контакты';
+
+  @override
+  String get tooltipSelMyWallet => 'Выбрать из моего кошелька';
+
+  @override
+  String get tooltipSelContact => 'Выбрать из списка контактов';
+
+  @override
+  String get tooltipPasteFromBuffer => 'Вставить из буфера';
+
+  @override
+  String get secretKeys => 'Секретные ключи';
+
+  @override
+  String get showMoreInfo => 'Отображать дополнительную информацию';
+
+  @override
+  String get hideMoreInfo => 'Скрыть информацию';
+
+  @override
+  String get yes => 'Да';
+
+  @override
+  String get no => 'Нет';
+
+  @override
+  String get issueDialogDeleteContact => 'Вы действительно хотите удалить контакт?';
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
-import 'package:nososova/ui/common/components/empty_list_widget.dart';
+import 'package:nososova/ui/common/widgets/empty_list_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../l10n/app_localizations.dart';

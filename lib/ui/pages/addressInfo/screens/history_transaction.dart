@@ -7,16 +7,23 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../models/address_wallet.dart';
 import '../../../../models/rest_api/transaction_history.dart';
 import '../../../../utils/network_const.dart';
-import '../../../common/components/empty_list_widget.dart';
-import '../../../common/components/loading.dart';
 import '../../../common/route/page_router.dart';
+import '../../../common/widgets/empty_list_widget.dart';
+import '../../../common/widgets/loading.dart';
 import '../../../theme/style/text_style.dart';
 import '../../../tiles/tile_transaction.dart';
 
 class HistoryTransactionsWidget extends StatefulWidget {
   final Address address;
+  final bool activeMobile;
+  final Function() setVisible;
 
-  const HistoryTransactionsWidget({super.key, required this.address});
+  const HistoryTransactionsWidget({
+    super.key,
+    required this.address,
+    this.activeMobile = true,
+    required this.setVisible,
+  });
 
   @override
   State createState() => _HistoryTransactionWidgetsState();
@@ -24,120 +31,153 @@ class HistoryTransactionsWidget extends StatefulWidget {
 
 class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
   final GlobalKey<_HistoryTransactionWidgetsState> _historyKey = GlobalKey();
+  bool isVisibleAction = true;
 
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        BlocBuilder<HistoryTransactionsBloc, HistoryTransactionsBState>(
-            key: _historyKey,
-            builder: (context, state) {
-              var listHistory = state.transactions;
-              listHistory.sort((a, b) => b.blockId.compareTo(a.blockId));
+    return Stack(children: [
+      BlocBuilder<HistoryTransactionsBloc, HistoryTransactionsBState>(
+          key: _historyKey,
+          builder: (context, state) {
+            var listHistory = state.transactions;
+            listHistory.sort((a, b) => b.blockId.compareTo(a.blockId));
 
-              if (state.apiStatus == ApiStatus.error ||
-                  listHistory.isEmpty && state.apiStatus != ApiStatus.loading) {
-                return getStackMessage(EmptyWidget(
-                    title: AppLocalizations.of(context)!.unknownError,
-                    descrpt: AppLocalizations.of(context)!
-                        .errorEmptyHistoryTransactions));
-              }
-              if (state.apiStatus == ApiStatus.loading) {
-                return getStackMessage(const LoadingWidget());
-              }
+            if (state.apiStatus == ApiStatus.error) {
+              return getStackMessage(EmptyWidget(
+                  title: AppLocalizations.of(context)!.unknownError,
+                  descrpt: AppLocalizations.of(context)!.errorConnectionApi));
+            }
 
-              return Container(
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Column(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.only(
-                              top: 20, left: 20, right: 20, bottom: 20),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    AppLocalizations.of(context)!
-                                        .catHistoryTransaction,
-                                    style: AppTextStyles.categoryStyle),
-                              ])),
-                      if (state.apiStatus == ApiStatus.connected) ...[
-                        Expanded(
-                            child: ListView.builder(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 0.0, vertical: 0.0),
-                          itemCount: listHistory.length,
-                          itemBuilder: (context, index) {
-                            final transaction = listHistory[index];
-                            var isReceiver =
-                                widget.address.hash == transaction.receiver;
+            if (listHistory.isEmpty && state.apiStatus != ApiStatus.loading) {
+              return getStackMessage(EmptyWidget(
+                  title: AppLocalizations.of(context)!.empty,
+                  descrpt: AppLocalizations.of(context)!
+                      .errorEmptyHistoryTransactions));
+            }
+            if (state.apiStatus == ApiStatus.loading) {
+              return getStackMessage(const LoadingWidget());
+            }
 
-                            if (index == 0 ||
-                                _isDifferentDate(
-                                    listHistory[index - 1], transaction)) {
-                              return Column(
-                                children: [
-                                  // Date header
+            return Container(
+                width: double.infinity,
+                color: Theme.of(context).colorScheme.surface,
+                child: Column(children: [
+                  Padding(
+                      padding: const EdgeInsets.only(
+                          top: 20, left: 20, right: 20, bottom: 10),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                                AppLocalizations.of(context)!
+                                    .catHistoryTransaction,
+                                style: AppTextStyles.categoryStyle),
+                            if (widget.activeMobile)
+                              IconButton(
+                                  tooltip: isVisibleAction
+                                      ? AppLocalizations.of(context)!.hideMoreInfo
+                                      : AppLocalizations.of(context)!.showMoreInfo,
+                                  padding: EdgeInsets.zero,
+                                  onPressed: () {
+                                    setState(() {
+                                      isVisibleAction = !isVisibleAction;
+                                    });
+                                    widget.setVisible();
+                                  },
+                                  icon: Icon(
+                                      isVisibleAction
+                                          ? Icons.expand_less
+                                          : Icons.expand_more_outlined,
+                                      size: 24,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface))
+                          ])),
+                  if (state.apiStatus == ApiStatus.connected) ...[
+                    Expanded(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: listHistory.length,
+                            itemBuilder: (context, index) {
+                              final transaction = listHistory[index];
+                              var isReceiver =
+                                  widget.address.hash == transaction.receiver;
+
+                              if (index == 0 ||
+                                  _isDifferentDate(
+                                      listHistory[index - 1], transaction)) {
+                                return Column(children: [
                                   ListTile(
-                                    title: Text(
-                                        _getFormattedDate(
-                                            transaction.timestamp),
-                                        style: AppTextStyles.itemStyle.copyWith(
-                                            color:
-                                                Colors.black.withOpacity(0.9),
-                                            fontSize: 18)),
-                                  ),
+                                      title: Text(
+                                          _getFormattedDate(
+                                              transaction.timestamp),
+                                          style: AppTextStyles.infoItemValue)),
                                   TransactionTile(
+                                      transactionHistory: transaction,
+                                      receiver: isReceiver,
+                                      onTap: () =>
+                                          PageRouter.showTransactionInfo(
+                                              context, transaction, isReceiver))
+                                ]);
+                              } else {
+                                return TransactionTile(
                                     transactionHistory: transaction,
                                     receiver: isReceiver,
                                     onTap: () => PageRouter.showTransactionInfo(
-                                        context, transaction, isReceiver),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return TransactionTile(
-                                transactionHistory: transaction,
-                                receiver: isReceiver,
-                                onTap: () => PageRouter.showTransactionInfo(
-                                    context, transaction, isReceiver),
-                              );
-                            }
-                          },
-                        )),
-                      ]
-                    ],
-                  ));
-            })
-      ],
-    );
+                                        context, transaction, isReceiver));
+                              }
+                            }))
+                  ]
+                ]));
+          })
+    ]);
   }
 
-  getStackMessage(Widget widget) {
+  getStackMessage(Widget widgetQ) {
     return Container(
         width: double.infinity,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         child: Stack(children: [
           Padding(
               padding: const EdgeInsets.only(
-                  top: 20, left: 20, right: 20, bottom: 20),
+                  top: 20, left: 20, right: 20, bottom: 10),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(AppLocalizations.of(context)!.catHistoryTransaction,
+                    Text(
+                        AppLocalizations.of(context)!
+                            .catHistoryTransaction,
                         style: AppTextStyles.categoryStyle),
+                    if (widget.activeMobile)
+                      IconButton(
+                          tooltip: isVisibleAction
+                              ? AppLocalizations.of(context)!.hideMoreInfo
+                              : AppLocalizations.of(context)!.showMoreInfo,
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            setState(() {
+                              isVisibleAction = !isVisibleAction;
+                            });
+                            widget.setVisible();
+                          },
+                          icon: Icon(
+                              isVisibleAction
+                                  ? Icons.expand_less
+                                  : Icons.expand_more_outlined,
+                              size: 24,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface))
                   ])),
-          widget
+          widgetQ
         ]));
   }
 

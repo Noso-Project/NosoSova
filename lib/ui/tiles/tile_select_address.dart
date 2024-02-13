@@ -36,7 +36,7 @@ class SelectAddressListTileState extends State<SelectAddressListTile> {
               children: [
                 Text(
                   AppLocalizations.of(context)!.sellAddress,
-                  style: AppTextStyles.walletAddress.copyWith(fontSize: 18),
+                  style: AppTextStyles.walletHash,
                 ),
               ],
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:noso_dart/utils/noso_utility.dart';
 
 import '../../../blocs/events/wallet_events.dart';
 import '../../../blocs/wallet_bloc.dart';
@@ -63,6 +64,12 @@ class AddressInfoState extends State<AddressInfo> {
                   Assets.iconsTextTwo,
                   AppLocalizations.of(context)!.copyAddress,
                   () => _copy(context)),
+              if (widget.address.balance >=
+                  NosoUtility.getCountMonetToRunNode())
+                buildListTileSvg(
+                    Assets.iconsNodeI,
+                    AppLocalizations.of(context)!.openNodeInfo,
+                    () => _showNodeInfo(context)),
               TileConfirmList(
                   iconData: Assets.iconsDelete,
                   title: AppLocalizations.of(context)!.removeAddress,
@@ -79,6 +86,11 @@ class AddressInfoState extends State<AddressInfo> {
   void _copy(BuildContext context) {
     Navigator.pop(context);
     Clipboard.setData(ClipboardData(text: widget.address.hash));
+  }
+
+  void _showNodeInfo(BuildContext context) {
+    Navigator.pop(context);
+    DialogRouter.showDialogNodeInfo(context, widget.address);
   }
 
   void _viewQr(BuildContext context) {

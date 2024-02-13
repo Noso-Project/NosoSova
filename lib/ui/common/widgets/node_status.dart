@@ -13,23 +13,23 @@ class NodeStatusUi {
     if (statusConnected == StatusConnectNodes.error) {
       return Text(
         AppLocalizations.of(context)!.errorConnection,
-        style: AppTextStyles.itemStyle
-            .copyWith(fontSize: 14, color: CustomColors.negativeBalance),
+        style: AppTextStyles.textHiddenSmall(context)
+            .copyWith(color: CustomColors.negativeBalance),
       );
     } else if (statusConnected == StatusConnectNodes.searchNode) {
       return Text(
         AppLocalizations.of(context)!.connection,
-        style: AppTextStyles.itemStyle.copyWith(fontSize: 14),
+        style: AppTextStyles.textHiddenSmall(context),
       );
     } else if (statusConnected == StatusConnectNodes.sync) {
       return Text(
         AppLocalizations.of(context)!.sync,
-        style: AppTextStyles.itemStyle.copyWith(fontSize: 14),
+        style: AppTextStyles.textHiddenSmall(context),
       );
     } else if (statusConnected == StatusConnectNodes.consensus) {
       return Text(
         AppLocalizations.of(context)!.consensusCheck,
-        style: AppTextStyles.itemStyle.copyWith(fontSize: 14),
+        style: AppTextStyles.textHiddenSmall(context),
       );
     }
     if (statusConnected == StatusConnectNodes.connected) {
@@ -38,12 +38,12 @@ class NodeStatusUi {
         children: [
           Text(
             AppLocalizations.of(context)!.activeConnect,
-            style: AppTextStyles.itemStyle.copyWith(fontSize: 14),
+            style: AppTextStyles.textHiddenSmall(context),
           ),
           const SizedBox(width: 5),
           Text(
             "(${seed.ping.toString()} ${AppLocalizations.of(context)!.pingMs})",
-            style: AppTextStyles.itemStyle.copyWith(fontSize: 14),
+            style: AppTextStyles.textHiddenSmall(context),
           )
         ],
       );
