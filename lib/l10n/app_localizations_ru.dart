@@ -308,7 +308,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get getKeysPair => 'Просмотр ключей';
 
   @override
-  String get reward => 'Вознаграждение';
+  String get reward => 'Прибыль';
 
   @override
   String get online => 'В сети';
