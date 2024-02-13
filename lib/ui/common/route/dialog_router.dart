@@ -178,6 +178,11 @@ class DialogRouter {
                 topBarTitle: Text(address.hashPublic,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.dialogTitle),
+                trailingNavBarWidget: IconButton(
+                  padding: const EdgeInsets.all(20),
+                  icon: const Icon(Icons.close),
+                  onPressed: Navigator.of(context).pop,
+                ),
                 isTopBarLayerAlwaysVisible: true,
                 child: DialogViewQrWidget(address: address))
           ];
@@ -205,10 +210,16 @@ class DialogRouter {
       WoltModalSheet.show(
         context: context,
         showDragHandle: false,
+        minDialogWidth: 600,
         pageListBuilder: (BuildContext _) {
           return [
             WoltModalSheetPage(
                 hasSabGradient: false,
+                trailingNavBarWidget: IconButton(
+                  padding: const EdgeInsets.all(20),
+                  icon: const Icon(Icons.close),
+                  onPressed: Navigator.of(context).pop,
+                ),
                 topBarTitle: Text(AppLocalizations.of(context)!.customNameAdd,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.dialogTitle),
@@ -287,9 +298,15 @@ class DialogRouter {
       context: context,
       showDragHandle: false,
       minDialogWidth: 600,
+
       pageListBuilder: (BuildContext _) {
         return [
           WoltModalSheetPage(
+            trailingNavBarWidget: IconButton(
+              padding: const EdgeInsets.all(20),
+              icon: const Icon(Icons.close),
+              onPressed: Navigator.of(context).pop,
+            ),
             hasSabGradient: false,
             topBarTitle: Text(AppLocalizations.of(context)!.secretKeys,
                 textAlign: TextAlign.center, style: AppTextStyles.dialogTitle),
