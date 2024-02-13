@@ -11,7 +11,7 @@ At the moment the development of this application is still in constant flux, sin
 
 ## Table of contents 
 
-- [Build and use](#recover-an-address-from-a-key-pair)
+- [Build and use](doc/build_use.md)
 - [Screenshots](doc/screenshots.md)
 
 ## Donations
