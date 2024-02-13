@@ -144,7 +144,7 @@ LazyDatabase _openConnection() {
           : await getApplicationSupportDirectory();
       dbFolder = "${path.path}/database";
     } else {
-      var path = await getApplicationDocumentsDirectory();
+      var path = await getApplicationSupportDirectory();
       dbFolder = path.path;
     }
 

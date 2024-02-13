@@ -145,15 +145,21 @@ class FileService {
       if (Platform.isLinux || Platform.isWindows) {
         var path = await getApplicationSupportDirectory();
         folderDir = path.path;
-      } else if (Platform.isMacOS || Platform.isIOS) {
+      }
+      if (Platform.isMacOS) {
         var path = await getLibraryDirectory();
         folderDir = path.path;
-      } else if (Platform.isAndroid) {
+      }
+      if (Platform.isAndroid) {
         var path = await getExternalStorageDirectory();
         if (path == null) {
           return ResponseBackup(
               message: "Error backup Wallet file: AndroidPath Not Found");
         }
+        folderDir = path.path;
+      }
+      if (Platform.isIOS) {
+        var path = await getApplicationDocumentsDirectory();
         folderDir = path.path;
       }
 
