@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:nososova/ui/dialogs/dialog_settings.dart';
 
 import '../../../../generated/assets.dart';
-import '../../../common/widgets/network_info.dart';
 import '../../../common/route/dialog_router.dart';
+import '../../../common/widgets/network_info.dart';
 import '../../../config/responsive.dart';
 import '../../../theme/style/icons_style.dart';
 

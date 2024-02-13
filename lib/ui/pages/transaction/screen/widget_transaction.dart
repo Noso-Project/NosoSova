@@ -6,9 +6,9 @@ import 'package:nososova/ui/theme/style/icons_style.dart';
 import '../../../../generated/assets.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/rest_api/transaction_history.dart';
-import '../../../theme/style/text_style.dart';
 import '../../../common/widgets/custom/dasher_divider.dart';
 import '../../../common/widgets/item_info_widget.dart';
+import '../../../theme/style/text_style.dart';
 
 class TransactionWidgetInfo extends StatefulWidget {
   final TransactionHistory transaction;
