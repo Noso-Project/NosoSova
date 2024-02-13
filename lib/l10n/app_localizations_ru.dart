@@ -44,7 +44,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addToWallet => 'Добавить в кошелёк';
 
   @override
-  String get titleInfoNetwork => 'Подключение к сети.';
+  String get titleInfoNetwork => 'Подключение к сети';
 
   @override
   String get debugInfo => 'Отладка';
@@ -137,7 +137,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get daysUntilNextHalving => 'Дней до следующего Халвинга';
 
   @override
-  String get numberOfMinedCoins => 'Добыто монет';
+  String get numberOfMinedCoins => 'Добыто/лимит монет';
 
   @override
   String get coinsLocked => 'Монет заблокировано';
@@ -146,7 +146,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get marketcap => 'Капитализация';
 
   @override
-  String get tvl => 'Заблокированных активов';
+  String get tvl => 'Заблокированно (USDT)';
 
   @override
   String get maxPriceStory => 'Максимальная цена';

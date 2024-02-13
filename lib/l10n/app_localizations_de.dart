@@ -146,7 +146,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get marketcap => 'Marktkapitalisierung';
 
   @override
-  String get tvl => 'Gesperrte Vermögenswerte';
+  String get tvl => 'Gesperrte Vermögenswerte\'';
 
   @override
   String get maxPriceStory => 'Maximaler Preis in der Historie';
@@ -176,7 +176,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get launched => 'läuft';
 
   @override
-  String get available => 'verfügbar';
+  String get available => 'Verfügbar';
 
   @override
   String get masternode => 'Masternode';
@@ -242,7 +242,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get today => 'heute';
 
   @override
-  String get yesterday => 'gestern';
+  String get yesterday => 'Gestern';
 
   @override
   String get sender => 'Sender';
@@ -293,7 +293,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get viewQr => 'QR Code zeigen';
 
   @override
-  String get infoTotalPriceUst => 'Kontostand in USD';
+  String get infoTotalPriceUst => 'Kontostand in USDT';
 
   @override
   String get updateInfo => 'Information updaten';
@@ -449,7 +449,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get openNodeInfo => 'Informationen zum Knotenpunkt';
 
   @override
-  String get errorConnectionApi => 'Tut uns leid, wir können die Anfrage derzeit nicht bearbeiten';
+  String get errorConnectionApi => 'Tut uns leid, wir können Ihre Anfrage derzeit nicht bearbeiten';
 
   @override
   String get contact => 'Kontakte';
