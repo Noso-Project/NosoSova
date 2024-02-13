@@ -1,21 +1,20 @@
 # NosoSova
 ![GitHub Tag](https://img.shields.io/github/v/tag/Noso-Project/NosoSova)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Noso-Project/NosoSova/total)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/Noso-Project/NosoSova)
 
-This is a `lite` wallet for the cryptocurrency [Noso](https://nosocoin.com).
+**NosoSova** is a cross-platform application with an appealing design that seamlessly combines aesthetics and multifunctionality. Providing users with a user-friendly interface, NosoSova allows you to enjoy various features.
 
-The application is being developed in Flutter(Dart).
+This is wallet for the cryptocurrency [Noso](https://nosocoin.com).
 
-At the moment the development of this application is still in constant flux, since it's at an alpha stage.
+At the moment the development of this application is still in constant flux, since it's at an beta stage.
 
-## Screenshots
+## Table of contents 
 
-### Linux
+- [Build and use](#recover-an-address-from-a-key-pair)
+- [Screenshots](doc/screenshots.md)
 
-Main window with a graph of `Noso`'s price(Left), Details about the wallet and a list of addresses(Center) and some information about the network(Right):
+## Donations
 
-![LinuxMainWindow](screenshots/LinuxMainWindow.png)
-
-Account details:
-
-![LinuxAccountDetails](screenshots/LinuxAccountDetails.png)
+To support development, please consider donating Noso to the following address:
+> N4ZR3fKhTUod34evnEcDQX3i6XufBDU (NOSO)
