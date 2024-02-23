@@ -47,7 +47,7 @@ android {
         applicationId "com.pasivhdev.nososova"
         minSdkVersion 22
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
+        versionCode 2
         versionName flutterVersionName
     }
 
