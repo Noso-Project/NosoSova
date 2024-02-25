@@ -17,4 +17,4 @@ At the moment the development of this application is still in constant flux, sin
 ## Donations
 
 To support development, please consider donating Noso to the following address:
-> N4ZR3fKhTUod34evnEcDQX3i6XufBDU (NOSO)
+> N4ZR3fKhTUod34evnEcDQX3i6XufBDU (NOSO) (pasichDev)
