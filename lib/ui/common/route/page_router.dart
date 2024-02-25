@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nososova/blocs/contacts_block.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
+import 'package:nososova/ui/pages/gvt/gvt_page.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../../blocs/app_data_bloc.dart';
@@ -163,6 +164,54 @@ class PageRouter {
                     ),
                   ],
                   child: const ContactsScreen(),
+                ))
+          ];
+        },
+      );
+    }
+  }
+
+  static void routeGvt(BuildContext context) {
+    if (Responsive.isMobile(context)) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: locator<WalletBloc>(),
+              ),
+            ],
+            child: const GvtPage(),
+          ),
+        ),
+      );
+    } else {
+      WoltModalSheet.show(
+        context: context,
+        pageListBuilder: (BuildContext _) {
+          return [
+            WoltModalSheetPage(
+                topBarTitle: Text(AppLocalizations.of(context)!.contact,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.dialogTitle),
+                trailingNavBarWidget: IconButton(
+                  padding: const EdgeInsets.all(20),
+                  icon: const Icon(Icons.close),
+                  onPressed: Navigator.of(context).pop,
+                ),
+                hasSabGradient: false,
+                isTopBarLayerAlwaysVisible: true,
+                child: MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: locator<WalletBloc>(),
+                    ),
+                    BlocProvider.value(
+                      value: locator<ContactsBloc>(),
+                    ),
+                  ],
+                  child: const GvtPage(),
                 ))
           ];
         },

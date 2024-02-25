@@ -131,6 +131,13 @@ class _CardBodyState extends State<CardBody> {
                         () =>
                             DialogRouter.showDialogPendingTransaction(context)),
                     const SizedBox(width: 20),
+                    AppButtonStyle.buttonAction(
+                        context,
+                        Assets.iconsGvt,
+                        "GvT",
+                            () =>
+                            PageRouter.routeGvt(context)),
+                    const SizedBox(width: 20),
                   ])),
             ],
             if (Responsive.isMobile(context)) const SizedBox(height: 20),

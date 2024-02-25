@@ -66,6 +66,12 @@ class AppTextStyles {
       fontFamily: "Gilroy",
       fontWeight: FontWeight.w700);
 
+  static TextStyle gvtBalance = TextStyle(
+      fontSize: 30,
+      color: Colors.white,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w700);
+
   static TextStyle nosoName = TextStyle(
       fontSize: 18,
       color: Colors.white,

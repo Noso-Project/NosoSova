@@ -247,7 +247,7 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
       var response = await _repositories.networkRepository
           .fetchNode(NodeRequest.getNodeList, tNode.seed);
       if (response.errors == null) {
-        List<Seed> listUserNodes = DataParser().parseDataSeeds(response.value);
+        List<Seed> listUserNodes = DataParser.parseDataSeeds(response.value);
         blockInfo = blockInfo.copyWith(
             masternodes: Masternode().copyFromSeed(listUserNodes),
             count: listUserNodes.length);

@@ -175,8 +175,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
             if (!isAdding)
               Positioned(
-                  bottom: 16.0,
-                  right: 16.0,
+                  bottom: 20,
+                  right: 20,
                   child: FloatingActionButton(
                     onPressed: () {
                       setState(() {
