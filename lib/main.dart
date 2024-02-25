@@ -52,6 +52,16 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
+  /*  if (Platform.isAndroid || Platform.isIOS) {
+      ScreenUtil.init(context, designSize: const Size(360, 690));
+    } else {
+      ScreenUtil.init(context,
+          designSize: const Size(1000, 800), minTextAdapt: true, );
+      ScreenUtil().setSp(22);
+    }
+
+   */
+
     return ListenableBuilder(
         listenable: _appSettings,
         builder: (BuildContext context, Widget? child) {
