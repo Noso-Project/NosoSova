@@ -98,13 +98,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get importFile => 'Importar de um ficheiro';
 
   @override
-  String get importFileSubtitle => 'Escolher um ficheiro de carteira em formato .pkw ou .nososova';
+  String get importFileSubtitle => 'Escolher um ficheiro de carteira em formato \"*.pkw\" ou \"*.nososova\"';
 
   @override
   String get exportFile => 'Exportar para ficheiro';
 
   @override
-  String get exportFileSubtitle => 'Gravar a carteira em formato .pkw ou .nososova';
+  String get exportFileSubtitle => 'Gravar a carteira em formato \"*.pkw\" ou \"*.nososova\"';
 
   @override
   String get fileWallet => 'Ficheiro da carteira';
@@ -134,7 +134,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get blocksRemaining => 'Blocos Restantes';
 
   @override
-  String get daysUntilNextHalving => 'Dias para o próximo \'Halving\'';
+  String get daysUntilNextHalving => 'Dias para o próximo \"Halving\"';
 
   @override
   String get numberOfMinedCoins => 'Moedas minadas';
@@ -143,7 +143,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get coinsLocked => 'Moedas bloqueadas';
 
   @override
-  String get marketcap => 'Noso Marketcap';
+  String get marketcap => 'Noso MarketCap';
 
   @override
   String get tvl => 'Valor Total Bloqueado';
@@ -170,7 +170,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get nosoPrice => 'Preço de Noso';
 
   @override
-  String get rewardNode => 'Recompensa para masternode:';
+  String get rewardNode => 'Recompensa para Nó Mestre:';
 
   @override
   String get launched => 'Correndo';
@@ -194,7 +194,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get hintStatusNodeNonRun => 'Nó está offline';
 
   @override
-  String get emptyNodesError => 'Falta de contas com condições para iniciar MasterNode...';
+  String get emptyNodesError => 'Falta de contas com condições para iniciar Nó Mestre...';
 
   @override
   String get importKeysPair => 'Importar de par de chaves';
