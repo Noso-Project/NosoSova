@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nososova/blocs/contacts_block.dart';
+import 'package:nososova/blocs/contacts_bloc.dart';
 import 'package:nososova/blocs/events/contacts_events.dart';
 import 'package:nososova/models/contact.dart';
 import 'package:nososova/ui/tiles/tile_contact.dart';

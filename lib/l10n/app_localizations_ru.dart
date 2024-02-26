@@ -489,4 +489,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get issueDialogDeleteContact => 'Вы действительно хотите удалить контакт?';
+
+  @override
+  String get whatGvt => 'Что такое GVT?';
+
+  @override
+  String get gvtAbout => 'Токен управления (GVT) от Noso предоставляет владельцам возможность голосовать по вопросам, касающимся проекта, позволяя им предлагать и участвовать в голосовании. Один GVT равен одному голосу. В будущем люди смогут приобретать токены GVT через торговлю Noso/GVT в кошельке NosoSova.';
+
+  @override
+  String get myListGvts => 'Мои GvT';
+
+  @override
+  String get viewGvtsList => 'Обзор';
+
+  @override
+  String get emptyGvts => 'В вашем кошельке нет GVT';
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
-import 'package:nososova/blocs/contacts_block.dart';
+import 'package:nososova/blocs/contacts_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/ui/dialogs/address_action/dialog_view_keyspair.dart';
 import 'package:nososova/ui/dialogs/dialog_info_node.dart';

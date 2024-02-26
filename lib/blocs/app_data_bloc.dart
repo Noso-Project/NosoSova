@@ -78,13 +78,11 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     } else {
       await _selectTargetNode(event, emit, InitialNodeAlgh.listenDefaultNodes);
     }
-
-    // add(LoadPriceHistory());
   }
 
-  /// Метод який повідомляє системі про помилку
-  /// Якщо [countAttempsConnections] - назбирає 5 помилок, то перезапуск не відбувається
-  /// Зупиняється таймер та встановлються консенсус
+  /// A method that notifies the system about an error.
+  /// If [countAttemptsConnections] accumulates 5 errors, the restart does not occur.
+  /// The timer is stopped, and the consensus is established.
   Future<void> _reconnectFromError(
     event,
     emit,

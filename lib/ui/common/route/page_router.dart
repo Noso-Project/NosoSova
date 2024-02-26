@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nososova/blocs/contacts_block.dart';
+import 'package:nososova/blocs/contacts_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
+import 'package:nososova/blocs/gvt_bloc.dart';
 import 'package:nososova/ui/pages/gvt/gvt_page.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../../blocs/app_data_bloc.dart';
+import '../../../blocs/events/gvt_events.dart';
 import '../../../blocs/history_transactions_bloc.dart';
 import '../../../blocs/wallet_bloc.dart';
 import '../../../dependency_injection.dart';
@@ -181,6 +183,11 @@ class PageRouter {
               BlocProvider.value(
                 value: locator<WalletBloc>(),
               ),
+              BlocProvider<GvtBloc>(create: (context) {
+                var bloc = GvtBloc(repositories: locator<Repositories>(), walletBloc: locator<WalletBloc>());
+                bloc.add(LoadGvts());
+                return bloc;
+              }),
             ],
             child: const GvtPage(),
           ),
@@ -207,9 +214,11 @@ class PageRouter {
                     BlocProvider.value(
                       value: locator<WalletBloc>(),
                     ),
-                    BlocProvider.value(
-                      value: locator<ContactsBloc>(),
-                    ),
+                    BlocProvider<GvtBloc>(create: (context) {
+                      var bloc = locator<GvtBloc>();
+                      bloc.add(LoadGvts());
+                      return bloc;
+                    }),
                   ],
                   child: const GvtPage(),
                 ))

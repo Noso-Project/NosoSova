@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:noso_dart/const.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../config/responsive.dart';
 import '../../../theme/decoration/gvt/gvt_gradient_decoration.dart';
 import '../../../theme/decoration/gvt/gvt_gradient_decoration_round.dart';
-import '../../../theme/decoration/standart_gradient_decoration.dart';
-import '../../../theme/decoration/standart_gradient_decoration_round.dart';
 import '../../../theme/style/text_style.dart';
 
-class GvtWidget extends StatelessWidget {
-  const GvtWidget({super.key});
+class GvtCardHead extends StatelessWidget {
+  int gvtsTotal = 0;
+
+  GvtCardHead({super.key, required this.gvtsTotal});
 
   @override
   Widget build(BuildContext context) {
@@ -19,65 +18,53 @@ class GvtWidget extends StatelessWidget {
             height: 350,
             width: double.infinity,
             decoration: const GvtGradientDecoration(),
-            child: const SafeArea(
+            child: SafeArea(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                   Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30.0),
-                      child: GvtBody())
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: _gvtBody(context))
                 ])))
         : Container(
-      height: 300,
             width: double.infinity,
             decoration: const GvtGradientDecorationRound(),
-            child: const SafeArea(
+            child: SafeArea(
                 child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30.0),
-                    child: GvtBody())));
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: _gvtBody(context))));
   }
-}
 
-class GvtBody extends StatefulWidget {
-  const GvtBody({Key? key}) : super(key: key);
-
-  @override
-  State createState() => _GvtBodyState();
-}
-
-class _GvtBodyState extends State<GvtBody> {
-  bool isVisibleAction = false;
-
-  @override
-  Widget build(BuildContext context) {
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            Text("My GvT",
-                style: AppTextStyles.infoItemValue
-                    .copyWith(color: Colors.white.withOpacity(0.5))),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("0",
-                      style: AppTextStyles.gvtBalance),
-
-                ]),
-            const SizedBox(height: 10),
-
-            Text(
-              "All Count",
+  _gvtBody(BuildContext context) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+          Text(AppLocalizations.of(context)!.balance,
               style: AppTextStyles.infoItemValue
-                  .copyWith(color: Colors.white.withOpacity(0.5), fontSize: 14),
-            ),
-            Text("100",
-                style: AppTextStyles.infoItemValue.copyWith(
-                    color: Colors.white.withOpacity(0.8), fontSize: 20)),
-          ]);
-
+                  .copyWith(color: Colors.white.withOpacity(0.5))),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(gvtsTotal.toString(), style: AppTextStyles.gvtBalance),
+                Text("/100",
+                    style: AppTextStyles.gvtBalance
+                        .copyWith(color: Colors.white.withOpacity(0.4))),
+              ]),
+          const SizedBox(height: 20),
+          Text(AppLocalizations.of(context)!.whatGvt,
+              style: AppTextStyles.infoItemValue
+                  .copyWith(color: Colors.white.withOpacity(0.5))),
+          const SizedBox(height: 10),
+          Text(
+            AppLocalizations.of(context)!.gvtAbout,
+            style: AppTextStyles.infoItemTitle
+                .copyWith(color: Colors.white.withOpacity(1), fontSize: 14),
+          ),
+          const SizedBox(height: 30),
+        ]);
   }
 }

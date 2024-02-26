@@ -489,4 +489,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get issueDialogDeleteContact => '¿De verdad quieres borrar contacto?';
+
+  @override
+  String get whatGvt => '¿Qué es GVT?';
+
+  @override
+  String get gvtAbout => 'El Token de Gobernanza (GVT) de Noso permite a los titulares votar en asuntos relacionados con el proyecto, permitiéndoles proponer y participar en actividades de votación. Un GVT equivale a un voto. En el futuro, las personas podrán adquirir tokens GVT a través del intercambio Noso/GVT dentro de la billetera NosoSova.';
+
+  @override
+  String get myListGvts => 'Mis GvTs';
+
+  @override
+  String get viewGvtsList => 'Vista general';
+
+  @override
+  String get emptyGvts => 'No se encontraron GVT en tu billetera';
 }

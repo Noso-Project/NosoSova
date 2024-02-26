@@ -1072,6 +1072,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Do you really want to delete contact?'**
   String get issueDialogDeleteContact;
+
+  /// No description provided for @whatGvt.
+  ///
+  /// In en, this message translates to:
+  /// **'What is GVT?'**
+  String get whatGvt;
+
+  /// No description provided for @gvtAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Noso\'s Governance Token (GVT) empowers holders to vote on project-related matters, enabling them to propose and participate in voting activities. One GVT equals one vote. In the future, individuals will be able to acquire GVT tokens through Noso/GVT trading within the NosoSova wallet.'**
+  String get gvtAbout;
+
+  /// No description provided for @myListGvts.
+  ///
+  /// In en, this message translates to:
+  /// **'My GvT'**
+  String get myListGvts;
+
+  /// No description provided for @viewGvtsList.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get viewGvtsList;
+
+  /// No description provided for @emptyGvts.
+  ///
+  /// In en, this message translates to:
+  /// **'No GVTs found in your wallet'**
+  String get emptyGvts;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
