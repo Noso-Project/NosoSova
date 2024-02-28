@@ -10,8 +10,10 @@ import 'package:nososova/ui/theme/style/icons_style.dart';
 import 'package:nososova/ui/tiles/dialog_tile.dart';
 
 import '../../blocs/events/wallet_events.dart';
+import '../../models/address_wallet.dart';
 import '../../utils/files_const.dart';
 import '../common/route/dialog_router.dart';
+import '../common/route/page_router.dart';
 import '../common/widgets/custom/dialog_title_dropdown.dart';
 import '../config/responsive.dart';
 import '../theme/style/text_style.dart';
@@ -19,7 +21,9 @@ import '../theme/style/text_style.dart';
 class DialogWalletActions extends StatefulWidget {
   final GlobalKey<ScaffoldState>? scaffoldKey;
   final bool isVisibleDropInfo;
-  const DialogWalletActions({super.key, this.scaffoldKey, this.isVisibleDropInfo = false});
+
+  const DialogWalletActions(
+      {super.key, this.scaffoldKey, this.isVisibleDropInfo = false});
 
   @override
   State createState() => _DialogWalletActionsState();
@@ -35,7 +39,6 @@ class _DialogWalletActionsState extends State<DialogWalletActions> {
     walletBloc = BlocProvider.of<WalletBloc>(context);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WalletBloc, WalletState>(builder: (context, state) {
@@ -44,15 +47,22 @@ class _DialogWalletActionsState extends State<DialogWalletActions> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (widget.isVisibleDropInfo)    DialogTitleDropdown(
-                titleDialog: AppLocalizations.of(context)!.actionWallet,
-                activeMobile: !Responsive.isMobile(context),
-                isVisible: isVisibleAction,
-                setVisible: () => setState(() {
-                      isVisibleAction = !isVisibleAction;
-                    })),
+            if (widget.isVisibleDropInfo)
+              DialogTitleDropdown(
+                  titleDialog: AppLocalizations.of(context)!.actionWallet,
+                  activeMobile: !Responsive.isMobile(context),
+                  isVisible: isVisibleAction,
+                  setVisible: () => setState(() {
+                        isVisibleAction = !isVisibleAction;
+                      })),
             if (Responsive.isMobile(context) || isVisibleAction)
-            ListView(shrinkWrap: true, children: [
+              ListView(shrinkWrap: true, children: [
+                if (!Responsive.isMobile(context))
+                  buildListTileSvg(
+                      Assets.iconsOutput,
+                      AppLocalizations.of(context)!.sendCoins,
+                      () => PageRouter.routePaymentPage(context,
+                          Address(hash: "", publicKey: "", privateKey: ""))),
                 buildListTileSvg(
                     Assets.iconsWallet,
                     AppLocalizations.of(context)!.genNewKeyPair,

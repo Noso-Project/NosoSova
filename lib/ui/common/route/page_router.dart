@@ -174,57 +174,25 @@ class PageRouter {
   }
 
   static void routeGvt(BuildContext context) {
-    if (Responsive.isMobile(context)) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: locator<WalletBloc>(),
-              ),
-              BlocProvider<GvtBloc>(create: (context) {
-                var bloc = GvtBloc(repositories: locator<Repositories>(), walletBloc: locator<WalletBloc>());
-                bloc.add(LoadGvts());
-                return bloc;
-              }),
-            ],
-            child: const GvtPage(),
-          ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: locator<WalletBloc>(),
+            ),
+            BlocProvider<GvtBloc>(create: (context) {
+              var bloc = GvtBloc(
+                  repositories: locator<Repositories>(),
+                  walletBloc: locator<WalletBloc>());
+              bloc.add(LoadGvts());
+              return bloc;
+            }),
+          ],
+          child: const GvtPage(),
         ),
-      );
-    } else {
-      WoltModalSheet.show(
-        context: context,
-        pageListBuilder: (BuildContext _) {
-          return [
-            WoltModalSheetPage(
-                topBarTitle: Text(AppLocalizations.of(context)!.contact,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.dialogTitle),
-                trailingNavBarWidget: IconButton(
-                  padding: const EdgeInsets.all(20),
-                  icon: const Icon(Icons.close),
-                  onPressed: Navigator.of(context).pop,
-                ),
-                hasSabGradient: false,
-                isTopBarLayerAlwaysVisible: true,
-                child: MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(
-                      value: locator<WalletBloc>(),
-                    ),
-                    BlocProvider<GvtBloc>(create: (context) {
-                      var bloc = locator<GvtBloc>();
-                      bloc.add(LoadGvts());
-                      return bloc;
-                    }),
-                  ],
-                  child: const GvtPage(),
-                ))
-          ];
-        },
-      );
-    }
+      ),
+    );
   }
 }

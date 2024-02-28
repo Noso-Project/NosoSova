@@ -5,6 +5,7 @@ import 'package:nososova/ui/theme/style/text_style.dart';
 import '../../generated/assets.dart';
 import '../../models/rest_api/transaction_history.dart';
 import '../../utils/other_utils.dart';
+import '../config/responsive.dart';
 import '../theme/style/colors.dart';
 
 class TransactionTile extends StatefulWidget {
@@ -52,9 +53,13 @@ class TransactionTileState extends State<TransactionTile> {
         children: [
           Expanded(
             child: Text(
-                OtherUtils.hashObfuscation(widget.receiver
-                    ? widget.transactionHistory.sender
-                    : widget.transactionHistory.receiver),
+                Responsive.isMobile(context)
+                    ? OtherUtils.hashObfuscation(widget.receiver
+                        ? widget.transactionHistory.sender
+                        : widget.transactionHistory.receiver)
+                    : widget.receiver
+                        ? widget.transactionHistory.sender
+                        : widget.transactionHistory.receiver,
                 style: AppTextStyles.walletHash),
           ),
           Text(

@@ -61,7 +61,7 @@ class _AddressListTileState extends State<AddressListTile> {
       return BlinkingWidget(
           widget: AppIconsStyle.icon3x2(Assets.iconsNodeI),
           startBlinking: true,
-          duration: 500);
+          duration: 1000);
     }
 
     if (!widget.address.nodeStatusOn && widget.address.nodeStatusOn) {

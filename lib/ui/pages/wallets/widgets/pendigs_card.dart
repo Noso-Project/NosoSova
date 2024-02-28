@@ -18,34 +18,36 @@ class PendingCard extends StatelessWidget {
     var isIncoming = incoming > 0;
 
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(AppLocalizations.of(context)!.incoming,
-            style: AppTextStyles.infoItemValue
-                .copyWith(color: Colors.white.withOpacity(0.5))),
-        BlinkingWidget(
-            widget: Text(incoming.toStringAsFixed(5),
-                style: AppTextStyles.infoItemValue.copyWith(
-                    color: isIncoming
-                        ? CustomColors.positiveBalance
-                        : Colors.white.withOpacity(0.8))),
-            startBlinking: isIncoming,
-            duration: 1000)
+      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(AppLocalizations.of(context)!.incoming,
+              style: AppTextStyles.infoItemValue
+                  .copyWith(color: Colors.white.withOpacity(0.5))),
+          BlinkingWidget(
+              widget: Text(incoming.toStringAsFixed(5),
+                  style: AppTextStyles.infoItemValue.copyWith(
+                      color: isIncoming
+                          ? CustomColors.positiveBalance
+                          : Colors.white.withOpacity(0.8))),
+              startBlinking: isIncoming,
+              duration: 1000)
+        ]),
+        const SizedBox(width: 20),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(AppLocalizations.of(context)!.outgoing,
+              style: AppTextStyles.infoItemValue
+                  .copyWith(color: Colors.white.withOpacity(0.5))),
+          BlinkingWidget(
+              widget: Text(outgoing.toStringAsFixed(5),
+                  style: AppTextStyles.infoItemValue.copyWith(
+                    color: isOutgoing
+                        ? CustomColors.negativeBalance
+                        : Colors.white.withOpacity(0.8),
+                  )),
+              startBlinking: isOutgoing,
+              duration: 1000)
+        ])
       ]),
-      const SizedBox(width: 20),
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(AppLocalizations.of(context)!.outgoing,
-            style: AppTextStyles.infoItemValue
-                .copyWith(color: Colors.white.withOpacity(0.5))),
-        BlinkingWidget(
-            widget: Text(outgoing.toStringAsFixed(5),
-                style: AppTextStyles.infoItemValue.copyWith(
-                  color: isOutgoing
-                      ? CustomColors.negativeBalance
-                      : Colors.white.withOpacity(0.8),
-                )),
-            startBlinking: isOutgoing,
-            duration: 1000)
-      ])
     ]);
   }
 }

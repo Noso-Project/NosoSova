@@ -9,6 +9,7 @@ import 'package:nososova/utils/network_const.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../../models/app/gvt_owner.dart';
+import '../../config/responsive.dart';
 import '../../theme/style/text_style.dart';
 import '../../tiles/tile_gvt_my.dart';
 import '../../tiles/tile_gvt_owner.dart';
@@ -39,53 +40,72 @@ class _GvtPageState extends State<GvtPage> with SingleTickerProviderStateMixin {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          iconTheme: const IconThemeData(color: Colors.white),
+          //   iconTheme: const IconThemeData(color: Colors.white),
+          centerTitle: false,
           title: const Text("GVTs"),
           elevation: 0,
         ),
         body: BlocBuilder<GvtBloc, GvtState>(
             key: _keyBloc,
             builder: (context, state) {
+              if (!Responsive.isMobile(context)) {
+                return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                          flex: 4, child: SafeArea(child: _tabsContent(state))),
+                      Container(
+                          width: 370,
+                          height: double.infinity,
+                          color: Theme.of(context).colorScheme.background,
+                          child: GvtCardHead(gvtsTotal: state.myGvts.length))
+                    ]);
+              }
               return Column(children: [
                 GvtCardHead(gvtsTotal: state.myGvts.length),
-                const SizedBox(height: 10),
-                if (state.statusFetch == ApiStatus.loading)
-                  const Expanded(child: LoadingWidget()),
-                if (state.statusFetch == ApiStatus.error)
-                  Expanded(child: EmptyWidget(
-                      title: AppLocalizations.of(context)!.errorLoading)),
-                if (state.statusFetch == ApiStatus.connected)
-                  TabBar(
-                      controller: _tabController,
-                      indicatorPadding:
-                          const EdgeInsets.symmetric(horizontal: 20),
-                      onTap: (index) {
-                        setState(() {
-                          selectIndexTab = index;
-                        });
-                      },
-                      tabs: [
-                        Tab(
-                            child: Text(
-                                AppLocalizations.of(context)!.myListGvts,
-                                style: selectIndexTab == 0
-                                    ? AppTextStyles.tabActive
-                                    : AppTextStyles.tabInActive)),
-                        Tab(
-                            child: Text(
-                                AppLocalizations.of(context)!.viewGvtsList,
-                                style: selectIndexTab == 1
-                                    ? AppTextStyles.tabActive
-                                    : AppTextStyles.tabInActive))
-                      ]),
-                const SizedBox(height: 10),
-                if (state.statusFetch == ApiStatus.connected)   Expanded(
-                    child: TabBarView(controller: _tabController, children: [
-                  _myGvt(state.myGvts),
-                  _listViewGvts(state.gvts)
-                ]))
+                Expanded(child: _tabsContent(state))
               ]);
             }));
+  }
+
+  _tabsContent(GvtState state) {
+    return Column(children: [
+      const SizedBox(height: 10),
+      if (state.statusFetch == ApiStatus.loading)
+        const Expanded(child: LoadingWidget()),
+      if (state.statusFetch == ApiStatus.error)
+        Expanded(
+            child:
+                EmptyWidget(title: AppLocalizations.of(context)!.errorLoading)),
+      if (state.statusFetch == ApiStatus.connected)
+        TabBar(
+            controller: _tabController,
+            indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
+            onTap: (index) {
+              setState(() {
+                selectIndexTab = index;
+              });
+            },
+            tabs: [
+              Tab(
+                  child: Text(AppLocalizations.of(context)!.myListGvts,
+                      style: selectIndexTab == 0
+                          ? AppTextStyles.tabActive
+                          : AppTextStyles.tabInActive)),
+              Tab(
+                  child: Text(AppLocalizations.of(context)!.viewGvtsList,
+                      style: selectIndexTab == 1
+                          ? AppTextStyles.tabActive
+                          : AppTextStyles.tabInActive))
+            ]),
+      const SizedBox(height: 10),
+      if (state.statusFetch == ApiStatus.connected)
+        Expanded(
+            child: TabBarView(
+                controller: _tabController,
+                children: [_myGvt(state.myGvts), _listViewGvts(state.gvts)]))
+    ]);
   }
 
   _myGvt(List<Gvt> myGvts) {

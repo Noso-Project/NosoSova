@@ -118,7 +118,7 @@ class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
                                       title: Text(
                                           _getFormattedDate(
                                               transaction.timestamp),
-                                          style: AppTextStyles.infoItemValue)),
+                                          style: AppTextStyles.infoItemValue.copyWith(color: Colors.black.withOpacity(0.4)))),
                                   TransactionTile(
                                       transactionHistory: transaction,
                                       receiver: isReceiver,
