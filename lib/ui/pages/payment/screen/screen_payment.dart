@@ -18,6 +18,7 @@ import '../../../../models/app/response_page_listener.dart';
 import '../../../../models/rest_api/transaction_history.dart';
 import '../../../common/responses_util/response_widget_id.dart';
 import '../../../common/responses_util/snackbar_message.dart';
+import '../../../config/responsive.dart';
 import '../../../theme/style/text_style.dart';
 import '../../../tiles/tile_select_address.dart';
 import '../../transaction/screen/widget_transaction.dart';
@@ -140,185 +141,196 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
+  _buildSender() {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(AppLocalizations.of(context)!.sender,
+          textAlign: TextAlign.start,
+          style:
+              AppTextStyles.itemMedium.copyWith(fontWeight: FontWeight.w600)),
+      Container(
+          decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(5.0)),
+          width: double.infinity,
+          child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: targetAddress.hash.isEmpty
+                  ? SelectAddressListTile(
+                      onTap: () => DialogRouter.showDialogSellAddress(
+                          context,
+                          targetAddress,
+                          (selAddress) => refreshAddress(selAddress)))
+                  : AddressListTile(
+                      address: targetAddress,
+                      onLong: () {},
+                      onTap: () => DialogRouter.showDialogSellAddress(
+                          context,
+                          targetAddress,
+                          (selAddress) => refreshAddress(selAddress)))))
+    ]);
+  }
+
+  _buildButtonPay() {
+    return Center(
+        key: containerKey,
+        child: SwipeableButtonView(
+            isActive: statusConsensus == ConsensusStatus.error
+                ? false
+                : isActiveButtonSend,
+            buttonText: AppLocalizations.of(context)!.send,
+            buttonWidget:
+                const Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey),
+            activeColor: Theme.of(context).colorScheme.primary,
+            onWaitingProcess: () => sendOrder(),
+            onFinish: () {}));
+  }
+
+  _buildMobile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: SingleChildScrollView(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const SizedBox(height: 10),
+          _buildSender(),
+          _buildForms(),
+          const SizedBox(height: 30),
+          _buildButtonPay(),
+          const SizedBox(height: 30),
+        ]),
+      ),
+    );
+  }
+
+  _buildDesktop() {
+    return Expanded(
+        flex: 2,
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: _buildForms()),
+                const SizedBox(width: 20),
+                Expanded(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [_buildSender(), _buildButtonPay()],
+                ))
+              ],
+            )));
+  }
+
+  _buildForms() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(AppLocalizations.of(context)!.receiver,
+              textAlign: TextAlign.start,
+              style: AppTextStyles.itemMedium
+                  .copyWith(fontWeight: FontWeight.w600)),
+          Row(children: [
+            IconButton(
+                padding: EdgeInsets.zero,
+                tooltip: AppLocalizations.of(context)!.tooltipSelMyWallet,
+                onPressed: () => DialogRouter.showDialogSellAddress(
+                    context,
+                    Address(hash: "", publicKey: "", privateKey: ""),
+                    isReceiver: true,
+                    (selAddress) => refreshReceiver(selAddress.hash)),
+                icon: const Icon(Icons.credit_card)),
+            IconButton(
+                padding: EdgeInsets.zero,
+                tooltip: AppLocalizations.of(context)!.tooltipSelContact,
+                onPressed: () => DialogRouter.showDialogSellContact(
+                    context, (p0) => refreshReceiver(p0.hash)),
+                icon: const Icon(Icons.contacts)),
+            IconButton(
+                padding: EdgeInsets.zero,
+                tooltip: AppLocalizations.of(context)!.tooltipPasteFromBuffer,
+                onPressed: () => pasteReceiver(),
+                icon: const Icon(Icons.paste))
+          ])
+        ]),
+        const SizedBox(height: 10),
+        TextField(
+            maxLength: 33,
+            onChanged: (text) => checkButtonActive(null),
+            controller: receiverController,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9@*+\-_:]')),
+            ],
+            style: AppTextStyles.textField,
+            decoration: AppTextFiledDecoration.defaultDecoration(
+                AppLocalizations.of(context)!.receiver)),
+        Text(
+          AppLocalizations.of(context)!.amount,
+          textAlign: TextAlign.start,
+          style: AppTextStyles.itemMedium.copyWith(fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 10),
+        TextField(
+            onChanged: (text) => checkButtonActive(null),
+            controller: amountController,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+              TextInputFormatter.withFunction((oldValue, newValue) {
+                var value =
+                    double.parse(newValue.text.isEmpty ? "0" : newValue.text);
+                if (value <= targetAddress.availableBalance) {
+                  return newValue;
+                }
+
+                return oldValue;
+              })
+            ],
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            style: AppTextStyles.textField,
+            decoration: AppTextFiledDecoration.defaultDecoration("0.0000000")),
+        const SizedBox(height: 20),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          buttonPercent(25),
+          buttonPercent(50),
+          buttonPercent(75),
+          buttonPercent(100)
+        ]),
+        const SizedBox(height: 30),
+        TextField(
+            maxLength: 120,
+            controller: messageController,
+            style: AppTextStyles.textField,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]'))
+            ],
+            decoration: AppTextFiledDecoration.defaultDecoration(
+                AppLocalizations.of(context)!.message)),
+        const SizedBox(height: 10),
+        Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.commission,
+                style: AppTextStyles.infoItemTitle,
+              ),
+              const SizedBox(height: 5),
+              Text((commission).toStringAsFixed(8),
+                  style: AppTextStyles.infoItemValue)
+            ]),
+        const SizedBox(height: 30),
+        const SizedBox(height: 30),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),
         child: !isResultWidget
-            ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        Text(AppLocalizations.of(context)!.sender,
-                            textAlign: TextAlign.start,
-                            style: AppTextStyles.itemMedium
-                                .copyWith(fontWeight: FontWeight.w600)),
-                        Container(
-                            decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(5.0)),
-                            width: double.infinity,
-                            child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 15),
-                                child: targetAddress.hash.isEmpty
-                                    ? SelectAddressListTile(
-                                        onTap: () =>
-                                            DialogRouter.showDialogSellAddress(
-                                                context,
-                                                targetAddress,
-                                                (selAddress) =>
-                                                    refreshAddress(selAddress)))
-                                    : AddressListTile(
-                                        address: targetAddress,
-                                        onLong: () {},
-                                        onTap: () =>
-                                            DialogRouter.showDialogSellAddress(
-                                                context,
-                                                targetAddress,
-                                                (selAddress) => refreshAddress(
-                                                    selAddress))))),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(AppLocalizations.of(context)!.receiver,
-                                  textAlign: TextAlign.start,
-                                  style: AppTextStyles.itemMedium
-                                      .copyWith(fontWeight: FontWeight.w600)),
-                              Row(children: [
-                                IconButton(
-                                    padding: EdgeInsets.zero,
-                                    tooltip: AppLocalizations.of(context)!
-                                        .tooltipSelMyWallet,
-                                    onPressed: () =>
-                                        DialogRouter.showDialogSellAddress(
-                                            context,
-                                            Address(
-                                                hash: "",
-                                                publicKey: "",
-                                                privateKey: ""),
-                                            isReceiver: true,
-                                            (selAddress) => refreshReceiver(
-                                                selAddress.hash)),
-                                    icon: const Icon(Icons.credit_card)),
-                                IconButton(
-                                    padding: EdgeInsets.zero,
-                                    tooltip: AppLocalizations.of(context)!
-                                        .tooltipSelContact,
-                                    onPressed: () =>
-                                        DialogRouter.showDialogSellContact(
-                                            context,
-                                            (p0) => refreshReceiver(p0.hash)),
-                                    icon: const Icon(Icons.contacts)),
-                                IconButton(
-                                    padding: EdgeInsets.zero,
-                                    tooltip: AppLocalizations.of(context)!
-                                        .tooltipPasteFromBuffer,
-                                    onPressed: () => pasteReceiver(),
-                                    icon: const Icon(Icons.paste))
-                              ])
-                            ]),
-                        const SizedBox(height: 10),
-                        TextField(
-                            maxLength: 33,
-                            onChanged: (text) => checkButtonActive(null),
-                            controller: receiverController,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'[a-zA-Z0-9@*+\-_:]')),
-                            ],
-                            style: AppTextStyles.textField,
-                            decoration:
-                                AppTextFiledDecoration.defaultDecoration(
-                                    AppLocalizations.of(context)!.receiver)),
-                        Text(
-                          AppLocalizations.of(context)!.amount,
-                          textAlign: TextAlign.start,
-                          style: AppTextStyles.itemMedium
-                              .copyWith(fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(height: 10),
-                        TextField(
-                            onChanged: (text) => checkButtonActive(null),
-                            controller: amountController,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d+\.?\d*')),
-                              TextInputFormatter.withFunction(
-                                  (oldValue, newValue) {
-                                var value = double.parse(newValue.text.isEmpty
-                                    ? "0"
-                                    : newValue.text);
-                                if (value <= targetAddress.availableBalance) {
-                                  return newValue;
-                                }
-
-                                return oldValue;
-                              })
-                            ],
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            style: AppTextStyles.textField,
-                            decoration:
-                                AppTextFiledDecoration.defaultDecoration(
-                                    "0.0000000")),
-                        const SizedBox(height: 20),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              buttonPercent(25),
-                              buttonPercent(50),
-                              buttonPercent(75),
-                              buttonPercent(100)
-                            ]),
-                        const SizedBox(height: 30),
-                        TextField(
-                            maxLength: 120,
-                            controller: messageController,
-                            style: AppTextStyles.textField,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'[a-zA-Z0-9]'))
-                            ],
-                            decoration:
-                                AppTextFiledDecoration.defaultDecoration(
-                                    AppLocalizations.of(context)!.message)),
-                        const SizedBox(height: 10),
-                        Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.commission,
-                                style: AppTextStyles.infoItemTitle,
-                              ),
-                              const SizedBox(height: 5),
-                              Text((commission).toStringAsFixed(8),
-                                  style: AppTextStyles.infoItemValue)
-                            ]),
-                        const SizedBox(height: 30),
-                        Center(
-                            key: containerKey,
-                            child: SwipeableButtonView(
-                                isActive:
-                                    statusConsensus == ConsensusStatus.error
-                                        ? false
-                                        : isActiveButtonSend,
-                                buttonText: AppLocalizations.of(context)!.send,
-                                buttonWidget: const Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color: Colors.grey),
-                                activeColor:
-                                    Theme.of(context).colorScheme.primary,
-                                onWaitingProcess: () => sendOrder(),
-                                onFinish: () {})),
-                        const SizedBox(height: 30),
-                      ]),
-                ),
-              )
+            ? Responsive.isMobile(Navigator.of(context).context)
+                ? _buildMobile()
+                : _buildDesktop()
             : TransactionWidgetInfo(
                 transaction: transactionHistory,
                 isReceiver: false,
