@@ -202,27 +202,30 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   _buildDesktop() {
-    return Expanded(
-        flex: 2,
-        child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Row(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: _buildForms(),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child: _buildForms()),
-                const SizedBox(width: 20),
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildSender(),
-                    _buildCommission(),
-                    _buildButtonPay()
-                  ],
-                ))
+                _buildSender(),
+                _buildCommission(),
+                _buildButtonPay()
               ],
-            )));
+            ),
+          )
+        ],
+      ),
+    );
   }
+
 
   _buildForms() {
     return Column(
