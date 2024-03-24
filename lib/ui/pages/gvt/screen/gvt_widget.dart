@@ -7,9 +7,9 @@ import '../../../theme/decoration/gvt/gvt_gradient_decoration_round.dart';
 import '../../../theme/style/text_style.dart';
 
 class GvtCardHead extends StatelessWidget {
-  int gvtsTotal = 0;
+  final int gvtsTotal;
 
-  GvtCardHead({super.key, required this.gvtsTotal});
+  const GvtCardHead({super.key, required this.gvtsTotal});
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:flutter/foundation.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:nososova/database/address.dart';
 import 'package:path/path.dart' as p;
@@ -101,44 +100,10 @@ class MyDatabase extends _$MyDatabase {
 LazyDatabase _openConnection() {
   var nameDatabase = 'db.sqlite';
 
-  Future<void> moveDatabase() async {
-    try {
-      var pathDestin = Platform.isMacOS
-          ? await getLibraryDirectory()
-          : await getApplicationSupportDirectory();
-      String destinationPath = "${pathDestin.path}/database";
-      var path = await getApplicationDocumentsDirectory();
-      final newFile = File('$destinationPath/$nameDatabase');
-      File sourceFile = File(p.join("${path.path}/NosoSova", nameDatabase));
-
-      if (kDebugMode) {
-        print(sourceFile.existsSync());
-      }
-      if (!newFile.existsSync() && sourceFile.existsSync()) {
-        File destinationFile = await newFile.create(recursive: true);
-        await sourceFile.copy(destinationFile.path);
-
-        if (kDebugMode) {
-          print('File successfully moved to $destinationPath.');
-        }
-      } else {
-        if (kDebugMode) {
-          print('SKIP NOT FOUND DB');
-        }
-        return;
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error move database $e");
-      }
-    }
-  }
-
   return LazyDatabase(() async {
     String dbFolder;
 
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-      await moveDatabase();
       var path = Platform.isMacOS
           ? await getLibraryDirectory()
           : await getApplicationSupportDirectory();

@@ -314,7 +314,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           DebugType.success));
     } else {
       _debugBloc.add(AddStringDebug(
-          "Error creating a backup wallet. Be careful \Error ->  ${backup.message}",
+          "Error creating a backup wallet. Be careful \nError ->  ${backup.message}",
           DebugType.error));
     }
   }
@@ -658,24 +658,6 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         myPending: myPendings,
         totalIncoming: totalIncoming,
         totalOutgoing: totalOutgoing);
-  }
-
-  int _getTrxCount() {
-    var calculateListAddress = state.wallet.address;
-    var pendingsList = state.wallet.pendings;
-    int countTrx = 0;
-
-    for (var address in calculateListAddress) {
-      List<Pending> foundReceivers = pendingsList
-          .where((other) => other.receiver == address.hash)
-          .toList();
-      List<Pending> foundSenders =
-          pendingsList.where((other) => other.sender == address.hash).toList();
-
-      countTrx += foundReceivers.length + foundSenders.length;
-    }
-
-    return countTrx == 0 ? 1 : countTrx;
   }
 
   /// This method receives a file and processes its contents, and returns the contents of the file for confirmation

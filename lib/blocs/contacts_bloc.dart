@@ -52,9 +52,4 @@ class ContactsBloc extends Bloc<ContactsEvents, ContactsState> {
   _deleteContact(event, emit) async {
     _repositories.localRepository.deleteContact(event.contact);
   }
-
-  @override
-  Future<void> close() {
-    return super.close();
-  }
 }
