@@ -1,3 +1,5 @@
+## v.0.3.5
+
 ## v.0.2.5-beta (Version for App Store and Google Play)
 
 - Corrections are required to publish apps to the app store.
