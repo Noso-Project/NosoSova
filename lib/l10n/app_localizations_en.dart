@@ -504,4 +504,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emptyGvts => 'No GVTs found in your wallet';
+
+  @override
+  String get viewAddressItem => 'Style address element';
+
+  @override
+  String get interface => 'Interface';
 }

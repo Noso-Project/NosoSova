@@ -165,5 +165,7 @@
   "gvtAbout": "Noso 的治理代币（GVT）赋予持有者对项目相关事项进行投票的权力，使他们能够提议并参与投票活动。一个 GVT 相当于一票。今后，个人可以通过 NosoSova 钱包内的 Noso/GVT 交易获得 GVT 代币.",
   "myListGvts": "我的GvT",
   "viewGvtsList": "概述",
-  "emptyGvts": "您的钱包中未找到 GVT"
+  "emptyGvts": "您的钱包中未找到 GVT",
+  "viewAddressItem" : "地址元素的样式",
+  "interface": "接口"
 }

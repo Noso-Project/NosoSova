@@ -504,4 +504,10 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get emptyGvts => 'Ваш гаманець не містить жодного GVT';
+
+  @override
+  String get viewAddressItem => 'Стиль елементу адреси';
+
+  @override
+  String get interface => 'Інтерфейс';
 }

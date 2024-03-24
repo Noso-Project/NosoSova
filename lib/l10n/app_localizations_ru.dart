@@ -504,4 +504,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get emptyGvts => 'В вашем кошельке нет GVT';
+
+  @override
+  String get viewAddressItem => 'Стиль элемента адреса';
+
+  @override
+  String get interface => 'Интерфейс';
 }

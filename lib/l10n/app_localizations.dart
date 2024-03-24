@@ -1104,6 +1104,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No GVTs found in your wallet'**
   String get emptyGvts;
+
+  /// No description provided for @viewAddressItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Style address element'**
+  String get viewAddressItem;
+
+  /// No description provided for @interface.
+  ///
+  /// In en, this message translates to:
+  /// **'Interface'**
+  String get interface;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -504,4 +504,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get emptyGvts => 'Nenhum GVT encontrado na sua carteira';
+
+  @override
+  String get viewAddressItem => 'Estilo do elemento de endereço';
+
+  @override
+  String get interface => 'Interface';
 }

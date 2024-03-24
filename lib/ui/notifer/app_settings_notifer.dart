@@ -16,6 +16,7 @@ class AppSettings with ChangeNotifier {
   String get selectLanguage => _selectLanguage;
 
   String get getSelectLanguage => localeList[_selectLanguage] ?? "English";
+
   String get getAppVersion => _appVersion;
 
   final Map<String, String> localeList = {

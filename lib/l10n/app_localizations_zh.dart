@@ -504,4 +504,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get emptyGvts => '您的钱包中未找到 GVT';
+
+  @override
+  String get viewAddressItem => '地址元素的样式';
+
+  @override
+  String get interface => '接口';
 }

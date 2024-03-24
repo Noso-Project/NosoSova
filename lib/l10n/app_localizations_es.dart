@@ -504,4 +504,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get emptyGvts => 'No se encontraron GVT en tu billetera';
+
+  @override
+  String get viewAddressItem => 'Estilo del elemento de dirección';
+
+  @override
+  String get interface => 'Interfaz';
 }

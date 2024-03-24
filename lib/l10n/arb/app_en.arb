@@ -165,5 +165,7 @@
   "gvtAbout": "Noso's Governance Token (GVT) empowers holders to vote on project-related matters, enabling them to propose and participate in voting activities. One GVT equals one vote. In the future, individuals will be able to acquire GVT tokens through Noso/GVT trading within the NosoSova wallet.",
   "myListGvts": "My GvT",
   "viewGvtsList" : "Overview",
-  "emptyGvts" : "No GVTs found in your wallet"
+  "emptyGvts" : "No GVTs found in your wallet",
+  "viewAddressItem" : "Style address element",
+  "interface" : "Interface"
 }
