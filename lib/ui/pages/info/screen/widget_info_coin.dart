@@ -80,7 +80,9 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                                       .read<CoinInfoBloc>()
                                       .add(LoadPriceHistory())),
                           IconButton(
-                            tooltip: isVisibleAction ? AppLocalizations.of(context)!.hideMoreInfo : AppLocalizations.of(context)!.showMoreInfo,
+                              tooltip: isVisibleAction
+                                  ? AppLocalizations.of(context)!.hideMoreInfo
+                                  : AppLocalizations.of(context)!.showMoreInfo,
                               padding: EdgeInsets.zero,
                               onPressed: () {
                                 setState(() {
@@ -108,9 +110,28 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                     height: 120,
                     width: double.infinity,
                     child: LineChart(LineChartData(
+                        lineTouchData: LineTouchData(
+                          enabled: true,
+                          touchTooltipData: LineTouchTooltipData(
+                            getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                              return touchedSpots
+                                  .map((LineBarSpot touchedSpot) {
+                                return LineTooltipItem(
+                                  touchedSpot.y.toString(),
+                                  TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              }).toList();
+                            },
+                            tooltipBgColor:
+                                Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                         gridData: const FlGridData(show: false),
                         titlesData: const FlTitlesData(show: false),
-                        lineTouchData: const LineTouchData(enabled: true),
                         borderData: FlBorderData(show: false),
                         lineBarsData: [
                           LineChartBarData(
@@ -135,7 +156,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                                               (color) => color.withOpacity(0.3))
                                           .toList())))
                         ]))),
-                  if (isVisibleAction)   const SizedBox(height: 10),
+              if (isVisibleAction) const SizedBox(height: 10),
             ])),
         if (infoCoin.apiStatus == ApiStatus.error) ...[
           Padding(
