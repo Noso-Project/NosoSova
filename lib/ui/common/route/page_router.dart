@@ -12,6 +12,7 @@ import '../../../blocs/history_transactions_bloc.dart';
 import '../../../blocs/wallet_bloc.dart';
 import '../../../dependency_injection.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../main.dart';
 import '../../../models/address_wallet.dart';
 import '../../../models/rest_api/transaction_history.dart';
 import '../../../repositories/repositories.dart';
@@ -41,15 +42,19 @@ class PageRouter {
       );
     } else {
       WoltModalSheet.show(
-        minDialogWidth: 550,
-        context: context,
+        maxDialogWidth: 1100,
+        minDialogWidth: 850,
+        context: NavigationService.navigatorKey.currentContext ?? context,
         pageListBuilder: (BuildContext _) {
           return [
             WoltModalSheetPage(
+                topBarTitle: Text(AppLocalizations.of(context)!.sendCoins,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.dialogTitle),
                 trailingNavBarWidget: IconButton(
                   padding: const EdgeInsets.all(20),
                   icon: const Icon(Icons.close),
-                  onPressed: Navigator.of(context).pop,
+                  onPressed: Navigator.of(_).pop,
                 ),
                 hasSabGradient: false,
                 isTopBarLayerAlwaysVisible: true,
@@ -107,7 +112,7 @@ class PageRouter {
       );
     } else {
       WoltModalSheet.show(
-        context: context,
+        context: NavigationService.navigatorKey.currentContext ?? context,
         minDialogWidth: 500,
         pageListBuilder: (BuildContext _) {
           return [
@@ -142,7 +147,7 @@ class PageRouter {
       );
     } else {
       WoltModalSheet.show(
-        context: context,
+        context: NavigationService.navigatorKey.currentContext ?? context,
         pageListBuilder: (BuildContext _) {
           return [
             WoltModalSheetPage(
@@ -152,7 +157,7 @@ class PageRouter {
                 trailingNavBarWidget: IconButton(
                   padding: const EdgeInsets.all(20),
                   icon: const Icon(Icons.close),
-                  onPressed: Navigator.of(context).pop,
+                  onPressed: Navigator.of(_).pop,
                 ),
                 hasSabGradient: false,
                 isTopBarLayerAlwaysVisible: true,

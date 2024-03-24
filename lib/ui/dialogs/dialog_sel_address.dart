@@ -2,29 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 
-import '../../l10n/app_localizations.dart';
 import '../../models/address_wallet.dart';
-import '../theme/style/text_style.dart';
 import '../tiles/tile_wallet_address.dart';
 
 class DialogSellAddress extends StatefulWidget {
   final Address targetAddress;
   final Function(Address) selected;
-  final isReceiver;
 
   const DialogSellAddress(
-      {super.key,
-      required this.targetAddress,
-      required this.selected,
-      this.isReceiver = false});
+      {super.key, required this.targetAddress, required this.selected});
 
   @override
   State createState() => DialogSellAddressState();
 }
 
 class DialogSellAddressState extends State<DialogSellAddress> {
-  final ScrollController _controller = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WalletBloc, WalletState>(builder: (context, state) {
@@ -33,21 +25,6 @@ class DialogSellAddressState extends State<DialogSellAddress> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.sellAddress,
-                      style: AppTextStyles.dialogTitle,
-                    ),
-                    Text(
-                      "(${widget.isReceiver ? AppLocalizations.of(context)!.receiver : AppLocalizations.of(context)!.sender})",
-                      style: AppTextStyles.textHiddenMedium(context),
-                    )
-                  ])),
           const SizedBox(height: 0),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -55,7 +32,7 @@ class DialogSellAddressState extends State<DialogSellAddress> {
             height: MediaQuery.of(context).size.height * 0.4,
             child: ListView.builder(
               shrinkWrap: true,
-              controller: _controller,
+              //   controller: _controller,
               padding:
                   const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
               itemCount: listAddress.length,

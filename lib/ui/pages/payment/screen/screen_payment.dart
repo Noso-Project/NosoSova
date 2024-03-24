@@ -193,7 +193,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           const SizedBox(height: 10),
           _buildSender(),
           _buildForms(),
-          const SizedBox(height: 30),
+          _buildCommission(),
           _buildButtonPay(),
           const SizedBox(height: 30),
         ]),
@@ -214,7 +214,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 Expanded(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [_buildSender(), _buildButtonPay()],
+                  children: [
+                    _buildSender(),
+                    _buildCommission(),
+                    _buildButtonPay()
+                  ],
                 ))
               ],
             )));
@@ -304,23 +308,27 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ],
             decoration: AppTextFiledDecoration.defaultDecoration(
                 AppLocalizations.of(context)!.message)),
-        const SizedBox(height: 10),
-        Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.commission,
-                style: AppTextStyles.infoItemTitle,
-              ),
-              const SizedBox(height: 5),
-              Text((commission).toStringAsFixed(8),
-                  style: AppTextStyles.infoItemValue)
-            ]),
-        const SizedBox(height: 30),
-        const SizedBox(height: 30),
       ],
     );
+  }
+
+  _buildCommission() {
+    return Column(children: [
+      const SizedBox(height: 10),
+      Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.commission,
+              style: AppTextStyles.infoItemTitle,
+            ),
+            const SizedBox(height: 5),
+            Text((commission).toStringAsFixed(8),
+                style: AppTextStyles.infoItemValue)
+          ]),
+      const SizedBox(height: 20)
+    ]);
   }
 
   @override

@@ -40,6 +40,10 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+class NavigationService {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+}
+
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
@@ -55,6 +59,7 @@ class MyApp extends StatelessWidget {
         listenable: _appSettings,
         builder: (BuildContext context, Widget? child) {
           return MaterialApp(
+            navigatorKey: NavigationService.navigatorKey,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
             darkTheme:

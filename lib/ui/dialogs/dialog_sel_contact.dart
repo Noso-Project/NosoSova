@@ -37,25 +37,10 @@ class _DialogSellContactState extends State<DialogSellContact> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.sellAddress,
-                      style: AppTextStyles.dialogTitle,
-                    ),
-                    Text(
-                      "(${AppLocalizations.of(context)!.receiver})",
-                      style: AppTextStyles.textHiddenMedium(context),
-                    )
-                  ])),
-          const SizedBox(height: 0),
           if (contacts.isEmpty)
-            Expanded(
-                child: EmptyWidget(
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 70),
+                child:  EmptyWidget(
                     title: AppLocalizations.of(context)!.empty,
                     descrpt: AppLocalizations.of(context)!.contactEmpty)),
           if (contacts.isNotEmpty)
