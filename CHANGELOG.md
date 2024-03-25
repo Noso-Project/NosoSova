@@ -1,5 +1,16 @@
 ## v.0.3.5
 
+- Added display of active exchanges
+- Display of own and all GVTs
+- Fixed price display error
+- Added the ability to choose the display of the address on the main page
+- Added Chine translation
+- Fixed the display of dialogue boxes in the Desktop version
+- Improvements to the interface of the desktop version
+- Translation updates
+- Fixed errors on mobile devices
+- Fixed errors when sending coins
+
 ## v.0.2.5-beta (Version for App Store and Google Play)
 
 - Corrections are required to publish apps to the app store.
@@ -11,7 +22,8 @@
 - Updated the algorithm for obtaining seeds.
 - Added support for dark theme.
 - Added the ability to change the language of the application.
-- Implemented the relocation of application files to more secure directories depending on the platform.
+- Implemented the relocation of application files to more secure directories depending on the
+  platform.
 - Added the ability to view detailed data about your nodes.
 - Added contacts.
 - Added automatic backup of your wallet.
@@ -33,7 +45,8 @@
 - Added the ability to change the sender on the payment creation page.
 - Added the ability to view pending.
 - Added support for macOs. (min target 10.15)
-- Added a stop system that stops the connection after 5 unsuccessful attempts. (The connection is stopped and can only be restored manually)
+- Added a stop system that stops the connection after 5 unsuccessful attempts. (The connection is
+  stopped and can only be restored manually)
 - Improved user interface and user experience.
 - Correction of translations.
 - Switching to using NosoDart, removing NosoCore code.
@@ -53,4 +66,5 @@
 
 ## v0.1.0-alpha
 
-* This version has been closedly tested. It does not contain all the features, they should be expected in the next releases
+* This version has been closedly tested. It does not contain all the features, they should be
+  expected in the next releases
