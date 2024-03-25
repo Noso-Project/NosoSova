@@ -202,7 +202,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           _buildSender(),
           _buildForms(),
           const SizedBox(height: 20),
-          if (targetAddress.nodeStatusOn) _buildLockedCoins(),
+          if (targetAddress.nodeStatusOn || targetAddress.outgoing > 0.0) _buildLockedCoins(),
           _buildCommission(),
           _buildButtonPay(),
           const SizedBox(height: 30),
@@ -227,7 +227,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               children: [
                 _buildSender(),
                 const SizedBox(height: 20),
-                if (targetAddress.nodeStatusOn) _buildLockedCoins(),
+                if (targetAddress.nodeStatusOn || targetAddress.outgoing > 0.0) _buildLockedCoins(),
                 _buildCommission(),
                 _buildButtonPay()
               ],
@@ -355,7 +355,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     .copyWith(color: CustomColors.negativeBalance)),
             const SizedBox(height: 5),
             Text(
-                "${(NosoUtility.getCountMonetToRunNode()).toStringAsFixed(5)} NOSO",
+
+                "${targetAddress.nodeStatusOn  ? (NosoUtility.getCountMonetToRunNode()).toStringAsFixed(5)  : targetAddress.outgoing} NOSO" ,
                 style: AppTextStyles.infoItemValue
                     .copyWith(color: CustomColors.negativeBalance))
           ]),
@@ -429,15 +430,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
             NosoUtility.getCountMonetToRunNode())
         : targetAddress.availableBalance;
     double value =
-        double.parse(((percent / 100) * balanceAddress).toStringAsFixed(7));
+        double.parse(((percent / 100) * balanceAddress).toStringAsFixed(8));
     var valueAmount = percent == 100 ? (value - getFee(value)) : value;
 
     return OutlinedButton(
         onPressed: () {
-          if (targetAddress.hash.isNotEmpty && targetAddress.balance != 0) {
+          if (targetAddress.hash.isNotEmpty && targetAddress.balance != 0 && valueAmount >= getFee(value)) {
             setState(() {
-              amountController.text = valueAmount.toStringAsFixed(7);
-              selButton = double.parse(valueAmount.toStringAsFixed(7));
+              amountController.text = valueAmount.toStringAsFixed(8);
+              selButton = double.parse(valueAmount.toStringAsFixed(8));
 
               checkButtonActive(valueAmount);
             });
@@ -445,11 +446,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
         },
         style: OutlinedButton.styleFrom(
           backgroundColor:
-              selButton == double.parse(valueAmount.toStringAsFixed(7))
+              selButton == double.parse(valueAmount.toStringAsFixed(8))
                   ? Theme.of(context).colorScheme.primary
                   : Colors.transparent,
           side: BorderSide(
-              color: selButton == double.parse(valueAmount.toStringAsFixed(7))
+              color: selButton == double.parse(valueAmount.toStringAsFixed(8))
                   ? Theme.of(context).colorScheme.background.withOpacity(0.5)
                   : Colors.grey),
           shape: RoundedRectangleBorder(
@@ -462,11 +463,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: selButton ==
-                            double.parse(valueAmount.toStringAsFixed(7))
+                            double.parse(valueAmount.toStringAsFixed(8))
                         ? FontWeight.bold
                         : FontWeight.normal,
                     color: selButton ==
-                            double.parse(valueAmount.toStringAsFixed(7))
+                            double.parse(valueAmount.toStringAsFixed(8))
                         ? Theme.of(context).colorScheme.onPrimary
                         : Theme.of(context).colorScheme.onSurface))));
   }
