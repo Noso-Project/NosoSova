@@ -39,7 +39,7 @@ class AddressListTileState extends State<AddressNodeTile> {
         style: AppTextStyles.walletHash,
       ),
       subtitle: Text(
-        "${messageSubtitle()} (${widget.address.seedNodeOn})",
+        messageSubtitle(),
         style: AppTextStyles.textHiddenSmall(context),
       ),
       onTap: () => DialogRouter.showDialogNodeInfo(context, widget.address),
@@ -48,10 +48,10 @@ class AddressListTileState extends State<AddressNodeTile> {
 
   messageSubtitle() {
     if (widget.address.nodeStatusOn) {
-      return AppLocalizations.of(context)!.hintStatusNodeRun;
+      return "${AppLocalizations.of(context)!.hintStatusNodeRun} (${widget.address.seedNodeOn})";
     }
 
-    if (!widget.address.nodeStatusOn && widget.address.nodeStatusOn) {
+    if (!widget.address.nodeStatusOn) {
       return AppLocalizations.of(context)!.hintStatusNodeNonRun;
     }
 

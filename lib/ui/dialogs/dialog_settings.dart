@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:nososova/models/address_wallet.dart';
+import 'package:nososova/ui/tiles/tile_wallet_address.dart';
 import 'package:nososova/utils/social_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
@@ -7,7 +9,9 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 import '../../dependency_injection.dart';
 import '../../generated/assets.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/address_tile_style.dart';
 import '../config/responsive.dart';
+import '../notifer/address_tile_style_notifer.dart';
 import '../notifer/app_settings_notifer.dart';
 import '../theme/style/button_style.dart';
 import '../theme/style/sizes.dart';
@@ -19,6 +23,8 @@ class DialogSettings {
     const double pageBreakpoint = 768.0;
     final pageIndexNotifier = ValueNotifier(0);
     final appSettings = locator<AppSettings>();
+    final AddressStyleNotifier settingsStyleAddressTile =
+        locator<AddressStyleNotifier>();
 
     openLink(String valLink) async {
       var link = Uri.parse(valLink);
@@ -178,6 +184,30 @@ class DialogSettings {
                                   pageIndexNotifier.value =
                                       pageIndexNotifier.value + 1;
                                 }),
+                            Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 10),
+                                child: Text(
+                                  AppLocalizations.of(context)!.interface,
+                                  style: AppTextStyles.dialogTitle,
+                                )),
+                            ListTile(
+                                title: Text(
+                                  AppLocalizations.of(context)!.viewAddressItem,
+                                  style: AppTextStyles.itemMedium,
+                                ),
+                                subtitle: Text(
+                                  settingsStyleAddressTile
+                                              .getStyleAddressTile ==
+                                          AddressTileStyle.sCustom
+                                      ? "Custom"
+                                      : "Default",
+                                  style: AppTextStyles.textHiddenSmall(context),
+                                ),
+                                onTap: () {
+                                  pageIndexNotifier.value =
+                                      pageIndexNotifier.value + 2;
+                                }),
                             const SizedBox(height: 10)
                           ],
                         );
@@ -268,6 +298,98 @@ class DialogSettings {
       );
     }
 
+    ///TODO In the future, it is better to work out the choice of the address display style
+    SliverWoltModalSheetPage pageDisplayAddress(
+        BuildContext modalSheetContext, TextTheme textTheme) {
+      Widget buildItemStyleAddress(Address mAddress, Function(int) select,
+          int value, String title, AddressTileStyle style) {
+        return Column(children: [
+          ListTile(
+            leading: Radio<int>(
+              value: value,
+              groupValue: settingsStyleAddressTile.getStyleAddressTile ==
+                      AddressTileStyle.sDefault
+                  ? 0
+                  : 1,
+              onChanged: (value) => select(value ?? 0),
+            ),
+            title: Text(title),
+            onTap: () => select(value),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 40),
+            child: AddressListTile(
+                address: mAddress, onLong: null, onTap: null, style: style),
+          )
+        ]);
+      }
+
+      var mAddress = Address(
+          hash: 'Hash',
+          publicKey: '',
+          privateKey: '',
+          custom: "Alias",
+          description: "Description (In other cases alias/hash)");
+
+      return SliverWoltModalSheetPage(
+        enableDrag: false,
+        leadingNavBarWidget: IconButton(
+          padding: const EdgeInsets.all(pagePadding),
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () =>
+              pageIndexNotifier.value = pageIndexNotifier.value - 2,
+        ),
+        trailingNavBarWidget: IconButton(
+          padding: const EdgeInsets.all(pagePadding),
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            Navigator.of(modalSheetContext).pop();
+            pageIndexNotifier.value = 0;
+          },
+        ),
+        mainContentSlivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: 1,
+              (_, index) => Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: ListenableBuilder(
+                      listenable: appSettings,
+                      builder: (BuildContext context, Widget? child) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: Responsive.isMobile(context)
+                                        ? CustomSizes.paddingDialogMobile
+                                        : CustomSizes.paddingDialogDesktop,
+                                    horizontal:
+                                        CustomSizes.paddingDialogVertical),
+                                child: Text(
+                                  AppLocalizations.of(context)!.viewAddressItem,
+                                  style: AppTextStyles.dialogTitle,
+                                )),
+                            buildItemStyleAddress(mAddress, (sel) {
+                              settingsStyleAddressTile.setStyleAddressTile(0);
+                              pageIndexNotifier.value =
+                                  pageIndexNotifier.value - 2;
+                            }, 0, "Default", AddressTileStyle.sDefault),
+                            buildItemStyleAddress(mAddress, (sel) {
+                              settingsStyleAddressTile.setStyleAddressTile(1);
+                              pageIndexNotifier.value =
+                                  pageIndexNotifier.value - 2;
+                            }, 1, "Custom", AddressTileStyle.sCustom),
+                            const SizedBox(height: 30),
+                          ],
+                        );
+                      })),
+            ),
+          )
+        ],
+      );
+    }
+
     WoltModalSheet.show<void>(
       pageIndexNotifier: pageIndexNotifier,
       context: context,
@@ -278,6 +400,7 @@ class DialogSettings {
           pageHomeInformation(modalSheetContext, textTheme),
           pageSettings(modalSheetContext, textTheme),
           pageSetLocale(modalSheetContext, textTheme),
+          pageDisplayAddress(modalSheetContext, textTheme),
         ];
       },
       modalTypeBuilder: (context) {

@@ -40,6 +40,10 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+class NavigationService {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+}
+
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
@@ -51,21 +55,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-
-  /*  if (Platform.isAndroid || Platform.isIOS) {
-      ScreenUtil.init(context, designSize: const Size(360, 690));
-    } else {
-      ScreenUtil.init(context,
-          designSize: const Size(1000, 800), minTextAdapt: true, );
-      ScreenUtil().setSp(22);
-    }
-
-   */
-
     return ListenableBuilder(
         listenable: _appSettings,
         builder: (BuildContext context, Widget? child) {
           return MaterialApp(
+            navigatorKey: NavigationService.navigatorKey,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
             darkTheme:

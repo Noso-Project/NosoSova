@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../common/route/page_router.dart';
 import '../../../dialogs/dialog_info_network.dart';
 import '../../../dialogs/dialog_settings.dart';
 import '../../../dialogs/dialog_wallet_actions.dart';
@@ -23,6 +24,29 @@ class SideRightBarDesktop extends StatelessWidget {
                 const Card(child: DialogInfoNetwork(isVisibleDropInfo: true)),
                 const SizedBox(height: 10),
                 const Card(child: DialogWalletActions(isVisibleDropInfo: true)),
+                const SizedBox(height: 10),
+                Card(
+                    child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: CustomSizes.paddingDialogVertical),
+                        title: Text(AppLocalizations.of(context)!.contact,
+                            style: AppTextStyles.dialogTitle),
+                        onTap: () => PageRouter.routeContacts(context),
+                        trailing: Icon(Icons.navigate_next,
+                            size: 28,
+                            color: Theme.of(context).colorScheme.onSurface))),
+                const SizedBox(height: 10),
+                Card(
+                    child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: CustomSizes.paddingDialogVertical),
+                        title: Text("GVTs", style: AppTextStyles.dialogTitle),
+                        onTap: () => PageRouter.routeGvt(context),
+                        trailing: Icon(Icons.navigate_next,
+                            size: 28,
+                            color: Theme.of(context).colorScheme.onSurface))),
                 const SizedBox(height: 10),
                 Card(
                     child: ListTile(

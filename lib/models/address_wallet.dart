@@ -19,6 +19,8 @@ class Address extends AddressObject {
 
   String seedNodeOn = "";
 
+  final String? description;
+
   Address({
     required String hash,
     String? custom,
@@ -32,6 +34,7 @@ class Address extends AddressObject {
     double outgoing = 0,
     this.rewardDay = 0,
     this.nodeStatusOn = false,
+    this.description,
   }) : super(
           hash: hash,
           custom: custom,

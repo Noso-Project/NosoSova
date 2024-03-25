@@ -7,19 +7,22 @@ import 'package:nososova/ui/theme/style/text_style.dart';
 import '../../generated/assets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/address_wallet.dart';
+import '../../utils/address_tile_style.dart';
 import '../theme/style/icons_style.dart';
 
 class AddressListTile extends StatefulWidget {
-  final VoidCallback onLong;
-  final VoidCallback onTap;
+  final VoidCallback? onLong;
+  final VoidCallback? onTap;
   final Address address;
+  final AddressTileStyle style;
 
-  const AddressListTile({
-    Key? key,
-    required this.address,
-    required this.onLong,
-    required this.onTap,
-  }) : super(key: key);
+  const AddressListTile(
+      {Key? key,
+      required this.address,
+      required this.onLong,
+      required this.onTap,
+      this.style = AddressTileStyle.sDefault})
+      : super(key: key);
 
   @override
   State createState() => _AddressListTileState();
@@ -32,28 +35,61 @@ class _AddressListTileState extends State<AddressListTile> {
         message: messageTooltip(),
         child: GestureDetector(
             onSecondaryTap: widget.onLong,
-            child: ListTile(
-                contentPadding: const EdgeInsets.only(left: 10, right: 15),
-                leading: _iconAddress(),
-                title: Text(
-                  Responsive.isMobile(context)
-                      ? widget.address.hashPublic
-                      : widget.address.hash,
-                  style: AppTextStyles.walletHash,
-                ),
-                subtitle: Text(
-                  widget.address.custom ?? "",
-                  style: AppTextStyles.textHiddenSmall(context),
-                ),
-                trailing: Text(
-                  widget.address.balance == 0
-                      ? "0.00"
-                      : widget.address.balance.toStringAsFixed(5),
-                  style: AppTextStyles.walletBalance,
-                ),
-                onLongPress: widget.onLong,
-                dense: true,
-                onTap: widget.onTap)));
+            child: widget.style == AddressTileStyle.sDefault
+                ? _styleDefault()
+                : _styleCustom()));
+  }
+
+  _styleDefault() {
+    return ListTile(
+        contentPadding: const EdgeInsets.only(left: 10, right: 15),
+        leading: _iconAddress(),
+        title: Text(
+          _getHashSize(),
+          style: AppTextStyles.walletHash,
+        ),
+        subtitle: Text(
+          widget.address.custom ?? "",
+          style: AppTextStyles.textHiddenSmall(context),
+        ),
+        trailing: Text(
+          widget.address.balance == 0
+              ? "0.00"
+              : widget.address.balance.toStringAsFixed(5),
+          style: AppTextStyles.walletBalance,
+        ),
+        onLongPress: widget.onLong,
+        dense: true,
+        onTap: widget.onTap);
+  }
+
+  _styleCustom() {
+    return ListTile(
+        contentPadding: const EdgeInsets.only(left: 10, right: 15, top: 10, bottom: 10),
+        leading: _iconAddress(),
+        title: Text(
+          widget.address.description ?? _getTitleHash(),
+          style: AppTextStyles.walletHash,
+        ),
+        trailing: Text(
+          widget.address.balance == 0
+              ? "0.00"
+              : widget.address.balance.toStringAsFixed(5),
+          style: AppTextStyles.walletBalance,
+        ),
+        onLongPress: widget.onLong,
+        dense: true,
+        onTap: widget.onTap);
+  }
+
+  _getTitleHash() {
+    return widget.address.custom ?? _getHashSize();
+  }
+
+  _getHashSize() {
+    return Responsive.isMobile(context)
+        ? widget.address.hashPublic
+        : widget.address.hash;
   }
 
   Widget _iconAddress() {
@@ -61,7 +97,7 @@ class _AddressListTileState extends State<AddressListTile> {
       return BlinkingWidget(
           widget: AppIconsStyle.icon3x2(Assets.iconsNodeI),
           startBlinking: true,
-          duration: 500);
+          duration: 1000);
     }
 
     if (!widget.address.nodeStatusOn && widget.address.nodeStatusOn) {

@@ -160,5 +160,14 @@
   "hideMoreInfo": "Informationen ausblenden",
   "yes": "Ja",
   "no": "Nein",
-  "issueDialogDeleteContact": "Möchten Sie den Kontakt wirklich löschen?"
+  "issueDialogDeleteContact": "Möchten Sie den Kontakt wirklich löschen?",
+  "whatGvt": "Was ist GVT?",
+  "gvtAbout": "Der Governance-Token (GVT) von Noso ermöglicht es den Inhabern, über projektbezogene Angelegenheiten abzustimmen und sich an Abstimmungen zu beteiligen. Ein GVT entspricht einer Stimme. In der Zukunft werden Einzelpersonen GVT-Token durch den Handel von Noso/GVT innerhalb der NosoSova-Wallet erwerben können.",
+  "myListGvts": "Meine GvTs",
+  "viewGvtsList": "Übersicht",
+  "emptyGvts": "Keine GVTs in Ihrem Wallet gefunden",
+  "viewAddressItem" : "Stil des Adresseelements",
+  "interface": "Schnittstelle",
+  "lockedCoins" : "Gesperrte Münzen",
+  "exchanges": "Börsen"
 }

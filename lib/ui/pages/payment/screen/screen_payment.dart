@@ -6,18 +6,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:nososova/ui/common/route/dialog_router.dart';
 import 'package:nososova/ui/theme/decoration/textfield_decoration.dart';
+import 'package:nososova/ui/theme/style/colors.dart';
 import 'package:nososova/ui/tiles/tile_wallet_address.dart';
+import 'package:nososova/utils/address_tile_style.dart';
 import 'package:nososova/utils/network_const.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
 
 import '../../../../blocs/events/wallet_events.dart';
 import '../../../../blocs/wallet_bloc.dart';
+import '../../../../dependency_injection.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/address_wallet.dart';
 import '../../../../models/app/response_page_listener.dart';
 import '../../../../models/rest_api/transaction_history.dart';
 import '../../../common/responses_util/response_widget_id.dart';
 import '../../../common/responses_util/snackbar_message.dart';
+import '../../../config/responsive.dart';
+import '../../../notifer/address_tile_style_notifer.dart';
 import '../../../theme/style/text_style.dart';
 import '../../../tiles/tile_select_address.dart';
 import '../../transaction/screen/widget_transaction.dart';
@@ -47,6 +52,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   bool isResultWidget = false;
   late TransactionHistory transactionHistory;
   late ConsensusStatus statusConsensus = ConsensusStatus.error;
+  final AddressStyleNotifier _settingsStyleAddressTile =
+      locator<AddressStyleNotifier>();
 
   @override
   void initState() {
@@ -140,185 +147,232 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
+  _buildSender() {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(AppLocalizations.of(context)!.sender,
+          textAlign: TextAlign.start,
+          style:
+              AppTextStyles.itemMedium.copyWith(fontWeight: FontWeight.w600)),
+      Container(
+          decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(5.0)),
+          width: double.infinity,
+          child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: targetAddress.hash.isEmpty
+                  ? SelectAddressListTile(
+                      onTap: () => DialogRouter.showDialogSellAddress(
+                          context,
+                          targetAddress,
+                          (selAddress) => refreshAddress(selAddress)))
+                  : AddressListTile(
+                      address: targetAddress,
+                      onLong: null,
+                      style: _settingsStyleAddressTile.getStyleAddressTile ??
+                          AddressTileStyle.sDefault,
+                      onTap: () => DialogRouter.showDialogSellAddress(
+                          context,
+                          targetAddress,
+                          (selAddress) => refreshAddress(selAddress)))))
+    ]);
+  }
+
+  _buildButtonPay() {
+    return Center(
+        key: containerKey,
+        child: SwipeableButtonView(
+            isActive: statusConsensus == ConsensusStatus.error
+                ? false
+                : isActiveButtonSend,
+            buttonText: AppLocalizations.of(context)!.send,
+            buttonWidget:
+                const Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey),
+            activeColor: Theme.of(context).colorScheme.primary,
+            onWaitingProcess: () => sendOrder(),
+            onFinish: () {}));
+  }
+
+  _buildMobile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: SingleChildScrollView(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const SizedBox(height: 10),
+          _buildSender(),
+          _buildForms(),
+          const SizedBox(height: 20),
+          if (targetAddress.nodeStatusOn || targetAddress.outgoing > 0.0)
+            _buildLockedCoins(),
+          _buildCommission(),
+          _buildButtonPay(),
+          const SizedBox(height: 30),
+        ]),
+      ),
+    );
+  }
+
+  _buildDesktop() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: _buildForms(),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildSender(),
+                const SizedBox(height: 20),
+                if (targetAddress.nodeStatusOn || targetAddress.outgoing > 0.0)
+                  _buildLockedCoins(),
+                _buildCommission(),
+                _buildButtonPay()
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  _buildForms() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(AppLocalizations.of(context)!.receiver,
+              textAlign: TextAlign.start,
+              style: AppTextStyles.itemMedium
+                  .copyWith(fontWeight: FontWeight.w600)),
+          Row(children: [
+            IconButton(
+                padding: EdgeInsets.zero,
+                tooltip: AppLocalizations.of(context)!.tooltipSelMyWallet,
+                onPressed: () => DialogRouter.showDialogSellAddress(
+                    context,
+                    Address(hash: "", publicKey: "", privateKey: ""),
+                    isReceiver: true,
+                    (selAddress) => refreshReceiver(selAddress.hash)),
+                icon: const Icon(Icons.credit_card)),
+            IconButton(
+                padding: EdgeInsets.zero,
+                tooltip: AppLocalizations.of(context)!.tooltipSelContact,
+                onPressed: () => DialogRouter.showDialogSellContact(
+                    context, (p0) => refreshReceiver(p0.hash)),
+                icon: const Icon(Icons.contacts)),
+            IconButton(
+                padding: EdgeInsets.zero,
+                tooltip: AppLocalizations.of(context)!.tooltipPasteFromBuffer,
+                onPressed: () => pasteReceiver(),
+                icon: const Icon(Icons.paste))
+          ])
+        ]),
+        const SizedBox(height: 10),
+        TextField(
+            maxLength: 33,
+            onChanged: (text) => checkButtonActive(null),
+            controller: receiverController,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9@*+\-_:]')),
+            ],
+            style: AppTextStyles.textField,
+            decoration: AppTextFiledDecoration.defaultDecoration(
+                AppLocalizations.of(context)!.receiver)),
+        Text(
+          AppLocalizations.of(context)!.amount,
+          textAlign: TextAlign.start,
+          style: AppTextStyles.itemMedium.copyWith(fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 10),
+        TextField(
+            onChanged: (text) => checkButtonActive(null),
+            controller: amountController,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+              TextInputFormatter.withFunction((oldValue, newValue) {
+                var value =
+                    double.parse(newValue.text.isEmpty ? "0" : newValue.text);
+                if (value <= targetAddress.availableBalance) {
+                  return newValue;
+                }
+
+                return oldValue;
+              })
+            ],
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            style: AppTextStyles.textField,
+            decoration: AppTextFiledDecoration.defaultDecoration("0.0000000")),
+        const SizedBox(height: 20),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          buttonPercent(25),
+          buttonPercent(50),
+          buttonPercent(75),
+          buttonPercent(100)
+        ]),
+        const SizedBox(height: 30),
+        TextField(
+            maxLength: 120,
+            controller: messageController,
+            style: AppTextStyles.textField,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]'))
+            ],
+            decoration: AppTextFiledDecoration.defaultDecoration(
+                AppLocalizations.of(context)!.message)),
+      ],
+    );
+  }
+
+  _buildCommission() {
+    return Column(children: [
+      Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.commission,
+              style: AppTextStyles.infoItemTitle,
+            ),
+            const SizedBox(height: 5),
+            Text("${(commission).toStringAsFixed(8)} NOSO",
+                style: AppTextStyles.infoItemValue)
+          ]),
+      const SizedBox(height: 20)
+    ]);
+  }
+
+  _buildLockedCoins() {
+    return Column(children: [
+      Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(AppLocalizations.of(context)!.lockedCoins,
+                style: AppTextStyles.infoItemTitle
+                    .copyWith(color: CustomColors.negativeBalance)),
+            const SizedBox(height: 5),
+            Text(
+                "${targetAddress.nodeStatusOn ? (NosoUtility.getCountMonetToRunNode()).toStringAsFixed(5) : targetAddress.outgoing} NOSO",
+                style: AppTextStyles.infoItemValue
+                    .copyWith(color: CustomColors.negativeBalance))
+          ]),
+      const SizedBox(height: 10)
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),
         child: !isResultWidget
-            ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        Text(AppLocalizations.of(context)!.sender,
-                            textAlign: TextAlign.start,
-                            style: AppTextStyles.itemMedium
-                                .copyWith(fontWeight: FontWeight.w600)),
-                        Container(
-                            decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(5.0)),
-                            width: double.infinity,
-                            child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 15),
-                                child: targetAddress.hash.isEmpty
-                                    ? SelectAddressListTile(
-                                        onTap: () =>
-                                            DialogRouter.showDialogSellAddress(
-                                                context,
-                                                targetAddress,
-                                                (selAddress) =>
-                                                    refreshAddress(selAddress)))
-                                    : AddressListTile(
-                                        address: targetAddress,
-                                        onLong: () {},
-                                        onTap: () =>
-                                            DialogRouter.showDialogSellAddress(
-                                                context,
-                                                targetAddress,
-                                                (selAddress) => refreshAddress(
-                                                    selAddress))))),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(AppLocalizations.of(context)!.receiver,
-                                  textAlign: TextAlign.start,
-                                  style: AppTextStyles.itemMedium
-                                      .copyWith(fontWeight: FontWeight.w600)),
-                              Row(children: [
-                                IconButton(
-                                    padding: EdgeInsets.zero,
-                                    tooltip: AppLocalizations.of(context)!
-                                        .tooltipSelMyWallet,
-                                    onPressed: () =>
-                                        DialogRouter.showDialogSellAddress(
-                                            context,
-                                            Address(
-                                                hash: "",
-                                                publicKey: "",
-                                                privateKey: ""),
-                                            isReceiver: true,
-                                            (selAddress) => refreshReceiver(
-                                                selAddress.hash)),
-                                    icon: const Icon(Icons.credit_card)),
-                                IconButton(
-                                    padding: EdgeInsets.zero,
-                                    tooltip: AppLocalizations.of(context)!
-                                        .tooltipSelContact,
-                                    onPressed: () =>
-                                        DialogRouter.showDialogSellContact(
-                                            context,
-                                            (p0) => refreshReceiver(p0.hash)),
-                                    icon: const Icon(Icons.contacts)),
-                                IconButton(
-                                    padding: EdgeInsets.zero,
-                                    tooltip: AppLocalizations.of(context)!
-                                        .tooltipPasteFromBuffer,
-                                    onPressed: () => pasteReceiver(),
-                                    icon: const Icon(Icons.paste))
-                              ])
-                            ]),
-                        const SizedBox(height: 10),
-                        TextField(
-                            maxLength: 33,
-                            onChanged: (text) => checkButtonActive(null),
-                            controller: receiverController,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'[a-zA-Z0-9@*+\-_:]')),
-                            ],
-                            style: AppTextStyles.textField,
-                            decoration:
-                                AppTextFiledDecoration.defaultDecoration(
-                                    AppLocalizations.of(context)!.receiver)),
-                        Text(
-                          AppLocalizations.of(context)!.amount,
-                          textAlign: TextAlign.start,
-                          style: AppTextStyles.itemMedium
-                              .copyWith(fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(height: 10),
-                        TextField(
-                            onChanged: (text) => checkButtonActive(null),
-                            controller: amountController,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d+\.?\d*')),
-                              TextInputFormatter.withFunction(
-                                  (oldValue, newValue) {
-                                var value = double.parse(newValue.text.isEmpty
-                                    ? "0"
-                                    : newValue.text);
-                                if (value <= targetAddress.availableBalance) {
-                                  return newValue;
-                                }
-
-                                return oldValue;
-                              })
-                            ],
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            style: AppTextStyles.textField,
-                            decoration:
-                                AppTextFiledDecoration.defaultDecoration(
-                                    "0.0000000")),
-                        const SizedBox(height: 20),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              buttonPercent(25),
-                              buttonPercent(50),
-                              buttonPercent(75),
-                              buttonPercent(100)
-                            ]),
-                        const SizedBox(height: 30),
-                        TextField(
-                            maxLength: 120,
-                            controller: messageController,
-                            style: AppTextStyles.textField,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'[a-zA-Z0-9]'))
-                            ],
-                            decoration:
-                                AppTextFiledDecoration.defaultDecoration(
-                                    AppLocalizations.of(context)!.message)),
-                        const SizedBox(height: 10),
-                        Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.commission,
-                                style: AppTextStyles.infoItemTitle,
-                              ),
-                              const SizedBox(height: 5),
-                              Text((commission).toStringAsFixed(8),
-                                  style: AppTextStyles.infoItemValue)
-                            ]),
-                        const SizedBox(height: 30),
-                        Center(
-                            key: containerKey,
-                            child: SwipeableButtonView(
-                                isActive:
-                                    statusConsensus == ConsensusStatus.error
-                                        ? false
-                                        : isActiveButtonSend,
-                                buttonText: AppLocalizations.of(context)!.send,
-                                buttonWidget: const Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color: Colors.grey),
-                                activeColor:
-                                    Theme.of(context).colorScheme.primary,
-                                onWaitingProcess: () => sendOrder(),
-                                onFinish: () {})),
-                        const SizedBox(height: 30),
-                      ]),
-                ),
-              )
+            ? Responsive.isMobile(Navigator.of(context).context)
+                ? _buildMobile()
+                : _buildDesktop()
             : TransactionWidgetInfo(
                 transaction: transactionHistory,
                 isReceiver: false,
@@ -372,16 +426,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   buttonPercent(int percent) {
-    double value = double.parse(
-        ((percent / 100) * targetAddress.availableBalance).toStringAsFixed(7));
+    var balanceAddress = targetAddress.nodeStatusOn
+        ? (targetAddress.availableBalance -
+            NosoUtility.getCountMonetToRunNode())
+        : targetAddress.availableBalance;
+    double value =
+        double.parse(((percent / 100) * balanceAddress).toStringAsFixed(8));
     var valueAmount = percent == 100 ? (value - getFee(value)) : value;
 
     return OutlinedButton(
         onPressed: () {
-          if (targetAddress.hash.isNotEmpty && targetAddress.balance != 0) {
+          if (targetAddress.hash.isNotEmpty &&
+              targetAddress.balance != 0 &&
+              valueAmount >= getFee(value)) {
             setState(() {
-              amountController.text = valueAmount.toStringAsFixed(7);
-              selButton = double.parse(valueAmount.toStringAsFixed(7));
+              amountController.text = valueAmount.toStringAsFixed(8);
+              selButton = double.parse(valueAmount.toStringAsFixed(8));
 
               checkButtonActive(valueAmount);
             });
@@ -389,11 +449,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
         },
         style: OutlinedButton.styleFrom(
           backgroundColor:
-              selButton == double.parse(valueAmount.toStringAsFixed(7))
+              selButton == double.parse(valueAmount.toStringAsFixed(8))
                   ? Theme.of(context).colorScheme.primary
                   : Colors.transparent,
           side: BorderSide(
-              color: selButton == double.parse(valueAmount.toStringAsFixed(7))
+              color: selButton == double.parse(valueAmount.toStringAsFixed(8))
                   ? Theme.of(context).colorScheme.background.withOpacity(0.5)
                   : Colors.grey),
           shape: RoundedRectangleBorder(
@@ -406,11 +466,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: selButton ==
-                            double.parse(valueAmount.toStringAsFixed(7))
+                            double.parse(valueAmount.toStringAsFixed(8))
                         ? FontWeight.bold
                         : FontWeight.normal,
                     color: selButton ==
-                            double.parse(valueAmount.toStringAsFixed(7))
+                            double.parse(valueAmount.toStringAsFixed(8))
                         ? Theme.of(context).colorScheme.onPrimary
                         : Theme.of(context).colorScheme.onSurface))));
   }

@@ -11,6 +11,7 @@ import 'app_localizations_es.dart';
 import 'app_localizations_pt.dart';
 import 'app_localizations_ru.dart';
 import 'app_localizations_uk.dart';
+import 'app_localizations_zh.dart';
 
 /// Callers can lookup localized strings with an instance of AppLocalizations
 /// returned by `AppLocalizations.of(context)`.
@@ -98,7 +99,8 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('pt'),
     Locale('ru'),
-    Locale('uk')
+    Locale('uk'),
+    Locale('zh')
   ];
 
   /// No description provided for @incoming.
@@ -1072,6 +1074,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Do you really want to delete contact?'**
   String get issueDialogDeleteContact;
+
+  /// No description provided for @whatGvt.
+  ///
+  /// In en, this message translates to:
+  /// **'What is GVT?'**
+  String get whatGvt;
+
+  /// No description provided for @gvtAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Noso\'s Governance Token (GVT) empowers holders to vote on project-related matters, enabling them to propose and participate in voting activities. One GVT equals one vote. In the future, individuals will be able to acquire GVT tokens through Noso/GVT trading within the NosoSova wallet.'**
+  String get gvtAbout;
+
+  /// No description provided for @myListGvts.
+  ///
+  /// In en, this message translates to:
+  /// **'My GvT'**
+  String get myListGvts;
+
+  /// No description provided for @viewGvtsList.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get viewGvtsList;
+
+  /// No description provided for @emptyGvts.
+  ///
+  /// In en, this message translates to:
+  /// **'No GVTs found in your wallet'**
+  String get emptyGvts;
+
+  /// No description provided for @viewAddressItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Style address element'**
+  String get viewAddressItem;
+
+  /// No description provided for @interface.
+  ///
+  /// In en, this message translates to:
+  /// **'Interface'**
+  String get interface;
+
+  /// No description provided for @lockedCoins.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked Coins'**
+  String get lockedCoins;
+
+  /// No description provided for @exchanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Exchanges'**
+  String get exchanges;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -1083,7 +1139,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'pt', 'ru', 'uk'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'pt', 'ru', 'uk', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1100,6 +1156,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'pt': return AppLocalizationsPt();
     case 'ru': return AppLocalizationsRu();
     case 'uk': return AppLocalizationsUk();
+    case 'zh': return AppLocalizationsZh();
   }
 
   throw FlutterError(

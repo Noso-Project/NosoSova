@@ -11,6 +11,7 @@ import '../../../../models/app/stats.dart';
 import '../../../../utils/date_utils.dart';
 import '../../../../utils/network_const.dart';
 import '../../../common/widgets/custom/dasher_divider.dart';
+import '../../../common/widgets/exchange_list.dart';
 import '../../../common/widgets/item_info_widget.dart';
 import '../../../config/responsive.dart';
 import '../../../theme/style/text_style.dart';
@@ -31,7 +32,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -80,7 +81,9 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                                       .read<CoinInfoBloc>()
                                       .add(LoadPriceHistory())),
                           IconButton(
-                            tooltip: isVisibleAction ? AppLocalizations.of(context)!.hideMoreInfo : AppLocalizations.of(context)!.showMoreInfo,
+                              tooltip: isVisibleAction
+                                  ? AppLocalizations.of(context)!.hideMoreInfo
+                                  : AppLocalizations.of(context)!.showMoreInfo,
                               padding: EdgeInsets.zero,
                               onPressed: () {
                                 setState(() {
@@ -108,9 +111,28 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                     height: 120,
                     width: double.infinity,
                     child: LineChart(LineChartData(
+                        lineTouchData: LineTouchData(
+                          enabled: true,
+                          touchTooltipData: LineTouchTooltipData(
+                            getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                              return touchedSpots
+                                  .map((LineBarSpot touchedSpot) {
+                                return LineTooltipItem(
+                                  touchedSpot.y.toString(),
+                                  TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              }).toList();
+                            },
+                            tooltipBgColor:
+                                Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                         gridData: const FlGridData(show: false),
                         titlesData: const FlTitlesData(show: false),
-                        lineTouchData: const LineTouchData(enabled: true),
                         borderData: FlBorderData(show: false),
                         lineBarsData: [
                           LineChartBarData(
@@ -135,7 +157,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                                               (color) => color.withOpacity(0.3))
                                           .toList())))
                         ]))),
-                  if (isVisibleAction)   const SizedBox(height: 10),
+              if (isVisibleAction) const SizedBox(height: 10),
             ])),
         if (infoCoin.apiStatus == ApiStatus.error) ...[
           Padding(
@@ -201,13 +223,20 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                     child: Text(AppLocalizations.of(context)!.masternodes,
                         style: selectIndexTab == 1
                             ? AppTextStyles.tabActive
+                            : AppTextStyles.tabInActive)),
+                Tab(
+                    child: Text(AppLocalizations.of(context)!.exchanges,
+                        style: selectIndexTab == 1
+                            ? AppTextStyles.tabActive
                             : AppTextStyles.tabInActive))
               ]),
           const SizedBox(height: 10),
           Expanded(
-              child: TabBarView(
-                  controller: _tabController,
-                  children: [information(infoCoin), masterNodes(infoCoin, 0)]))
+              child: TabBarView(controller: _tabController, children: [
+            information(infoCoin),
+            masterNodes(infoCoin, 0),
+            const ExchangeList()
+          ]))
         ]
       ]);
     });

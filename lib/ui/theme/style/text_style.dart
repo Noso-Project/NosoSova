@@ -13,7 +13,6 @@ class AppTextStyles {
         fontWeight: FontWeight.w400);
   }
 
-
   static TextStyle textHiddenMedium(BuildContext context) {
     return TextStyle(
         fontSize: _medBigSizeText,
@@ -22,64 +21,92 @@ class AppTextStyles {
         fontWeight: FontWeight.w400);
   }
 
-  static TextStyle tabActive = TextStyle(
-      fontSize: _medBigSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w600);
-
-  static TextStyle tabInActive = TextStyle(
-      fontSize: _medBigSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w400);
-
-  static TextStyle infoItemValue = TextStyle(
-      fontSize: _mediumSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w600);
-
-  static TextStyle infoItemTitle = TextStyle(
-      fontSize: _mediumSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w400);
-
-  static TextStyle priceValue = const TextStyle(
-      fontSize: 32,
+  static TextStyle tabActive = const TextStyle(
+      fontSize: _medBigSizeText,
       fontFamily: "Gilroy",
       fontWeight: FontWeight.w600);
 
-  static TextStyle categoryStyle = TextStyle(
+  static TextStyle tabInActive = const TextStyle(
+      fontSize: _medBigSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w400);
+
+  static TextStyle infoItemValue = const TextStyle(
+      fontSize: _mediumSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w600);
+
+  static TextStyle infoItemTitle = const TextStyle(
+      fontSize: _mediumSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w400);
+
+  static TextStyle priceValue = const TextStyle(
+      fontSize: 32, fontFamily: "Gilroy", fontWeight: FontWeight.w600);
+
+  static TextStyle categoryStyle = const TextStyle(
       fontSize: 22, fontFamily: "Gilroy", fontWeight: FontWeight.w700);
 
-  static TextStyle walletHash = TextStyle(
-      fontSize: _mediumSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w600);
+  static TextStyle walletHash = const TextStyle(
+      fontSize: _mediumSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w600);
 
-  static TextStyle walletBalance = TextStyle(
-      fontSize: _mediumSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w600);
+  static TextStyle walletBalance = const TextStyle(
+      fontSize: _mediumSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w600);
 
-  static TextStyle titleMessage = TextStyle(
-      fontSize: _medBigSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w600);
+  static TextStyle titleMessage = const TextStyle(
+      fontSize: _medBigSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w600);
 
-  static TextStyle subTitleMessage = TextStyle(
-      fontSize: _mediumSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w400);
+  static TextStyle subTitleMessage = const TextStyle(
+      fontSize: _mediumSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w400);
 
-  static TextStyle dialogTitle = TextStyle(
+  static TextStyle dialogTitle = const TextStyle(
       fontSize: 20, fontFamily: "Gilroy", fontWeight: FontWeight.w600);
 
-  static TextStyle itemMedium = TextStyle(
-      fontSize: _medBigSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w400);
+  static TextStyle itemMedium = const TextStyle(
+      fontSize: _medBigSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w400);
 
-  static TextStyle balance = TextStyle(
+  static TextStyle balance = const TextStyle(
       fontSize: 34,
       color: Colors.white,
       fontFamily: "Gilroy",
       fontWeight: FontWeight.w700);
 
-  static TextStyle nosoName = TextStyle(
+  static TextStyle gvtBalance = const TextStyle(
+      fontSize: 36,
+      color: Colors.white,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w700);
+
+  static TextStyle nosoName = const TextStyle(
       fontSize: 18,
       color: Colors.white,
       fontFamily: "Gilroy",
       fontWeight: FontWeight.w500);
 
-  static TextStyle textField = TextStyle(
-      fontSize: _mediumSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w700);
+  static TextStyle textField = const TextStyle(
+      fontSize: _mediumSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w700);
 
-  static TextStyle textFieldHiddenStyle = TextStyle(
-      fontSize: _mediumSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w700);
+  static TextStyle textFieldHiddenStyle = const TextStyle(
+      fontSize: _mediumSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w700);
 
   static TextStyle snackBarMessage = const TextStyle(
-      fontSize: _mediumSizeText, fontFamily: "Gilroy", fontWeight: FontWeight.w600);
+      fontSize: _mediumSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w600);
 
   static TextStyle buttonText = const TextStyle(
       fontSize: 18,

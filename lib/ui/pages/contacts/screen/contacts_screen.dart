@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
-import 'package:nososova/blocs/contacts_block.dart';
+import 'package:nososova/blocs/contacts_bloc.dart';
 import 'package:nososova/blocs/events/contacts_events.dart';
 import 'package:nososova/models/address_wallet.dart';
 import 'package:nososova/ui/config/responsive.dart';
@@ -175,8 +175,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
             if (!isAdding)
               Positioned(
-                  bottom: 16.0,
-                  right: 16.0,
+                  bottom: 20,
+                  right: 20,
                   child: FloatingActionButton(
                     onPressed: () {
                       setState(() {

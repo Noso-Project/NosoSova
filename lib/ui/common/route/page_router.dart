@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nososova/blocs/contacts_block.dart';
+import 'package:nososova/blocs/contacts_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
+import 'package:nososova/blocs/gvt_bloc.dart';
+import 'package:nososova/ui/pages/gvt/gvt_page.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../../blocs/app_data_bloc.dart';
+import '../../../blocs/events/gvt_events.dart';
 import '../../../blocs/history_transactions_bloc.dart';
 import '../../../blocs/wallet_bloc.dart';
 import '../../../dependency_injection.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../main.dart';
 import '../../../models/address_wallet.dart';
 import '../../../models/rest_api/transaction_history.dart';
 import '../../../repositories/repositories.dart';
@@ -38,15 +42,19 @@ class PageRouter {
       );
     } else {
       WoltModalSheet.show(
-        minDialogWidth: 550,
-        context: context,
+        maxDialogWidth: 1100,
+        minDialogWidth: 850,
+        context: NavigationService.navigatorKey.currentContext ?? context,
         pageListBuilder: (BuildContext _) {
           return [
             WoltModalSheetPage(
+                topBarTitle: Text(AppLocalizations.of(context)!.sendCoins,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.dialogTitle),
                 trailingNavBarWidget: IconButton(
                   padding: const EdgeInsets.all(20),
                   icon: const Icon(Icons.close),
-                  onPressed: Navigator.of(context).pop,
+                  onPressed: Navigator.of(_).pop,
                 ),
                 hasSabGradient: false,
                 isTopBarLayerAlwaysVisible: true,
@@ -104,7 +112,7 @@ class PageRouter {
       );
     } else {
       WoltModalSheet.show(
-        context: context,
+        context: NavigationService.navigatorKey.currentContext ?? context,
         minDialogWidth: 500,
         pageListBuilder: (BuildContext _) {
           return [
@@ -139,7 +147,7 @@ class PageRouter {
       );
     } else {
       WoltModalSheet.show(
-        context: context,
+        context: NavigationService.navigatorKey.currentContext ?? context,
         pageListBuilder: (BuildContext _) {
           return [
             WoltModalSheetPage(
@@ -149,7 +157,7 @@ class PageRouter {
                 trailingNavBarWidget: IconButton(
                   padding: const EdgeInsets.all(20),
                   icon: const Icon(Icons.close),
-                  onPressed: Navigator.of(context).pop,
+                  onPressed: Navigator.of(_).pop,
                 ),
                 hasSabGradient: false,
                 isTopBarLayerAlwaysVisible: true,
@@ -168,5 +176,28 @@ class PageRouter {
         },
       );
     }
+  }
+
+  static void routeGvt(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: locator<WalletBloc>(),
+            ),
+            BlocProvider<GvtBloc>(create: (context) {
+              var bloc = GvtBloc(
+                  repositories: locator<Repositories>(),
+                  walletBloc: locator<WalletBloc>());
+              bloc.add(LoadGvts());
+              return bloc;
+            }),
+          ],
+          child: const GvtPage(),
+        ),
+      ),
+    );
   }
 }

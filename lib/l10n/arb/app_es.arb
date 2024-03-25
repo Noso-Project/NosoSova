@@ -160,5 +160,14 @@
   "hideMoreInfo": "Ocultar información",
   "yes": "sí",
   "no": "No",
-  "issueDialogDeleteContact": "¿De verdad quieres borrar contacto?"
+  "issueDialogDeleteContact": "¿De verdad quieres borrar contacto?",
+  "whatGvt": "¿Qué es GVT?",
+  "gvtAbout": "El Token de Gobernanza (GVT) de Noso permite a los titulares votar en asuntos relacionados con el proyecto, permitiéndoles proponer y participar en actividades de votación. Un GVT equivale a un voto. En el futuro, las personas podrán adquirir tokens GVT a través del intercambio Noso/GVT dentro de la billetera NosoSova.",
+  "myListGvts": "Mis GvTs",
+  "viewGvtsList": "Vista general",
+  "emptyGvts": "No se encontraron GVT en tu billetera",
+  "viewAddressItem" : "Estilo del elemento de dirección",
+  "interface": "Interfaz",
+  "lockedCoins" : "Monedas bloqueadas",
+  "exchanges": "Bolsas"
 }

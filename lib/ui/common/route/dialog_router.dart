@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
-import 'package:nososova/blocs/contacts_block.dart';
+import 'package:nososova/blocs/contacts_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/ui/dialogs/address_action/dialog_view_keyspair.dart';
 import 'package:nososova/ui/dialogs/dialog_info_node.dart';
@@ -12,6 +12,7 @@ import '../../../blocs/app_data_bloc.dart';
 import '../../../blocs/debug_bloc.dart';
 import '../../../blocs/wallet_bloc.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../main.dart';
 import '../../../models/address_wallet.dart';
 import '../../../models/contact.dart';
 import '../../config/responsive.dart';
@@ -28,6 +29,7 @@ import '../../dialogs/import_export/dialog_import_keys_pair.dart';
 import '../../dialogs/import_export/dialog_scanner_qr.dart';
 import '../../theme/style/dialog_style.dart';
 import '../../theme/style/text_style.dart';
+import '../widgets/exchange_list.dart';
 
 class DialogRouter {
   /// The dialog that displays the qr Codes scanner
@@ -72,8 +74,39 @@ class DialogRouter {
   /// The dialog that displays the status of the network connection and actions on it
   static void showDialogInfoNetwork(BuildContext context) {
     WoltModalSheet.show(
-      context: context,
-      showDragHandle: false,
+        context: NavigationService.navigatorKey.currentContext ?? context,
+        showDragHandle: false,
+        pageListBuilder: (BuildContext _) {
+          return [
+            WoltModalSheetPage(
+                hasSabGradient: false,
+                trailingNavBarWidget: IconButton(
+                  padding: const EdgeInsets.all(20),
+                  icon: const Icon(Icons.close),
+                  onPressed: Navigator.of(_).pop,
+                ),
+                topBarTitle: Text(
+                    AppLocalizations.of(context)!.titleInfoNetwork,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.dialogTitle),
+                isTopBarLayerAlwaysVisible: true,
+                child: MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                        value: BlocProvider.of<AppDataBloc>(context)),
+                    BlocProvider.value(
+                        value: BlocProvider.of<DebugBloc>(context))
+                  ],
+                  child: const DialogInfoNetwork(),
+                ))
+          ];
+        });
+  }
+
+  /// The dialog that can be used to restore the address with a pair of keys
+  static void showDialogImportAddressFromKeysPair(BuildContext context) {
+    WoltModalSheet.show(
+      context: NavigationService.navigatorKey.currentContext ?? context,
       pageListBuilder: (BuildContext _) {
         return [
           WoltModalSheetPage(
@@ -81,36 +114,8 @@ class DialogRouter {
               trailingNavBarWidget: IconButton(
                 padding: const EdgeInsets.all(20),
                 icon: const Icon(Icons.close),
-                onPressed: Navigator.of(context).pop,
+                onPressed: Navigator.of(_).pop,
               ),
-              topBarTitle: Text(AppLocalizations.of(context)!.titleInfoNetwork,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.dialogTitle),
-              isTopBarLayerAlwaysVisible: true,
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider.value(
-                    value: BlocProvider.of<AppDataBloc>(context),
-                  ),
-                  BlocProvider.value(
-                    value: BlocProvider.of<DebugBloc>(context),
-                  ),
-                ],
-                child: const DialogInfoNetwork(),
-              ))
-        ];
-      },
-    );
-  }
-
-  /// The dialog that can be used to restore the address with a pair of keys
-  static void showDialogImportAddressFromKeysPair(BuildContext context) {
-    WoltModalSheet.show(
-      context: context,
-      pageListBuilder: (BuildContext _) {
-        return [
-          WoltModalSheetPage(
-              hasSabGradient: false,
               topBarTitle: Text(AppLocalizations.of(context)!.importKeysPair,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.dialogTitle),
@@ -170,7 +175,7 @@ class DialogRouter {
       );
     } else {
       WoltModalSheet.show(
-        context: context,
+        context: NavigationService.navigatorKey.currentContext ?? context,
         pageListBuilder: (BuildContext _) {
           return [
             WoltModalSheetPage(
@@ -181,7 +186,7 @@ class DialogRouter {
                 trailingNavBarWidget: IconButton(
                   padding: const EdgeInsets.all(20),
                   icon: const Icon(Icons.close),
-                  onPressed: Navigator.of(context).pop,
+                  onPressed: Navigator.of(_).pop,
                 ),
                 isTopBarLayerAlwaysVisible: true,
                 child: DialogViewQrWidget(address: address))
@@ -208,7 +213,7 @@ class DialogRouter {
               ));
     } else {
       WoltModalSheet.show(
-        context: context,
+        context: NavigationService.navigatorKey.currentContext ?? context,
         showDragHandle: false,
         minDialogWidth: 600,
         pageListBuilder: (BuildContext _) {
@@ -218,7 +223,7 @@ class DialogRouter {
                 trailingNavBarWidget: IconButton(
                   padding: const EdgeInsets.all(20),
                   icon: const Icon(Icons.close),
-                  onPressed: Navigator.of(context).pop,
+                  onPressed: Navigator.of(_).pop,
                 ),
                 topBarTitle: Text(AppLocalizations.of(context)!.customNameAdd,
                     textAlign: TextAlign.center,
@@ -241,7 +246,7 @@ class DialogRouter {
   /// Dialog in which debug information is displayed
   static void showDialogDebug(BuildContext context) {
     WoltModalSheet.show(
-      context: context,
+      context: NavigationService.navigatorKey.currentContext ?? context,
       showDragHandle: false,
       minDialogWidth: 700,
       pageListBuilder: (BuildContext _) {
@@ -255,7 +260,7 @@ class DialogRouter {
               trailingNavBarWidget: IconButton(
                 padding: const EdgeInsets.all(20),
                 icon: const Icon(Icons.close),
-                onPressed: Navigator.of(context).pop,
+                onPressed: Navigator.of(_).pop,
               ),
               child: BlocProvider.value(
                   value: BlocProvider.of<DebugBloc>(context),
@@ -269,7 +274,7 @@ class DialogRouter {
   static void showDialogImportFile(
       BuildContext context, List<AddressObject> address) {
     WoltModalSheet.show(
-      context: context,
+      context: NavigationService.navigatorKey.currentContext ?? context,
       showDragHandle: false,
       minDialogWidth: 600,
       pageListBuilder: (BuildContext _) {
@@ -279,7 +284,7 @@ class DialogRouter {
             trailingNavBarWidget: IconButton(
               padding: const EdgeInsets.all(20),
               icon: const Icon(Icons.close),
-              onPressed: Navigator.of(context).pop,
+              onPressed: Navigator.of(_).pop,
             ),
             topBarTitle: Text(AppLocalizations.of(context)!.foundAddresses,
                 textAlign: TextAlign.center, style: AppTextStyles.dialogTitle),
@@ -295,17 +300,16 @@ class DialogRouter {
 
   static void showDialogViewKeysPair(BuildContext context, Address address) {
     WoltModalSheet.show(
-      context: context,
+      context: NavigationService.navigatorKey.currentContext ?? context,
       showDragHandle: false,
       minDialogWidth: 600,
-
       pageListBuilder: (BuildContext _) {
         return [
           WoltModalSheetPage(
             trailingNavBarWidget: IconButton(
               padding: const EdgeInsets.all(20),
               icon: const Icon(Icons.close),
-              onPressed: Navigator.of(context).pop,
+              onPressed: Navigator.of(_).pop,
             ),
             hasSabGradient: false,
             topBarTitle: Text(AppLocalizations.of(context)!.secretKeys,
@@ -320,7 +324,7 @@ class DialogRouter {
 
   static void showDialogPendingTransaction(BuildContext context) {
     WoltModalSheet.show(
-      context: context,
+      context: NavigationService.navigatorKey.currentContext ?? context,
       showDragHandle: false,
       minDialogWidth: 500,
       pageListBuilder: (BuildContext _) {
@@ -335,7 +339,7 @@ class DialogRouter {
               trailingNavBarWidget: IconButton(
                 padding: const EdgeInsets.all(20),
                 icon: const Icon(Icons.close),
-                onPressed: Navigator.of(context).pop,
+                onPressed: Navigator.of(_).pop,
               ),
               child: BlocProvider.value(
                   value: BlocProvider.of<WalletBloc>(context),
@@ -347,7 +351,7 @@ class DialogRouter {
 
   static void showDialogNodeInfo(BuildContext context, Address targetAddress) {
     WoltModalSheet.show(
-      context: context,
+      context: NavigationService.navigatorKey.currentContext ?? context,
       showDragHandle: false,
       minDialogWidth: 500,
       pageListBuilder: (BuildContext _) {
@@ -361,7 +365,7 @@ class DialogRouter {
               trailingNavBarWidget: IconButton(
                 padding: const EdgeInsets.all(20),
                 icon: const Icon(Icons.close),
-                onPressed: Navigator.of(context).pop,
+                onPressed: Navigator.of(_).pop,
               ),
               child: DialogInfoNode(address: targetAddress)),
         ];
@@ -372,29 +376,91 @@ class DialogRouter {
   static void showDialogSellAddress(
       BuildContext context, Address targetAddress, Function(Address) selected,
       {bool isReceiver = false}) {
-    showModalBottomSheet(
-        shape: DialogStyle.borderShape,
-        context: context,
-        builder: (_) => BlocProvider.value(
-              value: BlocProvider.of<WalletBloc>(context),
-              child: DialogSellAddress(
-                targetAddress: targetAddress,
-                selected: selected,
-                isReceiver: isReceiver,
+    WoltModalSheet.show(
+      context: NavigationService.navigatorKey.currentContext ?? context,
+      showDragHandle: false,
+      minDialogWidth: 500,
+      pageListBuilder: (BuildContext _) {
+        return [
+          WoltModalSheetPage(
+              hasSabGradient: false,
+              topBarTitle: Text(
+                isReceiver
+                    ? AppLocalizations.of(context)!.receiver
+                    : AppLocalizations.of(context)!.sender,
+                style: AppTextStyles.dialogTitle,
               ),
-            ));
+              isTopBarLayerAlwaysVisible: true,
+              trailingNavBarWidget: IconButton(
+                padding: const EdgeInsets.all(20),
+                icon: const Icon(Icons.close),
+                onPressed: Navigator.of(_).pop,
+              ),
+              child: BlocProvider.value(
+                  value: BlocProvider.of<WalletBloc>(context),
+                  child: DialogSellAddress(
+                    targetAddress: targetAddress,
+                    selected: selected,
+                  ))),
+        ];
+      },
+    );
   }
 
   static void showDialogSellContact(
       BuildContext context, Function(ContactModel) selected) {
-    showModalBottomSheet(
-        shape: DialogStyle.borderShape,
-        context: context,
-        builder: (_) => BlocProvider.value(
-              value: locator<ContactsBloc>(),
-              child: DialogSellContact(
-                selected: (model) => selected(model),
+    WoltModalSheet.show(
+      context: NavigationService.navigatorKey.currentContext ?? context,
+      showDragHandle: false,
+      minDialogWidth: 500,
+      pageListBuilder: (BuildContext _) {
+        return [
+          WoltModalSheetPage(
+              hasSabGradient: false,
+              topBarTitle: Text(
+                AppLocalizations.of(context)!.sellAddress,
+                style: AppTextStyles.dialogTitle,
               ),
-            ));
+              isTopBarLayerAlwaysVisible: true,
+              trailingNavBarWidget: IconButton(
+                padding: const EdgeInsets.all(20),
+                icon: const Icon(Icons.close),
+                onPressed: Navigator.of(_).pop,
+              ),
+              child: BlocProvider.value(
+                  value: locator<ContactsBloc>(),
+                  child: DialogSellContact(
+                    selected: (model) => selected(model),
+                  ))),
+        ];
+      },
+    );
+  }
+
+  static void showExchangesList(BuildContext context) {
+    WoltModalSheet.show(
+      context: NavigationService.navigatorKey.currentContext ?? context,
+      showDragHandle: false,
+      minDialogWidth: 500,
+      pageListBuilder: (BuildContext _) {
+        return [
+          WoltModalSheetPage(
+              hasSabGradient: false,
+              topBarTitle: Text(
+                AppLocalizations.of(context)!.exchanges,
+                style: AppTextStyles.dialogTitle,
+              ),
+              isTopBarLayerAlwaysVisible: true,
+              trailingNavBarWidget: IconButton(
+                padding: const EdgeInsets.all(20),
+                icon: const Icon(Icons.close),
+                onPressed: Navigator.of(_).pop,
+              ),
+              child: BlocProvider.value(
+                  value: BlocProvider.of<WalletBloc>(context),
+                  child: const ExchangeList())),
+        ];
+      },
+    );
   }
 }

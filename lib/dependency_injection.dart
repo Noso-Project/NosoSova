@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/blocs/coininfo_bloc.dart';
-import 'package:nososova/blocs/contacts_block.dart';
+import 'package:nososova/blocs/contacts_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
 import 'package:nososova/blocs/history_transactions_bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
@@ -15,6 +15,7 @@ import 'package:nososova/services/explorer_stats_service.dart';
 import 'package:nososova/services/file_service.dart';
 import 'package:nososova/services/node_service.dart';
 import 'package:nososova/services/shared_service.dart';
+import 'package:nososova/ui/notifer/address_tile_style_notifer.dart';
 import 'package:nososova/ui/notifer/app_settings_notifer.dart';
 
 final GetIt locator = GetIt.instance;
@@ -24,6 +25,8 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<SharedService>(() => SharedService());
   locator.registerLazySingleton<MyDatabase>(() => MyDatabase());
   locator.registerLazySingleton<AppSettings>(() => AppSettings());
+  locator.registerLazySingleton<AddressStyleNotifier>(
+      () => AddressStyleNotifier());
 
   /// repo && services
   locator.registerLazySingleton<FileService>(() => FileService());
