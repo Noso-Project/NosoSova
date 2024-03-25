@@ -202,7 +202,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
           _buildSender(),
           _buildForms(),
           const SizedBox(height: 20),
-          if (targetAddress.nodeStatusOn || targetAddress.outgoing > 0.0) _buildLockedCoins(),
+          if (targetAddress.nodeStatusOn || targetAddress.outgoing > 0.0)
+            _buildLockedCoins(),
           _buildCommission(),
           _buildButtonPay(),
           const SizedBox(height: 30),
@@ -227,7 +228,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
               children: [
                 _buildSender(),
                 const SizedBox(height: 20),
-                if (targetAddress.nodeStatusOn || targetAddress.outgoing > 0.0) _buildLockedCoins(),
+                if (targetAddress.nodeStatusOn || targetAddress.outgoing > 0.0)
+                  _buildLockedCoins(),
                 _buildCommission(),
                 _buildButtonPay()
               ],
@@ -355,8 +357,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     .copyWith(color: CustomColors.negativeBalance)),
             const SizedBox(height: 5),
             Text(
-
-                "${targetAddress.nodeStatusOn  ? (NosoUtility.getCountMonetToRunNode()).toStringAsFixed(5)  : targetAddress.outgoing} NOSO" ,
+                "${targetAddress.nodeStatusOn ? (NosoUtility.getCountMonetToRunNode()).toStringAsFixed(5) : targetAddress.outgoing} NOSO",
                 style: AppTextStyles.infoItemValue
                     .copyWith(color: CustomColors.negativeBalance))
           ]),
@@ -435,7 +436,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
     return OutlinedButton(
         onPressed: () {
-          if (targetAddress.hash.isNotEmpty && targetAddress.balance != 0 && valueAmount >= getFee(value)) {
+          if (targetAddress.hash.isNotEmpty &&
+              targetAddress.balance != 0 &&
+              valueAmount >= getFee(value)) {
             setState(() {
               amountController.text = valueAmount.toStringAsFixed(8);
               selButton = double.parse(valueAmount.toStringAsFixed(8));
