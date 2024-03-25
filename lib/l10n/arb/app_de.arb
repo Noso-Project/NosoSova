@@ -167,5 +167,6 @@
   "viewGvtsList": "Übersicht",
   "emptyGvts": "Keine GVTs in Ihrem Wallet gefunden",
   "viewAddressItem" : "Stil des Adresseelements",
-  "interface": "Schnittstelle"
+  "interface": "Schnittstelle",
+  "lockedCoins" : "Gesperrte Münzen"
 }

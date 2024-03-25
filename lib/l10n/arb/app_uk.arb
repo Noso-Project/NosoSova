@@ -168,5 +168,6 @@
   "viewGvtsList": "Огляд",
   "emptyGvts": "Ваш гаманець не містить жодного GVT",
   "viewAddressItem" : "Стиль елементу адреси",
-  "interface": "Інтерфейс"
+  "interface": "Інтерфейс",
+  "lockedCoins" : "Заблоковані монети"
 }

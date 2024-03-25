@@ -510,4 +510,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get interface => 'Інтерфейс';
+
+  @override
+  String get lockedCoins => 'Заблоковані монети';
 }

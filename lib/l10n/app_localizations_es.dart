@@ -510,4 +510,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get interface => 'Interfaz';
+
+  @override
+  String get lockedCoins => 'Monedas bloqueadas';
 }

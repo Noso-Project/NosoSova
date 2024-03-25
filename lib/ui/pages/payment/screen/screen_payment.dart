@@ -6,12 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:nososova/ui/common/route/dialog_router.dart';
 import 'package:nososova/ui/theme/decoration/textfield_decoration.dart';
+import 'package:nososova/ui/theme/style/colors.dart';
 import 'package:nososova/ui/tiles/tile_wallet_address.dart';
+import 'package:nososova/utils/address_tile_style.dart';
 import 'package:nososova/utils/network_const.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
 
 import '../../../../blocs/events/wallet_events.dart';
 import '../../../../blocs/wallet_bloc.dart';
+import '../../../../dependency_injection.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/address_wallet.dart';
 import '../../../../models/app/response_page_listener.dart';
@@ -19,6 +22,7 @@ import '../../../../models/rest_api/transaction_history.dart';
 import '../../../common/responses_util/response_widget_id.dart';
 import '../../../common/responses_util/snackbar_message.dart';
 import '../../../config/responsive.dart';
+import '../../../notifer/address_tile_style_notifer.dart';
 import '../../../theme/style/text_style.dart';
 import '../../../tiles/tile_select_address.dart';
 import '../../transaction/screen/widget_transaction.dart';
@@ -48,6 +52,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   bool isResultWidget = false;
   late TransactionHistory transactionHistory;
   late ConsensusStatus statusConsensus = ConsensusStatus.error;
+  final AddressStyleNotifier _settingsStyleAddressTile =
+      locator<AddressStyleNotifier>();
 
   @override
   void initState() {
@@ -162,7 +168,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           (selAddress) => refreshAddress(selAddress)))
                   : AddressListTile(
                       address: targetAddress,
-                      onLong: () {},
+                      onLong: null,
+                      style: _settingsStyleAddressTile.getStyleAddressTile ??
+                          AddressTileStyle.sDefault,
                       onTap: () => DialogRouter.showDialogSellAddress(
                           context,
                           targetAddress,
@@ -193,6 +201,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
           const SizedBox(height: 10),
           _buildSender(),
           _buildForms(),
+          const SizedBox(height: 20),
+          if (targetAddress.nodeStatusOn) _buildLockedCoins(),
           _buildCommission(),
           _buildButtonPay(),
           const SizedBox(height: 30),
@@ -216,6 +226,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildSender(),
+                const SizedBox(height: 20),
+                if (targetAddress.nodeStatusOn) _buildLockedCoins(),
                 _buildCommission(),
                 _buildButtonPay()
               ],
@@ -225,7 +237,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
   }
-
 
   _buildForms() {
     return Column(
@@ -317,7 +328,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   _buildCommission() {
     return Column(children: [
-      const SizedBox(height: 10),
       Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -327,10 +337,29 @@ class _PaymentScreenState extends State<PaymentScreen> {
               style: AppTextStyles.infoItemTitle,
             ),
             const SizedBox(height: 5),
-            Text((commission).toStringAsFixed(8),
+            Text("${(commission).toStringAsFixed(8)} NOSO",
                 style: AppTextStyles.infoItemValue)
           ]),
       const SizedBox(height: 20)
+    ]);
+  }
+
+  _buildLockedCoins() {
+    return Column(children: [
+      Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(AppLocalizations.of(context)!.lockedCoins,
+                style: AppTextStyles.infoItemTitle
+                    .copyWith(color: CustomColors.negativeBalance)),
+            const SizedBox(height: 5),
+            Text(
+                "${(NosoUtility.getCountMonetToRunNode()).toStringAsFixed(5)} NOSO",
+                style: AppTextStyles.infoItemValue
+                    .copyWith(color: CustomColors.negativeBalance))
+          ]),
+      const SizedBox(height: 10)
     ]);
   }
 
@@ -395,8 +424,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   buttonPercent(int percent) {
-    double value = double.parse(
-        ((percent / 100) * targetAddress.availableBalance).toStringAsFixed(7));
+    var balanceAddress = targetAddress.nodeStatusOn
+        ? (targetAddress.availableBalance -
+            NosoUtility.getCountMonetToRunNode())
+        : targetAddress.availableBalance;
+    double value =
+        double.parse(((percent / 100) * balanceAddress).toStringAsFixed(7));
     var valueAmount = percent == 100 ? (value - getFee(value)) : value;
 
     return OutlinedButton(

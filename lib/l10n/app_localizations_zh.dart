@@ -510,4 +510,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get interface => '接口';
+
+  @override
+  String get lockedCoins => '锁定的硬币';
 }

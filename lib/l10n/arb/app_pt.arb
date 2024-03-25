@@ -167,5 +167,6 @@
   "viewGvtsList": "Visão geral",
   "emptyGvts": "Nenhum GVT encontrado na sua carteira",
   "viewAddressItem" : "Estilo do elemento de endereço",
-  "interface": "Interface"
+  "interface": "Interface",
+  "lockedCoins" : "Moedas bloqueadas"
 }
