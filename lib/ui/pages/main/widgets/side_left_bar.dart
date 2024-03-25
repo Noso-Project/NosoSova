@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:nososova/ui/common/route/dialog_router.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../common/route/page_router.dart';
 import '../../../common/widgets/custom/dialog_title_dropdown.dart';
 import '../../../config/responsive.dart';
+import '../../../theme/style/sizes.dart';
+import '../../../theme/style/text_style.dart';
 import '../../info/screen/widget_info_coin.dart';
 import '../../node/screens/body_stats_nodes.dart';
 
@@ -28,6 +32,17 @@ class _SideLeftBarDesktopState extends State<SideLeftBarDesktop> {
           child: Column(
             children: [
               const Card(child: WidgetInfoCoin()),
+              const SizedBox(height: 10),
+              Card(
+                  child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: CustomSizes.paddingDialogVertical),
+                      title: Text(AppLocalizations.of(context)!.exchanges, style: AppTextStyles.dialogTitle),
+                      onTap: () => DialogRouter.showExchangesList(context),
+                      trailing: Icon(Icons.navigate_next,
+                          size: 28,
+                          color: Theme.of(context).colorScheme.onSurface))),
               const SizedBox(height: 10),
               Card(
                 color: const Color(0xFF363957),

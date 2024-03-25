@@ -513,4 +513,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get lockedCoins => '锁定的硬币';
+
+  @override
+  String get exchanges => '交易所';
 }

@@ -168,5 +168,6 @@
   "emptyGvts": "Nenhum GVT encontrado na sua carteira",
   "viewAddressItem" : "Estilo do elemento de endereço",
   "interface": "Interface",
-  "lockedCoins" : "Moedas bloqueadas"
+  "lockedCoins" : "Moedas bloqueadas",
+  "exchanges": "Bolsas"
 }

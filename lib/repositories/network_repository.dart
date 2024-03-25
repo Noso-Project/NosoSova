@@ -37,4 +37,8 @@ class NetworkRepository {
   Future<ResponseApi> fetchNodeStatus(String targetHash) {
     return _explorerStatsService.fetchNodeStatus(targetHash);
   }
+
+  Future<ResponseApi> fetchExchangeList() {
+    return _explorerStatsService.fetchExchangeList();
+  }
 }

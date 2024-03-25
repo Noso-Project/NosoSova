@@ -29,6 +29,7 @@ import '../../dialogs/import_export/dialog_import_keys_pair.dart';
 import '../../dialogs/import_export/dialog_scanner_qr.dart';
 import '../../theme/style/dialog_style.dart';
 import '../../theme/style/text_style.dart';
+import '../widgets/exchange_list.dart';
 
 class DialogRouter {
   /// The dialog that displays the qr Codes scanner
@@ -431,6 +432,33 @@ class DialogRouter {
                   child: DialogSellContact(
                     selected: (model) => selected(model),
                   ))),
+        ];
+      },
+    );
+  }
+
+  static void showExchangesList(BuildContext context) {
+    WoltModalSheet.show(
+      context: NavigationService.navigatorKey.currentContext ?? context,
+      showDragHandle: false,
+      minDialogWidth: 500,
+      pageListBuilder: (BuildContext _) {
+        return [
+          WoltModalSheetPage(
+              hasSabGradient: false,
+              topBarTitle: Text(
+                AppLocalizations.of(context)!.exchanges,
+                style: AppTextStyles.dialogTitle,
+              ),
+              isTopBarLayerAlwaysVisible: true,
+              trailingNavBarWidget: IconButton(
+                padding: const EdgeInsets.all(20),
+                icon: const Icon(Icons.close),
+                onPressed: Navigator.of(_).pop,
+              ),
+              child: BlocProvider.value(
+                  value: BlocProvider.of<WalletBloc>(context),
+                  child: const ExchangeList())),
         ];
       },
     );

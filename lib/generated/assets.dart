@@ -35,6 +35,7 @@ class Assets {
   static const String iconsWallet = 'assets/icons/wallet.svg';
   static const String iconsContact = 'assets/icons/contact.svg';
   static const String iconsGvt = 'assets/icons/gvt.svg';
+  static const String iconsExchange= 'assets/icons/exchange.svg';
   static const String nosoSova = '.env';
 
 }

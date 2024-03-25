@@ -513,4 +513,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get lockedCoins => 'Заблоковані монети';
+
+  @override
+  String get exchanges => 'Біржі';
 }

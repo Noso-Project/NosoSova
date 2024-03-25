@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:nososova/models/rest_api/exhcange_data.dart';
 import 'package:nososova/models/rest_api/node_info.dart';
 
 import '../models/responses/response_api.dart';
@@ -13,6 +14,23 @@ import '../models/rest_api/transaction_history.dart';
 class ExplorerStatsService {
   final String _apiStats = "https://api.nosocoin.com/";
   final int _delaySeconds = 10;
+
+  Future<ResponseApi> fetchExchangeList() async {
+    try {
+      final response = await _fetchExplorerStats(
+          "${_apiStats}info/price_by_exchange?range=minute&interval=1");
+      if (response.errors != null) {
+        return response;
+      } else {
+        return ResponseApi(value: CoinDataParser(response.value).parse());
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Request failed with error: $e');
+      }
+      return ResponseApi(errors: 'Request failed with error: $e');
+    }
+  }
 
   Future<ResponseApi> fetchNodeStatus(String addressHash) async {
     try {

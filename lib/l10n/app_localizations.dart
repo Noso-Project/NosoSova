@@ -1122,6 +1122,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Locked Coins'**
   String get lockedCoins;
+
+  /// No description provided for @exchanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Exchanges'**
+  String get exchanges;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -168,5 +168,6 @@
   "emptyGvts": "В вашем кошельке нет GVT",
   "viewAddressItem" : "Стиль элемента адреса",
   "interface": "Интерфейс",
-  "lockedCoins" : "Заблокированные монеты"
+  "lockedCoins" : "Заблокированные монеты",
+  "exchanges": "Биржи"
 }

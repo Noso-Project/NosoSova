@@ -11,6 +11,7 @@ import '../../../../models/app/stats.dart';
 import '../../../../utils/date_utils.dart';
 import '../../../../utils/network_const.dart';
 import '../../../common/widgets/custom/dasher_divider.dart';
+import '../../../common/widgets/exchange_list.dart';
 import '../../../common/widgets/item_info_widget.dart';
 import '../../../config/responsive.dart';
 import '../../../theme/style/text_style.dart';
@@ -31,7 +32,7 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -222,13 +223,20 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
                     child: Text(AppLocalizations.of(context)!.masternodes,
                         style: selectIndexTab == 1
                             ? AppTextStyles.tabActive
+                            : AppTextStyles.tabInActive)),
+                Tab(
+                    child: Text(AppLocalizations.of(context)!.exchanges,
+                        style: selectIndexTab == 1
+                            ? AppTextStyles.tabActive
                             : AppTextStyles.tabInActive))
               ]),
           const SizedBox(height: 10),
           Expanded(
-              child: TabBarView(
-                  controller: _tabController,
-                  children: [information(infoCoin), masterNodes(infoCoin, 0)]))
+              child: TabBarView(controller: _tabController, children: [
+            information(infoCoin),
+            masterNodes(infoCoin, 0),
+            const ExchangeList()
+          ]))
         ]
       ]);
     });

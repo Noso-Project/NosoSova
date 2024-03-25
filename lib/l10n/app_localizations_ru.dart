@@ -513,4 +513,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get lockedCoins => 'Заблокированные монеты';
+
+  @override
+  String get exchanges => 'Биржи';
 }

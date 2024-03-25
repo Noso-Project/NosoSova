@@ -168,5 +168,6 @@
   "emptyGvts": "您的钱包中未找到 GVT",
   "viewAddressItem" : "地址元素的样式",
   "interface": "接口",
-  "lockedCoins" : "锁定的硬币"
+  "lockedCoins" : "锁定的硬币",
+  "exchanges": "交易所"
 }

@@ -513,4 +513,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get lockedCoins => 'Gesperrte Münzen';
+
+  @override
+  String get exchanges => 'Börsen';
 }

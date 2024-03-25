@@ -168,5 +168,6 @@
   "emptyGvts" : "No GVTs found in your wallet",
   "viewAddressItem" : "Style address element",
   "interface" : "Interface",
-  "lockedCoins" : "Locked Coins"
+  "lockedCoins" : "Locked Coins",
+  "exchanges" : "Exchanges"
 }

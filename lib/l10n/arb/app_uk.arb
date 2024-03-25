@@ -169,5 +169,6 @@
   "emptyGvts": "Ваш гаманець не містить жодного GVT",
   "viewAddressItem" : "Стиль елементу адреси",
   "interface": "Інтерфейс",
-  "lockedCoins" : "Заблоковані монети"
+  "lockedCoins" : "Заблоковані монети",
+  "exchanges": "Біржі"
 }

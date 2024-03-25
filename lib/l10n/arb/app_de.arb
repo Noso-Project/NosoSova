@@ -168,5 +168,6 @@
   "emptyGvts": "Keine GVTs in Ihrem Wallet gefunden",
   "viewAddressItem" : "Stil des Adresseelements",
   "interface": "Schnittstelle",
-  "lockedCoins" : "Gesperrte Münzen"
+  "lockedCoins" : "Gesperrte Münzen",
+  "exchanges": "Börsen"
 }
