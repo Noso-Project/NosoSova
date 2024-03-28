@@ -170,5 +170,6 @@
   "interface": "Interface",
   "lockedCoins" : "Moedas bloqueadas",
   "exchanges": "Bolsas",
-  "errorImportNoPassword": "Atenção! Antes de importar, desbloqueie seus endereços que você bloqueou com senha no aplicativo NosoLite. Caso contrário, eles serão ignorados."
+  "errorImportNoPassword": "Atenção! Antes de importar, desbloqueie seus endereços que você bloqueou com senha no aplicativo NosoLite. Caso contrário, eles serão ignorados.",
+  "thanksTranslate": "Obrigado pela tradução"
 }

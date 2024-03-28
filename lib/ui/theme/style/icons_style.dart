@@ -24,4 +24,8 @@ class AppIconsStyle {
         height: 80,
         colorFilter: ColorFilter.mode(colorCustom, BlendMode.srcIn));
   }
+
+  static SvgPicture icon3x2NoColor(String iconPath) {
+    return SvgPicture.asset(iconPath, width: 32, height: 32);
+  }
 }

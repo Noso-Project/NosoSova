@@ -519,4 +519,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get errorImportNoPassword => 'Atenção! Antes de importar, desbloqueie seus endereços que você bloqueou com senha no aplicativo NosoLite. Caso contrário, eles serão ignorados.';
+
+  @override
+  String get thanksTranslate => 'Obrigado pela tradução';
 }
