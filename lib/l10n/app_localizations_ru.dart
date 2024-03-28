@@ -137,7 +137,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get daysUntilNextHalving => 'Дней до следующего Халвинга';
 
   @override
-  String get numberOfMinedCoins => 'Добыто/лимит монет';
+  String get numberOfMinedCoins => 'Добыто монет';
 
   @override
   String get coinsLocked => 'Монет заблокировано';

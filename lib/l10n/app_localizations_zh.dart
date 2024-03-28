@@ -86,7 +86,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get address => '地址';
 
   @override
-  String get keys => '密匙';
+  String get keys => '密钥';
 
   @override
   String get sendFromAddress => '从该地址发送';
@@ -293,7 +293,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get viewQr => '查看二维码';
 
   @override
-  String get infoTotalPriceUst => '以美元为单位的余额';
+  String get infoTotalPriceUst => '余额估值≈';
 
   @override
   String get updateInfo => '更新信息';
@@ -305,7 +305,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get informMyNodes => '您的节点状态';
 
   @override
-  String get getKeysPair => '查看密匙';
+  String get getKeysPair => '查看密钥';
 
   @override
   String get reward => '奖励';
@@ -353,7 +353,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get errorNoFoundCoinsTransaction => '没有足够的硬币进行交易';
 
   @override
-  String get errorInformationIncorrect => '运输信息不正确';
+  String get errorInformationIncorrect => '传输信息不正确';
 
   @override
   String get errorImportAddresses => '由于地址重复，因此未添加地址';
@@ -473,7 +473,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tooltipPasteFromBuffer => '粘贴';
 
   @override
-  String get secretKeys => '密匙';
+  String get secretKeys => '密钥';
 
   @override
   String get showMoreInfo => '显示其他信息';
