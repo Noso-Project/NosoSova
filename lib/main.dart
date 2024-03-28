@@ -18,8 +18,9 @@ import 'package:window_manager/window_manager.dart';
 import 'blocs/events/app_data_events.dart';
 
 Future<void> main() async {
-  setupLocator();
+
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(

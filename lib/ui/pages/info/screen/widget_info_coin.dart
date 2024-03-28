@@ -207,7 +207,6 @@ class _WidgetInfoCoinState extends State<WidgetInfoCoin>
           const SizedBox(height: 20),
           TabBar(
               controller: _tabController,
-              indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
               onTap: (index) {
                 setState(() {
                   selectIndexTab = index;

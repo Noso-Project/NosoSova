@@ -22,9 +22,13 @@ class _ExchangeListState extends State<ExchangeList> {
     final restApi = locator<NetworkRepository>();
     var response = await restApi.fetchExchangeList();
     if (response.errors == null) {
-      return response.value;
+      List<CoinData> list = response.value;
+
+      return list.isEmpty
+          ? throw Exception('Failed to load exchanges list')
+          : list;
     } else {
-      throw Exception('Failed to load nodeInfo');
+      throw Exception('Failed to load exchanges list');
     }
   }
 
@@ -42,12 +46,17 @@ class _ExchangeListState extends State<ExchangeList> {
                   color: Theme.of(context).colorScheme.primary,
                   size: 80,
                 )));
-          } else if (snapshot.hasError || snapshot.data == null) {
-            return EmptyWidget(
-              title: AppLocalizations.of(context)!.errorLoading,
-              descrpt:
-                  "Our api is not available for maintenance. \n Please try again later",
-            );
+          } else if (snapshot.hasError ||
+              snapshot.data == null ||
+              snapshot.data!.isEmpty) {
+            return Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                child: EmptyWidget(
+                  title: AppLocalizations.of(context)!.errorLoading,
+                  descrpt:
+                      "Our api is not available for maintenance. \n Please try again later",
+                ));
           } else {
             var listData = snapshot.data ?? [];
             listData.sort((a, b) => b.price.compareTo(a.price));
@@ -66,7 +75,7 @@ class _ExchangeListState extends State<ExchangeList> {
                     ),
                     trailing: Text(
                       "${item.price.toStringAsFixed(5)}\$",
-                      style: AppTextStyles.walletHash.copyWith(fontSize: 18),
+                      style: AppTextStyles.walletHash.copyWith(fontSize: 16),
                     ),
                     subtitle: Text(
                       "Volume 24hr: ${item.volume24h.toString()}\$",
