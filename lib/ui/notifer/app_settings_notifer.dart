@@ -26,6 +26,7 @@ class AppSettings with ChangeNotifier {
     'pt': 'Português',
     'ru': 'Русский',
     'uk': 'Українська',
+    'nl': 'Dutch',
     'zh': 'Chinese (Simplified) - China'
   };
 
