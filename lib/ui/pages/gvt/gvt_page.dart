@@ -5,7 +5,7 @@ import 'package:nososova/blocs/gvt_bloc.dart';
 import 'package:nososova/ui/common/widgets/empty_list_widget.dart';
 import 'package:nososova/ui/common/widgets/loading.dart';
 import 'package:nososova/ui/pages/gvt/screen/gvt_widget.dart';
-import 'package:nososova/utils/network_const.dart';
+import 'package:nososova/utils/enum.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../../models/app/gvt_owner.dart';

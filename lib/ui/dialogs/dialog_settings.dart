@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nososova/models/address_wallet.dart';
 import 'package:nososova/ui/tiles/tile_wallet_address.dart';
-import 'package:nososova/utils/social_links.dart';
+import 'package:nososova/configs/social_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 import '../../dependency_injection.dart';
 import '../../generated/assets.dart';
 import '../../l10n/app_localizations.dart';
-import '../../utils/address_tile_style.dart';
+import '../../utils/enum.dart';
 import '../config/responsive.dart';
 import '../notifer/address_tile_style_notifer.dart';
 import '../notifer/app_settings_notifer.dart';

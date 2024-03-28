@@ -1,10 +1,11 @@
-import '../../utils/network_const.dart';
+import '../../utils/enum.dart';
+import '../../configs/network_config.dart';
 
 class AppBlocConfig {
   late String? _lastSeed;
   late String? _nodesList;
   late int? _lastBlock;
-  int _delaySync = NetworkConst.delaySync;
+  int _delaySync = NetworkConfig.delaySync;
   bool _isOneStartup = true;
   late int? _countErrorConnections = 0;
 
@@ -20,7 +21,7 @@ class AppBlocConfig {
     _nodesList = nodesList;
     _lastBlock = lastBlock;
     _countErrorConnections = countErrorConnections;
-    _delaySync = delaySync ?? NetworkConst.delaySync;
+    _delaySync = delaySync ?? NetworkConfig.delaySync;
     _isOneStartup = isOneStartup ?? false;
   }
 

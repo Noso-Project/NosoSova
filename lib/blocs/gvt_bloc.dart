@@ -8,7 +8,7 @@ import 'package:nososova/repositories/repositories.dart';
 
 import '../models/address_wallet.dart';
 import '../models/responses/response_node.dart';
-import '../utils/network_const.dart';
+import '../utils/enum.dart';
 
 class GvtState {
   final List<Gvt> gvts;

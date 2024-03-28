@@ -9,6 +9,7 @@ import 'package:noso_dart/const.dart';
 import 'package:noso_dart/handlers/address_handler.dart';
 import 'package:noso_dart/handlers/files_handler.dart';
 import 'package:noso_dart/handlers/order_handler.dart';
+import 'package:noso_dart/models/app_info.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/models/noso/pending.dart';
@@ -26,6 +27,7 @@ import 'package:nososova/models/app/response_page_listener.dart';
 import 'package:nososova/repositories/repositories.dart';
 
 import '../../models/address_wallet.dart';
+import '../configs/network_config.dart';
 import '../models/app/debug.dart';
 import '../models/app/response_calculate.dart';
 import '../models/app/state_node.dart';
@@ -33,8 +35,8 @@ import '../models/app/wallet.dart';
 import '../models/responses/response_node.dart';
 import '../models/rest_api/transaction_history.dart';
 import '../ui/common/responses_util/response_widget_id.dart';
+import '../utils/enum.dart';
 import '../utils/files_const.dart';
-import '../utils/network_const.dart';
 import 'debug_bloc.dart';
 import 'events/app_data_events.dart';
 import 'events/coininfo_events.dart';
@@ -44,10 +46,12 @@ import 'events/wallet_events.dart';
 class WalletState {
   final Wallet wallet;
   final StateNodes stateNodes;
+  final AppInfo appInfo;
 
   WalletState({Wallet? wallet, StateNodes? stateNodes})
       : wallet = wallet ?? Wallet(),
-        stateNodes = stateNodes ?? StateNodes();
+        stateNodes = stateNodes ?? StateNodes(),
+        appInfo = NetworkConfig().getAppInfo;
 
   WalletState copyWith({
     Wallet? wallet,
@@ -128,7 +132,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         receiver: e.alias,
         currentBlock: appDataBloc.state.node.lastblock.toString(),
         amount: 0,
-        appInfo: NetworkConst.appInfo);
+        appInfo: state.appInfo);
     var newOrder = OrderHandler().generateNewOrder(orderData, OrderType.CUSTOM);
 
     if (newOrder == null) {
@@ -213,7 +217,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         currentBlock: appDataBloc.state.node.lastblock.toString(),
         amount: amount,
         message: message,
-        appInfo: NetworkConst.appInfo);
+        appInfo: state.appInfo);
     var newOrder = OrderHandler().generateNewOrder(orderData, OrderType.TRFR);
 
     if (newOrder == null) {
@@ -528,7 +532,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
     do {
       var randomSeed =
-          Seed().tokenizer(NetworkConst.getRandomNode(listNodesUsers));
+          Seed().tokenizer(NetworkConfig.getRandomNode(listNodesUsers));
       var targetUserNode = await _repositories.networkRepository
           .fetchNode(NodeRequest.getNodeStatus, randomSeed);
 

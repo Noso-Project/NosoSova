@@ -17,7 +17,8 @@ import '../models/app/stats.dart';
 import '../models/responses/response_node.dart';
 import '../models/rest_api/block_info.dart';
 import '../repositories/repositories.dart';
-import '../utils/network_const.dart';
+import '../utils/enum.dart';
+import '../configs/network_config.dart';
 import 'events/app_data_events.dart';
 import 'events/debug_events.dart';
 
@@ -167,12 +168,12 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
       case InitialNodeAlgh.connectLastNode:
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
-            Seed().tokenizer(NetworkConst.getRandomNode(null),
+            Seed().tokenizer(NetworkConfig.getRandomNode(null),
                 rawString: appBlocConfig.lastSeed));
       case InitialNodeAlgh.listenUserNodes:
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
-            Seed().tokenizer(NetworkConst.getRandomNode(listUsersNodes)));
+            Seed().tokenizer(NetworkConfig.getRandomNode(listUsersNodes)));
       default:
         return await _repositories.networkRepository.getRandomDevNode();
     }

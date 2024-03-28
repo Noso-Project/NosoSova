@@ -5,10 +5,11 @@ import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/l10n/app_localizations.dart';
 
 import '../../blocs/events/app_data_events.dart';
+import '../../configs/network_config.dart';
 import '../../generated/assets.dart';
 import '../../ui/tiles/seed_tile.dart';
 import '../../utils/date_utils.dart';
-import '../../utils/network_const.dart';
+import '../../utils/enum.dart';
 import '../common/route/dialog_router.dart';
 import '../common/widgets/custom/dialog_title_dropdown.dart';
 import '../common/widgets/item_info_widget.dart';
@@ -146,7 +147,7 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
   }
 
   String getNetworkType(Node node) {
-    bool isDev = NetworkConst.getSeedList()
+    bool isDev = NetworkConfig.getVerificationSeedList()
         .any((item) => item.toTokenizer == node.seed.toTokenizer);
     return isDev ? "Verified node" : "Custom node";
   }

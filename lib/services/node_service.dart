@@ -7,13 +7,13 @@ import 'package:noso_dart/models/noso/seed.dart';
 import 'package:noso_dart/node_request.dart';
 
 import '../models/responses/response_node.dart';
-import '../utils/network_const.dart';
+import '../configs/network_config.dart';
 
 class NodeService {
   List<Seed> seedsDefault = [];
 
   NodeService() {
-    seedsDefault = NetworkConst.getSeedList();
+    seedsDefault = NetworkConfig.getVerificationSeedList();
   }
 
   Future<ResponseNode<List<int>>> fetchNode(String command, Seed seed) async {
@@ -104,6 +104,6 @@ class NodeService {
 
   Future<Socket> _connectSocket(Seed seed) async {
     return Socket.connect(seed.ip, seed.port,
-        timeout: const Duration(seconds: NetworkConst.durationTimeOut));
+        timeout: const Duration(seconds: NetworkConfig.durationTimeOut));
   }
 }

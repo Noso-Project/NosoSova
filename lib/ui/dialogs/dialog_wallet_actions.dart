@@ -11,7 +11,7 @@ import 'package:nososova/ui/tiles/dialog_tile.dart';
 
 import '../../blocs/events/wallet_events.dart';
 import '../../models/address_wallet.dart';
-import '../../utils/files_const.dart';
+import '../../utils/enum.dart';
 import '../common/route/dialog_router.dart';
 import '../common/route/page_router.dart';
 import '../common/widgets/custom/dialog_title_dropdown.dart';

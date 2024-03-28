@@ -1,15 +1,39 @@
 import 'dart:math';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:noso_dart/models/app_info.dart';
 import 'package:noso_dart/models/noso/seed.dart';
-import 'package:nososova/generated/assets.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
-final class NetworkConst {
+import '../generated/assets.dart';
+import '../utils/enum.dart';
+
+final class NetworkConfig {
+  static const List<String> seedsVerification = [
+    "63.227.69.162",
+    "20.199.50.27",
+    "107.172.21.121",
+    "107.172.214.53",
+    "198.23.134.105",
+    "107.173.210.55",
+    "5.230.55.203",
+    "4.233.61.8"
+  ];
+
+  String _appVersion = "";
 
   static const int durationTimeOut = 3;
   static const int delaySync = 30;
-  static AppInfo appInfo = AppInfo(appVersion: "NOSOSOVA_0.1.3");
+
+  get getAppInfo => AppInfo(appVersion: "NOSOSOVA_$_appVersion");
+
+  NetworkConfig() {
+    _load();
+  }
+
+  Future<void> _load() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    _appVersion = packageInfo.version;
+  }
 
   static String getRandomNode(String? inputString) {
     List<String> elements = (inputString ?? "").split(',');
@@ -19,16 +43,15 @@ final class NetworkConst {
       var targetSeed = elements[randomIndex].split("|")[0];
       return targetSeed;
     } else {
-      var devNode = NetworkConst.getSeedList();
+      var devNode = NetworkConfig.getVerificationSeedList();
       int randomDev = Random().nextInt(devNode.length);
       return devNode[randomDev].toTokenizer;
     }
   }
 
-  static List<Seed> getSeedList() {
-    var string = dotenv.env['seeds_default'] ?? "";
+  static List<Seed> getVerificationSeedList() {
     List<Seed> defSeed = [];
-    for (String seed in string.split(" ")) {
+    for (String seed in seedsVerification) {
       defSeed.add(Seed(ip: seed));
     }
     return defSeed;
@@ -47,15 +70,3 @@ final class CheckConnect {
     }
   }
 }
-
-enum InitialNodeAlgh { listenDefaultNodes, connectLastNode, listenUserNodes }
-
-/// Connected - підключено
-/// error - помилка
-/// searchNode - пошук вузла
-/// sync - синхронізація
-enum StatusConnectNodes { connected, error, searchNode, sync, consensus }
-
-enum ApiStatus { connected, loading, error, result }
-
-enum ConsensusStatus { sync, error }

@@ -33,7 +33,6 @@ dependencies:
   flutter_file_saver_dev: ^0.1.1
   swipeable_button_view: ^0.0.2
   page_transition: ^2.1.0
-  flutter_dotenv: ^5.1.0
   http: ^1.2.0
   url_launcher: ^6.2.4
   loading_animation_widget: ^1.2.1
@@ -67,7 +66,6 @@ flutter:
             weight: 800
 
   assets:
-    - .env
     - assets/
     - assets/fonts/
     - assets/icons/

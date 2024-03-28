@@ -6,7 +6,7 @@ import 'package:nososova/blocs/history_transactions_bloc.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/address_wallet.dart';
 import '../../../../models/rest_api/transaction_history.dart';
-import '../../../../utils/network_const.dart';
+import '../../../../utils/enum.dart';
 import '../../../common/route/page_router.dart';
 import '../../../common/widgets/empty_list_widget.dart';
 import '../../../common/widgets/loading.dart';

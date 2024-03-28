@@ -9,7 +9,7 @@ import '../../../../blocs/events/coininfo_events.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/app/stats.dart';
 import '../../../../utils/date_utils.dart';
-import '../../../../utils/network_const.dart';
+import '../../../../utils/enum.dart';
 import '../../../common/widgets/custom/dasher_divider.dart';
 import '../../../common/widgets/exchange_list.dart';
 import '../../../common/widgets/item_info_widget.dart';

@@ -22,7 +22,8 @@ class Assets {
   static const String iconsNodeI = 'assets/icons/node_i.svg';
   static const String iconsNodeStop = 'assets/icons/node_stop.svg';
   static const String iconsOutput = 'assets/icons/output.svg';
-  static const String iconsPendingTransaction = 'assets/icons/pending_transaction.svg';
+  static const String iconsPendingTransaction =
+      'assets/icons/pending_transaction.svg';
   static const String iconsRename = 'assets/icons/rename.svg';
   static const String iconsScan = 'assets/icons/scan.svg';
   static const String iconsSettings = 'assets/icons/settings.svg';
@@ -35,7 +36,5 @@ class Assets {
   static const String iconsWallet = 'assets/icons/wallet.svg';
   static const String iconsContact = 'assets/icons/contact.svg';
   static const String iconsGvt = 'assets/icons/gvt.svg';
-  static const String iconsExchange= 'assets/icons/exchange.svg';
-  static const String nosoSova = '.env';
-
+  static const String iconsExchange = 'assets/icons/exchange.svg';
 }

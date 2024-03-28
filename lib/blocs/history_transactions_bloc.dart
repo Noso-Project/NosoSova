@@ -4,7 +4,7 @@ import 'package:nososova/repositories/repositories.dart';
 
 import '../models/responses/response_api.dart';
 import '../models/rest_api/transaction_history.dart';
-import '../utils/network_const.dart';
+import '../utils/enum.dart';
 import 'events/history_transactions_events.dart';
 
 class HistoryTransactionsBState {

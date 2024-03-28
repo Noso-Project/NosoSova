@@ -5,7 +5,7 @@ import 'package:nososova/models/rest_api/block_info.dart';
 
 import '../models/app/stats.dart';
 import '../repositories/repositories.dart';
-import '../utils/network_const.dart';
+import '../utils/enum.dart';
 import 'debug_bloc.dart';
 import 'events/coininfo_events.dart';
 

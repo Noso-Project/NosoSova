@@ -3,6 +3,7 @@ import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:noso_dart/models/noso/pending.dart';
 
 import '../../models/address_wallet.dart';
+import '../../utils/enum.dart';
 import '../../utils/files_const.dart';
 
 abstract class WalletEvent {}

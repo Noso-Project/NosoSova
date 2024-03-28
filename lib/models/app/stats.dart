@@ -1,6 +1,6 @@
 import 'package:noso_dart/models/halving.dart';
 
-import '../../utils/network_const.dart';
+import '../../utils/enum.dart';
 import '../rest_api/price_dat.dart';
 
 class StatisticsCoin {

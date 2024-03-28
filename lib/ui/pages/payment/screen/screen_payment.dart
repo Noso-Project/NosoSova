@@ -8,8 +8,7 @@ import 'package:nososova/ui/common/route/dialog_router.dart';
 import 'package:nososova/ui/theme/decoration/textfield_decoration.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
 import 'package:nososova/ui/tiles/tile_wallet_address.dart';
-import 'package:nososova/utils/address_tile_style.dart';
-import 'package:nososova/utils/network_const.dart';
+import 'package:nososova/utils/enum.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
 
 import '../../../../blocs/events/wallet_events.dart';
