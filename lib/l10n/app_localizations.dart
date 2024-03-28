@@ -1128,6 +1128,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Exchanges'**
   String get exchanges;
+
+  /// No description provided for @errorImportNoPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Attention! Before importing, unlock your addresses that you have locked with a password in the NosoLite app. Otherwise, they will be ignored.'**
+  String get errorImportNoPassword;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

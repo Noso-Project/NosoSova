@@ -516,4 +516,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get exchanges => 'Биржи';
+
+  @override
+  String get errorImportNoPassword => 'Внимание! Перед импортом разблокируйте ваши адреса, которые вы заблокировали паролем в приложении NosoLite. В противном случае они будут проигнорированы.';
 }

@@ -46,6 +46,7 @@ class DialogImportAddressState extends State<DialogImportAddress> {
             Expanded(
                 child: ListView.builder(
                     shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     itemCount: addresses.length,
                     itemBuilder: (BuildContext context, int index) {
                       final item = addresses[index];
@@ -89,43 +90,46 @@ class DialogImportAddressState extends State<DialogImportAddress> {
                   color: Theme.of(context).colorScheme.surfaceVariant,
                 ),
                 padding: const EdgeInsets.all(20.0),
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: IconButton(
-                          padding: EdgeInsets.zero,
-                          icon: Icon(
-                              !selectAll ? Icons.select_all : Icons.deselect),
-                          onPressed: () {
-                            setState(() {
-                              if (selectAll) {
-                                selectedItems.clear();
-                              } else {
-                                selectedItems.addAll(addresses);
-                              }
-                              selectAll = !selectAll;
-                            });
-                          }),
-                      title: Text(
-                        "${AppLocalizations.of(context)!.searchAddressResult}: ${addresses.length}",
-                      )),
-                  const SizedBox(height: 20),
-                  AppButtonStyle.buttonDefault(
-                      context, AppLocalizations.of(context)!.addToWallet, () {
-                    if (selectedItems.isNotEmpty) {
-                      walletBloc.add(AddAddresses(selectedItems));
-                    }
-                    Navigator.pop(context);
-                  }),
-                  /*  const SizedBox(height: 10),
-                  AppButtonStyle.buttonDefault(
-                      context,
-                      AppLocalizations.of(context)!.cancel,
-                      () => Navigator.pop(context),
-                      isCancel: true)
-
-                 */
-                ]))
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(!selectAll
+                                  ? Icons.select_all
+                                  : Icons.deselect),
+                              onPressed: () {
+                                setState(() {
+                                  if (selectAll) {
+                                    selectedItems.clear();
+                                  } else {
+                                    selectedItems.addAll(addresses);
+                                  }
+                                  selectAll = !selectAll;
+                                });
+                              }),
+                          title: Text(
+                            "${AppLocalizations.of(context)!.searchAddressResult}: ${addresses.length}",
+                          )),
+                      const SizedBox(height: 10),
+                      Text(
+                        AppLocalizations.of(context)!.errorImportNoPassword,
+                        style: AppTextStyles.snackBarMessage.copyWith(
+                            color: CustomColors.negativeBalance, fontSize: 14),
+                      ),
+                      const SizedBox(height: 20),
+                      AppButtonStyle.buttonDefault(
+                          context, AppLocalizations.of(context)!.addToWallet,
+                          () {
+                        if (selectedItems.isNotEmpty) {
+                          walletBloc.add(AddAddresses(selectedItems));
+                        }
+                        Navigator.pop(context);
+                      }),
+                    ]))
           ])
         ]));
   }

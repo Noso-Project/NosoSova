@@ -516,4 +516,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get exchanges => '交易所';
+
+  @override
+  String get errorImportNoPassword => '注意！在导入前，请解锁您在NosoLite应用中用密码锁定的地址。否则，它们将被忽略。';
 }
