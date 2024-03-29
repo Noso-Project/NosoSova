@@ -516,4 +516,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exchanges => 'Exchanges';
+
+  @override
+  String get errorImportNoPassword => 'Attention! Before importing, unlock your addresses that you have locked with a password in the NosoLite app. Otherwise, they will be ignored.';
+
+  @override
+  String get thanksTranslate => 'Thank you for translation';
 }

@@ -3,7 +3,7 @@ import 'package:nososova/blocs/events/contacts_events.dart';
 import 'package:nososova/models/contact.dart';
 import 'package:nososova/repositories/repositories.dart';
 
-import '../utils/network_const.dart';
+import '../utils/enum.dart';
 
 class ContactsState {
   final List<ContactModel> contacts;

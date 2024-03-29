@@ -1,7 +1,7 @@
 import 'package:noso_dart/models/noso/pending.dart';
 
 import '../../models/address_wallet.dart';
-import '../../utils/network_const.dart';
+import '../../utils/enum.dart';
 
 class Wallet {
   List<Address> address;

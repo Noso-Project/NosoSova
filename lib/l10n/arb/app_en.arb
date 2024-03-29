@@ -169,5 +169,7 @@
   "viewAddressItem" : "Style address element",
   "interface" : "Interface",
   "lockedCoins" : "Locked Coins",
-  "exchanges" : "Exchanges"
+  "exchanges" : "Exchanges",
+  "errorImportNoPassword": "Attention! Before importing, unlock your addresses that you have locked with a password in the NosoLite app. Otherwise, they will be ignored.",
+  "thanksTranslate": "Thank you for translation"
 }

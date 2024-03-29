@@ -1,1 +1,0 @@
-enum AddressTileStyle { sDefault, sCustom }

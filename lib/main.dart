@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
@@ -17,12 +16,11 @@ import 'package:nososova/ui/theme/color_schemes.g.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'blocs/events/app_data_events.dart';
-import 'generated/assets.dart';
 
 Future<void> main() async {
-  await dotenv.load(fileName: Assets.nosoSova);
-  setupLocator();
+
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(

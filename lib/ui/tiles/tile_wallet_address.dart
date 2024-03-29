@@ -7,7 +7,7 @@ import 'package:nososova/ui/theme/style/text_style.dart';
 import '../../generated/assets.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/address_wallet.dart';
-import '../../utils/address_tile_style.dart';
+import '../../utils/enum.dart';
 import '../theme/style/icons_style.dart';
 
 class AddressListTile extends StatefulWidget {

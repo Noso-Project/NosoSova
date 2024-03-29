@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
-import 'package:nososova/utils/address_tile_style.dart';
 
 import '../../../../dependency_injection.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../utils/enum.dart';
 import '../../../common/route/dialog_router.dart';
 import '../../../common/route/page_router.dart';
 import '../../../common/widgets/empty_list_widget.dart';

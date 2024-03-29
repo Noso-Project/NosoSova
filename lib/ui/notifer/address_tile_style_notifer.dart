@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../utils/address_tile_style.dart';
+import '../../utils/enum.dart';
 
 class AddressStyleNotifier with ChangeNotifier {
   final String _styleAddressTilePref = "addressTileStyle";

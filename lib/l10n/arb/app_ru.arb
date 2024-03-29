@@ -43,7 +43,7 @@
   "masternodes": "Мастерноды",
   "blocksRemaining": "Осталось блоков",
   "daysUntilNextHalving": "Дней до следующего Халвинга",
-  "numberOfMinedCoins": "Добыто/лимит монет",
+  "numberOfMinedCoins": "Добыто монет",
   "coinsLocked": "Монет заблокировано",
   "marketcap": "Капитализация",
   "tvl": "Заблокированно (USDT)",
@@ -166,8 +166,10 @@
   "myListGvts": "Мои GvT",
   "viewGvtsList": "Обзор",
   "emptyGvts": "В вашем кошельке нет GVT",
-  "viewAddressItem" : "Стиль элемента адреса",
+  "viewAddressItem": "Стиль элемента адреса",
   "interface": "Интерфейс",
-  "lockedCoins" : "Заблокированные монеты",
-  "exchanges": "Биржи"
+  "lockedCoins": "Заблокированные монеты",
+  "exchanges": "Биржи",
+  "errorImportNoPassword": "Внимание! Перед импортом разблокируйте ваши адреса, которые вы заблокировали паролем в приложении NosoLite. В противном случае они будут проигнорированы.",
+  "thanksTranslate": "Спасибо за перевод"
 }

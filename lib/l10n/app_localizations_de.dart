@@ -516,4 +516,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get exchanges => 'Börsen';
+
+  @override
+  String get errorImportNoPassword => 'Achtung! Bevor Sie importieren, entsperren Sie Ihre Adressen, die Sie mit einem Passwort in der NosoLite-App gesperrt haben. Andernfalls werden sie ignoriert.';
+
+  @override
+  String get thanksTranslate => 'Danke für Übersetzung';
 }

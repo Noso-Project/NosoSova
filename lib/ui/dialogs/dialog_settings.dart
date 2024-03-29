@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:nososova/models/address_wallet.dart';
 import 'package:nososova/ui/tiles/tile_wallet_address.dart';
-import 'package:nososova/utils/social_links.dart';
+import 'package:nososova/configs/social_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../configs/interpreters.dart';
 import '../../dependency_injection.dart';
 import '../../generated/assets.dart';
 import '../../l10n/app_localizations.dart';
-import '../../utils/address_tile_style.dart';
+import '../../utils/enum.dart';
+import '../../configs/author.dart';
 import '../config/responsive.dart';
 import '../notifer/address_tile_style_notifer.dart';
 import '../notifer/app_settings_notifer.dart';
 import '../theme/style/button_style.dart';
+import '../theme/style/icons_style.dart';
 import '../theme/style/sizes.dart';
 import '../theme/style/text_style.dart';
 
@@ -68,58 +70,53 @@ class DialogSettings {
               100,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.information,
-                  style: AppTextStyles.dialogTitle,
-                ),
-                Text(
-                  "${AppLocalizations.of(context)!.appVersions}: ${appSettings.getAppVersion}",
-                  style: AppTextStyles.infoItemTitle,
-                ),
-                Text(
-                  "${AppLocalizations.of(context)!.developer}: @pasichDev (Noso-Project)",
-                  style: AppTextStyles.infoItemTitle,
-                ),
-                const SizedBox(height: 20),
-                Text(AppLocalizations.of(context)!.socialLinks,
-                    style: AppTextStyles.dialogTitle),
-                Row(
-                  children: [
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.information,
+                    style: AppTextStyles.dialogTitle,
+                  ),
+                  Text(
+                    "${AppLocalizations.of(context)!.appVersions}: ${appSettings.getAppVersion}",
+                    style: AppTextStyles.infoItemTitle,
+                  ),
+                  Row(children: [
+                    Text(
+                      "${AppLocalizations.of(context)!.developer}: ",
+                      style: AppTextStyles.infoItemTitle,
+                    ),
+                    const AuthorLink()
+                  ]),
+                  const SizedBox(height: 20),
+                  Text(AppLocalizations.of(context)!.thanksTranslate,
+                      style: AppTextStyles.dialogTitle),
+                  Text(
+                    "${Interpreters.getInterpreters}",
+                    style: AppTextStyles.infoItemTitle.copyWith(fontSize: 14),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(AppLocalizations.of(context)!.socialLinks,
+                      style: AppTextStyles.dialogTitle),
+                  Row(children: [
                     IconButton(
                         onPressed: () => openLink(SocialLinks.discord),
-                        icon: SvgPicture.asset(
-                          Assets.iconsSocDiscord,
-                          width: 32,
-                          height: 32,
-                        )),
+                        icon: AppIconsStyle.icon3x2NoColor(
+                            Assets.iconsSocDiscord)),
                     IconButton(
                         onPressed: () => openLink(SocialLinks.telegram),
-                        icon: SvgPicture.asset(
-                          Assets.iconsSocTelegram,
-                          width: 32,
-                          height: 32,
-                        )),
+                        icon: AppIconsStyle.icon3x2NoColor(
+                            Assets.iconsSocTelegram)),
                     IconButton(
                         onPressed: () => openLink(SocialLinks.github),
-                        icon: SvgPicture.asset(
-                          Assets.iconsSocGithub,
-                          width: 32,
-                          height: 32,
-                        )),
+                        icon: AppIconsStyle.icon3x2NoColor(
+                            Assets.iconsSocGithub)),
                     IconButton(
                         onPressed: () => openLink(SocialLinks.reddit),
-                        icon: SvgPicture.asset(
-                          Assets.iconsSocReddit,
-                          width: 32,
-                          height: 32,
-                        )),
-                  ],
-                )
-              ],
-            )),
+                        icon: AppIconsStyle.icon3x2NoColor(
+                            Assets.iconsSocReddit)),
+                  ])
+                ])),
       );
     }
 

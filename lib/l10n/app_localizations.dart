@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' as intl;
 import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
+import 'app_localizations_nl.dart';
 import 'app_localizations_pt.dart';
 import 'app_localizations_ru.dart';
 import 'app_localizations_uk.dart';
@@ -97,6 +98,7 @@ abstract class AppLocalizations {
     Locale('de'),
     Locale('en'),
     Locale('es'),
+    Locale('nl'),
     Locale('pt'),
     Locale('ru'),
     Locale('uk'),
@@ -1128,6 +1130,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Exchanges'**
   String get exchanges;
+
+  /// No description provided for @errorImportNoPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Attention! Before importing, unlock your addresses that you have locked with a password in the NosoLite app. Otherwise, they will be ignored.'**
+  String get errorImportNoPassword;
+
+  /// No description provided for @thanksTranslate.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for translation'**
+  String get thanksTranslate;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -1139,7 +1153,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'pt', 'ru', 'uk', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'nl', 'pt', 'ru', 'uk', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1153,6 +1167,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'de': return AppLocalizationsDe();
     case 'en': return AppLocalizationsEn();
     case 'es': return AppLocalizationsEs();
+    case 'nl': return AppLocalizationsNl();
     case 'pt': return AppLocalizationsPt();
     case 'ru': return AppLocalizationsRu();
     case 'uk': return AppLocalizationsUk();

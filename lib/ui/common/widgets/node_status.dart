@@ -4,7 +4,7 @@ import 'package:noso_dart/models/noso/seed.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
 
 import '../../../l10n/app_localizations.dart';
-import '../../../utils/network_const.dart';
+import '../../../utils/enum.dart';
 import '../../theme/style/text_style.dart';
 
 class NodeStatusUi {

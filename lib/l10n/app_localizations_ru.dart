@@ -137,7 +137,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get daysUntilNextHalving => 'Дней до следующего Халвинга';
 
   @override
-  String get numberOfMinedCoins => 'Добыто/лимит монет';
+  String get numberOfMinedCoins => 'Добыто монет';
 
   @override
   String get coinsLocked => 'Монет заблокировано';
@@ -516,4 +516,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get exchanges => 'Биржи';
+
+  @override
+  String get errorImportNoPassword => 'Внимание! Перед импортом разблокируйте ваши адреса, которые вы заблокировали паролем в приложении NosoLite. В противном случае они будут проигнорированы.';
+
+  @override
+  String get thanksTranslate => 'Спасибо за перевод';
 }
