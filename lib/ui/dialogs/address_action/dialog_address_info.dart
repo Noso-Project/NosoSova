@@ -13,7 +13,7 @@ import '../../common/route/page_router.dart';
 import '../../config/responsive.dart';
 import '../../theme/style/text_style.dart';
 import '../../tiles/dialog_tile.dart';
-import '../../tiles/tile_сonfirm_list.dart';
+import '../../tiles/tile_confirm.dart';
 
 class AddressInfo extends StatefulWidget {
   final Address address;

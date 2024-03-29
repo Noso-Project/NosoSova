@@ -13,8 +13,8 @@ class AuthorLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        if (await canLaunch(url)) {
-          await launch(url);
+        if (!await launchUrl(Uri.parse(url))) {
+          throw Exception('Could not launch author');
         }
       },
       child: Text(

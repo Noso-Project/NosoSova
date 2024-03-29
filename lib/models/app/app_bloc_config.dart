@@ -1,4 +1,3 @@
-import '../../utils/enum.dart';
 import '../../configs/network_config.dart';
 
 class AppBlocConfig {

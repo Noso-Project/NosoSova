@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nososova/ui/common/route/dialog_router.dart';
 
 import '../../../../l10n/app_localizations.dart';
-import '../../../common/route/page_router.dart';
 import '../../../common/widgets/custom/dialog_title_dropdown.dart';
 import '../../../config/responsive.dart';
 import '../../../theme/style/sizes.dart';
@@ -38,7 +37,8 @@ class _SideLeftBarDesktopState extends State<SideLeftBarDesktop> {
                       contentPadding: const EdgeInsets.symmetric(
                           vertical: 5,
                           horizontal: CustomSizes.paddingDialogVertical),
-                      title: Text(AppLocalizations.of(context)!.exchanges, style: AppTextStyles.dialogTitle),
+                      title: Text(AppLocalizations.of(context)!.exchanges,
+                          style: AppTextStyles.dialogTitle),
                       onTap: () => DialogRouter.showExchangesList(context),
                       trailing: Icon(Icons.navigate_next,
                           size: 28,
