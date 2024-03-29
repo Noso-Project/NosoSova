@@ -1,3 +1,7 @@
+## v.0.3.6
+
+- Fixing bugs and improving your experience with our app.
+  
 ## v.0.3.5
 
 - Added display of active exchanges
