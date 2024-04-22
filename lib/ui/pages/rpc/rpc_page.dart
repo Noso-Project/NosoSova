@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nososova/blocs/rpc_bloc.dart';
+import 'package:nososova/ui/theme/style/colors.dart';
 
 import '../../../blocs/events/rpc_events.dart';
 import '../../../l10n/app_localizations.dart';
@@ -31,6 +32,10 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    var addressSave =
+        BlocProvider.of<RpcBloc>(context).state.rpcAddress.split(":");
+    _ipController.text = addressSave[0];
+    _portController.text = addressSave[1];
   }
 
   @override
@@ -171,7 +176,7 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
               "Settings",
               style: AppTextStyles.dialogTitle.copyWith(
                 fontSize: 28,
-                color: Colors.white.withOpacity(0.8),
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
               ),
             ),
             const SizedBox(height: 40),
@@ -195,14 +200,6 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
                       } else {
                         BlocProvider.of<RpcBloc>(context).add(StopServer());
                       }
-                      //  _rpcEnable = value;
-                      /*  BlocProvider.of<RpcBloc>(context)
-                      .add(StartServer("${_ipController.text}:${_portController.text}"));
-
-
-                */
-
-                      //  runServer();
                     });
                   },
                 ),
@@ -225,7 +222,13 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
                 ],
                 style: AppTextStyles.textField,
                 decoration: AppTextFiledDecoration.defaultDecoration("Port")),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
+            if (state.rpcRunnable)
+              Text("RPC is launched, some wallet functions will be limited.\n",
+                  style: AppTextStyles.infoItemValue.copyWith(
+                    fontSize: 16,
+                    color: CustomColors.negativeBalance.withOpacity(0.5),
+                  )),
           ],
         ));
   }
