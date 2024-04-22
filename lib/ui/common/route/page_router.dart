@@ -22,6 +22,7 @@ import '../../pages/contacts/contacts_page.dart';
 import '../../pages/contacts/screen/contacts_screen.dart';
 import '../../pages/payment/payment_page.dart';
 import '../../pages/payment/screen/screen_payment.dart';
+import '../../pages/rpc/rpc_page.dart';
 import '../../pages/transaction/transaction_dialog.dart';
 import '../../pages/transaction/transaction_page.dart';
 import '../../theme/style/text_style.dart';
@@ -196,6 +197,29 @@ class PageRouter {
             }),
           ],
           child: const GvtPage(),
+        ),
+      ),
+    );
+  }
+
+  static void routeRpc(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: locator<WalletBloc>(),
+            ),
+            BlocProvider<GvtBloc>(create: (context) {
+              var bloc = GvtBloc(
+                  repositories: locator<Repositories>(),
+                  walletBloc: locator<WalletBloc>());
+              bloc.add(LoadGvts());
+              return bloc;
+            }),
+          ],
+          child: const RpcPage(),
         ),
       ),
     );
