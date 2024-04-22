@@ -7,6 +7,7 @@ import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
 import 'package:nososova/blocs/events/coininfo_events.dart';
+import 'package:nososova/blocs/rpc_bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/l10n/app_localizations.dart';
@@ -18,7 +19,6 @@ import 'package:window_manager/window_manager.dart';
 import 'blocs/events/app_data_events.dart';
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
@@ -71,6 +71,7 @@ class MyApp extends StatelessWidget {
               providers: [
                 BlocProvider<DebugBloc>(
                     create: (context) => locator<DebugBloc>()),
+                BlocProvider<RpcBloc>(create: (context) => locator<RpcBloc>()),
                 BlocProvider<CoinInfoBloc>(create: (context) {
                   var bloc = locator<CoinInfoBloc>();
                   bloc.add(InitBloc());

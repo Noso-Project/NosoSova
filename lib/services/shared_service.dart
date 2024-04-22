@@ -6,7 +6,7 @@ class SharedService {
   static const String listNodes = "nodesList";
   static const String delaySync = "delaySync";
   static const String rpcStatus = "RPCEnable";
-
+  static const String rpcAddress = "RPCAddress";
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future<void> saveLastSeed(String value) async {
@@ -59,13 +59,25 @@ class SharedService {
 
   Future<void> saveRPCStatus(bool value) async {
     _prefs.then((SharedPreferences prefs) {
-      return prefs.setBool(delaySync, value);
+      return prefs.setBool(rpcStatus, value);
     });
   }
 
   Future<bool?> loadRPCStatus() async {
     return _prefs.then((SharedPreferences prefs) {
-      return prefs.getBool(delaySync);
+      return prefs.getBool(rpcStatus);
+    });
+  }
+
+  Future<void> saveRPCAddress(String value) async {
+    _prefs.then((SharedPreferences prefs) {
+      return prefs.setString(rpcAddress, value);
+    });
+  }
+
+  Future<String?> loadRPCAddress() async {
+    return _prefs.then((SharedPreferences prefs) {
+      return prefs.getString(rpcAddress);
     });
   }
 }

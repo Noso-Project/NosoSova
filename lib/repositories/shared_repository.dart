@@ -44,4 +44,12 @@ class SharedRepository {
   Future<bool?> loadRPCStatus() async {
     return _sharedService.loadRPCStatus();
   }
+
+  Future<void> saveRPCAddress(String value) async {
+    await _sharedService.saveRPCAddress(value);
+  }
+
+  Future<String?> loadRPCAddress() async {
+    return _sharedService.loadRPCAddress();
+  }
 }

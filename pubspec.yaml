@@ -44,6 +44,8 @@ dependencies:
   noso_dart: ^1.2.1
   ##noso_dart:
   ## path: ../NosoDart
+  shelf: ^1.4.1
+  shelf_router: ^1.1.4
 dev_dependencies:
   drift_dev: ^2.15.0
   build_runner: ^2.4.6

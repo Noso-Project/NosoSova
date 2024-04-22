@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nososova/blocs/contacts_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
 import 'package:nososova/blocs/gvt_bloc.dart';
+import 'package:nososova/blocs/rpc_bloc.dart';
 import 'package:nososova/ui/pages/gvt/gvt_page.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
@@ -209,15 +210,9 @@ class PageRouter {
         builder: (_) => MultiBlocProvider(
           providers: [
             BlocProvider.value(
-              value: locator<WalletBloc>(),
+              value: locator<RpcBloc>(),
             ),
-            BlocProvider<GvtBloc>(create: (context) {
-              var bloc = GvtBloc(
-                  repositories: locator<Repositories>(),
-                  walletBloc: locator<WalletBloc>());
-              bloc.add(LoadGvts());
-              return bloc;
-            }),
+
           ],
           child: const RpcPage(),
         ),

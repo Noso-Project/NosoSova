@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../config/responsive.dart';
-import '../../../theme/decoration/gvt/gvt_gradient_decoration.dart';
-import '../../../theme/decoration/gvt/gvt_gradient_decoration_round.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nososova/blocs/events/rpc_events.dart';
+import 'package:nososova/blocs/rpc_bloc.dart';
+import 'package:shelf/shelf.dart';
 import '../../../theme/decoration/textfield_decoration.dart';
 import '../../../theme/style/text_style.dart';
+import 'package:shelf/shelf_io.dart' as shelf_io;
+
 
 class RpcSettings extends StatefulWidget {
   const RpcSettings({Key? key}) : super(key: key);
@@ -17,7 +19,7 @@ class RpcSettings extends StatefulWidget {
 class _RpcSettingsState extends State<RpcSettings> {
   bool _rpcEnable = false;
   final TextEditingController _portController = TextEditingController(text: "8080");
-
+  final TextEditingController _ipController = TextEditingController(text: "localhost");
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +28,22 @@ class _RpcSettingsState extends State<RpcSettings> {
     );
   }
 
+  void runServer() async {
+    var handler =
+    const Pipeline().addMiddleware(logRequests()).addHandler(_echoRequest);
+
+    var server = await shelf_io.serve(handler, 'localhost', 8082);
+
+    // Enable content compression
+    server.autoCompress = true;
+
+    print('Serving at http://${server.address.host}:${server.port}');
+  }
+
+  Response _echoRequest(Request request) =>
+      Response.ok('Request for "${request.url}"');
   Widget _gvtBody(BuildContext context) {
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,6 +72,8 @@ class _RpcSettingsState extends State<RpcSettings> {
               onChanged: (value) {
                 setState(() {
                   _rpcEnable = value;
+                  BlocProvider.of<RpcBloc>(context).add(StartServer("$_ipController:$_ipController"));
+                //  runServer();
                 });
               },
             ),
@@ -63,6 +82,16 @@ class _RpcSettingsState extends State<RpcSettings> {
         const SizedBox(height: 20),
         TextField(
           enabled: !_rpcEnable,
+            maxLength: 15,
+            controller: _ipController,
+            inputFormatters: [
+              CustomTextInputFormatter(),
+            ],
+            style: AppTextStyles.textField,
+            decoration: AppTextFiledDecoration.defaultDecoration("IP")),
+        const SizedBox(height: 20),
+        TextField(
+            enabled: !_rpcEnable,
             maxLength: 4,
             controller: _portController,
             inputFormatters: [
@@ -74,4 +103,8 @@ class _RpcSettingsState extends State<RpcSettings> {
       ],
     );
   }
+}
+
+class CustomTextInputFormatter extends FilteringTextInputFormatter {
+  CustomTextInputFormatter() : super.allow(RegExp(r'^[0-9.]*$'));
 }

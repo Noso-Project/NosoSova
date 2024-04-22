@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:noso_dart/models/noso/gvt.dart';
-import 'package:nososova/blocs/gvt_bloc.dart';
-import 'package:nososova/ui/common/widgets/empty_list_widget.dart';
-import 'package:nososova/ui/common/widgets/loading.dart';
-import 'package:nososova/ui/pages/rpc/screen/rpc_settings.dart';
-import 'package:nososova/utils/enum.dart';
+import 'package:nososova/blocs/rpc_bloc.dart';
 
+import '../../../blocs/events/rpc_events.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../models/app/gvt_owner.dart';
 import '../../config/responsive.dart';
+import '../../theme/decoration/textfield_decoration.dart';
 import '../../theme/style/text_style.dart';
-import '../../tiles/tile_gvt_my.dart';
-import '../../tiles/tile_gvt_owner.dart';
 
 class RpcPage extends StatefulWidget {
   const RpcPage({Key? key}) : super(key: key);
@@ -26,6 +21,11 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
   final GlobalKey<_RpcPageState> _keyBloc = GlobalKey();
   late TabController _tabController;
   int selectIndexTab = 0;
+
+  final TextEditingController _portController =
+      TextEditingController(text: "8080");
+  final TextEditingController _ipController =
+      TextEditingController(text: "192.168.31.126");
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
           title: const Text("RPC"),
           elevation: 0,
         ),
-        body: BlocBuilder<GvtBloc, GvtState>(
+        body: BlocBuilder<RpcBloc, RpcState>(
             key: _keyBloc,
             builder: (context, state) {
               if (!Responsive.isMobile(context)) {
@@ -52,61 +52,54 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                          flex: 4, child: SafeArea(child: _tabsContent(state))),
+                      Expanded(flex: 4, child: SafeArea(child: _tabsContent())),
                       Container(
                           width: 370,
                           height: double.infinity,
                           color: Theme.of(context).colorScheme.background,
-                          child: const RpcSettings())
+                          child: _rpcSettings(state))
                     ]);
               }
               return Column(children: [
-                const RpcSettings(),
-                Expanded(child: _tabsContent(state))
+                _rpcSettings(state),
+                Expanded(child: _tabsContent())
               ]);
             }));
   }
 
-  _tabsContent(GvtState state) {
+  _tabsContent() {
     return Column(children: [
       const SizedBox(height: 10),
-      if (state.statusFetch == ApiStatus.loading)
-        const Expanded(child: LoadingWidget()),
-      if (state.statusFetch == ApiStatus.error)
-        Expanded(
-            child:
-                EmptyWidget(title: AppLocalizations.of(context)!.errorLoading)),
-      if (state.statusFetch == ApiStatus.connected)
-        TabBar(
-            controller: _tabController,
-            indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
-            onTap: (index) {
-              setState(() {
-                selectIndexTab = index;
-              });
-            },
-            tabs: [
-              Tab(
-                  child: Text(AppLocalizations.of(context)!.myListGvts,
-                      style: selectIndexTab == 0
-                          ? AppTextStyles.tabActive
-                          : AppTextStyles.tabInActive)),
-              Tab(
-                  child: Text(AppLocalizations.of(context)!.viewGvtsList,
-                      style: selectIndexTab == 1
-                          ? AppTextStyles.tabActive
-                          : AppTextStyles.tabInActive))
-            ]),
+      TabBar(
+          controller: _tabController,
+          indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
+          onTap: (index) {
+            setState(() {
+              selectIndexTab = index;
+            });
+          },
+          tabs: [
+            Tab(
+                child: Text(AppLocalizations.of(context)!.myListGvts,
+                    style: selectIndexTab == 0
+                        ? AppTextStyles.tabActive
+                        : AppTextStyles.tabInActive)),
+            Tab(
+                child: Text(AppLocalizations.of(context)!.viewGvtsList,
+                    style: selectIndexTab == 1
+                        ? AppTextStyles.tabActive
+                        : AppTextStyles.tabInActive))
+          ]),
       const SizedBox(height: 10),
-      if (state.statusFetch == ApiStatus.connected)
+      /* if (state.statusFetch == ApiStatus.connected)
         Expanded(
             child: TabBarView(
                 controller: _tabController,
-                children: [_myGvt(state.myGvts), _listViewGvts(state.gvts)]))
+                children: [_myGvt(state.myGvts), _listViewGvts(state.gvts)]))*/
     ]);
   }
 
+  /*
   _myGvt(List<Gvt> myGvts) {
     if (myGvts.isEmpty) {
       return EmptyWidget(
@@ -163,4 +156,81 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
 
     return gvtOwners;
   }
+
+   */
+
+  Widget _rpcSettings(RpcState state) {
+    return Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            Text(
+              "Settings",
+              style: AppTextStyles.dialogTitle.copyWith(
+                fontSize: 28,
+                color: Colors.white.withOpacity(0.8),
+              ),
+            ),
+            const SizedBox(height: 40),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "RPC Enable",
+                  style: AppTextStyles.dialogTitle.copyWith(
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                ),
+                Switch(
+                  value: state.rpcRunnable,
+                  onChanged: (value) {
+                    setState(() {
+                      if (state.rpcRunnable == false) {
+                        BlocProvider.of<RpcBloc>(context).add(StartServer(
+                            "${_ipController.text}:${_portController.text}"));
+                      } else {
+                        BlocProvider.of<RpcBloc>(context).add(StopServer());
+                      }
+                      //  _rpcEnable = value;
+                      /*  BlocProvider.of<RpcBloc>(context)
+                      .add(StartServer("${_ipController.text}:${_portController.text}"));
+
+
+                */
+
+                      //  runServer();
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            TextField(
+                enabled: !state.rpcRunnable,
+                maxLength: 15,
+                controller: _ipController,
+                style: AppTextStyles.textField,
+                decoration: AppTextFiledDecoration.defaultDecoration("IP")),
+            const SizedBox(height: 20),
+            TextField(
+                enabled: !state.rpcRunnable,
+                maxLength: 4,
+                controller: _portController,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                style: AppTextStyles.textField,
+                decoration: AppTextFiledDecoration.defaultDecoration("Port")),
+            const SizedBox(height: 30),
+          ],
+        ));
+  }
+}
+
+class CustomTextInputFormatter extends FilteringTextInputFormatter {
+  CustomTextInputFormatter() : super.allow(RegExp(r'^[0-9.]*$'));
 }
