@@ -57,7 +57,7 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
   Future<void> _loadConfig() async {
     var rpcAddress = await _repositories.sharedRepository.loadRPCAddress();
  //   var rpcStatus = await _repositories.sharedRepository.loadRPCStatus();
-
+    print('LoadConfig');
     emit(state.copyWith(rpcAddress: rpcAddress, rpcRunnable: false));
   }
 

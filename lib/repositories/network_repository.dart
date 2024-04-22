@@ -41,4 +41,8 @@ class NetworkRepository {
   Future<ResponseApi> fetchExchangeList() {
     return _explorerStatsService.fetchExchangeList();
   }
+
+  Future<ResponseApi> fetchHeathCheck() {
+    return _explorerStatsService.fetchHeathCheck();
+  }
 }

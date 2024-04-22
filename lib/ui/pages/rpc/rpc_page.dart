@@ -85,7 +85,7 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
           },
           tabs: [
             Tab(
-                child: Text(AppLocalizations.of(context)!.myListGvts,
+                child: Text("RPC Logs",
                     style: selectIndexTab == 0
                         ? AppTextStyles.tabActive
                         : AppTextStyles.tabInActive)),
