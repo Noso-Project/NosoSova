@@ -5,15 +5,15 @@ Future<void> sendJsonRpcRequest(String url, String method, Map<String, dynamic> 
   final requestData = {
     'jsonrpc': '2.0',
     'method': method,
-    'params': params,
-    'id': 1,
+    'params': ["N2bXDNq8mogt75naxi6uamrjvWn7ZGe"],
+    'id': 15,
   };
   String body = jsonEncode(requestData);
 
   try {
     var response = await http.post(
       Uri.parse(url),
-      headers: {"Origin" : "http://$url"},
+      headers: {"Content-Type": "application/json", "Origin" : url},
       body: body,
     );
     if (response.statusCode == 200) {
@@ -27,5 +27,6 @@ Future<void> sendJsonRpcRequest(String url, String method, Map<String, dynamic> 
 }
 
 Future main(List<String> args) async {
-  sendJsonRpcRequest("http://192.168.31.126:8082", "getmainnetinfo", {});
+  sendJsonRpcRequest("http://192.168.31.126:8082", "getaddressbalance", {});
+ // sendJsonRpcRequest("https://rpc.nosocoin.com:8078", "getaddressbalance", {});
 }

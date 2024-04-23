@@ -1,22 +1,22 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/node_request.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/repositories/repositories.dart';
-import 'package:nososova/services/rpc/rpc_api.dart';
+import 'package:nososova/services/rpc/rpc_handlers.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import '../../utils/enum.dart';
 
-/// Class used to set up all the routing for your server
-class Service {
+class ServiceRPC {
   final Repositories repositories;
   final String ignoreMethods;
 
-  Service(this.repositories, this.ignoreMethods);
+  ServiceRPC(this.repositories, this.ignoreMethods);
 
   /*
   getmainnetinfo
@@ -30,14 +30,14 @@ class Service {
   setdefault
   sendfunds
    */
-
   Future<Response> handleJsonRpcRequest(Request request) async {
     try {
       var body = await request.readAsString();
       var requestData = jsonDecode(body);
       var method = requestData['method'];
       var params = requestData['params'];
-      var result = _handleMethod(method, params);
+
+      var result = await _handleMethod(method, params);
 
       var jsonResponse = {
         'jsonrpc': '2.0',
@@ -45,25 +45,37 @@ class Service {
         'id': requestData['id'],
       };
 
+      var arrayIgnoredMethods = ignoreMethods.split(",");
+
+      if (arrayIgnoredMethods.contains(method)) {
+        var errorResponse = {
+          'jsonrpc': '2.0',
+          'error': {'code': 400, 'message': 'Route locked'},
+          'id': -1,
+        };
+
+        return Response.ok(jsonEncode(errorResponse));
+      }
+
       return Response.ok(jsonEncode(jsonResponse));
     } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
       var errorResponse = {
         'jsonrpc': '2.0',
-        'error': {'code': -32603, 'message': 'Route not found'},
-        'id': null,
+        'error': {'code': 400, 'message': 'Bad Request'},
+        'id': -1,
       };
 
       return Response.ok(jsonEncode(errorResponse));
     }
   }
 
-  dynamic _handleMethod(String method, dynamic params) {
+  dynamic _handleMethod(String method, dynamic params) async {
     var statusLocaleNetwork = locator<AppDataBloc>().state.statusConnected;
     bool localeNetworkRunnable =
         statusLocaleNetwork == StatusConnectNodes.connected;
-
-    // Тут ви можете додати логіку обробки різних методів
-    // Наприклад, якщо метод - "getmainnetinfo", повернемо масив параметрів
 
     if (method == 'getmainnetinfo') {
       /**
@@ -90,12 +102,44 @@ class Service {
     if (method == 'getpendingorders') {
       var value = repositories.networkRepository.fetchNode(
           NodeRequest.getPendingsList, locator<AppDataBloc>().state.node.seed);
-      return ['param1', 'param2']; // Приклад відповіді
+      return ['param1', 'param2'];
     }
-    // Додаткова логіка обробки інших методів
+
+    if (method == 'getblockorders') {
+      return ['param1', 'param2'];
+    }
+
+    if (method == 'getorderinfo') {
+      return ['param1', 'param2'];
+    }
+
+    if (method == 'getaddressbalance') {
+      var info = await RPCHandlers(repositories)
+          .fetchBalance(params[0], statusLocaleNetwork);
+      return info;
+    }
+
+    if (method == 'getnewaddress') {
+      return ['param1', 'param2'];
+    }
+
+    if (method == 'islocaladdress') {
+      return ['param1', 'param2'];
+    }
+
+    if (method == 'getwalletbalance') {
+      return ['param1', 'param2'];
+    }
+
+    if (method == 'setdefault') {
+      return ['param1', 'param2'];
+    }
+
+    if (method == 'sendfunds') {
+      return ['param1', 'param2'];
+    }
   }
 
-  // The handler/middleware that will be used by the server, all the routing for the server will be implemented here.
   Handler get handler {
     final router = Router();
     router.post('/', (Request request) {
@@ -103,26 +147,9 @@ class Service {
     });
 
     router.get('/health-check', (Request request) async {
-      var restApi = await repositories.networkRepository.fetchHeathCheck();
-      var nodeInfo = locator<AppDataBloc>().state.node;
-
-      var jsonResponse = {
-        'REST-API': restApi.value,
-        'Noso-Network': {
-          "Seed": nodeInfo.seed.toTokenizer,
-          "Block": nodeInfo.lastblock,
-          "UTCTime": nodeInfo.utcTime,
-          "Node Version": nodeInfo.version
-        },
-        'NosoSova': "Running",
-      };
-
-      return Response.ok(jsonEncode(jsonResponse));
+      return Response.ok(
+          jsonEncode(RPCHandlers(repositories).fetchHealthCheck()));
     });
-
-    // You can also embed other routers, in this case it will help organizer your routers
-    // Note: This needs be before the catch 'router.all' that follows
-    //   router.mount('/api/', Api().router);
 
     return router;
   }

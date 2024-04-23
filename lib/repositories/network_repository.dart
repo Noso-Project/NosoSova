@@ -45,4 +45,7 @@ class NetworkRepository {
   Future<ResponseApi> fetchHeathCheck() {
     return _explorerStatsService.fetchHeathCheck();
   }
+  Future<ResponseApi> fetchAddressBalance(String hash) {
+    return _explorerStatsService.fetchAddressBalance(hash);
+  }
 }

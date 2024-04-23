@@ -84,7 +84,7 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
         rpcServer = null;
       }
       rpcServer = await shelf_io.serve(
-          Service(_repositories, ignoreMethods).handler,
+          ServiceRPC(_repositories, ignoreMethods).handler,
           addressArray[0],
           int.parse(addressArray[1]));
 
