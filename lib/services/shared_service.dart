@@ -7,6 +7,7 @@ class SharedService {
   static const String delaySync = "delaySync";
   static const String rpcStatus = "RPCEnable";
   static const String rpcAddress = "RPCAddress";
+  static const String rpcMethodsIgnored = "RPCMethodsIgnored";
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future<void> saveLastSeed(String value) async {
@@ -78,6 +79,18 @@ class SharedService {
   Future<String?> loadRPCAddress() async {
     return _prefs.then((SharedPreferences prefs) {
       return prefs.getString(rpcAddress);
+    });
+  }
+
+  Future<void> saveRPCMethodsIgnored(String value) async {
+    _prefs.then((SharedPreferences prefs) {
+      return prefs.setString(rpcMethodsIgnored, value);
+    });
+  }
+
+  Future<String?> loadRPCMethodsIgnored() async {
+    return _prefs.then((SharedPreferences prefs) {
+      return prefs.getString(rpcMethodsIgnored);
     });
   }
 }

@@ -27,15 +27,22 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
       TextEditingController(text: "8080");
   final TextEditingController _ipController =
       TextEditingController(text: "192.168.31.126");
+  final TextEditingController _ignoreMethods = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    var addressSave =
-        BlocProvider.of<RpcBloc>(context).state.rpcAddress.split(":");
+    _initDataForms();
+  }
+
+  _initDataForms() async {
+    var blockState = BlocProvider.of<RpcBloc>(context).state;
+    var addressSave = blockState.rpcAddress.split(":");
+    var ignoreMethods = blockState.ignoreMethods;
     _ipController.text = addressSave[0];
     _portController.text = addressSave[1];
+    _ignoreMethods.text = ignoreMethods;
   }
 
   @override
@@ -52,6 +59,7 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
         body: BlocBuilder<RpcBloc, RpcState>(
             key: _keyBloc,
             builder: (context, state) {
+              _initDataForms();
               if (!Responsive.isMobile(context)) {
                 return Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -196,7 +204,8 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
                     setState(() {
                       if (state.rpcRunnable == false) {
                         BlocProvider.of<RpcBloc>(context).add(StartServer(
-                            "${_ipController.text}:${_portController.text}"));
+                            "${_ipController.text}:${_portController.text}",
+                            _ignoreMethods.text));
                       } else {
                         BlocProvider.of<RpcBloc>(context).add(StopServer());
                       }
@@ -222,6 +231,20 @@ class _RpcPageState extends State<RpcPage> with SingleTickerProviderStateMixin {
                 ],
                 style: AppTextStyles.textField,
                 decoration: AppTextFiledDecoration.defaultDecoration("Port")),
+            Text(
+              "Ignore methods",
+              style: AppTextStyles.infoItemValue.copyWith(
+                color: Colors.white.withOpacity(0.8),
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+                enabled: !state.rpcRunnable,
+                maxLength: 40,
+                controller: _ignoreMethods,
+                style: AppTextStyles.textField,
+                decoration: AppTextFiledDecoration.defaultDecoration(
+                    "reset,testmethod,twomethod")),
             const SizedBox(height: 20),
             if (state.rpcRunnable)
               Text("RPC is launched, some wallet functions will be limited.\n",

@@ -41,9 +41,9 @@ dependencies:
   wolt_modal_sheet: ^0.2.0
   window_manager: ^0.3.8
   package_info_plus: ^5.0.1
-  noso_dart: ^1.2.1
-  ##noso_dart:
-  ## path: ../NosoDart
+    ##noso_dart: ^1.2.1
+  noso_dart:
+   path: ../NosoDart
   shelf: ^1.4.1
   shelf_router: ^1.1.4
 dev_dependencies:

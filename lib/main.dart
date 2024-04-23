@@ -17,6 +17,7 @@ import 'package:nososova/ui/theme/color_schemes.g.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'blocs/events/app_data_events.dart';
+import 'blocs/events/rpc_events.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,7 +72,12 @@ class MyApp extends StatelessWidget {
               providers: [
                 BlocProvider<DebugBloc>(
                     create: (context) => locator<DebugBloc>()),
-                BlocProvider<RpcBloc>(create: (context) => locator<RpcBloc>()),
+              //  BlocProvider<RpcBloc>(create: (context) => locator<RpcBloc>()),
+                BlocProvider<RpcBloc>(create: (context) {
+                  var bloc = locator<RpcBloc>();
+                  bloc.add(InitBlocRPC());
+                  return bloc;
+                }),
                 BlocProvider<CoinInfoBloc>(create: (context) {
                   var bloc = locator<CoinInfoBloc>();
                   bloc.add(InitBloc());

@@ -209,10 +209,10 @@ class PageRouter {
       MaterialPageRoute(
         builder: (_) => MultiBlocProvider(
           providers: [
-            BlocProvider.value(
-              value: locator<RpcBloc>(),
-            ),
 
+            BlocProvider.value(
+              value:   BlocProvider.of<RpcBloc>(context),
+            ),
           ],
           child: const RpcPage(),
         ),
