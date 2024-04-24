@@ -75,8 +75,7 @@ class ServiceRPC {
      * "sumaryhash" : "C21483546A23510F65E36FE0781B6FF7", "pending" : 12, "supply" : 473480390730000 }], "id" : 15 }
      */
     if (method == 'getmainnetinfo') {
-      var info = await RPCHandlers(repositories).fetchMainNetInfo();
-      return info;
+      return await RPCHandlers(repositories).fetchMainNetInfo();
     }
 
     /**
@@ -85,8 +84,7 @@ class ServiceRPC {
      *   }], "id" : 15 }
      */
     if (method == 'getpendingorders') {
-      var info = await RPCHandlers(repositories).fetchPendingList();
-      return info;
+      return await RPCHandlers(repositories).fetchPendingList();
     }
 
     /**
@@ -103,8 +101,7 @@ class ServiceRPC {
         500200000, "fee" : 0, "reference" : "null", "sender" : "COINBASE" }] }], "id" : 15 }
      */
     if (method == 'getblockorders') {
-      var info = await RPCHandlers(repositories).fetchBlockOrders(params[0]);
-      return info;
+      return await RPCHandlers(repositories).fetchBlockOrders(params[0]);
     }
 
     /**
@@ -114,14 +111,12 @@ class ServiceRPC {
         "COINBASE" } }], "id" : 15 }
      */
     if (method == 'getorderinfo') {
-      var info = await RPCHandlers(repositories).fetchOrderInfo(params[0]);
-      return info;
+      return await RPCHandlers(repositories).fetchOrderInfo(params[0]);
     }
 
     if (method == 'getaddressbalance') {
-      var info = await RPCHandlers(repositories)
+      return await RPCHandlers(repositories)
           .fetchBalance(params[0], statusLocaleNetwork);
-      return info;
     }
 
     if (method == 'getnewaddress') {
@@ -129,7 +124,7 @@ class ServiceRPC {
     }
 
     if (method == 'islocaladdress') {
-      return ['param1', 'param2'];
+      return await RPCHandlers(repositories).fetchIsLocalAddress(params[0]);
     }
 
     if (method == 'getwalletbalance') {

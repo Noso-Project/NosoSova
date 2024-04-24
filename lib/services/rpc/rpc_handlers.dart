@@ -6,6 +6,8 @@ import 'package:noso_dart/models/noso/summary.dart';
 import 'package:noso_dart/node_request.dart';
 import 'package:noso_dart/utils/data_parser.dart';
 import 'package:noso_dart/utils/noso_math.dart';
+import 'package:nososova/blocs/wallet_bloc.dart';
+import 'package:nososova/models/address_wallet.dart';
 
 import '../../blocs/app_data_bloc.dart';
 import '../../blocs/coininfo_bloc.dart';
@@ -218,5 +220,15 @@ class RPCHandlers {
       }
     }
     return [addressBalance.toJson()];
+  }
+
+  Future<Map<String, bool>> fetchIsLocalAddress(String hashAddress) async {
+    var walletList = locator<WalletBloc>().state.wallet.address;
+
+    Address foundSummary = walletList.firstWhere(
+        (wallet) => wallet.hash == hashAddress,
+        orElse: () => Address(hash: "", publicKey: "", privateKey: ""));
+
+    return {"result": foundSummary.hash.isNotEmpty};
   }
 }
