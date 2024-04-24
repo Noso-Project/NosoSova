@@ -27,6 +27,6 @@ Future<void> sendJsonRpcRequest(String url, String method, Map<String, dynamic> 
 }
 
 Future main(List<String> args) async {
-  sendJsonRpcRequest("http://192.168.31.126:8082", "getaddressbalance", {});
+  sendJsonRpcRequest("http://192.168.31.126:8082", "getpendingorders", {});
  // sendJsonRpcRequest("https://rpc.nosocoin.com:8078", "getaddressbalance", {});
 }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/node_request.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
@@ -19,11 +18,11 @@ class ServiceRPC {
   ServiceRPC(this.repositories, this.ignoreMethods);
 
   /*
-  getmainnetinfo
-  getpendingorders
+  getmainnetinfo +
+  getpendingorders +
   getblockorders
   getorderinfo
-  getaddressbalance
+  getaddressbalance +
   getnewaddress
   islocaladdress
   getwalletbalance
@@ -74,35 +73,23 @@ class ServiceRPC {
 
   dynamic _handleMethod(String method, dynamic params) async {
     var statusLocaleNetwork = locator<AppDataBloc>().state.statusConnected;
-    bool localeNetworkRunnable =
-        statusLocaleNetwork == StatusConnectNodes.connected;
-
+    /**
+     * { "jsonrpc" : "2.0", "result" : [{ "lastblock" : 94490, "lastblockhash" : "5E71D00A2945E0884893ACD9A0C6AD72", "headershash" : "E41D37527B0A9F0A01C63F32C52562E9",
+     * "sumaryhash" : "C21483546A23510F65E36FE0781B6FF7", "pending" : 12, "supply" : 473480390730000 }], "id" : 15 }
+     */
     if (method == 'getmainnetinfo') {
-      /**
-       * { "jsonrpc" : "2.0", "result" : [{ "lastblock" : 94490, "lastblockhash" : "5E71D00A2945E0884893ACD9A0C6AD72", "headershash" : "E41D37527B0A9F0A01C63F32C52562E9",
-       * "sumaryhash" : "C21483546A23510F65E36FE0781B6FF7", "pending" : 12, "supply" : 473480390730000 }], "id" : 15 }
-       */
-      Node nodeInfo;
-      //   if(localeNetworkRunnable){
-      nodeInfo = locator<AppDataBloc>().state.node;
-      //  }
-      // lastblockhash,headershash,sumaryhash,supply
-      return [
-        {
-          "lastblock": nodeInfo.lastblock,
-          "lastblockhash": "",
-          "headershash": "",
-          "sumaryhash": "",
-          "pending": nodeInfo.pendings,
-          "supply": 0
-        }
-      ];
+      var info = await RPCHandlers(repositories).fetchMainNetInfo();
+      return info;
     }
 
+    /**
+     * { "jsonrpc" : "2.0", "result" : [{ "pendings" :
+     *   ["OR4p3i68820rekmls61dxrrxr05rgogv6odo3gitxw0dp4ugnbno,1713978646,TRFR,N4ZR3fKhTUod34evnEcDQX3i6XufBDU,N2bXDNq8mogt75naxi6uamrjvWn7ZGe,100000000,1000000,"]
+     *   }], "id" : 15 }
+     */
     if (method == 'getpendingorders') {
-      var value = repositories.networkRepository.fetchNode(
-          NodeRequest.getPendingsList, locator<AppDataBloc>().state.node.seed);
-      return ['param1', 'param2'];
+      var info = await RPCHandlers(repositories).fetchPendingList();
+      return info;
     }
 
     if (method == 'getblockorders') {
