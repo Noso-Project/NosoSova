@@ -13,6 +13,7 @@ import '../../configs/network_config.dart';
 import '../../dependency_injection.dart';
 import '../../models/responses/response_api.dart';
 import '../../models/responses/response_node.dart';
+import '../../models/rest_api/block_full_info.dart';
 import '../../models/rpc/address_balance.dart';
 import '../../repositories/repositories.dart';
 import '../../utils/enum.dart';
@@ -63,6 +64,74 @@ class RPCHandlers {
             : {}
       ]
     };
+  }
+
+  Future<List<Map<String, Object?>>> fetchOrderInfo(String targetOrder) async {
+    ResponseApi<dynamic> restApiResponse =
+        await repositories.networkRepository.fetchOrderInformation(targetOrder);
+    if (restApiResponse.errors == null && targetOrder.isNotEmpty) {
+      var inputObject = restApiResponse.value;
+
+      if (inputObject['block_id'].isNotEmpty) {
+        DateTime dateTime = DateTime.parse(inputObject['timestamp']);
+        int unixTimestamp = dateTime.millisecondsSinceEpoch ~/ 1000;
+        double amount = double.parse(inputObject['amount']);
+        double fee = double.parse(inputObject['fee']);
+
+        Map<String, dynamic> outputObject = {
+          'orderid': inputObject['order_id'],
+          'timestamp': unixTimestamp,
+          'block': inputObject['block_id'],
+          'type': inputObject['order_type'],
+          'trfrs': 1,
+          'receiver': inputObject['receiver'],
+          'amount': NosoMath().doubleToBigEndian(amount),
+          'fee': NosoMath().doubleToBigEndian(fee),
+          'reference': inputObject['reference'],
+          'sender': inputObject['sender'],
+        };
+
+        return [
+          {"valid": true, "order": outputObject}
+        ];
+      }
+    }
+    return [
+      {"valid": false, "order": null}
+    ];
+  }
+
+  Future<List<Map<String, Object?>>> fetchBlockOrders(String block) async {
+    int targetBlock = block.isEmpty ? 0 : int.parse(block);
+    ResponseApi<dynamic> restApiResponse =
+        await repositories.networkRepository.fetchBlockInformation(targetBlock);
+    if (restApiResponse.errors == null && targetBlock != 0) {
+      var blockInfo = Block.fromJson(restApiResponse.value);
+      List<Map<String, dynamic>> transactionsJson =
+          blockInfo.transactions.map((transaction) {
+        return {
+          "orderid": transaction.orderId,
+          "timestamp":
+              DateTime.parse(transaction.timestamp).millisecondsSinceEpoch ~/
+                  1000,
+          "block": transaction.blockId,
+          "type": transaction.orderType,
+          "trfrs": transaction.transactionCount,
+          "receiver": transaction.receiver,
+          "amount": transaction.totalAmount,
+          "fee": transaction.totalFee,
+          "reference": transaction.reference,
+          "sender": transaction.sender,
+        };
+      }).toList();
+      return [
+        {"valid": true, "block": blockInfo.blockId, "orders": transactionsJson}
+      ];
+    } else {
+      return [
+        {"valid": false, "block": -1, "orders": []}
+      ];
+    }
   }
 
   Future<Map<String, dynamic>> fetchMainNetInfo() async {

@@ -15,6 +15,42 @@ class ExplorerStatsService {
   final String _apiStats = "https://api.nosocoin.com/";
   final int _delaySeconds = 10;
 
+  Future<ResponseApi> fetchOrderInfo(String orderId) async {
+    try {
+      final response = await _fetchExplorerStats(
+          "${_apiStats}transactions/order?order_id=$orderId");
+
+      if (response.errors != null) {
+        return response;
+      } else {
+        return ResponseApi(value: response.value);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Request failed with error: $e');
+      }
+      return ResponseApi(errors: 'Request failed with error: $e');
+    }
+  }
+
+  Future<ResponseApi> fetchBlockInfo(int block) async {
+    try {
+      final response =
+          await _fetchExplorerStats("${_apiStats}blocks/info?block_id=$block");
+
+      if (response.errors != null) {
+        return response;
+      } else {
+        return ResponseApi(value: response.value);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Request failed with error: $e');
+      }
+      return ResponseApi(errors: 'Request failed with error: $e');
+    }
+  }
+
   Future<ResponseApi> fetchAddressBalance(String hash) async {
     try {
       final response = await _fetchExplorerStats(
@@ -35,8 +71,8 @@ class ExplorerStatsService {
 
   Future<ResponseApi> fetchHeathCheck() async {
     try {
-      final response = await _fetchExplorerStats(
-          "${_apiStats}api/health-check");
+      final response =
+          await _fetchExplorerStats("${_apiStats}api/health-check");
 
       if (response.errors != null) {
         return response;

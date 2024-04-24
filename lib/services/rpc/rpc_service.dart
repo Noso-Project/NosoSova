@@ -1,15 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:noso_dart/node_request.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:nososova/services/rpc/rpc_handlers.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
-
-import '../../utils/enum.dart';
 
 class ServiceRPC {
   final Repositories repositories;
@@ -20,8 +17,8 @@ class ServiceRPC {
   /*
   getmainnetinfo +
   getpendingorders +
-  getblockorders
-  getorderinfo
+  getblockorders +
+  getorderinfo +
   getaddressbalance +
   getnewaddress
   islocaladdress
@@ -92,12 +89,33 @@ class ServiceRPC {
       return info;
     }
 
+    /**
+     * { "jsonrpc" : "2.0", "result" : [{ "valid" : false, "block" : -1, "orders" : [] }], "id" : 15 }
+     * ************************
+     * { "jsonrpc" : "2.0", "result" : [{ "valid" : true, "block" : 159560, "orders" : [{ "orderid" :
+        "OR4p3i68820rekmls61dxrrxr05rgogv6odo3gitxw0dp4ugnbno", "timestamp" : 1713978646, "block" : 159560, "type" : "TRFR",
+        "trfrs" : 1, "receiver" : "N2bXDNq8mogt75naxi6uamrjvWn7ZGe", "amount" : 100000000, "fee" : 1000000, "reference" : "",
+        "sender" : "N4ZR3fKhTUod34evnEcDQX3i6XufBDU" }, { "orderid" : "OR1ldp8vmj26u8nznqktlnyi11ykfm9c5yyksgm6silhhndkcy3f",
+        "timestamp" : 1713978656, "block" : 159560, "type" : "TRFR", "trfrs" : 1, "receiver" :
+        "N2bXDNq8mogt75naxi6uamrjvWn7ZGe", "amount" : 2200000000, "fee" : 1000000, "reference" : "", "sender" :
+        "N4ZR3fKhTUod34evnEcDQX3i6XufBDU" }, { "orderid" : "1tRCvuxKj7YEMy7xMxcVMqYxVQebRQUtAEXqiLufxRFbYMNRF", "timestamp" :
+        1713979199, "block" : 159560, "type" : "PROJCT", "trfrs" : 1, "receiver" : "NpryectdevepmentfundsGE", "amount" :
+        500200000, "fee" : 0, "reference" : "null", "sender" : "COINBASE" }] }], "id" : 15 }
+     */
     if (method == 'getblockorders') {
-      return ['param1', 'param2'];
+      var info = await RPCHandlers(repositories).fetchBlockOrders(params[0]);
+      return info;
     }
 
+    /**
+     * { "jsonrpc" : "2.0", "result" : [{ "valid" : true, "order" : { "orderid" :
+        "1tRBJvBUMQyCsaStyv1Hct36WNyhEH1jGyQzMZdk6FLmeAQNd", "timestamp" : 1713979799, "block" : 159561, "type" : "PROJCT",
+        "trfrs" : 1, "receiver" : "NpryectdevepmentfundsGE", "amount" : 500222000, "fee" : 0, "reference" : null, "sender" :
+        "COINBASE" } }], "id" : 15 }
+     */
     if (method == 'getorderinfo') {
-      return ['param1', 'param2'];
+      var info = await RPCHandlers(repositories).fetchOrderInfo(params[0]);
+      return info;
     }
 
     if (method == 'getaddressbalance') {

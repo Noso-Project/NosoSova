@@ -45,7 +45,16 @@ class NetworkRepository {
   Future<ResponseApi> fetchHeathCheck() {
     return _explorerStatsService.fetchHeathCheck();
   }
+
   Future<ResponseApi> fetchAddressBalance(String hash) {
     return _explorerStatsService.fetchAddressBalance(hash);
+  }
+
+  Future<ResponseApi> fetchBlockInformation(int block) {
+    return _explorerStatsService.fetchBlockInfo(block);
+  }
+
+  Future<ResponseApi> fetchOrderInformation(String orderId) {
+    return _explorerStatsService.fetchOrderInfo(orderId);
   }
 }
