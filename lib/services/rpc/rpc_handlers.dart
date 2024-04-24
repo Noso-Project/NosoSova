@@ -231,4 +231,19 @@ class RPCHandlers {
 
     return {"result": foundSummary.hash.isNotEmpty};
   }
+
+  Future<Map<String, List<Map<String, int>>>> fetchWalletBalance() async {
+    var walletList = locator<WalletBloc>().state.wallet.address;
+    double totalBalance = 0;
+
+    for (var address in walletList) {
+      totalBalance += address.balance;
+    }
+
+    return {
+      "result": [
+        {"balance": NosoMath().doubleToBigEndian(totalBalance)}
+      ]
+    };
+  }
 }

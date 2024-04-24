@@ -21,8 +21,8 @@ class ServiceRPC {
   getorderinfo +
   getaddressbalance +
   getnewaddress
-  islocaladdress
-  getwalletbalance
+  islocaladdress +
+  getwalletbalance +
   setdefault
   sendfunds
    */
@@ -128,7 +128,7 @@ class ServiceRPC {
     }
 
     if (method == 'getwalletbalance') {
-      return ['param1', 'param2'];
+      return await RPCHandlers(repositories).fetchWalletBalance();
     }
 
     if (method == 'setdefault') {

@@ -27,6 +27,6 @@ Future<void> sendJsonRpcRequest(String url, String method, Map<String, dynamic> 
 }
 
 Future main(List<String> args) async {
-  sendJsonRpcRequest("http://192.168.31.126:8082", "islocaladdress", {});
+  sendJsonRpcRequest("http://192.168.31.126:8082", "getwalletbalance", {});
  // sendJsonRpcRequest("https://rpc.nosocoin.com:8078", "getaddressbalance", {});
 }
