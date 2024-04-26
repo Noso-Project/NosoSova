@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:nososova/blocs/app_data_bloc.dart';
-import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
+import 'package:sovarpc/blocs/rpc_events.dart';
+import '../models/debug_rpc.dart';
 import '../services/rpc/rpc_service.dart';
-import 'events/rpc_events.dart';
+import 'debug_rpc_bloc.dart';
 
 class RpcState {
   final bool rpcRunnable;
@@ -34,29 +34,19 @@ class RpcState {
 }
 
 class RpcBloc extends Bloc<RPCEvents, RpcState> {
-  final WalletBloc walletBloc;
-  final AppDataBloc appDataBloc;
   final Repositories _repositories;
   HttpServer? rpcServer;
+  final DebugRPCBloc _debugBloc;
 
   RpcBloc({
     required Repositories repositories,
-    required this.walletBloc,
-    required this.appDataBloc,
+    required DebugRPCBloc debugBloc,
   })  : _repositories = repositories,
+        _debugBloc = debugBloc,
         super(RpcState()) {
     on<StartServer>(_startServer);
     on<StopServer>(_stopServer);
     on<InitBlocRPC>(_initRPCBloc);
-  }
-
-  factory RpcBloc.create(Repositories repositories, WalletBloc walletBloc,
-      AppDataBloc appDataBloc) {
-    return RpcBloc(
-      repositories: repositories,
-      walletBloc: walletBloc,
-      appDataBloc: appDataBloc,
-    );
   }
 
   void _initRPCBloc(event, emit) async {
@@ -88,7 +78,8 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
           addressArray[0],
           int.parse(addressArray[1]));
 
-      print('Serving at http://${rpcServer?.address.host}:${rpcServer?.port}');
+      _debugBloc.add(AddStringDebug("Start RPC at http://${rpcServer?.address.host}:${rpcServer?.port}", StatusReport.RPC, DebugType.success));
+     // print('Serving at http://${rpcServer?.address.host}:${rpcServer?.port}');
       emit(state.copyWith(
           rpcAddress: address,
           rpcRunnable: true,
@@ -101,7 +92,9 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
 
   void _stopServer(event, emit) async {
     await _repositories.sharedRepository.saveRPCStatus(false);
-    print('Stop server');
+    _debugBloc.add(AddStringDebug("Stop RPC Server", StatusReport.RPC, DebugType.error));
+
+  //  print('Stop server');
     rpcServer?.close(force: true);
     rpcServer = null;
     emit(state.copyWith(rpcRunnable: false));

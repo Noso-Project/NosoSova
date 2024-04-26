@@ -1,10 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:nososova/blocs/app_data_bloc.dart';
-import 'package:nososova/blocs/coininfo_bloc.dart';
-import 'package:nososova/blocs/contacts_bloc.dart';
-import 'package:nososova/blocs/debug_bloc.dart';
-import 'package:nososova/blocs/history_transactions_bloc.dart';
-import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/database/database.dart';
 import 'package:nososova/repositories/file_repository.dart';
 import 'package:nososova/repositories/local_repository.dart';
@@ -15,8 +9,10 @@ import 'package:nososova/services/explorer_stats_service.dart';
 import 'package:nososova/services/file_service.dart';
 import 'package:nososova/services/node_service.dart';
 import 'package:nososova/services/shared_service.dart';
-import 'package:nososova/ui/notifer/address_tile_style_notifer.dart';
 import 'package:nososova/ui/notifer/app_settings_notifer.dart';
+import 'package:sovarpc/blocs/debug_rpc_bloc.dart';
+import 'package:sovarpc/blocs/noso_network_bloc.dart';
+import 'package:sovarpc/blocs/rpc_bloc.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -25,11 +21,10 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<SharedService>(() => SharedService());
   locator.registerLazySingleton<MyDatabase>(() => MyDatabase());
   locator.registerLazySingleton<AppSettings>(() => AppSettings());
-  locator.registerLazySingleton<AddressStyleNotifier>(
-      () => AddressStyleNotifier());
 
   /// repo && services
-  locator.registerLazySingleton<FileService>(() => FileService());
+  locator.registerLazySingleton<FileService>(
+      () => FileService(nameFileSummary: "summaryRPC.psk"));
   locator.registerLazySingleton<ExplorerStatsService>(
       () => ExplorerStatsService());
   locator.registerLazySingleton<FileRepository>(
@@ -48,24 +43,11 @@ Future<void> setupLocator() async {
       fileRepository: locator<FileRepository>()));
 
   /// Blocs
-  locator.registerLazySingleton<DebugBloc>(() => DebugBloc());
-  locator.registerLazySingleton<CoinInfoBloc>(() => CoinInfoBloc(
-      repositories: locator<Repositories>(), debugBloc: locator<DebugBloc>()));
-  locator.registerLazySingleton<AppDataBloc>(() => AppDataBloc(
-      coinInfoBloc: locator<CoinInfoBloc>(),
+  locator.registerLazySingleton<RpcBloc>(() => RpcBloc(
       repositories: locator<Repositories>(),
-      debugBloc: locator<DebugBloc>()));
-  locator.registerLazySingleton<WalletBloc>(() => WalletBloc(
+      debugBloc: locator<DebugRPCBloc>()));
+  locator.registerLazySingleton<DebugRPCBloc>(() => DebugRPCBloc());
+  locator.registerLazySingleton<NosoNetworkBloc>(() => NosoNetworkBloc(
       repositories: locator<Repositories>(),
-      debugBloc: locator<DebugBloc>(),
-      coinInfoBloc: locator<CoinInfoBloc>(),
-      appDataBloc: locator<AppDataBloc>()));
-  locator.registerLazySingleton<ContactsBloc>(
-      () => ContactsBloc(repositories: locator<Repositories>()));
-  locator.registerSingleton<HistoryTransactionsBloc>(
-    HistoryTransactionsBloc(
-      repositories: locator<Repositories>(),
-      walletBloc: locator<WalletBloc>(),
-    ),
-  );
+      debugBloc: locator<DebugRPCBloc>()));
 }

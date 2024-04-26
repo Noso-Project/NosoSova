@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nososova/blocs/contacts_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
 import 'package:nososova/blocs/gvt_bloc.dart';
-import 'package:nososova/blocs/rpc_bloc.dart';
 import 'package:nososova/ui/pages/gvt/gvt_page.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
@@ -23,7 +22,6 @@ import '../../pages/contacts/contacts_page.dart';
 import '../../pages/contacts/screen/contacts_screen.dart';
 import '../../pages/payment/payment_page.dart';
 import '../../pages/payment/screen/screen_payment.dart';
-import '../../pages/rpc/rpc_page.dart';
 import '../../pages/transaction/transaction_dialog.dart';
 import '../../pages/transaction/transaction_page.dart';
 import '../../theme/style/text_style.dart';
@@ -203,20 +201,4 @@ class PageRouter {
     );
   }
 
-  static void routeRpc(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => MultiBlocProvider(
-          providers: [
-
-            BlocProvider.value(
-              value:   BlocProvider.of<RpcBloc>(context),
-            ),
-          ],
-          child: const RpcPage(),
-        ),
-      ),
-    );
-  }
 }

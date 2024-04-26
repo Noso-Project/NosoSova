@@ -12,7 +12,9 @@ import 'package:path_provider/path_provider.dart';
 import '../models/app/response_backup.dart';
 
 class FileService {
-  String nameFileSummary = "sumary.psk";
+  String nameFileSummary;
+
+  FileService({this.nameFileSummary = "sumary.psk"});
 
   /// Saves a summary file by writing the provided [bytesValue] to the application support directory.
   /// The method checks for a ZIP header in the byte array, removes it, and then extracts the files

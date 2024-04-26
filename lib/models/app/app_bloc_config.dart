@@ -4,7 +4,7 @@ class AppBlocConfig {
   late String? _lastSeed;
   late String? _nodesList;
   late int? _lastBlock;
-  int _delaySync = NetworkConfig.delaySync;
+  int _delaySync = 16;
   bool _isOneStartup = true;
   late int? _countErrorConnections = 0;
 

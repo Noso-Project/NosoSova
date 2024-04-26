@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/repositories/repositories.dart';
-import 'package:nososova/services/rpc/rpc_handlers.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
+import 'package:sovarpc/services/rpc/rpc_handlers.dart';
 
 class ServiceRPC {
   final Repositories repositories;

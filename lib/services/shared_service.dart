@@ -10,6 +10,7 @@ class SharedService {
   static const String rpcMethodsIgnored = "RPCMethodsIgnored";
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
+
   Future<void> saveLastSeed(String value) async {
     _prefs.then((SharedPreferences prefs) {
       return prefs.setString(lastSeed, value);

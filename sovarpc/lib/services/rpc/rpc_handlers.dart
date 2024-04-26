@@ -6,19 +6,17 @@ import 'package:noso_dart/models/noso/summary.dart';
 import 'package:noso_dart/node_request.dart';
 import 'package:noso_dart/utils/data_parser.dart';
 import 'package:noso_dart/utils/noso_math.dart';
+import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
+import 'package:nososova/configs/network_config.dart';
 import 'package:nososova/models/address_wallet.dart';
-
-import '../../blocs/app_data_bloc.dart';
-import '../../blocs/coininfo_bloc.dart';
-import '../../configs/network_config.dart';
+import 'package:nososova/models/responses/response_api.dart';
+import 'package:nososova/models/responses/response_node.dart';
+import 'package:nososova/repositories/repositories.dart';
+import 'package:nososova/utils/enum.dart';
+import 'package:nososova/models/rest_api/block_full_info.dart';
 import '../../dependency_injection.dart';
-import '../../models/responses/response_api.dart';
-import '../../models/responses/response_node.dart';
-import '../../models/rest_api/block_full_info.dart';
 import '../../models/rpc/address_balance.dart';
-import '../../repositories/repositories.dart';
-import '../../utils/enum.dart';
 
 class RPCHandlers {
   final Repositories repositories;
@@ -148,7 +146,7 @@ class RPCHandlers {
     var nodeParse = DataParser.parseDataNode(
         responseNode.value, locator<AppDataBloc>().state.node.seed);
     if (nodeParse != null && responseNode.errors == null) {
-      var supply = locator<CoinInfoBloc>().state.statisticsCoin.getTotalCoin;
+      var supply = 0;
       return {
         "lastblock": nodeParse.lastblock,
         "lastblockhash": nodeParse.lastblockhash,

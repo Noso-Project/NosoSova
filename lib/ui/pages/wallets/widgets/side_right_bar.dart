@@ -48,16 +48,6 @@ class SideRightBarDesktop extends StatelessWidget {
                             size: 28,
                             color: Theme.of(context).colorScheme.onSurface))),
                 const SizedBox(height: 10),
-                Card(
-                    child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: CustomSizes.paddingDialogVertical),
-                        title: Text("RPC-Wallet", style: AppTextStyles.dialogTitle),
-                        onTap: () => PageRouter.routeRpc(context),
-                        trailing: Icon(Icons.navigate_next,
-                            size: 28,
-                            color: Theme.of(context).colorScheme.onSurface))),
                 const SizedBox(height: 10),
                 Card(
                     child: ListTile(
