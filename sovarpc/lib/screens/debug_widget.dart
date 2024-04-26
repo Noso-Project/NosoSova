@@ -29,9 +29,17 @@ class _DebugWidgetState extends State<DebugWidget> {
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-        child: Column(children: [
-          Expanded( child:
-          Row(children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            "Logs",
+            style: AppTextStyles.dialogTitle.copyWith(
+              fontSize: 24,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+              child: Row(children: [
             Container(
               decoration: BoxDecoration(
                 color: sourceSelected == StatusReport.ALL
@@ -91,23 +99,25 @@ class _DebugWidgetState extends State<DebugWidget> {
                   .where((item) => item.source == sourceSelected)
                   .toList();
             }
-            return Expanded(flex:7,child:  ListView.builder(
-              shrinkWrap: true,
-              controller: _controller,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
-              itemCount: listDebug.length,
-              itemBuilder: (context, index) {
-                final item = listDebug[index];
-                return Row(
+            return Expanded(
+                flex: 7,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  controller: _controller,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0, vertical: 0.0),
+                  itemCount: listDebug.length,
+                  itemBuilder: (context, index) {
+                    final item = listDebug[index];
+                    return Row(
                       children: [
                         Text("${item.time}",
                             style: AppTextStyles.infoItemTitle.copyWith(
                                 fontSize: 12,
                                 color: item.type != DebugType.inform
                                     ? item.type != DebugType.error
-                                    ? CustomColors.positiveBalance
-                                    : CustomColors.negativeBalance
+                                        ? CustomColors.positiveBalance
+                                        : CustomColors.negativeBalance
                                     : Theme.of(context).colorScheme.onSurface)),
                         const SizedBox(width: 5),
                         Text(item.source == StatusReport.Node ? "NODE" : "RPC",
@@ -116,7 +126,8 @@ class _DebugWidgetState extends State<DebugWidget> {
                                 color: item.source == StatusReport.Node
                                     ? CustomColors.negativeBalance
                                     : CustomColors.positiveBalance)),
-                         SizedBox(width: item.source == StatusReport.Node ? 5 : 15),
+                        SizedBox(
+                            width: item.source == StatusReport.Node ? 5 : 15),
                         Text("${item.message}",
                             style: AppTextStyles.infoItemTitle.copyWith(
                                 fontSize: 12,
@@ -127,8 +138,8 @@ class _DebugWidgetState extends State<DebugWidget> {
                                     : Theme.of(context).colorScheme.onSurface))
                       ],
                     );
-              },
-            ));
+                  },
+                ));
           })
         ]));
   }

@@ -48,7 +48,6 @@ class SideRightBarDesktop extends StatelessWidget {
                             size: 28,
                             color: Theme.of(context).colorScheme.onSurface))),
                 const SizedBox(height: 10),
-                const SizedBox(height: 10),
                 Card(
                     child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(
