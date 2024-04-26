@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:sovarpc/services/rpc/rpc_handlers.dart';
+
+import '../../blocs/noso_network_bloc.dart';
 
 class ServiceRPC {
   final Repositories repositories;
@@ -69,7 +70,6 @@ class ServiceRPC {
   }
 
   dynamic _handleMethod(String method, dynamic params) async {
-    var statusLocaleNetwork = locator<AppDataBloc>().state.statusConnected;
     /**
      * { "jsonrpc" : "2.0", "result" : [{ "lastblock" : 94490, "lastblockhash" : "5E71D00A2945E0884893ACD9A0C6AD72", "headershash" : "E41D37527B0A9F0A01C63F32C52562E9",
      * "sumaryhash" : "C21483546A23510F65E36FE0781B6FF7", "pending" : 12, "supply" : 473480390730000 }], "id" : 15 }
@@ -116,7 +116,7 @@ class ServiceRPC {
 
     if (method == 'getaddressbalance') {
       return await RPCHandlers(repositories)
-          .fetchBalance(params[0], statusLocaleNetwork);
+          .fetchBalance(params[0]);
     }
 
     if (method == 'getnewaddress') {
@@ -148,9 +148,9 @@ class ServiceRPC {
 
     router.get('/health-check', (Request request) async {
       return Response.ok(
-          jsonEncode(RPCHandlers(repositories).fetchHealthCheck()));
+          jsonEncode(await RPCHandlers(repositories).fetchHealthCheck()));
     });
 
-    return router;
+    return router.call;
   }
 }

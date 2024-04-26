@@ -6,15 +6,16 @@ import 'package:noso_dart/models/noso/summary.dart';
 import 'package:noso_dart/node_request.dart';
 import 'package:noso_dart/utils/data_parser.dart';
 import 'package:noso_dart/utils/noso_math.dart';
-import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/configs/network_config.dart';
 import 'package:nososova/models/address_wallet.dart';
 import 'package:nososova/models/responses/response_api.dart';
 import 'package:nososova/models/responses/response_node.dart';
+import 'package:nososova/models/rest_api/block_full_info.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:nososova/utils/enum.dart';
-import 'package:nososova/models/rest_api/block_full_info.dart';
+import 'package:sovarpc/blocs/noso_network_bloc.dart';
+
 import '../../dependency_injection.dart';
 import '../../models/rpc/address_balance.dart';
 
@@ -25,7 +26,7 @@ class RPCHandlers {
 
   /// A method that tests and returns the active node
   Future<Seed> _getNetworkNode(bool lastNodeOFF) async {
-    var appDataBlock = locator<AppDataBloc>();
+    var appDataBlock = locator<NosoNetworkBloc>();
 
     if (lastNodeOFF) {
       return Seed().tokenizer(NetworkConfig.getRandomNode(null),
@@ -144,7 +145,7 @@ class RPCHandlers {
     }
 
     var nodeParse = DataParser.parseDataNode(
-        responseNode.value, locator<AppDataBloc>().state.node.seed);
+        responseNode.value, locator<NosoNetworkBloc>().state.node.seed);
     if (nodeParse != null && responseNode.errors == null) {
       var supply = 0;
       return {
@@ -166,29 +167,13 @@ class RPCHandlers {
     };
   }
 
-  Future<Map<String, dynamic>> fetchHealthCheck() async {
-    var restApi = await repositories.networkRepository.fetchHeathCheck();
-    var nodeInfo = locator<AppDataBloc>().state.node;
-
-    return {
-      'REST-API': restApi.value,
-      'Noso-Network': {
-        "Seed": nodeInfo.seed.toTokenizer,
-        "Block": nodeInfo.lastblock,
-        "UTCTime": nodeInfo.utcTime,
-        "Node Version": nodeInfo.version
-      },
-      'NosoSova': "Running",
-    };
-  }
-
   ///TODO Отримання pendings для локальних запитів
-  Future<List<Map<String, Object?>>> fetchBalance(
-      String hashAddress, StatusConnectNodes statusConnectNodes) async {
+  Future<List<Map<String, Object?>>> fetchBalance(String hashAddress) async {
     AddressBalance addressBalance;
 
+    var statusLocaleNetwork = locator<NosoNetworkBloc>().state.statusConnected;
     // Wallet not connected network, run fetch REST-API
-    if (statusConnectNodes != StatusConnectNodes.connected) {
+    if (statusLocaleNetwork != StatusConnectNodes.connected) {
       ResponseApi<dynamic> restApiResponse =
           await repositories.networkRepository.fetchAddressBalance(hashAddress);
       addressBalance = AddressBalance.fromJson(restApiResponse.value);
@@ -243,5 +228,34 @@ class RPCHandlers {
         {"balance": NosoMath().doubleToBigEndian(totalBalance)}
       ]
     };
+  }
+
+  Future<Map<String, dynamic>> fetchHealthCheck() async {
+    var restApi = await repositories.networkRepository.fetchHeathCheck();
+    var nosoNetwork = locator<NosoNetworkBloc>().state;
+    var localNode = nosoNetwork.node;
+
+    return {
+      'REST-API': restApi.value,
+      'Noso-Network': {
+        "Seed": localNode.seed.toTokenizer,
+        "Block": localNode.lastblock,
+        "UTCTime": localNode.utcTime,
+        "Node Version": localNode.version,
+        "Status": nosoNetwork.statusConnected == StatusConnectNodes.connected
+            ? "Synchronized"
+            : "Not synchronized"
+      }
+    };
+  }
+
+  int _getDifferenceLastRequestToNosoNetwork() {
+    var node = locator<NosoNetworkBloc>().state.node;
+    DateTime nowDate = DateTime.now();
+    DateTime nodeTime =
+        DateTime.fromMillisecondsSinceEpoch(node.utcTime * 1000, isUtc: true);
+
+    Duration difference = nodeTime.difference(nowDate);
+    return difference.inSeconds.abs();
   }
 }
