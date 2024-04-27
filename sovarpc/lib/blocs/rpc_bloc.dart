@@ -53,7 +53,6 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
     var rpcAddress = await _repositories.sharedRepository.loadRPCAddress();
     var ignoreMethods =
         await _repositories.sharedRepository.loadRPCMethodsIgnored();
-    print("lool");
     emit(state.copyWith(
         rpcAddress: rpcAddress,
         ignoreMethods: ignoreMethods,
@@ -79,7 +78,10 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
           addressArray[0],
           int.parse(addressArray[1]));
 
-      _debugBloc.add(AddStringDebug("Start RPC at http://${rpcServer?.address.host}:${rpcServer?.port}", StatusReport.RPC, DebugType.success));
+      _debugBloc.add(AddStringDebug(
+          "Start RPC at http://${rpcServer?.address.host}:${rpcServer?.port}",
+          StatusReport.RPC,
+          DebugType.success));
       emit(state.copyWith(
           rpcAddress: address,
           rpcRunnable: true,
@@ -91,7 +93,8 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
 
   void _stopServer(event, emit) async {
     await _repositories.sharedRepository.saveRPCStatus(false);
-    _debugBloc.add(AddStringDebug("Stop RPC Server", StatusReport.RPC, DebugType.error));
+    _debugBloc.add(
+        AddStringDebug("Stop RPC Server", StatusReport.RPC, DebugType.error));
 
     rpcServer?.close(force: true);
     rpcServer = null;

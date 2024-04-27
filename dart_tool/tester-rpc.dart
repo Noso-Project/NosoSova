@@ -5,7 +5,7 @@ Future<void> sendJsonRpcRequest(String url, String method, Map<String, dynamic> 
   final requestData = {
     'jsonrpc': '2.0',
     'method': method,
-    'params': [2],
+    'params': [100],
     'id': 15,
   };
   String body = jsonEncode(requestData);

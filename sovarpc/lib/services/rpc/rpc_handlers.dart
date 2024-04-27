@@ -23,6 +23,7 @@ import 'package:sovarpc/blocs/noso_network_bloc.dart';
 import '../../blocs/network_events.dart';
 import '../../dependency_injection.dart';
 import '../../models/rpc/address_balance.dart';
+import '../backup_service.dart';
 
 class RPCHandlers {
   final Repositories repositories;
@@ -289,7 +290,7 @@ class RPCHandlers {
     };
   }
 
-  ///TODO SAVE from BD && backups (isolated)
+  ///TODO SAVE from BD
   Future<List<Map<String, String>>> fetchCreateNewAddressFull(int count) async {
     List<AddressObject> listAddresses = [];
 
@@ -297,7 +298,7 @@ class RPCHandlers {
     for (int i = 0; i < countAddresses; i++) {
       listAddresses.add(AddressHandler.createNewAddress());
     }
-
+    BackupService.writeBackup(listAddresses);
     List<Map<String, String>> addressDetails = listAddresses
         .map((address) => {
               "hash": address.hash,
@@ -309,7 +310,7 @@ class RPCHandlers {
     return addressDetails;
   }
 
-  ///TODO SAVE from BD && backups (isolated)
+  ///TODO SAVE from BD
   Future<List<Map<String, List<String>>>> fetchCreateNewAddress(
       int count) async {
     List<AddressObject> listAddresses = [];
@@ -318,7 +319,7 @@ class RPCHandlers {
     for (int i = 0; i < countAddresses; i++) {
       listAddresses.add(AddressHandler.createNewAddress());
     }
-
+    BackupService.writeBackup(listAddresses);
     return [
       {
         "addresses": [listAddresses.map((address) => address.hash).join(', ')]
