@@ -20,8 +20,10 @@ import 'package:nososova/repositories/repositories.dart';
 import 'package:nososova/utils/enum.dart';
 import 'package:sovarpc/blocs/noso_network_bloc.dart';
 
+import '../../blocs/debug_rpc_bloc.dart';
 import '../../blocs/network_events.dart';
 import '../../dependency_injection.dart';
+import '../../models/debug_rpc.dart';
 import '../../models/rpc/address_balance.dart';
 import '../backup_service.dart';
 
@@ -31,15 +33,19 @@ class RPCHandlers {
   RPCHandlers(this.repositories);
 
   ///TODO Тут додати коли користувацький перевірку на помилки
-  Future<Seed> _getNetworkNode(bool lastNodeOFF) async {
+  Future<Seed> _getNetworkNode(bool localLastNode) async {
     var appDataBlock = locator<NosoNetworkBloc>();
 
-    if (lastNodeOFF) {
-      appDataBlock.add(ReconnectSeed(false));
+    if (localLastNode) {
       return Seed().tokenizer(NetworkConfig.getRandomNode(null),
           rawString: appDataBlock.appBlocConfig.lastSeed);
     }
 
+    locator<DebugRPCBloc>().add(AddStringDebug(
+        "RPC manually changed the seed for noso network",
+        StatusReport.RPC,
+        DebugType.error));
+    appDataBlock.add(ReconnectSeed(false));
     int randomNumber = Random().nextInt(2) + 1;
 
     if (randomNumber == 1) {
@@ -52,6 +58,23 @@ class RPCHandlers {
           Seed().tokenizer(NetworkConfig.getRandomNode(listUsersNodes)));
       return testNode.seed;
     }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchReset() async {
+    var networkBloc = locator<NosoNetworkBloc>();
+    var localNode = networkBloc.state.node;
+    locator<DebugRPCBloc>().add(AddStringDebug(
+        "Reset command was executed", StatusReport.RPC, DebugType.error));
+    locator<NosoNetworkBloc>().add(ReconnectSeed(false));
+    return [
+      {
+        "lastSeed": localNode.seed.toTokenizer,
+        "status":
+            networkBloc.state.statusConnected == StatusConnectNodes.connected
+                ? "Synchronized"
+                : "Not synchronized"
+      }
+    ];
   }
 
   Future<List<Map<String, List<Object>>>> fetchPendingList() async {

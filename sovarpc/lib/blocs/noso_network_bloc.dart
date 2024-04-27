@@ -225,7 +225,6 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
         await ComputeService.compute(calculateSummary, summary ?? Uint8List(0));
   }
 
-
   Future<ConsensusStatus> _checkConsensus(Node targetNode) async {
     List<Node> testNodes = [];
     List<bool> decisionNodes = [];

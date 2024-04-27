@@ -1,10 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
+import 'package:sovarpc/blocs/debug_rpc_bloc.dart';
 import 'package:sovarpc/services/rpc/rpc_handlers.dart';
+
+import '../../models/debug_rpc.dart';
 
 class ServiceRPC {
   final Repositories repositories;
@@ -27,8 +31,8 @@ class ServiceRPC {
   getwalletbalance + (fix, save from appDatabloc)
   setdefault
   sendfunds
+  reset + *
    */
-
 
   Future<Response> handleJsonRpcRequest(Request request) async {
     try {
@@ -61,6 +65,8 @@ class ServiceRPC {
 
       return Response.ok(jsonEncode(jsonResponse));
     } catch (e) {
+      locator<DebugRPCBloc>().add(AddStringDebug(
+          "Consensus confirmed", StatusReport.RPC, DebugType.error));
       if (kDebugMode) {
         print(e);
       }
@@ -156,6 +162,10 @@ class ServiceRPC {
 
     if (method == 'sendfunds') {
       return ['param1', 'param2'];
+    }
+
+    if (method == 'reset') {
+      return await rpcHandlers.fetchReset();
     }
   }
 
