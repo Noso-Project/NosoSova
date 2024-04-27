@@ -34,6 +34,7 @@ class ServiceRPC {
   reset + *
    */
 
+  ///TODO якщо помилка спричинена вузлом то повертати помилку відобажаючу
   Future<Response> handleJsonRpcRequest(Request request) async {
     try {
       var body = await request.readAsString();
@@ -65,8 +66,8 @@ class ServiceRPC {
 
       return Response.ok(jsonEncode(jsonResponse));
     } catch (e) {
-      locator<DebugRPCBloc>().add(AddStringDebug(
-          "Consensus confirmed", StatusReport.RPC, DebugType.error));
+      locator<DebugRPCBloc>()
+          .add(AddStringDebug(e.toString(), StatusReport.RPC, DebugType.error));
       if (kDebugMode) {
         print(e);
       }

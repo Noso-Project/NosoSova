@@ -202,7 +202,6 @@ class RPCHandlers {
 
   Future<List<Map<String, Object?>>> fetchBalance(String hashAddress) async {
     AddressBalance addressBalance;
-    var pending = await _loadPending(hashAddress);
 
     if (_isSyncLocalNetwork()) {
       List<SummaryData> arraySummary = DataParser.parseSummaryData(
@@ -219,6 +218,7 @@ class RPCHandlers {
             alias: foundSummary.custom,
             incoming: 0,
             outgoing: 0);
+        var pending = await _loadPending(hashAddress);
         addressBalance.incoming = pending['incoming'] ?? 0;
         addressBalance.outgoing = pending['outgoing'] ?? 0;
         return [addressBalance.toJson()];
@@ -226,10 +226,9 @@ class RPCHandlers {
     } else {
       ResponseApi<dynamic> restApiResponse =
           await repositories.networkRepository.fetchAddressBalance(hashAddress);
-      addressBalance = AddressBalance.fromJson(restApiResponse.value);
-      addressBalance.incoming = pending['incoming'] ?? 0;
-      addressBalance.outgoing = pending['outgoing'] ?? 0;
+
       if (restApiResponse.errors == null) {
+        addressBalance = AddressBalance.fromJson(restApiResponse.value);
         return [addressBalance.toJson()];
       }
     }
@@ -351,13 +350,16 @@ class RPCHandlers {
   }
 
   bool _isSyncLocalNetwork() {
-    var node = locator<NosoNetworkBloc>().state.node;
+    var networkBloc = locator<NosoNetworkBloc>().state;
     DateTime nowDate = DateTime.now();
-    DateTime nodeTime =
-        DateTime.fromMillisecondsSinceEpoch(node.utcTime * 1000, isUtc: true);
+    DateTime nodeTime = DateTime.fromMillisecondsSinceEpoch(
+        networkBloc.node.utcTime * 1000,
+        isUtc: true);
 
     Duration difference = nodeTime.difference(nowDate);
-    return difference.inSeconds.abs() <= 25;
+    return networkBloc.statusConnected == StatusConnectNodes.connected
+        ? difference.inSeconds.abs() <= 25
+        : false;
   }
 
   Future<ResponseNode<List<int>>> _requestNosoNetwork(String command) async {

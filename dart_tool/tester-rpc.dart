@@ -5,7 +5,7 @@ Future<void> sendJsonRpcRequest(String url, String method, Map<String, dynamic> 
   final requestData = {
     'jsonrpc': '2.0',
     'method': method,
-    'params': [100],
+    'params': ["N2bXDNq8mogt75naxi6uamrjvWn7ZGe"],
     'id': 15,
   };
   String body = jsonEncode(requestData);
@@ -27,6 +27,6 @@ Future<void> sendJsonRpcRequest(String url, String method, Map<String, dynamic> 
 }
 
 Future main(List<String> args) async {
-  sendJsonRpcRequest("http://192.168.31.126:8078", "reset", {});
+  sendJsonRpcRequest("http://192.168.31.126:8078", "getaddressbalance", {});
  // sendJsonRpcRequest("https://rpc.nosocoin.com:8078", "getaddressbalance", {});
 }
