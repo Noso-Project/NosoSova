@@ -17,6 +17,10 @@ class LocalRepository {
     await _database.deleteWallet(value);
   }
 
+  Future<bool> isLocalAddress(String hash) async {
+    return await _database.isLocalAddress(hash);
+  }
+
   Future<void> addAddress(AddressObject value) async {
     await _database.addAddress(value);
   }
@@ -28,6 +32,7 @@ class LocalRepository {
   Future<void> addContact(ContactModel value) async {
     await _database.addContact(value);
   }
+
   Future<void> deleteContact(ContactModel value) async {
     await _database.deleteContact(value);
   }

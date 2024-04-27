@@ -41,6 +41,11 @@ class MyDatabase extends _$MyDatabase {
 
   Stream<List<ContactModel>> fetchContacts() => select(contact).watch();
 
+  Future<bool> isLocalAddress(String hash) async {
+    final addressesList = await (select(addresses)..where((t) => t.hash.equals(hash))).get();
+    return addressesList.isNotEmpty;
+  }
+
   Future<void> addAddress(AddressObject value) async {
     await batch((batch) {
       batch.insert(

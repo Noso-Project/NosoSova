@@ -12,7 +12,6 @@ import 'package:noso_dart/utils/data_parser.dart';
 import 'package:noso_dart/utils/noso_math.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/configs/network_config.dart';
-import 'package:nososova/models/address_wallet.dart';
 import 'package:nososova/models/responses/response_api.dart';
 import 'package:nososova/models/responses/response_node.dart';
 import 'package:nososova/models/rest_api/block_full_info.dart';
@@ -31,34 +30,6 @@ class RPCHandlers {
   final Repositories repositories;
 
   RPCHandlers(this.repositories);
-
-  ///TODO Тут додати коли користувацький перевірку на помилки
-  Future<Seed> _getNetworkNode(bool localLastNode) async {
-    var appDataBlock = locator<NosoNetworkBloc>();
-
-    if (localLastNode) {
-      return Seed().tokenizer(NetworkConfig.getRandomNode(null),
-          rawString: appDataBlock.appBlocConfig.lastSeed);
-    }
-
-    locator<DebugRPCBloc>().add(AddStringDebug(
-        "RPC manually changed the seed for noso network",
-        StatusReport.RPC,
-        DebugType.error));
-    appDataBlock.add(ReconnectSeed(false));
-    int randomNumber = Random().nextInt(2) + 1;
-
-    if (randomNumber == 1) {
-      var randomSeed = await repositories.networkRepository.getRandomDevNode();
-      return randomSeed.seed;
-    } else {
-      var listUsersNodes = appDataBlock.appBlocConfig.nodesList;
-      var testNode = await repositories.networkRepository.fetchNode(
-          NodeRequest.getNodeStatus,
-          Seed().tokenizer(NetworkConfig.getRandomNode(listUsersNodes)));
-      return testNode.seed;
-    }
-  }
 
   Future<List<Map<String, dynamic>>> fetchReset() async {
     var networkBloc = locator<NosoNetworkBloc>();
@@ -267,14 +238,11 @@ class RPCHandlers {
 
   Future<List<Map<String, bool>>> fetchIsLocalAddress(
       String hashAddress) async {
-    var walletList = locator<WalletBloc>().state.wallet.address;
-
-    Address foundSummary = walletList.firstWhere(
-        (wallet) => wallet.hash == hashAddress,
-        orElse: () => Address(hash: "", publicKey: "", privateKey: ""));
+    var isLocalAddress =
+        await repositories.localRepository.isLocalAddress(hashAddress);
 
     return [
-      {"result": foundSummary.hash.isNotEmpty}
+      {"result": isLocalAddress}
     ];
   }
 
@@ -312,41 +280,71 @@ class RPCHandlers {
     };
   }
 
-  ///TODO SAVE from BD
   Future<List<Map<String, String>>> fetchCreateNewAddressFull(int count) async {
     List<AddressObject> listAddresses = [];
+    try {
+      var countAddresses = count > 100 ? 100 : count;
+      for (int i = 0; i < countAddresses; i++) {
+        listAddresses.add(AddressHandler.createNewAddress());
+      }
+      repositories.localRepository.addAddresses(listAddresses);
+      BackupService.writeBackup(listAddresses);
 
-    var countAddresses = count > 100 ? 100 : count;
-    for (int i = 0; i < countAddresses; i++) {
-      listAddresses.add(AddressHandler.createNewAddress());
+      return listAddresses
+          .map((address) => {
+                "hash": address.hash,
+                "public": address.publicKey,
+                "private": address.privateKey
+              })
+          .toList();
+    } catch (e) {
+      return [];
     }
-    BackupService.writeBackup(listAddresses);
-    List<Map<String, String>> addressDetails = listAddresses
-        .map((address) => {
-              "hash": address.hash,
-              "public": address.publicKey,
-              "private": address.privateKey
-            })
-        .toList();
-
-    return addressDetails;
   }
 
-  ///TODO SAVE from BD
   Future<List<Map<String, List<String>>>> fetchCreateNewAddress(
       int count) async {
-    List<AddressObject> listAddresses = [];
+    try {
+      List<AddressObject> listAddresses = [];
 
-    var countAddresses = count > 100 ? 100 : count;
-    for (int i = 0; i < countAddresses; i++) {
-      listAddresses.add(AddressHandler.createNewAddress());
-    }
-    BackupService.writeBackup(listAddresses);
-    return [
-      {
-        "addresses": [listAddresses.map((address) => address.hash).join(', ')]
+      var countAddresses = count > 100 ? 100 : count;
+      for (int i = 0; i < countAddresses; i++) {
+        listAddresses.add(AddressHandler.createNewAddress());
       }
-    ];
+      repositories.localRepository.addAddresses(listAddresses);
+      BackupService.writeBackup(listAddresses);
+      return [
+        {
+          "addresses": [listAddresses.map((address) => address.hash).join(', ')]
+        }
+      ];
+    } catch (e) {
+      return [
+        {"addresses": []}
+      ];
+    }
+  }
+
+  Future<List<Map<String, bool>>> fetchSetDefAddress(String hashAddress) async {
+    try {
+      var isLocalAddress =
+          await repositories.localRepository.isLocalAddress(hashAddress);
+
+      if (isLocalAddress) {
+        await repositories.sharedRepository.saveRPCDefaultAddress(hashAddress);
+        return [
+          {"result": true}
+        ];
+      } else {
+        return [
+          {"result": false}
+        ];
+      }
+    } catch (e) {
+      return [
+        {"result": false}
+      ];
+    }
   }
 
   bool _isSyncLocalNetwork() {
@@ -371,5 +369,33 @@ class RPCHandlers {
     }
 
     return responseNode;
+  }
+
+  ///TODO Тут додати коли користувацький перевірку на помилки
+  Future<Seed> _getNetworkNode(bool localLastNode) async {
+    var appDataBlock = locator<NosoNetworkBloc>();
+
+    if (localLastNode) {
+      return Seed().tokenizer(NetworkConfig.getRandomNode(null),
+          rawString: appDataBlock.appBlocConfig.lastSeed);
+    }
+
+    locator<DebugRPCBloc>().add(AddStringDebug(
+        "RPC manually changed the seed for noso network",
+        StatusReport.RPC,
+        DebugType.error));
+    appDataBlock.add(ReconnectSeed(false, hasError: true));
+    int randomNumber = Random().nextInt(2) + 1;
+
+    if (randomNumber == 1) {
+      var randomSeed = await repositories.networkRepository.getRandomDevNode();
+      return randomSeed.seed;
+    } else {
+      var listUsersNodes = appDataBlock.appBlocConfig.nodesList;
+      var testNode = await repositories.networkRepository.fetchNode(
+          NodeRequest.getNodeStatus,
+          Seed().tokenizer(NetworkConfig.getRandomNode(listUsersNodes)));
+      return testNode.seed;
+    }
   }
 }

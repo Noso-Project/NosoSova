@@ -121,20 +121,26 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
       case InitialNodeAlgh.connectLastNode:
         if (kDebugMode) {
           _debugBloc.add(AddStringDebug(
-            "Receive information from the last active node",
-            StatusReport.Node));
+              "Receive information from the last active node",
+              StatusReport.Node));
         }
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
             Seed().tokenizer(NetworkConfig.getRandomNode(null),
                 rawString: appBlocConfig.lastSeed));
       case InitialNodeAlgh.listenUserNodes:
-        if (kDebugMode)  _debugBloc.add(AddStringDebug("Search target node", StatusReport.Node));
+        if (kDebugMode) {
+          _debugBloc
+              .add(AddStringDebug("Search target node", StatusReport.Node));
+        }
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
             Seed().tokenizer(NetworkConfig.getRandomNode(listUsersNodes)));
       default:
-        if (kDebugMode)     _debugBloc.add(AddStringDebug("Search target node", StatusReport.Node));
+        if (kDebugMode) {
+          _debugBloc
+              .add(AddStringDebug("Search target node", StatusReport.Node));
+        }
         return await _repositories.networkRepository.getRandomDevNode();
     }
   }
@@ -143,7 +149,9 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     emit(state.copyWith(
         statusConnected: StatusConnectNodes.sync,
         node: state.node.copyWith(seed: targetNode.seed)));
-    if (kDebugMode)   _debugBloc.add(AddStringDebug("Sync noso network", StatusReport.Node));
+    if (kDebugMode) {
+      _debugBloc.add(AddStringDebug("Sync noso network", StatusReport.Node));
+    }
 
     if (state.node.lastblock != targetNode.lastblock ||
         state.node.seed.ip != targetNode.seed.ip) {
@@ -173,7 +181,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
         if (consensusReturn == ConsensusStatus.sync) {
           if (kDebugMode) {
             _debugBloc
-              .add(AddStringDebug("Consensus confirmed", StatusReport.Node));
+                .add(AddStringDebug("Consensus confirmed", StatusReport.Node));
           }
           add(SyncSuccess());
 
@@ -184,7 +192,8 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
           _loadSupply(event, emit);
         } else {
-          add(ReconnectSeed(false));
+          print("consensus error");
+          add(ReconnectSeed(false, hasError: true));
         }
         return;
       } else {
@@ -234,6 +243,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     List<bool> decisionNodes = [];
     var listNodesUsers = appBlocConfig.nodesList;
 
+    print("start consensus");
     int maxDevAttempts = 2;
     int maxDevFalseAttempts = 4;
     int attemptsDev = 0;
@@ -242,6 +252,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
           await _repositories.networkRepository.getRandomDevNode();
       final Node? nodeOutput =
           DataParser.parseDataNode(targetDevNode.value, targetDevNode.seed);
+      print("dev seed ${String.fromCharCodes(targetDevNode.value ?? [])}");
       if (targetDevNode.errors != null ||
           nodeOutput == null ||
           testNodes.any((node) =>
@@ -266,10 +277,10 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
           Seed().tokenizer(NetworkConfig.getRandomNode(listNodesUsers));
       var targetUserNode = await _repositories.networkRepository
           .fetchNode(NodeRequest.getNodeStatus, randomSeed);
-
+      print("user seed ${randomSeed.toTokenizer}");
       final Node? nodeUserOutput =
           DataParser.parseDataNode(targetUserNode.value, targetUserNode.seed);
-
+      print("user seed ${String.fromCharCodes(targetUserNode.value ?? [])}");
       if (targetUserNode.errors != null ||
           nodeUserOutput == null ||
           testNodes.any((node) =>
@@ -285,9 +296,12 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
       decisionNodes.add(isValidNode(tNode, targetNode));
     }
     if (decisionNodes.every((element) => element == true)) {
+      print("sync consensus");
       return ConsensusStatus.sync;
     } else {
+      print("error consensus");
       return ConsensusStatus.error;
+
     }
   }
 
@@ -310,7 +324,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     _startTimerSyncNetwork();
     if (kDebugMode) {
       _debugBloc.add(AddStringDebug(
-        "Information from the network received", StatusReport.Node));
+          "Information from the network received", StatusReport.Node));
     }
   }
 

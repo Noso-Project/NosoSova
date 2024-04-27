@@ -25,11 +25,11 @@ class ServiceRPC {
   getblockorders + * (REST)
   getorderinfo + * (REST)
   getaddressbalance + *
-  getnewaddress + (save DB)
-  getnewaddressfull  + (save DB)
-  islocaladdress + (fix)
+  getnewaddress + *
+  getnewaddressfull  + *
+  islocaladdress + *
   getwalletbalance + (fix, save from appDatabloc)
-  setdefault
+  setdefault *
   sendfunds
   reset + *
    */
@@ -158,7 +158,7 @@ class ServiceRPC {
     }
 
     if (method == 'setdefault') {
-      return ['param1', 'param2'];
+      return await rpcHandlers.fetchSetDefAddress(params[0]);
     }
 
     if (method == 'sendfunds') {

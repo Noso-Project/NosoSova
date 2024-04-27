@@ -60,4 +60,12 @@ class SharedRepository {
   Future<String?> loadRPCMethodsIgnored() async {
     return _sharedService.loadRPCMethodsIgnored();
   }
+
+  Future<void> saveRPCDefaultAddress(String value) async {
+    await _sharedService.saveRPCDefaultAddress(value);
+  }
+
+  Future<String?> loadRPCDefaultAddress() async {
+    return _sharedService.loadRPCDefaultAddress();
+  }
 }

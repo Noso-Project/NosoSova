@@ -8,6 +8,7 @@ class SharedService {
   static const String rpcStatus = "RPCEnable";
   static const String rpcAddress = "RPCAddress";
   static const String rpcMethodsIgnored = "RPCMethodsIgnored";
+  static const String rpcAddressDefault = "RPCDefaultAddress";
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
 
@@ -94,4 +95,17 @@ class SharedService {
       return prefs.getString(rpcMethodsIgnored);
     });
   }
+
+  Future<void> saveRPCDefaultAddress(String value) async {
+    _prefs.then((SharedPreferences prefs) {
+      return prefs.setString(rpcAddressDefault, value);
+    });
+  }
+
+  Future<String?> loadRPCDefaultAddress() async {
+    return _prefs.then((SharedPreferences prefs) {
+      return prefs.getString(rpcAddressDefault);
+    });
+  }
+
 }
