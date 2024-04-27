@@ -10,7 +10,6 @@ import 'package:noso_dart/utils/data_parser.dart';
 import 'package:nososova/configs/network_config.dart';
 import 'package:nososova/models/app/app_bloc_config.dart';
 import 'package:nososova/models/responses/response_node.dart';
-import 'package:nososova/models/rest_api/block_info.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:nososova/utils/enum.dart';
 import 'package:sovarpc/blocs/network_events.dart';
@@ -181,11 +180,11 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
           _loadSupply(event, emit);
         } else {
-          add(ReconnectFromError());
+          add(ReconnectSeed(false));
         }
         return;
       } else {
-        add(ReconnectFromError());
+        add(ReconnectSeed(false));
         return;
       }
     }
@@ -226,43 +225,6 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
         await ComputeService.compute(calculateSummary, summary ?? Uint8List(0));
   }
 
-  Future<BlockInfo> _loadSeedPeople(Node tNode) async {
-    var blockInfo =
-        BlockInfo(blockId: 0, reward: 0.15, count: 0, masternodes: []);
-    var isListNodesFail = false;
-    var responseLastBlockInfo =
-        await _repositories.networkRepository.fetchLastBlockInfo();
-
-    if (responseLastBlockInfo.errors == null) {
-      blockInfo = responseLastBlockInfo.value;
-    }
-
-    if (blockInfo.masternodes.isNotEmpty &&
-        responseLastBlockInfo.errors == null) {
-    } else {
-      var response = await _repositories.networkRepository
-          .fetchNode(NodeRequest.getNodeList, tNode.seed);
-      if (response.errors == null) {
-        List<Seed> listUserNodes = DataParser.parseDataSeeds(response.value);
-        blockInfo = blockInfo.copyWith(
-            masternodes: Masternode().copyFromSeed(listUserNodes),
-            count: listUserNodes.length);
-      } else {
-        isListNodesFail = true;
-      }
-    }
-
-    if (isListNodesFail) {
-      return blockInfo;
-    } else {
-      _repositories.sharedRepository
-          .saveNodesList(blockInfo.getMasternodesString());
-      appBlocConfig =
-          appBlocConfig.copyWith(nodesList: blockInfo.getMasternodesString());
-    }
-
-    return blockInfo;
-  }
 
   Future<ConsensusStatus> _checkConsensus(Node targetNode) async {
     List<Node> testNodes = [];

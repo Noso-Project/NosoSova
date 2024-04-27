@@ -1,29 +1,30 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:sovarpc/services/rpc/rpc_handlers.dart';
 
-import '../../blocs/noso_network_bloc.dart';
-
 class ServiceRPC {
   final Repositories repositories;
   final String ignoreMethods;
+  late RPCHandlers rpcHandlers;
 
-  ServiceRPC(this.repositories, this.ignoreMethods);
+  ServiceRPC(this.repositories, this.ignoreMethods) {
+    rpcHandlers = RPCHandlers(repositories);
+  }
 
   /*
-  getmainnetinfo +
-  getpendingorders +
-  getblockorders +
-  getorderinfo +
-  getaddressbalance +
-  getnewaddress
-  islocaladdress +
-  getwalletbalance +
+  getmainnetinfo + *
+  getpendingorders + *
+  getblockorders + * (REST)
+  getorderinfo + * (REST)
+  getaddressbalance + *
+  getnewaddress + (save DB)
+  getnewaddressfull  + (save DB)
+  islocaladdress + (fix)
+  getwalletbalance + (fix, save from appDatabloc)
   setdefault
   sendfunds
    */
@@ -47,7 +48,9 @@ class ServiceRPC {
       if (arrayIgnoredMethods.contains(method)) {
         var errorResponse = {
           'jsonrpc': '2.0',
-          'error': {'code': 400, 'message': 'Route locked'},
+          'result': [
+            {"result": "Banned"}
+          ],
           'id': -1,
         };
 
@@ -74,8 +77,8 @@ class ServiceRPC {
      * { "jsonrpc" : "2.0", "result" : [{ "lastblock" : 94490, "lastblockhash" : "5E71D00A2945E0884893ACD9A0C6AD72", "headershash" : "E41D37527B0A9F0A01C63F32C52562E9",
      * "sumaryhash" : "C21483546A23510F65E36FE0781B6FF7", "pending" : 12, "supply" : 473480390730000 }], "id" : 15 }
      */
-    if (method == 'getmainnetinfo') {
-      return await RPCHandlers(repositories).fetchMainNetInfo();
+    if (method == 'getmainnetinfo' || method == 'getNetworkInfo') {
+      return await rpcHandlers.fetchMainNetInfo();
     }
 
     /**
@@ -84,7 +87,7 @@ class ServiceRPC {
      *   }], "id" : 15 }
      */
     if (method == 'getpendingorders') {
-      return await RPCHandlers(repositories).fetchPendingList();
+      return await rpcHandlers.fetchPendingList();
     }
 
     /**
@@ -101,7 +104,7 @@ class ServiceRPC {
         500200000, "fee" : 0, "reference" : "null", "sender" : "COINBASE" }] }], "id" : 15 }
      */
     if (method == 'getblockorders') {
-      return await RPCHandlers(repositories).fetchBlockOrders(params[0]);
+      return await rpcHandlers.fetchBlockOrders(params[0]);
     }
 
     /**
@@ -111,24 +114,38 @@ class ServiceRPC {
         "COINBASE" } }], "id" : 15 }
      */
     if (method == 'getorderinfo') {
-      return await RPCHandlers(repositories).fetchOrderInfo(params[0]);
+      return await rpcHandlers.fetchOrderInfo(params[0]);
     }
 
     if (method == 'getaddressbalance') {
-      return await RPCHandlers(repositories)
-          .fetchBalance(params[0]);
+      return await rpcHandlers.fetchBalance(params[0]);
     }
 
+    /**
+     * { "jsonrpc" : "2.0", "result" : [{ "addresses" : ["N3DXseUPd8QcYf4pYoDzczPzvgJPbGD", "N48Jd43Th4DyDdnSezQhviPGDABRbD5"] }], "id" : 19 }
+     */
     if (method == 'getnewaddress') {
-      return ['param1', 'param2'];
+      return await rpcHandlers.fetchCreateNewAddress(
+          params[0] is int ? params[0] : int.parse(params[0]));
+    }
+
+    /**
+     * { "jsonrpc" : "2.0", "result" : [{ "hash" : "NQ1LQu2f8nKhzhNwzkb4dVEU8xFTEU", "public" :
+        "BEmKPkSc9kojPSz1mjtJ3pqlOL6McuvPzZh+QEVbgPONly7DzNphN2cx35jbX6UirvCT1HoP+APjXlg2IO2mjaI=", "private" :
+        "nvbVmP+Uq53mqRlqfPKUK6yEU+BlZ+ox3Q4Jotvd06A=" }], "id" : 1 }
+
+     */
+    if (method == 'getnewaddressfull') {
+      return await rpcHandlers.fetchCreateNewAddressFull(
+          params[0] is int ? params[0] : int.parse(params[0]));
     }
 
     if (method == 'islocaladdress') {
-      return await RPCHandlers(repositories).fetchIsLocalAddress(params[0]);
+      return await rpcHandlers.fetchIsLocalAddress(params[0]);
     }
 
     if (method == 'getwalletbalance') {
-      return await RPCHandlers(repositories).fetchWalletBalance();
+      return await rpcHandlers.fetchWalletBalance();
     }
 
     if (method == 'setdefault') {
