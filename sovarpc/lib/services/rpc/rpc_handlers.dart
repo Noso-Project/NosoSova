@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/models/noso/seed.dart';
 import 'package:noso_dart/models/noso/summary.dart';
 import 'package:noso_dart/node_request.dart';
@@ -136,25 +137,24 @@ class RPCHandlers {
   }
 
   Future<Map<String, dynamic>> fetchMainNetInfo() async {
-    ResponseNode<List<int>> responseNode = await repositories.networkRepository
-        .fetchNode(NodeRequest.getNodeStatus, await _getNetworkNode(true));
-
-    if (responseNode.errors != null) {
-      responseNode = await repositories.networkRepository
-          .fetchNode(NodeRequest.getNodeStatus, await _getNetworkNode(false));
+    Node? targetNode;
+    if (_isSyncLocalNetwork()) {
+      targetNode = locator<NosoNetworkBloc>().state.node;
+    } else {
+      var requestNode = _requestNosoNetwork(NodeRequest.getNodeStatus);
+      targetNode = DataParser.parseDataNode(
+          requestNode.value, locator<NosoNetworkBloc>().state.node.seed);
     }
 
-    var nodeParse = DataParser.parseDataNode(
-        responseNode.value, locator<NosoNetworkBloc>().state.node.seed);
-    if (nodeParse != null && responseNode.errors == null) {
-      var supply = 0;
+    if (targetNode != null) {
+      var supply = locator<NosoNetworkBloc>().supply;
       return {
-        "lastblock": nodeParse.lastblock,
-        "lastblockhash": nodeParse.lastblockhash,
-        "headershash": nodeParse.sumaryhash,
-        "sumaryhash": nodeParse.headershash,
-        "pending": nodeParse.pendings,
-        "supply": NosoMath().doubleToBigEndian(supply)
+        "lastblock": targetNode.lastblock,
+        "lastblockhash": targetNode.lastblockhash,
+        "headershash": targetNode.sumaryhash,
+        "sumaryhash": targetNode.headershash,
+        "pending": targetNode.pendings,
+        "supply": supply
       };
     }
     return {
@@ -166,6 +166,8 @@ class RPCHandlers {
       "supply": 0
     };
   }
+
+
 
   ///TODO Отримання pendings для локальних запитів
   Future<List<Map<String, Object?>>> fetchBalance(String hashAddress) async {
@@ -249,13 +251,24 @@ class RPCHandlers {
     };
   }
 
-  int _getDifferenceLastRequestToNosoNetwork() {
+  bool _isSyncLocalNetwork() {
     var node = locator<NosoNetworkBloc>().state.node;
     DateTime nowDate = DateTime.now();
     DateTime nodeTime =
         DateTime.fromMillisecondsSinceEpoch(node.utcTime * 1000, isUtc: true);
 
     Duration difference = nodeTime.difference(nowDate);
-    return difference.inSeconds.abs();
+    return difference.inSeconds.abs() <= 25;
+  }
+
+  _requestNosoNetwork(String command) async {
+    ResponseNode<List<int>> responseNode = await repositories.networkRepository
+        .fetchNode(command, await _getNetworkNode(true));
+    if (responseNode.errors != null) {
+      responseNode = await repositories.networkRepository
+          .fetchNode(NodeRequest.getNodeStatus, await _getNetworkNode(false));
+    }
+
+    return responseNode;
   }
 }

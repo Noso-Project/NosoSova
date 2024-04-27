@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/models/noso/seed.dart';
 import 'package:noso_dart/node_request.dart';
@@ -15,6 +16,7 @@ import 'package:nososova/utils/enum.dart';
 import 'package:sovarpc/blocs/network_events.dart';
 
 import '../models/debug_rpc.dart';
+import '../services/computer_service.dart';
 import 'debug_rpc_bloc.dart';
 
 class NosoNetworksState {
@@ -42,6 +44,8 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   Timer? _timerSyncNetwork;
   final Repositories _repositories;
   final DebugRPCBloc _debugBloc;
+  int supply = 0;
+
   NosoNetworkBloc({
     required Repositories repositories,
     required DebugRPCBloc debugBloc,
@@ -109,8 +113,6 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   /// A method that tests and returns the active node
   Future<ResponseNode<List<int>>> _searchTargetNode(
       InitialNodeAlgh initAlgh) async {
-
-
     var listUsersNodes = appBlocConfig.nodesList;
     if ((listUsersNodes ?? "").isEmpty) {
       initAlgh = InitialNodeAlgh.listenDefaultNodes;
@@ -118,7 +120,9 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
     switch (initAlgh) {
       case InitialNodeAlgh.connectLastNode:
-        _debugBloc.add(AddStringDebug("Receive information from the last active node", StatusReport.Node));
+        _debugBloc.add(AddStringDebug(
+            "Receive information from the last active node",
+            StatusReport.Node));
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
             Seed().tokenizer(NetworkConfig.getRandomNode(null),
@@ -142,7 +146,16 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
     if (state.node.lastblock != targetNode.lastblock ||
         state.node.seed.ip != targetNode.seed.ip) {
-    //  var blockInfo = await _loadSeedPeople(targetNode);
+      var response = await _repositories.networkRepository
+          .fetchNode(NodeRequest.getNodeList, targetNode.seed);
+      if (response.errors == null) {
+        List<Seed> listUserNodes = DataParser.parseDataSeeds(response.value);
+        var stringMasterNodes = listUserNodes
+            .map((node) => '${node.ip}:${node.port}|${node.address}')
+            .join(',');
+        _repositories.sharedRepository.saveNodesList(stringMasterNodes);
+        appBlocConfig = appBlocConfig.copyWith(nodesList: stringMasterNodes);
+      }
 
       ResponseNode<List<int>> responseSummary = await _repositories
           .networkRepository
@@ -157,16 +170,18 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
         var consensusReturn = await _checkConsensus(targetNode);
 
         if (consensusReturn == ConsensusStatus.sync) {
-          _debugBloc.add(AddStringDebug("Consensus confirmed", StatusReport.Node));
+          _debugBloc
+              .add(AddStringDebug("Consensus confirmed", StatusReport.Node));
           add(SyncSuccess());
+
           emit(state.copyWith(
             node: targetNode,
             statusConnected: StatusConnectNodes.connected,
           ));
 
+          _loadSupply(event, emit);
         } else {
           add(ReconnectFromError());
-
         }
         return;
       } else {
@@ -175,12 +190,40 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
       }
     }
 
-
     emit(state.copyWith(
-        node: targetNode,
-        statusConnected: StatusConnectNodes.connected));
+        node: targetNode, statusConnected: StatusConnectNodes.connected));
     add(SyncSuccess());
     return;
+  }
+
+  /// A method that calculates summary in a separate thread
+  _loadSupply(event, emit) async {
+    var summary = await _repositories.fileRepository.loadSummary();
+
+    int calculateSummary(Uint8List psk) {
+      int supply = 0;
+      int index = 0;
+      try {
+        while (index + 106 <= psk.length) {
+          var targetBalance = ByteData.view(
+                  Uint8List.fromList(psk.sublist(index + 82, index + 90))
+                      .buffer)
+              .getInt64(0, Endian.little);
+
+          supply += targetBalance;
+
+          index += 106;
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error total supply: $e');
+        }
+      }
+      return supply;
+    }
+
+    supply =
+        await ComputeService.compute(calculateSummary, summary ?? Uint8List(0));
   }
 
   Future<BlockInfo> _loadSeedPeople(Node tNode) async {
@@ -300,13 +343,13 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     appBlocConfig =
         appBlocConfig.copyWith(lastSeed: state.node.seed.toTokenizer);
     _startTimerSyncNetwork();
-    _debugBloc.add(AddStringDebug("Information from the network received", StatusReport.Node));
+    _debugBloc.add(AddStringDebug(
+        "Information from the network received", StatusReport.Node));
   }
 
   /// Method that starts a timer that simulates updating information
   void _startTimerSyncNetwork() {
-    _timerSyncNetwork ??=
-        Timer.periodic(const Duration(seconds: 16), (timer) {
+    _timerSyncNetwork ??= Timer.periodic(const Duration(seconds: 16), (timer) {
       add(ReconnectSeed(true));
     });
   }

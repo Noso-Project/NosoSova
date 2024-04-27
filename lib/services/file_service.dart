@@ -43,7 +43,7 @@ class FileService {
         for (var file in archive.files) {
           if (file.isFile) {
             final outputStream =
-                OutputFileStream('${directory.path}/${file.name}');
+                OutputFileStream('${directory.path}/data/${nameFileSummary}');
             file.writeContent(outputStream);
             outputStream.close();
           }

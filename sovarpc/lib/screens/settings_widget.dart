@@ -17,16 +17,11 @@ class SettingsWidget extends StatefulWidget {
 
 class _SettingsWidgetState extends State<SettingsWidget> {
   final TextEditingController _portController =
-      TextEditingController(text: "8080");
+      TextEditingController(text: "8078");
   final TextEditingController _ipController =
-      TextEditingController(text: "192.168.31.126");
+      TextEditingController(text: "localhost");
   final TextEditingController _ignoreMethods = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _initDataForms();
-  }
 
   _initDataForms() async {
     var blockState = BlocProvider.of<RpcBloc>(context).state;
@@ -40,6 +35,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RpcBloc, RpcState>(builder: (context, state) {
+      _initDataForms();
       return Container(
           padding: const EdgeInsets.all(20),
           child: Column(
