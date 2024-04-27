@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<void> sendJsonRpcRequest(String url, String method, Map<String, dynamic> params) async {
+Future<void> sendJsonRpcRequest(
+    String url, String method, Map<String, dynamic> params) async {
   final requestData = {
     'jsonrpc': '2.0',
     'method': method,
-    'params': ["N3zw6k4n1Uiksm9iWapWuqPJAiSHTFn"],
+    //   'params': ["N2bXDNq8mogt75naxi6uamrjvWn7ZGe", ],
+    'params': ["N2bXDNq8mogt75naxi6uamrjvWn7ZGe", "1000000000", ""],
     'id': 15,
   };
   String body = jsonEncode(requestData);
@@ -13,7 +15,7 @@ Future<void> sendJsonRpcRequest(String url, String method, Map<String, dynamic> 
   try {
     var response = await http.post(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json", "Origin" : url},
+      headers: {"Content-Type": "application/json", "Origin": url},
       body: body,
     );
     if (response.statusCode == 200) {
@@ -27,6 +29,5 @@ Future<void> sendJsonRpcRequest(String url, String method, Map<String, dynamic> 
 }
 
 Future main(List<String> args) async {
-  sendJsonRpcRequest("http://192.168.31.126:8078", "islocaladdress", {});
- // sendJsonRpcRequest("https://rpc.nosocoin.com:8078", "getaddressbalance", {});
+  sendJsonRpcRequest("http://192.168.31.126:8078", "sendfunds", {}); //sendfunds
 }

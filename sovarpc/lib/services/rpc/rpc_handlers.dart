@@ -2,15 +2,17 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:noso_dart/handlers/address_handler.dart';
+import 'package:noso_dart/handlers/order_handler.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/models/noso/pending.dart';
 import 'package:noso_dart/models/noso/seed.dart';
 import 'package:noso_dart/models/noso/summary.dart';
+import 'package:noso_dart/models/order_data.dart';
 import 'package:noso_dart/node_request.dart';
+import 'package:noso_dart/noso_enum.dart';
 import 'package:noso_dart/utils/data_parser.dart';
 import 'package:noso_dart/utils/noso_math.dart';
-import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/configs/network_config.dart';
 import 'package:nososova/models/responses/response_api.dart';
 import 'package:nososova/models/responses/response_node.dart';
@@ -27,9 +29,9 @@ import '../../models/rpc/address_balance.dart';
 import '../backup_service.dart';
 
 class RPCHandlers {
-  final Repositories repositories;
+  final Repositories _repositories;
 
-  RPCHandlers(this.repositories);
+  RPCHandlers(this._repositories);
 
   Future<List<Map<String, dynamic>>> fetchReset() async {
     var networkBloc = locator<NosoNetworkBloc>();
@@ -52,7 +54,7 @@ class RPCHandlers {
     var responseNode = await _requestNosoNetwork(NodeRequest.getPendingsList);
 
     if (responseNode.errors != null) {
-      responseNode = await repositories.networkRepository
+      responseNode = await _repositories.networkRepository
           .fetchNode(NodeRequest.getPendingsList, await _getNetworkNode(false));
     }
 
@@ -70,8 +72,8 @@ class RPCHandlers {
   }
 
   Future<List<Map<String, Object?>>> fetchOrderInfo(String targetOrder) async {
-    ResponseApi<dynamic> restApiResponse =
-        await repositories.networkRepository.fetchOrderInformation(targetOrder);
+    ResponseApi<dynamic> restApiResponse = await _repositories.networkRepository
+        .fetchOrderInformation(targetOrder);
     if (restApiResponse.errors == null && targetOrder.isNotEmpty) {
       var inputObject = restApiResponse.value;
 
@@ -106,8 +108,8 @@ class RPCHandlers {
 
   Future<List<Map<String, Object?>>> fetchBlockOrders(String block) async {
     int targetBlock = block.isEmpty ? 0 : int.parse(block);
-    ResponseApi<dynamic> restApiResponse =
-        await repositories.networkRepository.fetchBlockInformation(targetBlock);
+    ResponseApi<dynamic> restApiResponse = await _repositories.networkRepository
+        .fetchBlockInformation(targetBlock);
     if (restApiResponse.errors == null && targetBlock != 0) {
       var blockInfo = Block.fromJson(restApiResponse.value);
       List<Map<String, dynamic>> transactionsJson =
@@ -137,7 +139,7 @@ class RPCHandlers {
     }
   }
 
-  Future<Object> fetchMainNetInfo() async {
+  Future<List<Map<String, Object?>>> fetchMainNetInfo() async {
     Node? targetNode;
     if (_isSyncLocalNetwork()) {
       targetNode = locator<NosoNetworkBloc>().state.node;
@@ -147,8 +149,8 @@ class RPCHandlers {
           requestNode.value, locator<NosoNetworkBloc>().state.node.seed);
     }
     if (targetNode != null) {
-      var supply = locator<NosoNetworkBloc>().supply;
-      return {
+      var supply = locator<NosoNetworkBloc>().rpcInfo.supply;
+      return [
         {
           "lastblock": targetNode.lastblock,
           "lastblockhash": targetNode.lastblockhash,
@@ -157,7 +159,7 @@ class RPCHandlers {
           "pending": targetNode.pendings,
           "supply": supply
         }
-      };
+      ];
     }
     return [
       {
@@ -176,7 +178,7 @@ class RPCHandlers {
 
     if (_isSyncLocalNetwork()) {
       List<SummaryData> arraySummary = DataParser.parseSummaryData(
-          await repositories.fileRepository.loadSummary() ?? Uint8List(0));
+          await _repositories.fileRepository.loadSummary() ?? Uint8List(0));
 
       SummaryData foundSummary = arraySummary.firstWhere(
           (summary) => summary.hash == hashAddress,
@@ -195,8 +197,9 @@ class RPCHandlers {
         return [addressBalance.toJson()];
       }
     } else {
-      ResponseApi<dynamic> restApiResponse =
-          await repositories.networkRepository.fetchAddressBalance(hashAddress);
+      ResponseApi<dynamic> restApiResponse = await _repositories
+          .networkRepository
+          .fetchAddressBalance(hashAddress);
 
       if (restApiResponse.errors == null) {
         addressBalance = AddressBalance.fromJson(restApiResponse.value);
@@ -239,7 +242,7 @@ class RPCHandlers {
   Future<List<Map<String, bool>>> fetchIsLocalAddress(
       String hashAddress) async {
     var isLocalAddress =
-        await repositories.localRepository.isLocalAddress(hashAddress);
+        await _repositories.localRepository.isLocalAddress(hashAddress);
 
     return [
       {"result": isLocalAddress}
@@ -247,22 +250,17 @@ class RPCHandlers {
   }
 
   Future<Map<String, List<Map<String, int>>>> fetchWalletBalance() async {
-    var walletList = locator<WalletBloc>().state.wallet.address;
-    double totalBalance = 0;
-
-    for (var address in walletList) {
-      totalBalance += address.balance;
-    }
+    var totalBalance = locator<NosoNetworkBloc>().rpcInfo.walletBalance;
 
     return {
       "result": [
-        {"balance": NosoMath().doubleToBigEndian(totalBalance)}
+        {"balance": totalBalance}
       ]
     };
   }
 
   Future<Map<String, dynamic>> fetchHealthCheck() async {
-    var restApi = await repositories.networkRepository.fetchHeathCheck();
+    var restApi = await _repositories.networkRepository.fetchHeathCheck();
     var nosoNetwork = locator<NosoNetworkBloc>().state;
     var localNode = nosoNetwork.node;
 
@@ -287,7 +285,7 @@ class RPCHandlers {
       for (int i = 0; i < countAddresses; i++) {
         listAddresses.add(AddressHandler.createNewAddress());
       }
-      repositories.localRepository.addAddresses(listAddresses);
+      _repositories.localRepository.addAddresses(listAddresses);
       BackupService.writeBackup(listAddresses);
 
       return listAddresses
@@ -311,7 +309,7 @@ class RPCHandlers {
       for (int i = 0; i < countAddresses; i++) {
         listAddresses.add(AddressHandler.createNewAddress());
       }
-      repositories.localRepository.addAddresses(listAddresses);
+      _repositories.localRepository.addAddresses(listAddresses);
       BackupService.writeBackup(listAddresses);
       return [
         {
@@ -328,10 +326,10 @@ class RPCHandlers {
   Future<List<Map<String, bool>>> fetchSetDefAddress(String hashAddress) async {
     try {
       var isLocalAddress =
-          await repositories.localRepository.isLocalAddress(hashAddress);
+          await _repositories.localRepository.isLocalAddress(hashAddress);
 
       if (isLocalAddress) {
-        await repositories.sharedRepository.saveRPCDefaultAddress(hashAddress);
+        await _repositories.sharedRepository.saveRPCDefaultAddress(hashAddress);
         return [
           {"result": true}
         ];
@@ -343,6 +341,64 @@ class RPCHandlers {
     } catch (e) {
       return [
         {"result": false}
+      ];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> sendFunds(
+      String receiver, int amount, String reference) async {
+    try {
+      var defaultAddress =
+          await _repositories.sharedRepository.loadRPCDefaultAddress();
+      var addressObject = await _repositories.localRepository
+          .fetchAddressForHash(defaultAddress ?? "");
+      bool hasTenDigits = amount.toString().length == 10;
+      int block;
+
+      if (_isSyncLocalNetwork()) {
+        block = locator<NosoNetworkBloc>().state.node.lastblock;
+      } else {
+        var requestNode = await _requestNosoNetwork(NodeRequest.getNodeStatus);
+        var targetNode = DataParser.parseDataNode(
+            requestNode.value, locator<NosoNetworkBloc>().state.node.seed);
+        block = targetNode == null ? 0 : targetNode.lastblock;
+      }
+
+      if (addressObject != null && defaultAddress != null && hasTenDigits) {
+        var orderData = OrderData(
+            currentAddress: addressObject,
+            receiver: receiver,
+            currentBlock: block.toString(),
+            amount: amount,
+            message: reference.isEmpty ? "" : reference,
+            appInfo: NetworkConfig().getAppInfo);
+        var newOrder =
+            OrderHandler().generateNewOrder(orderData, OrderType.TRFR);
+
+        if (newOrder != null) {
+          var requestNode = await _requestNosoNetwork(newOrder.getRequest());
+          if (requestNode.errors == null) {
+            var result =
+                String.fromCharCodes(requestNode.value ?? []).split(' ');
+            if (result.length == 1) {
+              return [
+                {"valid": true, "result": newOrder.orderID}
+              ];
+            } else {
+              return [
+                {"valid": false, "result": int.parse(result[1]).toString()}
+              ];
+            }
+          }
+        }
+      }
+
+      return [
+        {"valid": false, "result": "-12"}
+      ];
+    } catch (e) {
+      return [
+        {"valid": false, "result": "-1"}
       ];
     }
   }
@@ -361,10 +417,10 @@ class RPCHandlers {
   }
 
   Future<ResponseNode<List<int>>> _requestNosoNetwork(String command) async {
-    ResponseNode<List<int>> responseNode = await repositories.networkRepository
+    ResponseNode<List<int>> responseNode = await _repositories.networkRepository
         .fetchNode(command, await _getNetworkNode(true));
     if (responseNode.errors != null) {
-      responseNode = await repositories.networkRepository
+      responseNode = await _repositories.networkRepository
           .fetchNode(NodeRequest.getNodeStatus, await _getNetworkNode(false));
     }
 
@@ -388,11 +444,11 @@ class RPCHandlers {
     int randomNumber = Random().nextInt(2) + 1;
 
     if (randomNumber == 1) {
-      var randomSeed = await repositories.networkRepository.getRandomDevNode();
+      var randomSeed = await _repositories.networkRepository.getRandomDevNode();
       return randomSeed.seed;
     } else {
       var listUsersNodes = appDataBlock.appBlocConfig.nodesList;
-      var testNode = await repositories.networkRepository.fetchNode(
+      var testNode = await _repositories.networkRepository.fetchNode(
           NodeRequest.getNodeStatus,
           Seed().tokenizer(NetworkConfig.getRandomNode(listUsersNodes)));
       return testNode.seed;

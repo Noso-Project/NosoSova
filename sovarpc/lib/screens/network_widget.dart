@@ -88,7 +88,7 @@ class _NetworkWidgetState extends State<NetworkWidget> {
                           onPressed: () {
                             return context
                                 .read<NosoNetworkBloc>()
-                                .add(ReconnectSeed(false));
+                                .add(ReconnectSeed(false, hasError: true));
                           }),
                       const SizedBox(width: 10)
                     ],

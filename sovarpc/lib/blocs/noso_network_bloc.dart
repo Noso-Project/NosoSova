@@ -13,6 +13,7 @@ import 'package:nososova/models/responses/response_node.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:nososova/utils/enum.dart';
 import 'package:sovarpc/blocs/network_events.dart';
+import 'package:sovarpc/models/rpc_info.dart';
 
 import '../models/debug_rpc.dart';
 import '../services/computer_service.dart';
@@ -43,7 +44,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   Timer? _timerSyncNetwork;
   final Repositories _repositories;
   final DebugRPCBloc _debugBloc;
-  int supply = 0;
+  RPCInfo rpcInfo = RPCInfo();
 
   NosoNetworkBloc({
     required Repositories repositories,
@@ -211,18 +212,25 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   /// A method that calculates summary in a separate thread
   _loadSupply(event, emit) async {
     var summary = await _repositories.fileRepository.loadSummary();
+    var addresses = await _repositories.localRepository.fetchTotalAddress();
 
-    int calculateSummary(Uint8List psk) {
+    List<int> calculateSummary(Uint8List psk) {
       int supply = 0;
+      int totalBalanceWallet = 0;
       int index = 0;
       try {
         while (index + 106 <= psk.length) {
+          var hash = String.fromCharCodes(
+              psk.sublist(index + 1, index + psk[index] + 1));
           var targetBalance = ByteData.view(
                   Uint8List.fromList(psk.sublist(index + 82, index + 90))
                       .buffer)
               .getInt64(0, Endian.little);
 
           supply += targetBalance;
+          if (addresses.any((localAddress) => localAddress.hash == hash)) {
+            totalBalanceWallet += targetBalance;
+          }
 
           index += 106;
         }
@@ -230,12 +238,15 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
         if (kDebugMode) {
           print('Error total supply: $e');
         }
+        return [0, 0];
       }
-      return supply;
+      return [supply, totalBalanceWallet];
     }
 
-    supply =
+    var resultResponse =
         await ComputeService.compute(calculateSummary, summary ?? Uint8List(0));
+    rpcInfo = rpcInfo.copyWith(
+        supply: resultResponse[0], walletBalance: resultResponse[1]);
   }
 
   Future<ConsensusStatus> _checkConsensus(Node targetNode) async {
@@ -301,7 +312,6 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     } else {
       print("error consensus");
       return ConsensusStatus.error;
-
     }
   }
 

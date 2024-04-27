@@ -13,8 +13,14 @@ class LocalRepository {
 
   Stream<List<Address>> fetchAddress() => _database.fetchAddresses();
 
+  Future<List<Address>> fetchTotalAddress() => _database.fetchTotalAddresses();
+
   Future<void> deleteAddress(Address value) async {
     await _database.deleteWallet(value);
+  }
+
+  Future<AddressObject?> fetchAddressForHash(String hash) async {
+    return await _database.fetchAddress(hash);
   }
 
   Future<bool> isLocalAddress(String hash) async {

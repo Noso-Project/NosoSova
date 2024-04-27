@@ -28,9 +28,9 @@ class ServiceRPC {
   getnewaddress + *
   getnewaddressfull  + *
   islocaladdress + *
-  getwalletbalance + (fix, save from appDatabloc)
-  setdefault *
-  sendfunds
+  getwalletbalance + *
+  setdefault + *
+  sendfunds + *
   reset + *
    */
 
@@ -162,7 +162,8 @@ class ServiceRPC {
     }
 
     if (method == 'sendfunds') {
-      return ['param1', 'param2'];
+      return rpcHandlers.sendFunds(params[0],
+          params[1] is int ? params[1] : int.parse(params[1]), params[2]);
     }
 
     if (method == 'reset') {

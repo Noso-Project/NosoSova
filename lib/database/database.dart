@@ -39,11 +39,19 @@ class MyDatabase extends _$MyDatabase {
 
   Stream<List<Address>> fetchAddresses() => select(addresses).watch();
 
+  Future<List<Address>> fetchTotalAddresses() => select(addresses).get();
+
   Stream<List<ContactModel>> fetchContacts() => select(contact).watch();
 
   Future<bool> isLocalAddress(String hash) async {
     final addressesList = await (select(addresses)..where((t) => t.hash.equals(hash))).get();
     return addressesList.isNotEmpty;
+  }
+
+  Future<AddressObject?> fetchAddress(String hash) async {
+    final addressesList = await (select(addresses)..where((t) => t.hash.equals(hash))).get();
+    print(addressesList.length);
+    return addressesList.isNotEmpty ? addressesList.first : null;
   }
 
   Future<void> addAddress(AddressObject value) async {
