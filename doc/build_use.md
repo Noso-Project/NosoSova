@@ -11,7 +11,7 @@ Follow these steps to set up and build the project for various platforms.
 - [Dart SDK](https://dart.dev/get-dart)
 - IDE (e.g., [Visual Studio Code](https://code.visualstudio.com/) with Flutter/Dart extension)
 
-### Setting up the build environment
+# Setting up the build environment
 
 Follow the instructions in this guide [Installation Flutter](https://docs.flutter.dev/get-started/install/windows)
 
@@ -21,6 +21,22 @@ Follow the instructions in this guide [Installation Flutter](https://docs.flutte
 git clone https://github.com/Noso-Project/NosoSova.git
 cd NosoSova
 ```
+
+# Building with scripts
+
+The project can be built using scripts, this is only supported for windows && linux. The scripts are located in the cmd folder
+
+```bash
+# Linux
+cd cmd
+./build_linux.sh
+
+# Windows
+cd cmd
+./build_windows.cmd
+```
+
+# Manual assembly for the platform
 
 ### Install Dependencies
 
