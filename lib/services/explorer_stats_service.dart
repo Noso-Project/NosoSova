@@ -192,8 +192,6 @@ class ExplorerStatsService {
         Uri.parse(uri),
         headers: {"accept": "application/json"},
       ).timeout(Duration(seconds: _delaySeconds));
-
-      print(json.decode(response.body));
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
         return ResponseApi(value: jsonData);

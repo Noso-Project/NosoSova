@@ -72,12 +72,18 @@ class RPCHandlers {
   }
 
   Future<List<Map<String, Object?>>> fetchOrderInfo(String targetOrder) async {
+    if (targetOrder.isEmpty) {
+      return [
+        {"valid": false, "order": null}
+      ];
+    }
     ResponseApi<dynamic> restApiResponse = await _repositories.networkRepository
         .fetchOrderInformation(targetOrder);
+
     if (restApiResponse.errors == null && targetOrder.isNotEmpty) {
       var inputObject = restApiResponse.value;
 
-      if (inputObject['block_id'].isNotEmpty) {
+      if (inputObject['order_id'].toString().contains(targetOrder)) {
         DateTime dateTime = DateTime.parse(inputObject['timestamp']);
         int unixTimestamp = dateTime.millisecondsSinceEpoch ~/ 1000;
         double amount = double.parse(inputObject['amount']);
@@ -352,7 +358,7 @@ class RPCHandlers {
           await _repositories.sharedRepository.loadRPCDefaultAddress();
       var addressObject = await _repositories.localRepository
           .fetchAddressForHash(defaultAddress ?? "");
-      bool hasTenDigits = amount.toString().length == 10;
+      //  bool hasTenDigits = amount.toString().length == 10;
       int block;
 
       if (_isSyncLocalNetwork()) {
@@ -364,7 +370,8 @@ class RPCHandlers {
         block = targetNode == null ? 0 : targetNode.lastblock;
       }
 
-      if (addressObject != null && defaultAddress != null && hasTenDigits) {
+      if (addressObject != null && defaultAddress != null // && hasTenDigits
+          ) {
         var orderData = OrderData(
             currentAddress: addressObject,
             receiver: receiver,
@@ -391,6 +398,10 @@ class RPCHandlers {
             }
           }
         }
+      } else {
+        return [
+          {"valid": false, "result": "-14"}
+        ];
       }
 
       return [
