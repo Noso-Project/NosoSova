@@ -193,7 +193,6 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
           _loadSupply(event, emit);
         } else {
-          print("consensus error");
           add(ReconnectSeed(false, hasError: true));
         }
         return;
@@ -253,8 +252,6 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     List<Node> testNodes = [];
     List<bool> decisionNodes = [];
     var listNodesUsers = appBlocConfig.nodesList;
-
-    print("start consensus");
     int maxDevAttempts = 2;
     int maxDevFalseAttempts = 4;
     int attemptsDev = 0;
@@ -263,7 +260,6 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
           await _repositories.networkRepository.getRandomDevNode();
       final Node? nodeOutput =
           DataParser.parseDataNode(targetDevNode.value, targetDevNode.seed);
-      print("dev seed ${String.fromCharCodes(targetDevNode.value ?? [])}");
       if (targetDevNode.errors != null ||
           nodeOutput == null ||
           testNodes.any((node) =>
@@ -288,10 +284,8 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
           Seed().tokenizer(NetworkConfig.getRandomNode(listNodesUsers));
       var targetUserNode = await _repositories.networkRepository
           .fetchNode(NodeRequest.getNodeStatus, randomSeed);
-      print("user seed ${randomSeed.toTokenizer}");
       final Node? nodeUserOutput =
           DataParser.parseDataNode(targetUserNode.value, targetUserNode.seed);
-      print("user seed ${String.fromCharCodes(targetUserNode.value ?? [])}");
       if (targetUserNode.errors != null ||
           nodeUserOutput == null ||
           testNodes.any((node) =>
@@ -307,10 +301,8 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
       decisionNodes.add(isValidNode(tNode, targetNode));
     }
     if (decisionNodes.every((element) => element == true)) {
-      print("sync consensus");
       return ConsensusStatus.sync;
     } else {
-      print("error consensus");
       return ConsensusStatus.error;
     }
   }
