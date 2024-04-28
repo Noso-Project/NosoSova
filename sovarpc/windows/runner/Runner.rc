@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.pasivhdev.nososova.nososova" "\0"
-            VALUE "FileDescription", "sovarpc" "\0"
+            VALUE "CompanyName", "NosoCoin" "\0"
+            VALUE "FileDescription", "SovaRPC" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "sovarpc" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 com.pasivhdev.nososova.nososova. All rights reserved." "\0"
-            VALUE "OriginalFilename", "sovarpc.exe" "\0"
-            VALUE "ProductName", "sovarpc" "\0"
+            VALUE "InternalName", "nososova" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 pasichDev All rights reserved." "\0"
+            VALUE "OriginalFilename", "SovaRPC.exe" "\0"
+            VALUE "ProductName", "nososova" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
