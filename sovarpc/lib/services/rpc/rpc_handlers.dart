@@ -36,16 +36,17 @@ class RPCHandlers {
   Future<List<Map<String, dynamic>>> fetchReset() async {
     var networkBloc = locator<NosoNetworkBloc>();
     var localNode = networkBloc.state.node;
-    locator<DebugRPCBloc>().add(AddStringDebug(
-        "Reset command was executed", StatusReport.RPC, DebugType.error));
+
     var isReset =
         networkBloc.state.statusConnected == StatusConnectNodes.connected;
 
-    if (isReset) {
+    if (!isReset) {
       locator<NosoNetworkBloc>().add(ReconnectSeed(false, hasError: true));
+      locator<DebugRPCBloc>().add(AddStringDebug(
+          "Reset command was executed", StatusReport.RPC, DebugType.error));
     }
     return [
-      {"lastSeed": localNode.seed.toTokenizer, "valid": isReset}
+      {"lastSeed": localNode.seed.toTokenizer, "valid": !isReset}
     ];
   }
 

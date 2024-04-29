@@ -1,10 +1,13 @@
 #!/bin/bash
 
-while true; do
+count=1
+
+while [ $count -le 70 ]; do
   # Виконати Dart-файл
   dart tester-rpc.dart
-  
-  # Затримка на 10 секунд
-  sleep 10
-done
 
+  # Затримка на 5 секунд
+  sleep 5
+
+  ((count++))
+done

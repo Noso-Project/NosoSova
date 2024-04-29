@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 Future<void> sendJsonRpcRequest(String url) async {
   final requestData = {
     "jsonrpc": "2.0",
-    "method":"getnewaddress",
+    "method":"getmainnetinfo",
     "params": ["100"],
     "id": 1
   };
