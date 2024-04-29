@@ -197,7 +197,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
         }
         return;
       } else {
-        add(ReconnectSeed(false));
+        add(ReconnectSeed(false, hasError: true));
         return;
       }
     }

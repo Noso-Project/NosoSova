@@ -38,15 +38,14 @@ class RPCHandlers {
     var localNode = networkBloc.state.node;
     locator<DebugRPCBloc>().add(AddStringDebug(
         "Reset command was executed", StatusReport.RPC, DebugType.error));
-    locator<NosoNetworkBloc>().add(ReconnectSeed(false));
+    var isReset =
+        networkBloc.state.statusConnected == StatusConnectNodes.connected;
+
+    if (isReset) {
+      locator<NosoNetworkBloc>().add(ReconnectSeed(false, hasError: true));
+    }
     return [
-      {
-        "lastSeed": localNode.seed.toTokenizer,
-        "status":
-            networkBloc.state.statusConnected == StatusConnectNodes.connected
-                ? "Synchronized"
-                : "Not synchronized"
-      }
+      {"lastSeed": localNode.seed.toTokenizer, "valid": isReset}
     ];
   }
 
@@ -273,13 +272,11 @@ class RPCHandlers {
     return {
       'REST-API': restApi.value,
       'Noso-Network': {
-        "Seed": localNode.seed.toTokenizer,
-        "Block": localNode.lastblock,
-        "UTCTime": localNode.utcTime,
-        "Node Version": localNode.version,
-        "Status": nosoNetwork.statusConnected == StatusConnectNodes.connected
-            ? "Synchronized"
-            : "Not synchronized"
+        "seed": localNode.seed.toTokenizer,
+        "block": localNode.lastblock,
+        "utc_time": localNode.utcTime,
+        "node_version": localNode.version,
+        "sync": nosoNetwork.statusConnected == StatusConnectNodes.connected
       }
     };
   }
