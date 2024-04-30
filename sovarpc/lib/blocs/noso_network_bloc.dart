@@ -248,7 +248,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
     await computer.turnOn(
       workersCount: 1,
-      verbose: true,
+      verbose: false,
     );
     final result = await computer.compute(
       calculateSummary,
