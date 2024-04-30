@@ -2,11 +2,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:noso_dart/handlers/files_handler.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:nososova/ui/theme/decoration/textfield_decoration.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
 import 'package:nososova/ui/theme/style/text_style.dart';
+import 'package:nososova/utils/files_const.dart';
+import 'package:sovarpc/stop_watch.dart';
 
 import '../blocs/rpc_bloc.dart';
 import '../blocs/rpc_events.dart';
@@ -80,11 +83,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     onChanged: (value) {
                       setState(() {
                         if (state.rpcRunnable == false) {
-                          BlocProvider.of<RpcBloc>(context).add(StartServer(
+                          locator<RpcBloc>().add(StartServer(
                               "${_ipController.text}:${_portController.text}",
                               _ignoreMethods.text));
                         } else {
-                          BlocProvider.of<RpcBloc>(context).add(StopServer());
+                          locator<RpcBloc>().add(StopServer());
                         }
                       });
                     },
@@ -136,11 +139,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: state.rpcRunnable ? null : _import,
+                      onPressed: state.rpcRunnable ? null : () => _import(),
                       style: styleButton(),
                       child: const Text('Import',
-                          style:
-                              TextStyle(color: Colors.white)), // Текст кнопки
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -159,29 +161,60 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     });
   }
 
-  _import() {}
+  _import() async {
+    var watch = WatchTime();
+    watch.startTimer();
+    var repo = locator<Repositories>();
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      var file = result.files.first;
+      if (file.extension?.toLowerCase() == FilesConst.pkwExtensions) {
+        var bytes = await repo.fileRepository.readBytesFromPlatformFile(file);
+        var listAddress = FileHandler.readExternalWallet(bytes, isIngoreVerification: true);
+
+        if (listAddress == null || listAddress.isEmpty) {
+          _snackBar("Error: File does not contain addresses", false);
+          return;
+        }
+
+        _snackBar("Wallet imported ${listAddress.length}", false);
+
+        // Wallet is open dialog selected address
+        /* _responseStatusStream.add(ResponseListenerPage(
+            idWidget: ResponseWidgetsIds.widgetImportAddress,
+            codeMessage: 0,
+            action: ActionsFileWallet.walletOpen,
+            actionValue: listAddress));
+
+        */
+      } else {
+        _snackBar("Error: File format is not supported", true);
+        return;
+      }
+    }
+    watch.stopTimer();
+  }
 
   _export() async {
+    var repo = locator<Repositories>();
     try {
       String? outputFile = await FilePicker.platform.saveFile(
           dialogTitle: 'Please select an wallet file:',
           fileName:
               "walletBackup_${DateTime.now().millisecondsSinceEpoch ~/ 1000}.pkw");
-      var addresses =
-          await locator<Repositories>().localRepository.fetchTotalAddress();
+      var addresses = await repo.localRepository.fetchTotalAddress();
       var countAddress = addresses.length;
 
       if (outputFile != null) {
-        var exportTrue = await locator<Repositories>()
-            .fileRepository
-            .saveExportWallet(addresses, outputFile);
+        var exportTrue =
+            await repo.fileRepository.saveExportWallet(addresses, outputFile);
 
         if (mounted) {
           _snackBar(
               exportTrue
                   ? "Export $countAddress addresses at path:\n $outputFile"
                   : "Error: Export wallet",
-              exportTrue);
+              !exportTrue);
         }
       } else {
         _snackBar("Error: Save path no valid", true);
@@ -191,7 +224,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     }
   }
 
-  _snackBar(String text, bool error) {
+  _snackBar(String text, bool isError) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         text,
@@ -200,7 +233,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         ),
       ),
       backgroundColor:
-          error ? CustomColors.positiveBalance : CustomColors.negativeBalance,
+      !isError ? CustomColors.positiveBalance : CustomColors.negativeBalance,
       elevation: 6.0,
       margin: EdgeInsets.only(
           bottom: 10, left: MediaQuery.of(context).size.width - 500, right: 10),

@@ -26,7 +26,9 @@ dependencies:
   window_manager: ^0.3.8
   shelf: ^1.4.1
   shelf_router: ^1.1.4
-  noso_dart: ^1.2.2
+  noso_dart: ^1.2.3
+    # noso_dart:
+  #   path: ../../NosoDart
   computer: ^3.2.1
   file_picker: ^5.5.0
   nososova :

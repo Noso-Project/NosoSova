@@ -213,6 +213,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     var summary = await _repositories.fileRepository.loadSummary();
     var addresses = await _repositories.localRepository.fetchTotalAddress();
 
+    ///TODO В майбутньому цей метод можна оптимізувати
     List<int> calculateSummary(Uint8List psk) {
       int supply = 0;
       int totalBalanceWallet = 0;

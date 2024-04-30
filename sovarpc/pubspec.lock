@@ -625,10 +625,10 @@ packages:
     dependency: "direct main"
     description:
       name: noso_dart
-      sha256: "89635384f86a08070345fc4d086f8ee4221f8b52ab129e35a909ae4c1a2cac38"
+      sha256: "99abd0828b99cf587e263ded32f6b2780b753ffaab405f70e32765d40a421756"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.2"
+    version: "1.2.3"
   nososova:
     dependency: "direct main"
     description:
