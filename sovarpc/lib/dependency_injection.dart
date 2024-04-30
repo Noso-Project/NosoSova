@@ -36,7 +36,7 @@ Future<void> setupLocator() async {
       () => LocalRepository(locator<MyDatabase>()));
   locator.registerLazySingleton<SharedRepository>(
       () => SharedRepository(locator<SharedService>()));
-  locator.registerLazySingleton(() => Repositories(
+  locator.registerLazySingleton<Repositories>(() => Repositories(
       localRepository: locator<LocalRepository>(),
       networkRepository: locator<NetworkRepository>(),
       sharedRepository: locator<SharedRepository>(),

@@ -252,7 +252,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     );
     final result = await computer.compute(
       calculateSummary,
-      param: summary ?? Uint8List(0), // optional
+      param: summary ?? Uint8List(0),
     );
     await computer.turnOff();
 

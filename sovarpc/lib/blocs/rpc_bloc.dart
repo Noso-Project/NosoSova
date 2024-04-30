@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:sovarpc/blocs/rpc_events.dart';
+
+import '../const.dart';
 import '../models/debug_rpc.dart';
 import '../services/rpc/rpc_service.dart';
 import 'debug_rpc_bloc.dart';
@@ -18,7 +20,8 @@ class RpcState {
     String? rpcAddress,
     String? ignoreMethods,
   })  : rpcRunnable = rpcRunnable ?? false,
-        rpcAddress = rpcAddress ?? "localhost:8080",
+        rpcAddress =
+            rpcAddress ?? "${Const.DEFAULT_HOST}:${Const.DEFAULT_PORT}",
         ignoreMethods = ignoreMethods ?? "";
 
   RpcState copyWith({
