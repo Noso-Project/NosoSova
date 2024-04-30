@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
+import 'package:computer/computer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/models/noso/seed.dart';
@@ -16,7 +17,6 @@ import 'package:sovarpc/blocs/network_events.dart';
 import 'package:sovarpc/models/rpc_info.dart';
 
 import '../models/debug_rpc.dart';
-import '../services/computer_service.dart';
 import 'debug_rpc_bloc.dart';
 
 class NosoNetworksState {
@@ -191,7 +191,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
             statusConnected: StatusConnectNodes.connected,
           ));
 
-          _loadSupply(event, emit);
+          _loadSupply();
         } else {
           add(ReconnectSeed(false, hasError: true));
         }
@@ -209,7 +209,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   }
 
   /// A method that calculates summary in a separate thread
-  _loadSupply(event, emit) async {
+  _loadSupply() async {
     var summary = await _repositories.fileRepository.loadSummary();
     var addresses = await _repositories.localRepository.fetchTotalAddress();
 
@@ -226,9 +226,11 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
                       .buffer)
               .getInt64(0, Endian.little);
 
-          supply += targetBalance;
-          if (addresses.any((localAddress) => localAddress.hash == hash)) {
-            totalBalanceWallet += targetBalance;
+          if (targetBalance != 0) {
+            supply += targetBalance;
+            if (addresses.any((localAddress) => localAddress.hash == hash)) {
+              totalBalanceWallet += targetBalance;
+            }
           }
 
           index += 106;
@@ -242,10 +244,19 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
       return [supply, totalBalanceWallet];
     }
 
-    var resultResponse =
-        await ComputeService.compute(calculateSummary, summary ?? Uint8List(0));
-    rpcInfo = rpcInfo.copyWith(
-        supply: resultResponse[0], walletBalance: resultResponse[1]);
+    final computer = Computer.create();
+
+    await computer.turnOn(
+      workersCount: 1,
+      verbose: true,
+    );
+    final result = await computer.compute(
+      calculateSummary,
+      param: summary ?? Uint8List(0), // optional
+    );
+    await computer.turnOff();
+
+    rpcInfo = rpcInfo.copyWith(supply: result[0], walletBalance: result[1]);
   }
 
   Future<ConsensusStatus> _checkConsensus(Node targetNode) async {
