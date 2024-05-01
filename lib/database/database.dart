@@ -81,7 +81,7 @@ class MyDatabase extends _$MyDatabase {
       );
     }).toList();
     await batch((batch) {
-      batch.insertAll(addresses, insertable);
+      batch.insertAll(addresses, insertable, mode: InsertMode.insertOrIgnore);
     });
   }
 

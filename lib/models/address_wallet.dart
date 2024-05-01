@@ -47,4 +47,20 @@ class Address extends AddressObject {
           incoming: incoming,
           outgoing: outgoing,
         );
+
+  factory Address.fromJson(Map<String, dynamic> json) {
+    return Address(
+      hash: json['hash'],
+      publicKey: json['publicKey'],
+      privateKey: json['privateKey'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'hash': hash,
+      'publicKey': publicKey,
+      'privateKey': privateKey,
+    };
+  }
 }
