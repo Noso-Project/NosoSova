@@ -15,6 +15,9 @@ class LocalRepository {
 
   Future<List<Address>> fetchTotalAddress() => _database.fetchTotalAddresses();
 
+  Future<Set<String>> fetchTotalAddressHashes() =>
+      _database.fetchTotalAddressHashes();
+
   Future<void> deleteAddress(Address value) async {
     await _database.deleteWallet(value);
   }

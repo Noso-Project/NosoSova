@@ -211,13 +211,14 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   /// A method that calculates summary in a separate thread
   _loadSupply() async {
     var summary = await _repositories.fileRepository.loadSummary();
-    var addresses = await _repositories.localRepository.fetchTotalAddress();
+    var addressesHashes =
+        await _repositories.localRepository.fetchTotalAddressHashes();
 
-    ///TODO В майбутньому цей метод можна оптимізувати
     List<int> calculateSummary(Uint8List psk) {
       int supply = 0;
       int totalBalanceWallet = 0;
       int index = 0;
+
       try {
         while (index + 106 <= psk.length) {
           var hash = String.fromCharCodes(
@@ -229,7 +230,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
           if (targetBalance != 0) {
             supply += targetBalance;
-            if (addresses.any((localAddress) => localAddress.hash == hash)) {
+            if (addressesHashes.contains(hash)) {
               totalBalanceWallet += targetBalance;
             }
           }
@@ -248,13 +249,14 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     final computer = Computer.create();
 
     await computer.turnOn(
-      workersCount: 1,
+      workersCount: 2,
       verbose: false,
     );
     final result = await computer.compute(
       calculateSummary,
       param: summary ?? Uint8List(0),
     );
+
     await computer.turnOff();
 
     rpcInfo = rpcInfo.copyWith(supply: result[0], walletBalance: result[1]);

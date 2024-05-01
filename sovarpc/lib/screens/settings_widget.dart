@@ -206,6 +206,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       var countAddress = addresses.length;
 
       if (outputFile != null) {
+
+
         var exportTrue =
             await repo.fileRepository.saveExportWallet(addresses, outputFile);
 
@@ -216,9 +218,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   : "Error: Export wallet",
               !exportTrue);
         }
-      } else {
-        _snackBar("Error: Save path no valid", true);
-      }
+      } 
     } catch (e) {
       _snackBar("Error: Export wallet", true);
     }
