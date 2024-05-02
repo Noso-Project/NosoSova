@@ -6,7 +6,7 @@ This utility shares a common working directory and database with NosoSova, but t
 
 **Important:** NosoSova and SovaRPC do not exchange information. They also do not interact synchronously with the database. Thus, if you open RPC and later import your wallet into NosoSova, it will not appear in SovaRPC until the next restart.
 
-#### Paths to the SovaRPC Working Folder:
+#### Paths to the SovaRPC Working Folder (APP_FOLDER):
 
 ```
 Windows:
@@ -30,7 +30,7 @@ Under the settings, there are two buttons for importing and exporting the wallet
 ### RPC Work Backups
 When using the commands `getnewaddress` and `getnewaddressfull`, generated addresses are added to the database and duplicated in a file located at:
 
-> APPFOLDER/nososova/backups/backup_addresses.json
+> APP_FOLDER/nososova/backups/backup_addresses.json
 
 ### Checking RPC Operation and Restart
 To check the status of RPC, you can use a GET request on the route rpc:port/health-check. Monitor the sync status; if it is false, there may be a failure or a local network freeze (a common feature of the noso network). To reconnect, you can use the RPC restart command.
