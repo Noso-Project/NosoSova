@@ -39,8 +39,12 @@ class PkwHandler {
       var path = message[1];
       var replyPort = message[2];
 
-      var exportTrue = await saveWallet(serializedAddresses, path);
-      replyPort.send([exportTrue, serializedAddresses.length]);
+      try {
+        var exportTrue = await saveWallet(serializedAddresses, path);
+        replyPort.send([exportTrue, serializedAddresses.length]);
+      } catch (e) {
+        replyPort.send([false, 0]);
+      }
     }
   }
 
