@@ -22,7 +22,7 @@ class AddressBalance {
     valid: json['valid'] ?? false,
     address: json['address'],
     alias: json['alias'],
-    balance: json['balance'],
+    balance: (json['balance'] is int ? (json['balance'] as int).toDouble() : json['balance'] as double),
     incoming: json['incoming'],
     outgoing: json['outgoing'],
   );

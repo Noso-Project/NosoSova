@@ -356,7 +356,6 @@ class RPCHandlers {
           await _repositories.sharedRepository.loadRPCDefaultAddress();
       var addressObject = await _repositories.localRepository
           .fetchAddressForHash(defaultAddress ?? "");
-      //  bool hasTenDigits = amount.toString().length == 10;
       int block;
 
       if (_isSyncLocalNetwork()) {
@@ -368,7 +367,7 @@ class RPCHandlers {
         block = targetNode == null ? 0 : targetNode.lastblock;
       }
 
-      if (addressObject != null && defaultAddress != null // && hasTenDigits
+      if (addressObject != null && defaultAddress != null
           ) {
         var orderData = OrderData(
             currentAddress: addressObject,
@@ -436,7 +435,6 @@ class RPCHandlers {
     return responseNode;
   }
 
-  ///TODO Тут додати коли користувацький перевірку на помилки
   Future<Seed> _getNetworkNode(bool localLastNode) async {
     var appDataBlock = locator<NosoNetworkBloc>();
 

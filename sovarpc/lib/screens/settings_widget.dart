@@ -121,7 +121,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   style: AppTextStyles.textField,
                   decoration: AppTextFiledDecoration.defaultDecoration(
                       "reset,testmethod,twomethod")),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               Text(
                 "Wallet Actions",
                 style: AppTextStyles.dialogTitle.copyWith(
@@ -189,7 +189,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           receivePort.close();
           isolate.kill();
         });
-
       } else {
         _snackBar("Error: File format is not supported", true);
         return;
@@ -197,8 +196,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     }
   }
 
-  ///TODO test print(NosoMath().doubleToByte(0.0000000));
   _export() async {
+    var addresses =
+        await locator<Repositories>().localRepository.fetchTotalAddress();
+
+    if (addresses.isEmpty) {
+      _snackBar("Empty addresses", true);
+      return;
+    }
     try {
       String? outputFile = await FilePicker.platform.saveFile(
           dialogTitle: 'Please select an wallet file:',
@@ -209,8 +214,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         setState(() {
           isLoadingExport = true;
         });
-        var addresses =
-            await locator<Repositories>().localRepository.fetchTotalAddress();
+
         ReceivePort receivePort = ReceivePort();
         Isolate isolate =
             await Isolate.spawn(PkwHandler.isolateExport, receivePort.sendPort);

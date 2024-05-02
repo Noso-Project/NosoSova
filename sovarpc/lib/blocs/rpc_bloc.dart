@@ -67,9 +67,7 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
       var address = event.address;
       var ignoreMethods = event.ignoreMethods;
       var addressArray = address.split(":");
-      await _repositories.sharedRepository.saveRPCStatus(true);
       await _repositories.sharedRepository.saveRPCAddress(address);
-
       await _repositories.sharedRepository.saveRPCMethodsIgnored(ignoreMethods);
 
       if (rpcServer != null) {
@@ -95,7 +93,6 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
   }
 
   void _stopServer(event, emit) async {
-    await _repositories.sharedRepository.saveRPCStatus(false);
     _debugBloc.add(
         AddStringDebug("Stop RPC Server", StatusReport.RPC, DebugType.error));
 

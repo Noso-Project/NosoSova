@@ -5,7 +5,7 @@ Future<void> sendJsonRpcRequest(String url) async {
   final requestData = {
     "jsonrpc": "2.0",
     "method":"getnewaddressfull",
-    "params": ["100000"],
+    "params": ["2"],
     "id": 1
   };
   String body = jsonEncode(requestData);

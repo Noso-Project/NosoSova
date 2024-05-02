@@ -37,13 +37,6 @@ class SharedRepository {
     return _sharedService.loadDelaySync();
   }
 
-  Future<void> saveRPCStatus(bool value) async {
-    await _sharedService.saveRPCStatus(value);
-  }
-
-  Future<bool?> loadRPCStatus() async {
-    return _sharedService.loadRPCStatus();
-  }
 
   Future<void> saveRPCAddress(String value) async {
     await _sharedService.saveRPCAddress(value);

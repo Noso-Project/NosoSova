@@ -3,7 +3,7 @@ description: "NosoSova + RPC"
 publish_to: 'none'
 
 
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: '>=3.3.2 <4.0.0'
@@ -26,9 +26,9 @@ dependencies:
   window_manager: ^0.3.8
   shelf: ^1.4.1
   shelf_router: ^1.1.4
-  noso_dart: ^1.2.3
-    # noso_dart:
-  #   path: ../../NosoDart
+  noso_dart: 1.2.4
+    #  noso_dart:
+  #    path: ../../NosoDart
   computer: ^3.2.1
   file_picker: ^5.5.0
   nososova :
