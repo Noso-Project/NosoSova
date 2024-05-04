@@ -478,7 +478,7 @@ Send funds to an address.
 ```json
 {
   "jsonrpc": "2.0",
-  "method": "setdefault",
+  "method": "transfer",
   "params": ["N3VCAvZyhnoFabFTfeWvY7WYoXQQ8ZC", "100000000", "Reference"],
   "id": 15
 }
