@@ -509,22 +509,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  isolate_contactor:
-    dependency: transitive
-    description:
-      name: isolate_contactor
-      sha256: f1be0a90f91e4309ef37cc45280b2a84e769e848aae378318dd3dd263cfc482a
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2.0"
-  isolate_manager:
-    dependency: "direct main"
-    description:
-      name: isolate_manager
-      sha256: e6c8490a85998d58ae9d8a7e6689992f45a1397b506f57ec72763a8c2b76e04b
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.3.0"
   js:
     dependency: transitive
     description:
