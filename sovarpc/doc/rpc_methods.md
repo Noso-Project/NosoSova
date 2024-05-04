@@ -478,7 +478,7 @@ Send funds to an address.
 ```json
 {
   "jsonrpc": "2.0",
-  "method": "setdefault",
+  "method": "transfer",
   "params": ["N3VCAvZyhnoFabFTfeWvY7WYoXQQ8ZC", "100000000", "Reference"],
   "id": 15
 }
@@ -508,8 +508,8 @@ Reconnect to the noso local network, if necessary. The last network node and the
 ```json
 {
   "jsonrpc": "2.0",
-  "method": "setdefault",
-  "params": ["N3VCAvZyhnoFabFTfeWvY7WYoXQQ8ZC", "100000000", "Reference"],
+  "method": "restart",
+  "params": [""],
   "id": 15
 }
 ```
