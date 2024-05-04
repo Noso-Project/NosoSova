@@ -14,6 +14,13 @@ class ServiceRPC {
   final Repositories repositories;
   final String ignoreMethods;
   late RPCHandlers rpcHandlers;
+  final _responseBad = Response.ok({
+    'jsonrpc': '2.0',
+    'result': [
+      {"result": "Bad Request"}
+    ],
+    'id': -1,
+  });
 
   ServiceRPC(this.repositories, this.ignoreMethods) {
     rpcHandlers = RPCHandlers(repositories);
@@ -55,13 +62,8 @@ class ServiceRPC {
       if (kDebugMode) {
         print(e);
       }
-      var errorResponse = {
-        'jsonrpc': '2.0',
-        'error': {'code': 400, 'error': '$e'},
-        'id': -1,
-      };
 
-      return Response.ok(jsonEncode(errorResponse));
+      return _responseBad;
     }
   }
 
@@ -116,6 +118,7 @@ class ServiceRPC {
     if (method == 'restart') {
       return await rpcHandlers.fetchReset();
     }
+    return _responseBad;
   }
 
   Handler get handler {
@@ -126,7 +129,8 @@ class ServiceRPC {
 
     router.get('/health-check', (Request request) async {
       return Response.ok(
-          jsonEncode(await RPCHandlers(repositories).fetchHealthCheck()));
+          jsonEncode(await RPCHandlers(repositories).fetchHealthCheck()),
+          headers: {'Content-Type': 'application/json'});
     });
 
     return router.call;

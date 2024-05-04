@@ -28,14 +28,13 @@ class DebugRPCBloc extends Bloc<DebugEventRPC, DebugRPCState> {
     final DateTime now = DateTime.now();
     var list = state.debugList;
     list = list.length >= 500 ? [] : list;
-
-    list.add(DebugRpcString(
+    var string = DebugRpcString(
         time:
-        "${now.hour}:${now.minute < 10 ? '0${now.minute}' : now.minute.toString()}:${now.second < 10 ? '0${now.second}' : now.second.toString()}",
-
+            "${now.hour}:${now.minute < 10 ? '0${now.minute}' : now.minute.toString()}:${now.second < 10 ? '0${now.second}' : now.second.toString()}",
         message: event.value,
         type: event.type,
-    source: event.source));
+        source: event.source);
+    list.add(string);
 
     emit(state.copyWith(debugList: list));
   }
@@ -48,5 +47,6 @@ class AddStringDebug extends DebugEventRPC {
   final DebugType type;
   final StatusReport source;
 
-  AddStringDebug(this.value,  [this.source = StatusReport.Node, this.type = DebugType.inform]);
+  AddStringDebug(this.value,
+      [this.source = StatusReport.Node, this.type = DebugType.inform]);
 }
