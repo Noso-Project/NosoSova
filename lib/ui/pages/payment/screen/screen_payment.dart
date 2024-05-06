@@ -17,7 +17,7 @@ import '../../../../blocs/wallet_bloc.dart';
 import '../../../../dependency_injection.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/address_wallet.dart';
-import '../../../../models/app/response_page_listener.dart';
+import '../../../../models/responses/response_page_listener.dart';
 import '../../../common/responses_util/response_widget_id.dart';
 import '../../../common/responses_util/snackbar_message.dart';
 import '../../../config/responsive.dart';

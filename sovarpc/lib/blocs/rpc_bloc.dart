@@ -70,6 +70,7 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
       await _repositories.sharedRepository.saveRPCAddress(address);
       await _repositories.sharedRepository.saveRPCMethodsIgnored(ignoreMethods);
 
+      print("sssss");
       if (rpcServer != null) {
         await rpcServer!.close(force: true);
         rpcServer = null;
@@ -88,6 +89,8 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
           rpcRunnable: true,
           ignoreMethods: ignoreMethods));
     } catch (e) {
+      print("xxxx");
+      print(e);
       emit(state.copyWith(rpcRunnable: false));
     }
   }

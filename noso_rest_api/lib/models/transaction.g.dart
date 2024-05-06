@@ -15,6 +15,7 @@ Transaction _$TransactionFromJson(Map<String, dynamic> json) => Transaction(
       amount: json['amount'] as String,
       fee: json['fee'] as String,
       reference: json['reference'] as String?,
+      transactionCount: (json['transactionCount'] as num?)?.toInt(),
       timestamp: json['timestamp'] as String,
     );
 
@@ -26,6 +27,7 @@ Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
       'sender': instance.sender,
       'receiver': instance.receiver,
       'amount': instance.amount,
+      'transactionCount': instance.transactionCount,
       'fee': instance.fee,
       'reference': instance.reference,
       'timestamp': instance.timestamp,

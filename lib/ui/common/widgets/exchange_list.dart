@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:noso_rest_api/api_service.dart';
+import 'package:noso_rest_api/enum/time_range.dart';
+import 'package:noso_rest_api/models/set_price.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/ui/common/widgets/empty_list_widget.dart';
 
 import '../../../generated/assets.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../models/rest_api/exhcange_data.dart';
-import '../../../repositories/network_repository.dart';
 import '../../theme/style/icons_style.dart';
 import '../../theme/style/text_style.dart';
 
@@ -18,11 +19,12 @@ class ExchangeList extends StatefulWidget {
 }
 
 class _ExchangeListState extends State<ExchangeList> {
-  Future<List<CoinData>> _fetchExchangeList() async {
-    final restApi = locator<NetworkRepository>();
-    var response = await restApi.fetchExchangeList();
-    if (response.errors == null) {
-      List<CoinData> list = response.value;
+  Future<PriceExchangeList> _fetchExchangeList() async {
+    final nosoApiService = locator<NosoApiService>();
+    var response = await nosoApiService
+        .fetchPriceExchange(SetPriceRequest(TimeRange.minute, 1));
+    if (response.error == null) {
+      PriceExchangeList list = response.value as PriceExchangeList;
 
       return list.isEmpty
           ? throw Exception('Failed to load exchanges list')
@@ -34,7 +36,7 @@ class _ExchangeListState extends State<ExchangeList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<CoinData>>(
+    return FutureBuilder<PriceExchangeList>(
         future: _fetchExchangeList(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -70,7 +72,7 @@ class _ExchangeListState extends State<ExchangeList> {
                 return ListTile(
                     leading: AppIconsStyle.icon3x2(Assets.iconsExchange),
                     title: Text(
-                      item.getName(),
+                      item.name,
                       style: AppTextStyles.walletHash,
                     ),
                     trailing: Text(

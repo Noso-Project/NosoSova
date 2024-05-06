@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:noso_rest_api/api_service.dart';
+import 'package:noso_rest_api/models/node_status.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/models/address_wallet.dart';
 import 'package:nososova/ui/common/widgets/empty_list_widget.dart';
 
-import '../../l10n/app_localizations.dart';
-import '../../models/rest_api/node_info.dart';
-import '../../repositories/network_repository.dart';
-import '../../utils/enum.dart';
 import '../../configs/network_config.dart';
+import '../../l10n/app_localizations.dart';
+import '../../utils/enum.dart';
 import '../common/widgets/item_info_widget.dart';
 import '../theme/style/icons_style.dart';
 import '../theme/style/text_style.dart';
@@ -23,11 +23,11 @@ class DialogInfoNode extends StatefulWidget {
 }
 
 class _DialogInfoNodeState extends State<DialogInfoNode> {
-  Future<NodeInfo> fetchStatusNode() async {
-    final restApi = locator<NetworkRepository>();
-    var response = await restApi.fetchNodeStatus(widget.address.hash);
-    if (response.errors == null) {
-      return response.value;
+  Future<NodeStatus> fetchStatusNode() async {
+    final nosoApiService = locator<NosoApiService>();
+    var response = await nosoApiService.fetchNodeStatus(widget.address.hash);
+    if (response.error == null) {
+      return (response.value ?? []) as NodeStatus;
     } else {
       throw Exception('Failed to load nodeInfo');
     }
@@ -37,7 +37,7 @@ class _DialogInfoNodeState extends State<DialogInfoNode> {
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-        child: FutureBuilder<NodeInfo>(
+        child: FutureBuilder<NodeStatus>(
             future: fetchStatusNode(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {

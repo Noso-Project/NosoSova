@@ -4,15 +4,22 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:noso_rest_api/config.dart';
+import 'package:noso_rest_api/models/address_info.dart';
+import 'package:noso_rest_api/models/api_status.dart';
+import 'package:noso_rest_api/models/block.dart';
+import 'package:noso_rest_api/models/node_status.dart';
 import 'package:noso_rest_api/models/nodes_info.dart';
 import 'package:noso_rest_api/models/price.dart';
+import 'package:noso_rest_api/models/price_exchange.dart';
 import 'package:noso_rest_api/models/response.dart';
 import 'package:noso_rest_api/models/set_history_transactions.dart';
 import 'package:noso_rest_api/models/set_price.dart';
+import 'package:noso_rest_api/models/transaction.dart';
 import 'package:noso_rest_api/models/transaction_response.dart';
 import 'package:noso_rest_api/requests.dart';
 
 typedef PriceDataList = List<PriceData>;
+typedef PriceExchangeList = List<PriceExchange>;
 typedef TransactionsHistory = TransactionResponse;
 
 typedef CirculationSupply = int;
@@ -91,6 +98,34 @@ class NosoApiService {
     }
   }
 
+  /// Get the self-reported price of $NOSO by CEX.
+  Future<ResponseNosoApi<List<PriceExchange>>> fetchPriceExchange(
+      SetPriceRequest setPrice) async {
+    try {
+      var response = await _fetchToApi(NosoApiRequests.priceExchange(setPrice));
+      if (response.error != null) {
+        return ResponseNosoApi(error: response.error);
+      } else {
+        Map<String, dynamic> jsonMap = response.value;
+
+        List<PriceExchange> priceList = [];
+
+        jsonMap.forEach((key, value) {
+          value.forEach((exchangeData) {
+            PriceExchange priceExchange = PriceExchange.fromJson({
+              ...exchangeData,
+              'name': key,
+            });
+            priceList.add(priceExchange);
+          });
+        });
+        return ResponseNosoApi(value: priceList);
+      }
+    } catch (e) {
+      return ResponseNosoApi(error: 'Request failed with error: $e');
+    }
+  }
+
   ///Get all Masternode information in one request.
   Future<ResponseNosoApi<NodesInfo>> fetchNodesInfo() async {
     try {
@@ -103,6 +138,78 @@ class NosoApiService {
         } else {
           return ResponseNosoApi(error: 'Response value is null');
         }
+      }
+    } catch (e) {
+      print(e);
+      return ResponseNosoApi(error: 'Request failed with error: $e');
+    }
+  }
+
+  Future<ResponseNosoApi<ApiStatus>> fetchHealthApi() async {
+    try {
+      var response = await _fetchToApi(NosoApiRequests.health_api);
+      if (response.error != null) {
+        return ResponseNosoApi(error: response.error);
+      } else {
+        print(response.value);
+        return ResponseNosoApi(value: ApiStatus.fromJson(response.value));
+      }
+    } catch (e) {
+      print(e);
+      return ResponseNosoApi(error: 'Request failed with error: $e');
+    }
+  }
+
+  Future<ResponseNosoApi<NodeStatus>> fetchNodeStatus(String hash) async {
+    try {
+      var response = await _fetchToApi(NosoApiRequests.nodeStatus(hash));
+      if (response.error != null) {
+        return ResponseNosoApi(error: response.error);
+      } else {
+        return ResponseNosoApi(value: NodeStatus.fromJson(response.value));
+      }
+    } catch (e) {
+      print(e);
+      return ResponseNosoApi(error: 'Request failed with error: $e');
+    }
+  }
+
+  Future<ResponseNosoApi<Transaction>> fetchOrderInfo(String txId) async {
+    try {
+      var response = await _fetchToApi(NosoApiRequests.orderInfo(txId));
+      if (response.error != null) {
+        return ResponseNosoApi(error: response.error);
+      } else {
+        return ResponseNosoApi(value: Transaction.fromJson(response.value));
+      }
+    } catch (e) {
+      print(e);
+      return ResponseNosoApi(error: 'Request failed with error: $e');
+    }
+  }
+
+  /// Get all information for a selected block ID.
+  Future<ResponseNosoApi<Block>> fetchBlockInfo(int block) async {
+    try {
+      var response = await _fetchToApi(NosoApiRequests.block(block));
+      if (response.error != null) {
+        return ResponseNosoApi(error: response.error);
+      } else {
+        return ResponseNosoApi(value: Block.fromJson(response.value));
+      }
+    } catch (e) {
+      print(e);
+      return ResponseNosoApi(error: 'Request failed with error: $e');
+    }
+  }
+
+  Future<ResponseNosoApi<AddressInfo>> fetchAddressBalance(String hash) async {
+    try {
+      var response = await _fetchToApi(NosoApiRequests.addressBalance(hash));
+      if (response.error != null) {
+        return ResponseNosoApi(error: response.error);
+      } else {
+        return ResponseNosoApi(value: AddressInfo.fromJson(response.value));
       }
     } catch (e) {
       print(e);

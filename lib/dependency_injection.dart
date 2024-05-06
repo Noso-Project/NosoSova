@@ -9,12 +9,11 @@ import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/database/database.dart';
 import 'package:nososova/repositories/file_repository.dart';
 import 'package:nososova/repositories/local_repository.dart';
-import 'package:nososova/repositories/network_repository.dart';
+import 'package:nososova/repositories/noso_network_repository.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:nososova/repositories/shared_repository.dart';
-import 'package:nososova/services/explorer_stats_service.dart';
 import 'package:nososova/services/file_service.dart';
-import 'package:nososova/services/node_service.dart';
+import 'package:nososova/services/noso_network_service.dart';
 import 'package:nososova/services/shared_service.dart';
 import 'package:nososova/ui/notifer/address_tile_style_notifer.dart';
 import 'package:nososova/ui/notifer/app_settings_notifer.dart';
@@ -32,20 +31,18 @@ Future<void> setupLocator() async {
 
   /// repo && services
   locator.registerLazySingleton<FileService>(() => FileService());
-  locator.registerLazySingleton<ExplorerStatsService>(
-      () => ExplorerStatsService());
   locator.registerLazySingleton<FileRepository>(
       () => FileRepository(locator<FileService>()));
-  locator.registerLazySingleton<NodeService>(() => NodeService());
-  locator.registerLazySingleton<NetworkRepository>(() => NetworkRepository(
-      locator<NodeService>(), locator<ExplorerStatsService>()));
+  locator.registerLazySingleton<NosoNetworkService>(() => NosoNetworkService());
+  locator.registerLazySingleton<NosoNetworkRepository>(
+      () => NosoNetworkRepository(locator<NosoNetworkService>()));
   locator.registerLazySingleton<LocalRepository>(
       () => LocalRepository(locator<MyDatabase>()));
   locator.registerLazySingleton<SharedRepository>(
       () => SharedRepository(locator<SharedService>()));
   locator.registerLazySingleton(() => Repositories(
       localRepository: locator<LocalRepository>(),
-      networkRepository: locator<NetworkRepository>(),
+      networkRepository: locator<NosoNetworkRepository>(),
       sharedRepository: locator<SharedRepository>(),
       fileRepository: locator<FileRepository>(),
       nosoApiService: locator<NosoApiService>()));

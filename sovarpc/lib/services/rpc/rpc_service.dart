@@ -14,13 +14,11 @@ class ServiceRPC {
   final Repositories repositories;
   final String ignoreMethods;
   late RPCHandlers rpcHandlers;
-  final _responseBad = Response.ok({
+  final _responseBad = Response.ok(jsonEncode({
     'jsonrpc': '2.0',
-    'result': [
-      {"result": "Bad Request"}
-    ],
+    'result': {"result": "Bad Request"},
     'id': -1,
-  });
+  }));
 
   ServiceRPC(this.repositories, this.ignoreMethods) {
     rpcHandlers = RPCHandlers(repositories);

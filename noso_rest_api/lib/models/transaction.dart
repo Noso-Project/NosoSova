@@ -4,12 +4,13 @@ part 'transaction.g.dart';
 
 @JsonSerializable()
 class Transaction {
-  int? blockId; // Make it nullable
+  int? blockId;
   String orderId;
   String orderType;
   String sender;
   String receiver;
   String amount;
+  int? transactionCount;
   String fee;
   String? reference;
   String timestamp;
@@ -23,6 +24,7 @@ class Transaction {
     required this.amount,
     required this.fee,
     this.reference,
+    this.transactionCount,
     required this.timestamp,
   });
 
@@ -35,6 +37,7 @@ class Transaction {
       receiver: json['receiver'] as String? ?? '',
       amount: json['amount'] as String? ?? '',
       fee: json['fee'] as String? ?? '',
+      transactionCount: json['transaction_count'] as int? ?? 1,
       reference: json['reference'] as String?,
       timestamp: json['timestamp'] as String? ?? '',
     );
@@ -42,4 +45,3 @@ class Transaction {
 
   Map<String, dynamic> toJson() => _$TransactionToJson(this);
 }
-

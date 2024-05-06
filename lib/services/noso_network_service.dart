@@ -9,10 +9,10 @@ import 'package:noso_dart/node_request.dart';
 import '../models/responses/response_node.dart';
 import '../configs/network_config.dart';
 
-class NodeService {
+class NosoNetworkService {
   List<Seed> seedsDefault = [];
 
-  NodeService() {
+  NosoNetworkService() {
     seedsDefault = NetworkConfig.getVerificationSeedList();
   }
 

@@ -13,10 +13,10 @@ import 'package:noso_dart/node_request.dart';
 import 'package:noso_dart/noso_enum.dart';
 import 'package:noso_dart/utils/data_parser.dart';
 import 'package:noso_dart/utils/noso_math.dart';
+import 'package:noso_rest_api/models/block.dart';
+import 'package:noso_rest_api/models/transaction.dart';
 import 'package:nososova/configs/network_config.dart';
-import 'package:nososova/models/responses/response_api.dart';
 import 'package:nososova/models/responses/response_node.dart';
-import 'package:nososova/models/rest_api/block_full_info.dart';
 import 'package:nososova/repositories/repositories.dart';
 import 'package:nososova/utils/enum.dart';
 import 'package:sovarpc/blocs/noso_network_bloc.dart';
@@ -25,7 +25,6 @@ import '../../blocs/debug_rpc_bloc.dart';
 import '../../blocs/network_events.dart';
 import '../../dependency_injection.dart';
 import '../../models/debug_rpc.dart';
-import '../../models/rpc/address_balance.dart';
 import '../backup_service.dart';
 
 class RPCHandlers {
@@ -77,29 +76,29 @@ class RPCHandlers {
         {"valid": false, "order": null}
       ];
     }
-    ResponseApi<dynamic> restApiResponse = await _repositories.networkRepository
-        .fetchOrderInformation(targetOrder);
 
-    if (restApiResponse.errors == null && targetOrder.isNotEmpty) {
-      var inputObject = restApiResponse.value;
+    var orderInfoResponse =
+        await _repositories.nosoApiService.fetchOrderInfo(targetOrder);
 
-      if (inputObject['order_id'].toString().contains(targetOrder)) {
-        DateTime dateTime = DateTime.parse(inputObject['timestamp']);
+    if (orderInfoResponse.value != null && targetOrder.isNotEmpty) {
+      Transaction? order = orderInfoResponse.value;
+      if (order != null && order.orderId.contains(targetOrder)) {
+        DateTime dateTime = DateTime.parse(order.timestamp);
         int unixTimestamp = dateTime.millisecondsSinceEpoch ~/ 1000;
-        double amount = double.parse(inputObject['amount']);
-        double fee = double.parse(inputObject['fee']);
+        double amount = double.parse(order.amount);
+        double fee = double.parse(order.fee);
 
         Map<String, dynamic> outputObject = {
-          'orderid': inputObject['order_id'],
+          'orderid': order.orderId,
           'timestamp': unixTimestamp,
-          'block': inputObject['block_id'],
-          'type': inputObject['order_type'],
+          'block': order.blockId,
+          'type': order.orderType,
           'trfrs': 1,
-          'receiver': inputObject['receiver'],
+          'receiver': order.receiver,
           'amount': NosoMath().doubleToBigEndian(amount),
           'fee': NosoMath().doubleToBigEndian(fee),
-          'reference': inputObject['reference'],
-          'sender': inputObject['sender'],
+          'reference': order.reference,
+          'sender': order.sender,
         };
 
         return [
@@ -114,35 +113,42 @@ class RPCHandlers {
 
   Future<List<Map<String, Object?>>> fetchBlockOrders(String block) async {
     int targetBlock = block.isEmpty ? 0 : int.parse(block);
-    ResponseApi<dynamic> restApiResponse = await _repositories.networkRepository
-        .fetchBlockInformation(targetBlock);
-    if (restApiResponse.errors == null && targetBlock != 0) {
-      var blockInfo = Block.fromJson(restApiResponse.value);
-      List<Map<String, dynamic>> transactionsJson =
-          blockInfo.transactions.map((transaction) {
-        return {
-          "orderid": transaction.orderId,
-          "timestamp":
-              DateTime.parse(transaction.timestamp).millisecondsSinceEpoch ~/
-                  1000,
-          "block": transaction.blockId,
-          "type": transaction.orderType,
-          "trfrs": transaction.transactionCount,
-          "receiver": transaction.receiver,
-          "amount": transaction.totalAmount,
-          "fee": transaction.totalFee,
-          "reference": transaction.reference,
-          "sender": transaction.sender,
-        };
-      }).toList();
-      return [
-        {"valid": true, "block": blockInfo.blockId, "orders": transactionsJson}
-      ];
-    } else {
-      return [
-        {"valid": false, "block": -1, "orders": []}
-      ];
+    var blockResponse =
+        await _repositories.nosoApiService.fetchBlockInfo(targetBlock);
+
+    if (blockResponse.error == null && targetBlock != 0) {
+      Block? blockInfo = blockResponse.value;
+      if (blockInfo != null) {
+        List<Map<String, dynamic>> transactionsJson =
+            blockInfo.transactions.map((transaction) {
+          return {
+            "orderid": transaction.orderId,
+            "timestamp":
+                DateTime.parse(transaction.timestamp).millisecondsSinceEpoch ~/
+                    1000,
+            "block": transaction.blockId,
+            "type": transaction.orderType,
+            "trfrs": transaction.transactionCount,
+            "receiver": transaction.receiver,
+            "amount": NosoMath().doubleToBigEndian(transaction.amount),
+            "fee": NosoMath().doubleToBigEndian(transaction.fee),
+            "reference": transaction.reference,
+            "sender": transaction.sender,
+          };
+        }).toList();
+        return [
+          {
+            "valid": true,
+            "block": blockInfo.blockId,
+            "orders": transactionsJson
+          }
+        ];
+      }
     }
+
+    return [
+      {"valid": false, "block": -1, "orders": []}
+    ];
   }
 
   Future<List<Map<String, Object?>>> fetchMainNetInfo() async {
@@ -180,7 +186,7 @@ class RPCHandlers {
   }
 
   Future<List<Map<String, Object?>>> fetchBalance(String hashAddress) async {
-    AddressBalance addressBalance;
+    Map<String, Object?> returnData;
 
     if (_isSyncLocalNetwork()) {
       List<SummaryData> arraySummary = DataParser.parseSummaryData(
@@ -190,38 +196,46 @@ class RPCHandlers {
           (summary) => summary.hash == hashAddress,
           orElse: () => SummaryData());
       if (foundSummary.hash != "") {
-        addressBalance = AddressBalance(
-            valid: true,
-            address: hashAddress,
-            balance: foundSummary.balance,
-            alias: foundSummary.custom,
-            incoming: 0,
-            outgoing: 0);
         var pending = await _loadPending(hashAddress);
-        addressBalance.incoming = pending['incoming'] ?? 0;
-        addressBalance.outgoing = pending['outgoing'] ?? 0;
-        return [addressBalance.toJson()];
+        returnData = {
+          'valid': true,
+          'address': hashAddress,
+          'alias': foundSummary.custom,
+          'balance': NosoMath().doubleToBigEndian(foundSummary.balance),
+          'incoming': pending['incoming'] ?? 0,
+          'outgoing': pending['outgoing'] ?? 0,
+        };
+        return [returnData];
       }
     } else {
-      ResponseApi<dynamic> restApiResponse = await _repositories
-          .networkRepository
-          .fetchAddressBalance(hashAddress);
-
-      if (restApiResponse.errors == null) {
-        addressBalance = AddressBalance.fromJson(restApiResponse.value);
-        return [addressBalance.toJson()];
+      var response =
+          await _repositories.nosoApiService.fetchAddressBalance(hashAddress);
+      if (response.error == null) {
+        var info = response.value;
+        if (info != null) {
+          returnData = {
+            'valid': true,
+            'address': hashAddress,
+            'alias': info.alias,
+            'balance': NosoMath().doubleToBigEndian(info.balance),
+            'incoming': info.incoming,
+            'outgoing': info.outgoing,
+          };
+          return [returnData];
+        }
       }
     }
 
-    addressBalance = AddressBalance(
-        valid: false,
-        address: hashAddress,
-        balance: 0,
-        alias: null,
-        incoming: 0,
-        outgoing: 0);
+    returnData = {
+      'valid': false,
+      'address': hashAddress,
+      'alias': null,
+      'balance': NosoMath().doubleToBigEndian(0),
+      'incoming': 0,
+      'outgoing': 0,
+    };
 
-    return [addressBalance.toJson()];
+    return [returnData];
   }
 
   Future<Map<String, int>> _loadPending(String hashAddress) async {
@@ -266,12 +280,14 @@ class RPCHandlers {
   }
 
   Future<Map<String, dynamic>> fetchHealthCheck() async {
-    var restApi = await _repositories.networkRepository.fetchHeathCheck();
+    var restApi = await _repositories.nosoApiService.fetchHealthApi();
     var nosoNetwork = locator<NosoNetworkBloc>().state;
     var localNode = nosoNetwork.node;
 
     return {
-      'REST-API': restApi.value,
+      'REST-API': restApi.value != null
+          ? restApi.value?.toJson()
+          : {"API": null, "nosoDB": null},
       'Noso-Network': {
         "seed": localNode.seed.toTokenizer,
         "block": localNode.lastblock,
@@ -367,8 +383,7 @@ class RPCHandlers {
         block = targetNode == null ? 0 : targetNode.lastblock;
       }
 
-      if (addressObject != null && defaultAddress != null
-          ) {
+      if (addressObject != null && defaultAddress != null) {
         var orderData = OrderData(
             currentAddress: addressObject,
             receiver: receiver,

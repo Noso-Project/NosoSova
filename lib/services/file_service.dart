@@ -9,7 +9,7 @@ import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:nososova/models/address_wallet.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../models/app/response_backup.dart';
+import '../models/responses/response_backup.dart';
 
 class FileService {
   String nameFileSummary;
