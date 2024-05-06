@@ -4,6 +4,7 @@ import 'package:noso_rest_api/models/set_history_transactions.dart';
 import 'package:noso_rest_api/models/transaction.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/repositories/repositories.dart';
+
 import '../utils/enum.dart';
 import 'events/history_transactions_events.dart';
 

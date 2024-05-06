@@ -6,8 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:noso_dart/models/noso/seed.dart';
 import 'package:noso_dart/node_request.dart';
 
-import '../models/responses/response_node.dart';
 import '../configs/network_config.dart';
+import '../models/responses/response_node.dart';
 
 class NosoNetworkService {
   List<Seed> seedsDefault = [];

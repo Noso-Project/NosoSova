@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class WatchTime {
   Stopwatch _stopwatch = Stopwatch();
 
@@ -8,7 +10,9 @@ class WatchTime {
 
   void stopTimer() {
     _stopwatch.stop();
-    print('Execution time: ${_stopwatch.elapsedMilliseconds / 1000} seconds');
+    if (kDebugMode) {
+      print('Execution time: ${_stopwatch.elapsedMilliseconds / 1000} seconds');
+    }
     _stopwatch.reset();
   }
 }

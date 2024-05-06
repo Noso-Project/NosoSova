@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -31,7 +32,9 @@ class BackupService {
         String existingContent = await backupFile.readAsString();
         existingData = jsonDecode(existingContent);
       } catch (e) {
-        print('Error reading or parsing existing content: $e');
+        if (kDebugMode) {
+          print('Error reading or parsing existing content: $e');
+        }
       }
     }
 

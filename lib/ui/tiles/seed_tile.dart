@@ -3,8 +3,8 @@ import 'package:noso_dart/models/noso/seed.dart';
 import 'package:nososova/ui/theme/style/icons_style.dart';
 import 'package:nososova/ui/theme/style/text_style.dart';
 
-import '../../utils/enum.dart';
 import '../../configs/network_config.dart';
+import '../../utils/enum.dart';
 import '../common/widgets/custom/shimmer.dart';
 import '../common/widgets/node_status.dart';
 import '../config/responsive.dart';
