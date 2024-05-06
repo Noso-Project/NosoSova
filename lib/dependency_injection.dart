@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:noso_rest_api/api_service.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/blocs/contacts_bloc.dart';
@@ -27,6 +28,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<AppSettings>(() => AppSettings());
   locator.registerLazySingleton<AddressStyleNotifier>(
       () => AddressStyleNotifier());
+  locator.registerLazySingleton<NosoApiService>(() => NosoApiService());
 
   /// repo && services
   locator.registerLazySingleton<FileService>(() => FileService());
@@ -45,7 +47,8 @@ Future<void> setupLocator() async {
       localRepository: locator<LocalRepository>(),
       networkRepository: locator<NetworkRepository>(),
       sharedRepository: locator<SharedRepository>(),
-      fileRepository: locator<FileRepository>()));
+      fileRepository: locator<FileRepository>(),
+      nosoApiService: locator<NosoApiService>()));
 
   /// Blocs
   locator.registerLazySingleton<DebugBloc>(() => DebugBloc());

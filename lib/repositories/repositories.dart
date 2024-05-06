@@ -1,3 +1,4 @@
+import 'package:noso_rest_api/api_service.dart';
 import 'package:nososova/repositories/network_repository.dart';
 import 'package:nososova/repositories/shared_repository.dart';
 
@@ -9,11 +10,13 @@ class Repositories {
   final NetworkRepository networkRepository;
   final SharedRepository sharedRepository;
   final FileRepository fileRepository;
+  final NosoApiService nosoApiService;
 
   Repositories({
     required this.localRepository,
     required this.networkRepository,
     required this.sharedRepository,
     required this.fileRepository,
+    required this.nosoApiService,
   });
 }

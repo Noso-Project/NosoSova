@@ -22,17 +22,6 @@ class NetworkRepository {
 
   /// Api REST
   /// https://api.nosocoin.com/docs/
-  Future<ResponseApi> fetchHistoryTransactions(String hashAddress) {
-    return _explorerStatsService.fetchHistoryTransactions(hashAddress);
-  }
-
-  Future<ResponseApi> fetchHistoryPrice() {
-    return _explorerStatsService.fetchHistoryPrice();
-  }
-
-  Future<ResponseApi> fetchLastBlockInfo() {
-    return _explorerStatsService.fetchLastBlockInfo();
-  }
 
   Future<ResponseApi> fetchNodeStatus(String targetHash) {
     return _explorerStatsService.fetchNodeStatus(targetHash);

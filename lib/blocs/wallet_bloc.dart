@@ -20,6 +20,7 @@ import 'package:noso_dart/noso_enum.dart';
 import 'package:noso_dart/utils/data_parser.dart';
 import 'package:noso_dart/utils/noso_math.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
+import 'package:noso_rest_api/models/transaction.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/models/app/response_backup.dart';
@@ -33,7 +34,6 @@ import '../models/app/response_calculate.dart';
 import '../models/app/state_node.dart';
 import '../models/app/wallet.dart';
 import '../models/responses/response_node.dart';
-import '../models/rest_api/transaction_history.dart';
 import '../ui/common/responses_util/response_widget_id.dart';
 import '../utils/enum.dart';
 import '../utils/files_const.dart';
@@ -238,14 +238,14 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       _responseStatusStream.add(ResponseListenerPage(
           idWidget: e.widgetId,
           codeMessage: 4,
-          actionValue: TransactionHistory(
+          actionValue: Transaction(
               blockId: appDataBloc.state.node.lastblock,
-              id: newOrder.orderID ?? "",
+              orderId: newOrder.orderID ?? "",
               timestamp: newOrder.timeStamp ?? "",
               sender: address.nameAddressFull,
               amount: e.amount.toString(),
               fee: (commission / 100000000).toStringAsFixed(8),
-              type: newOrder.orderType ?? "",
+              orderType: newOrder.orderType ?? "",
               receiver: receiver),
           snackBarType: SnackBarType.ignore));
       _debugBloc.add(AddStringDebug(

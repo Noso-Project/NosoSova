@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
+import 'package:noso_rest_api/models/transaction.dart';
 import 'package:nososova/ui/common/route/dialog_router.dart';
 import 'package:nososova/ui/theme/decoration/textfield_decoration.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
@@ -17,7 +18,6 @@ import '../../../../dependency_injection.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/address_wallet.dart';
 import '../../../../models/app/response_page_listener.dart';
-import '../../../../models/rest_api/transaction_history.dart';
 import '../../../common/responses_util/response_widget_id.dart';
 import '../../../common/responses_util/snackbar_message.dart';
 import '../../../config/responsive.dart';
@@ -49,7 +49,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   double commission = 0;
   Key containerKey = UniqueKey();
   bool isResultWidget = false;
-  late TransactionHistory transactionHistory;
+  late Transaction transactionHistory;
   late ConsensusStatus statusConsensus = ConsensusStatus.error;
   final AddressStyleNotifier _settingsStyleAddressTile =
       locator<AddressStyleNotifier>();

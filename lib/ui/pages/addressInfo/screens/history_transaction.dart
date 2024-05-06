@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:noso_rest_api/models/transaction.dart';
 import 'package:nososova/blocs/history_transactions_bloc.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/address_wallet.dart';
-import '../../../../models/rest_api/transaction_history.dart';
 import '../../../../utils/enum.dart';
 import '../../../common/route/page_router.dart';
 import '../../../common/widgets/empty_list_widget.dart';
@@ -45,7 +45,7 @@ class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
           key: _historyKey,
           builder: (context, state) {
             var listHistory = state.transactions;
-            listHistory.sort((a, b) => b.blockId.compareTo(a.blockId));
+            listHistory.sort((a, b) => b.blockId!.compareTo(a.blockId ?? 0));
 
             if (state.apiStatus == ApiStatus.error) {
               return getStackMessage(EmptyWidget(
@@ -81,8 +81,10 @@ class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
                             if (widget.activeMobile)
                               IconButton(
                                   tooltip: isVisibleAction
-                                      ? AppLocalizations.of(context)!.hideMoreInfo
-                                      : AppLocalizations.of(context)!.showMoreInfo,
+                                      ? AppLocalizations.of(context)!
+                                          .hideMoreInfo
+                                      : AppLocalizations.of(context)!
+                                          .showMoreInfo,
                                   padding: EdgeInsets.zero,
                                   onPressed: () {
                                     setState(() {
@@ -118,7 +120,12 @@ class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
                                       title: Text(
                                           _getFormattedDate(
                                               transaction.timestamp),
-                                          style: AppTextStyles.infoItemValue.copyWith(color:  Theme.of(context).colorScheme.onBackground.withOpacity(0.7)))),
+                                          style: AppTextStyles.infoItemValue
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground
+                                                      .withOpacity(0.7)))),
                                   TransactionTile(
                                       transactionHistory: transaction,
                                       receiver: isReceiver,
@@ -152,9 +159,7 @@ class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                        AppLocalizations.of(context)!
-                            .catHistoryTransaction,
+                    Text(AppLocalizations.of(context)!.catHistoryTransaction,
                         style: AppTextStyles.categoryStyle),
                     if (widget.activeMobile)
                       IconButton(
@@ -173,16 +178,14 @@ class _HistoryTransactionWidgetsState extends State<HistoryTransactionsWidget> {
                                   ? Icons.expand_less
                                   : Icons.expand_more_outlined,
                               size: 24,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface))
+                              color: Theme.of(context).colorScheme.onSurface))
                   ])),
           widgetQ
         ]));
   }
 
-  bool _isDifferentDate(TransactionHistory prevTransaction,
-      TransactionHistory currentTransaction) {
+  bool _isDifferentDate(
+      Transaction prevTransaction, Transaction currentTransaction) {
     final prevDate = DateTime.parse(prevTransaction.timestamp).toLocal();
     final currentDate = DateTime.parse(currentTransaction.timestamp).toLocal();
     return prevDate.day != currentDate.day ||

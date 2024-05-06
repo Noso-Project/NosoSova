@@ -6,19 +6,19 @@ import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/models/noso/seed.dart';
 import 'package:noso_dart/node_request.dart';
 import 'package:noso_dart/utils/data_parser.dart';
+import 'package:noso_rest_api/models/nodes_info.dart';
 import 'package:nososova/blocs/coininfo_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
 import 'package:nososova/blocs/events/coininfo_events.dart';
 import 'package:nososova/blocs/events/wallet_events.dart';
 import 'package:nososova/models/app/app_bloc_config.dart';
 
+import '../configs/network_config.dart';
 import '../models/app/debug.dart';
 import '../models/app/stats.dart';
 import '../models/responses/response_node.dart';
-import '../models/rest_api/block_info.dart';
 import '../repositories/repositories.dart';
 import '../utils/enum.dart';
-import '../configs/network_config.dart';
 import 'events/app_data_events.dart';
 import 'events/debug_events.dart';
 
@@ -227,19 +227,17 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     return;
   }
 
-  Future<BlockInfo> _loadSeedPeople(Node tNode) async {
+  Future<NodesInfo> _loadSeedPeople(Node tNode) async {
     var blockInfo =
-        BlockInfo(blockId: 0, reward: 0.15, count: 0, masternodes: []);
+        NodesInfo(blockId: 0, reward: 0.15, count: 0, masternodes: []);
     var isListNodesFail = false;
-    var responseLastBlockInfo =
-        await _repositories.networkRepository.fetchLastBlockInfo();
+    var nodesInfo = await _repositories.nosoApiService.fetchNodesInfo();
 
-    if (responseLastBlockInfo.errors == null) {
-      blockInfo = responseLastBlockInfo.value;
+    if (nodesInfo.error == null && nodesInfo.value != null) {
+      blockInfo = nodesInfo.value!;
     }
 
-    if (blockInfo.masternodes.isNotEmpty &&
-        responseLastBlockInfo.errors == null) {
+    if (blockInfo.masternodes.isNotEmpty && nodesInfo.error == null) {
       _debugBloc.add(AddStringDebug(
           "The list of active nodes is updated, currently they are -> ${blockInfo.count}"));
     } else {
@@ -248,7 +246,7 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
       if (response.errors == null) {
         List<Seed> listUserNodes = DataParser.parseDataSeeds(response.value);
         blockInfo = blockInfo.copyWith(
-            masternodes: Masternode().copyFromSeed(listUserNodes),
+            masternodes: _createMasternodeListFromSeed(listUserNodes),
             count: listUserNodes.length);
         _debugBloc.add(AddStringDebug(
             "The list of active nodes is updated, currently they are -> ${listUserNodes.length}"));
@@ -261,19 +259,42 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
 
     if (isListNodesFail) {
       _debugBloc.add(AddStringDebug("Block information not received, skipped"));
-      _debugBloc.add(AddStringDebug(
-          "Error: ${responseLastBlockInfo.errors}", DebugType.error));
+      _debugBloc
+          .add(AddStringDebug("Error: ${nodesInfo.error}", DebugType.error));
       return blockInfo;
     } else {
+      String masternodesString = _masternodesToString(blockInfo.masternodes);
       _repositories.sharedRepository
-          .saveNodesList(blockInfo.getMasternodesString());
-      appBlocConfig =
-          appBlocConfig.copyWith(nodesList: blockInfo.getMasternodesString());
+          .saveNodesList(_masternodesToString(blockInfo.masternodes));
+      appBlocConfig = appBlocConfig.copyWith(nodesList: masternodesString);
       _debugBloc.add(AddStringDebug(
           "Obtaining information about the block is successful ${tNode.lastblock}"));
     }
 
     return blockInfo;
+  }
+
+  String _masternodesToString(List<Masternode> masternodes) {
+    return masternodes
+        .map((node) => '${node.ipv4}:${node.port}|${node.address}')
+        .join(',');
+  }
+
+  List<Masternode> _createMasternodeListFromSeed(List<Seed> seeds) {
+    if (seeds.isEmpty) {
+      return [];
+    }
+
+    List<Masternode> masterNode = [];
+
+    for (Seed mSeed in seeds) {
+      masterNode.add(Masternode(
+          ipv4: mSeed.ip,
+          port: mSeed.port,
+          address: mSeed.address,
+          consecutivePayments: 0));
+    }
+    return masterNode;
   }
 
   /// The method that receives the response about the synchronization status in WalletBloc

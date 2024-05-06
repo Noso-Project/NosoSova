@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:noso_rest_api/api_service.dart';
 import 'package:nososova/database/database.dart';
 import 'package:nososova/repositories/file_repository.dart';
 import 'package:nososova/repositories/local_repository.dart';
@@ -21,6 +22,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<SharedService>(() => SharedService());
   locator.registerLazySingleton<MyDatabase>(() => MyDatabase());
   locator.registerLazySingleton<AppSettings>(() => AppSettings());
+  locator.registerLazySingleton<NosoApiService>(() => NosoApiService());
 
   /// repo && services
   locator.registerLazySingleton<FileService>(
@@ -40,7 +42,8 @@ Future<void> setupLocator() async {
       localRepository: locator<LocalRepository>(),
       networkRepository: locator<NetworkRepository>(),
       sharedRepository: locator<SharedRepository>(),
-      fileRepository: locator<FileRepository>()));
+      fileRepository: locator<FileRepository>(),
+  nosoApiService: locator<NosoApiService>()));
 
   /// Blocs
   locator.registerLazySingleton<RpcBloc>(() => RpcBloc(

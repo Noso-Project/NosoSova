@@ -7,9 +7,6 @@ import 'package:nososova/models/rest_api/exhcange_data.dart';
 import 'package:nososova/models/rest_api/node_info.dart';
 
 import '../models/responses/response_api.dart';
-import '../models/rest_api/block_info.dart';
-import '../models/rest_api/price_dat.dart';
-import '../models/rest_api/transaction_history.dart';
 
 class ExplorerStatsService {
   final String _apiStats = "https://api.nosocoin.com/";
@@ -122,69 +119,6 @@ class ExplorerStatsService {
     }
   }
 
-  Future<ResponseApi> fetchHistoryTransactions(String addressHash) async {
-    final response = await _fetchExplorerStats(
-        "${_apiStats}transactions/history?address=$addressHash&limit=100");
-
-    if (response.errors != null) {
-      return response;
-    } else {
-      List<TransactionHistory> list = [];
-      if (response.value['error'] != null) {
-        return ResponseApi(errors: response.value['error']);
-      } else {
-        for (Map<String, dynamic> item in response.value['inbound']) {
-          list.add(TransactionHistory.fromJson(item));
-        }
-        for (Map<String, dynamic> item in response.value['outbound']) {
-          list.add(TransactionHistory.fromJson(item));
-        }
-        return ResponseApi(value: list);
-      }
-    }
-  }
-
-  Future<ResponseApi> fetchHistoryPrice() async {
-    try {
-      var response = await _fetchExplorerStats(
-          "${_apiStats}info/price?range=day&interval=10");
-
-      if (response.errors != null) {
-        return response;
-      } else {
-        List<PriceData> listPrice = List<PriceData>.from(
-            response.value.map((item) => PriceData.fromJson(item)));
-
-        if (listPrice.isEmpty) {
-          return ResponseApi(errors: response.errors);
-        } else {
-          return ResponseApi(value: listPrice);
-        }
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Request failed with error: $e');
-      }
-      return ResponseApi(errors: 'Request failed with error: $e');
-    }
-  }
-
-  Future<ResponseApi> fetchLastBlockInfo() async {
-    try {
-      var response = await _fetchExplorerStats("${_apiStats}nodes/info");
-
-      if (response.errors != null) {
-        return response;
-      } else {
-        return ResponseApi(value: BlockInfo.fromJson(response.value));
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Request failed with error: $e');
-      }
-      return ResponseApi(errors: 'Request failed with error: $e');
-    }
-  }
 
   Future<ResponseApi> _fetchExplorerStats(String uri) async {
     try {

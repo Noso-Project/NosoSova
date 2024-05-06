@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:noso_dart/const.dart';
+import 'package:noso_rest_api/models/transaction.dart';
 import 'package:nososova/ui/theme/style/colors.dart';
 import 'package:nososova/ui/theme/style/icons_style.dart';
 
 import '../../../../generated/assets.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../models/rest_api/transaction_history.dart';
 import '../../../common/widgets/custom/dasher_divider.dart';
 import '../../../common/widgets/item_info_widget.dart';
 import '../../../theme/style/text_style.dart';
 
 class TransactionWidgetInfo extends StatefulWidget {
-  final TransactionHistory transaction;
+  final Transaction transaction;
   final bool isReceiver;
   final bool isProcess;
 
@@ -33,12 +33,12 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
   void initState() {
     super.initState();
 
-    isCustom = widget.transaction.type == "CUSTOM";
+    isCustom = widget.transaction.orderType == "CUSTOM";
   }
 
   @override
   Widget build(BuildContext context) {
-    var amount = double.parse(widget.transaction.amount.replaceAll(' ', ''));
+    var amount = widget.transaction.amount;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -75,9 +75,10 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
                 Text(
                     isCustom
                         ? AppLocalizations.of(context)!.editCustom
-                        : "${widget.isReceiver ? "+" : "-"}${amount.toStringAsFixed(5)} ${NosoConst.coinName}",
+                        : "${widget.isReceiver ? "+" : "-"}${amount} ${NosoConst.coinName}",
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.balance.copyWith(color: Theme.of(context).colorScheme.onSurface)),
+                    style: AppTextStyles.balance.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface)),
                 const SizedBox(height: 20),
                 Text(
                     "${AppLocalizations.of(context)!.block}: ${widget.transaction.blockId.toString()}",
@@ -97,7 +98,7 @@ class _TransactionWidgetInfoState extends State<TransactionWidgetInfo> {
                 const SizedBox(height: 20),
                 ItemInfoWidgetVertical(
                     nameItem: AppLocalizations.of(context)!.orderId,
-                    value: widget.transaction.id,
+                    value: widget.transaction.orderId,
                     copy: true),
                 if (!widget.isReceiver && !isCustom)
                   ItemInfoWidgetVertical(
