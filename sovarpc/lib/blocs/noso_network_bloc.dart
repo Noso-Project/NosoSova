@@ -62,9 +62,11 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     await loadConfig();
     _debugBloc.add(AddStringDebug("Init Noso-Network", StatusReport.Node));
     if (appBlocConfig.nodesList != null) {
-      await _selectTargetNode(event, emit, InitialNodeAlgh.listenUserNodes);
+      await _selectTargetNode(
+          event, emit, InitialNodeAlgorithm.listenUserNodes);
     } else {
-      await _selectTargetNode(event, emit, InitialNodeAlgh.listenDefaultNodes);
+      await _selectTargetNode(
+          event, emit, InitialNodeAlgorithm.listenDefaultNodes);
     }
   }
 
@@ -77,15 +79,16 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     _stopTimerSyncNetwork();
     if (event.lastNodeRun) {
       emit(state.copyWith(statusConnected: StatusConnectNodes.sync));
-      await _selectTargetNode(event, emit, InitialNodeAlgh.connectLastNode,
+      await _selectTargetNode(event, emit, InitialNodeAlgorithm.connectLastNode,
           repeat: true);
     } else {
-      await _selectTargetNode(event, emit, getRandomAlgorithm());
+      await _selectTargetNode(event, emit, _getRandomAlgorithm());
     }
   }
 
   /// This method implements the selection of the node to which we will connect in the future
-  Future<void> _selectTargetNode(event, emit, InitialNodeAlgh initAlgh,
+  Future<void> _selectTargetNode(
+      event, emit, InitialNodeAlgorithm initAlgorithm,
       {bool repeat = false}) async {
     if (!repeat) {
       emit(state.copyWith(statusConnected: StatusConnectNodes.searchNode));
@@ -93,33 +96,33 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     }
 
     ResponseNode<List<int>> responseTargetNode =
-        await _searchTargetNode(initAlgh);
+        await _searchTargetNode(initAlgorithm);
     final Node? nodeOutput = DataParser.parseDataNode(
         responseTargetNode.value, responseTargetNode.seed);
     if (responseTargetNode.errors == null && nodeOutput != null) {
       await _syncNetwork(event, emit, nodeOutput);
     } else {
-      await _selectTargetNode(event, emit, getRandomAlgorithm(), repeat: true);
+      await _selectTargetNode(event, emit, _getRandomAlgorithm(), repeat: true);
     }
   }
 
   /// A method that selects a random algorithm type
-  InitialNodeAlgh getRandomAlgorithm() {
+  InitialNodeAlgorithm _getRandomAlgorithm() {
     return Random().nextInt(2) == 0
-        ? InitialNodeAlgh.listenDefaultNodes
-        : InitialNodeAlgh.listenUserNodes;
+        ? InitialNodeAlgorithm.listenDefaultNodes
+        : InitialNodeAlgorithm.listenUserNodes;
   }
 
   /// A method that tests and returns the active node
   Future<ResponseNode<List<int>>> _searchTargetNode(
-      InitialNodeAlgh initAlgh) async {
+      InitialNodeAlgorithm initAlgorithm) async {
     var listUsersNodes = appBlocConfig.nodesList;
     if ((listUsersNodes ?? "").isEmpty) {
-      initAlgh = InitialNodeAlgh.listenDefaultNodes;
+      initAlgorithm = InitialNodeAlgorithm.listenDefaultNodes;
     }
 
-    switch (initAlgh) {
-      case InitialNodeAlgh.connectLastNode:
+    switch (initAlgorithm) {
+      case InitialNodeAlgorithm.connectLastNode:
         if (kDebugMode) {
           _debugBloc.add(AddStringDebug(
               "Receive information from the last active node",
@@ -129,7 +132,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
             NodeRequest.getNodeStatus,
             Seed().tokenizer(NetworkConfig.getRandomNode(null),
                 rawString: appBlocConfig.lastSeed));
-      case InitialNodeAlgh.listenUserNodes:
+      case InitialNodeAlgorithm.listenUserNodes:
         if (kDebugMode) {
           _debugBloc
               .add(AddStringDebug("Search target node", StatusReport.Node));

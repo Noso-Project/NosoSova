@@ -73,11 +73,11 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     await loadConfig();
 
     if (appBlocConfig.lastSeed != null) {
-      await _selectTargetNode(event, emit, InitialNodeAlgh.connectLastNode);
+      await _selectTargetNode(event, emit, InitialNodeAlgorithm.connectLastNode);
     } else if (appBlocConfig.nodesList != null) {
-      await _selectTargetNode(event, emit, InitialNodeAlgh.listenUserNodes);
+      await _selectTargetNode(event, emit, InitialNodeAlgorithm.listenUserNodes);
     } else {
-      await _selectTargetNode(event, emit, InitialNodeAlgh.listenDefaultNodes);
+      await _selectTargetNode(event, emit, InitialNodeAlgorithm.listenDefaultNodes);
     }
   }
 
@@ -116,16 +116,16 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     if (event.lastNodeRun) {
       emit(state.copyWith(statusConnected: StatusConnectNodes.sync));
       _debugBloc.add(AddStringDebug("Updating data from the last node"));
-      await _selectTargetNode(event, emit, InitialNodeAlgh.connectLastNode,
+      await _selectTargetNode(event, emit, InitialNodeAlgorithm.connectLastNode,
           repeat: true);
     } else {
       _debugBloc.add(AddStringDebug("Reconnecting to new node"));
-      await _selectTargetNode(event, emit, getRandomAlgorithm());
+      await _selectTargetNode(event, emit, _getRandomAlgorithm());
     }
   }
 
   /// This method implements the selection of the node to which we will connect in the future
-  Future<void> _selectTargetNode(event, emit, InitialNodeAlgh initAlgh,
+  Future<void> _selectTargetNode(event, emit, InitialNodeAlgorithm initAlgh,
       {bool repeat = false}) async {
     if (!repeat) {
       emit(state.copyWith(statusConnected: StatusConnectNodes.searchNode));
@@ -145,32 +145,32 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
       _debugBloc.add(AddStringDebug(
           "The node did not respond properly -> ${responseTargetNode.seed.toTokenizer}"));
       _debugBloc.add(AddStringDebug("Reconnecting to new node"));
-      await _selectTargetNode(event, emit, getRandomAlgorithm(), repeat: true);
+      await _selectTargetNode(event, emit, _getRandomAlgorithm(), repeat: true);
     }
   }
 
   /// A method that selects a random algorithm type
-  InitialNodeAlgh getRandomAlgorithm() {
+  InitialNodeAlgorithm _getRandomAlgorithm() {
     return Random().nextInt(2) == 0
-        ? InitialNodeAlgh.listenDefaultNodes
-        : InitialNodeAlgh.listenUserNodes;
+        ? InitialNodeAlgorithm.listenDefaultNodes
+        : InitialNodeAlgorithm.listenUserNodes;
   }
 
   /// A method that tests and returns the active node
   Future<ResponseNode<List<int>>> _searchTargetNode(
-      InitialNodeAlgh initAlgh) async {
+      InitialNodeAlgorithm initAlgorithm) async {
     var listUsersNodes = appBlocConfig.nodesList;
     if ((listUsersNodes ?? "").isEmpty) {
-      initAlgh = InitialNodeAlgh.listenDefaultNodes;
+      initAlgorithm = InitialNodeAlgorithm.listenDefaultNodes;
     }
 
-    switch (initAlgh) {
-      case InitialNodeAlgh.connectLastNode:
+    switch (initAlgorithm) {
+      case InitialNodeAlgorithm.connectLastNode:
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
             Seed().tokenizer(NetworkConfig.getRandomNode(null),
                 rawString: appBlocConfig.lastSeed));
-      case InitialNodeAlgh.listenUserNodes:
+      case InitialNodeAlgorithm.listenUserNodes:
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
             Seed().tokenizer(NetworkConfig.getRandomNode(listUsersNodes)));
@@ -335,7 +335,6 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
   @override
   Future<void> close() {
     _stopTimerSyncNetwork();
-    //  _stopSyncPriceHistory();
     return super.close();
   }
 

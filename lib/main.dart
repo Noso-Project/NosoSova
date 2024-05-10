@@ -34,15 +34,15 @@ Future<void> main() async {
       await windowManager.focus();
     });
   }
-  runApp(MyApp());
+  runApp(NosoSova());
 }
 
 class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class NosoSova extends StatelessWidget {
+  NosoSova({super.key});
 
   final AppSettings _appSettings = locator<AppSettings>();
 

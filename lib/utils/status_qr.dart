@@ -1,3 +1,5 @@
+import 'enum.dart';
+
 final class CheckQrCode {
 
   static TypeQrCode checkQrScan(String dataScan) {
@@ -10,8 +12,4 @@ final class CheckQrCode {
   }
 }
 
-enum TypeQrCode {
-  qrAddress,
-  qrKeys,
-  none
-}
+
