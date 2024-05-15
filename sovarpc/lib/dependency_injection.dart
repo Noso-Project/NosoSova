@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 import 'package:noso_rest_api/api_service.dart';
 import 'package:nososova/database/database.dart';
 import 'package:nososova/repositories/file_repository.dart';
@@ -16,7 +17,7 @@ import 'package:sovarpc/blocs/rpc_bloc.dart';
 
 final GetIt locator = GetIt.instance;
 
-Future<void> setupLocator() async {
+Future<void> setupLocator({Logger? logger}) async {
   /// shared & drift(sql)
   locator.registerLazySingleton<SharedService>(() => SharedService());
   locator.registerLazySingleton<MyDatabase>(() => MyDatabase());
@@ -46,7 +47,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<RpcBloc>(() => RpcBloc(
       repositories: locator<Repositories>(),
       debugBloc: locator<DebugRPCBloc>()));
-  locator.registerLazySingleton<DebugRPCBloc>(() => DebugRPCBloc());
+  locator.registerLazySingleton<DebugRPCBloc>(() => DebugRPCBloc(logger: logger));
   locator.registerLazySingleton<NosoNetworkBloc>(() => NosoNetworkBloc(
       repositories: locator<Repositories>(),
       debugBloc: locator<DebugRPCBloc>()));

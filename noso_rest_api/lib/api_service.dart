@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:noso_rest_api/config.dart';
 import 'package:noso_rest_api/models/address_info.dart';
@@ -245,14 +244,14 @@ class NosoApiService {
             error: 'Request failed with status: ${response.statusCode}');
       }
     } on TimeoutException catch (e) {
-      if (kDebugMode) {
+   //   if (kDebugMode) {
         print('Request timed out: $e');
-      }
+   //   }
       return ResponseNosoApi(error: 'Request timed out: $e');
     } catch (e) {
-      if (kDebugMode) {
+    //  if (kDebugMode) {
         print('Request failed with error: $e');
-      }
+    //  }
       return ResponseNosoApi(error: 'Request failed with error: $e');
     }
   }

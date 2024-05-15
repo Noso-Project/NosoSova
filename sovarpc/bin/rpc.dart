@@ -5,6 +5,9 @@ import 'package:args/args.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 import 'package:settings_yaml/settings_yaml.dart';
+import 'package:sovarpc/blocs/network_events.dart';
+import 'package:sovarpc/blocs/noso_network_bloc.dart';
+import 'package:sovarpc/dependency_injection.dart';
 
 const String _nameConfigFile = "rpc_config.yaml";
 final _logger = Logger('rpc');
@@ -40,8 +43,9 @@ Future<void> main(List<String> arguments) async {
 }
 
 Future<void> runRpcMode() async {
-  // Додайте код для запуску режиму RPC тут
-  // Цей код буде виконуватися асинхронно
+  setupLocator(logger: _logger);
+  var bloc = locator<NosoNetworkBloc>();
+  bloc.add(InitialConnect());
 }
 
 Future<void> checkConfig() async {

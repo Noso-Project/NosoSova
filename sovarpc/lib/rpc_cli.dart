@@ -1,3 +1,5 @@
+import 'dependency_injection.dart';
+
 main(){
-  return 2;
+  setupLocator();
 }

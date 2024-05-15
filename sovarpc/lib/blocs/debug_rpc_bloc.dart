@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:logging/logging.dart';
 
 import '../models/debug_rpc.dart';
 
@@ -19,7 +20,10 @@ class DebugRPCState {
 }
 
 class DebugRPCBloc extends Bloc<DebugEventRPC, DebugRPCState> {
-  DebugRPCBloc() : super(DebugRPCState()) {
+  Logger? loggerObject;
+
+  DebugRPCBloc({Logger? logger}) : super(DebugRPCState()) {
+    loggerObject = logger;
     on<AddStringDebug>(_addToDebug);
   }
 
@@ -28,6 +32,20 @@ class DebugRPCBloc extends Bloc<DebugEventRPC, DebugRPCState> {
     final DateTime now = DateTime.now();
     var list = state.debugList;
     list = list.length >= 500 ? [] : list;
+    if (loggerObject != null) {
+      var source = StatusReport.Node == event.source ? "Node" : "RPC";
+      var string = "$source: ${event.value}";
+      if (event.type == DebugType.error) {
+        loggerObject!.warning(string);
+      }
+      if (event.type == DebugType.inform) {
+        loggerObject!.info(string);
+      }
+      if (event.type == DebugType.success) {
+        loggerObject!.fine(string);
+      }
+      return;
+    }
     var string = DebugRpcString(
         time:
             "${now.hour}:${now.minute < 10 ? '0${now.minute}' : now.minute.toString()}:${now.second < 10 ? '0${now.second}' : now.second.toString()}",
