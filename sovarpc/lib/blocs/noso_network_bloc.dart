@@ -12,7 +12,7 @@ import 'package:nososova/configs/network_object.dart';
 import 'package:nososova/models/responses/response_node.dart';
 import 'package:nososova/utils/enum.dart';
 import 'package:sovarpc/blocs/network_events.dart';
-import 'package:sovarpc/calcutes.dart';
+import 'package:sovarpc/utils/calcutes.dart';
 import 'package:sovarpc/di.dart';
 import 'package:sovarpc/models/log_level.dart';
 import 'package:sovarpc/models/rpc_info.dart';

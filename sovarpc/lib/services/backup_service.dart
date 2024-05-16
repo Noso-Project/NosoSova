@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:noso_dart/models/noso/address_object.dart';
 
-import '../path_app_rpc.dart';
+import '../utils/path_app_rpc.dart';
 
 class BackupService {
   static Future<void> writeBackup(List<AddressObject> data) async {

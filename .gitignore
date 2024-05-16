@@ -12,7 +12,7 @@ migrate_working_dir/
 
 #Libs
 *.env
-
+*.pkw
 # IntelliJ related
 *.iml
 *.ipr

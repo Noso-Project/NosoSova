@@ -1,19 +1,19 @@
 import 'dart:io';
 
-import 'package:logging/logging.dart';
 import 'package:settings_yaml/settings_yaml.dart';
+import 'package:sovarpc/cli/pen.dart';
 
 import '../const.dart';
 import '../di.dart';
 import '../models/config_app.dart';
-import '../path_app_rpc.dart';
+import '../utils/path_app_rpc.dart';
 
 class SettingsYamlHandler {
-  Future<ConfigApp?> checkConfig(Logger logger) async {
+  Future<ConfigApp?> checkConfig() async {
     final File configFile = File(PathAppRpcUtil.shared_config);
 
     if (!configFile.existsSync()) {
-      logger.info('Config file not found. Creating a new one...');
+      stdout.writeln(Pen().red('Config file not found. Creating a new one...'));
       try {
         var settings =
             SettingsYaml.load(pathToSettings: PathAppRpcUtil.shared_config);
@@ -25,10 +25,11 @@ class SettingsYamlHandler {
 
         settings.save();
 
-        logger.info('${PathAppRpcUtil.shared_config} created.');
+        stdout
+            .writeln(Pen().greenText('${PathAppRpcUtil.shared_config} created.'));
         return ConfigApp.copyYamlConfig(settings);
       } catch (e) {
-        logger.warning('Error creating config file: $e');
+        stdout.writeln('Error creating config file: $e');
         return null;
       }
     }

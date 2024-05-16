@@ -5,6 +5,7 @@ import 'package:drift/native.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:nososova/database/address.dart';
 import 'package:path/path.dart' as p;
+
 import '../../models/address_wallet.dart';
 import '../models/contact.dart';
 import 'contact.dart';
@@ -68,7 +69,8 @@ class MyDatabase extends _$MyDatabase {
             publicKey: Value(value.publicKey),
             privateKey: Value(value.privateKey),
             hash: Value(value.hash),
-          ));
+          ),
+          mode: InsertMode.insertOrIgnore);
     });
   }
 
