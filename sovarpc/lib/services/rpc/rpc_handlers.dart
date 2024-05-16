@@ -34,15 +34,15 @@ class RPCHandlers {
   RPCHandlers(this._repositories);
 
   Future<List<Map<String, dynamic>>> fetchReset() async {
-    var networkBloc = locator<NosoNetworkBloc>();
+    var networkBloc = locatorRpc<NosoNetworkBloc>();
     var localNode = networkBloc.state.node;
 
     var isReset =
         networkBloc.state.statusConnected == StatusConnectNodes.connected;
 
     if (!isReset) {
-      locator<NosoNetworkBloc>().add(ReconnectSeed(false, hasError: true));
-      locator<DebugRPCBloc>().add(AddStringDebug(
+      locatorRpc<NosoNetworkBloc>().add(ReconnectSeed(false, hasError: true));
+      locatorRpc<DebugRPCBloc>().add(AddStringDebug(
           "Reset command was executed", StatusReport.RPC, DebugType.error));
     }
     return [
@@ -155,14 +155,14 @@ class RPCHandlers {
   Future<List<Map<String, Object?>>> fetchMainNetInfo() async {
     Node? targetNode;
     if (_isSyncLocalNetwork()) {
-      targetNode = locator<NosoNetworkBloc>().state.node;
+      targetNode = locatorRpc<NosoNetworkBloc>().state.node;
     } else {
       var requestNode = await _requestNosoNetwork(NodeRequest.getNodeStatus);
       targetNode = DataParser.parseDataNode(
-          requestNode.value, locator<NosoNetworkBloc>().state.node.seed);
+          requestNode.value, locatorRpc<NosoNetworkBloc>().state.node.seed);
     }
     if (targetNode != null) {
-      var supply = locator<NosoNetworkBloc>().rpcInfo.supply;
+      var supply = locatorRpc<NosoNetworkBloc>().rpcInfo.supply;
       return [
         {
           "lastblock": targetNode.lastblock,
@@ -271,7 +271,7 @@ class RPCHandlers {
   }
 
   Future<Map<String, List<Map<String, int>>>> fetchWalletBalance() async {
-    var totalBalance = locator<NosoNetworkBloc>().rpcInfo.walletBalance;
+    var totalBalance = locatorRpc<NosoNetworkBloc>().rpcInfo.walletBalance;
 
     return {
       "result": [
@@ -282,7 +282,7 @@ class RPCHandlers {
 
   Future<Map<String, dynamic>> fetchHealthCheck() async {
     var restApi = await _repositories.nosoApiService.fetchHealthApi();
-    var nosoNetwork = locator<NosoNetworkBloc>().state;
+    var nosoNetwork = locatorRpc<NosoNetworkBloc>().state;
     var localNode = nosoNetwork.node;
 
     return {
@@ -376,11 +376,11 @@ class RPCHandlers {
       int block;
 
       if (_isSyncLocalNetwork()) {
-        block = locator<NosoNetworkBloc>().state.node.lastblock;
+        block = locatorRpc<NosoNetworkBloc>().state.node.lastblock;
       } else {
         var requestNode = await _requestNosoNetwork(NodeRequest.getNodeStatus);
         var targetNode = DataParser.parseDataNode(
-            requestNode.value, locator<NosoNetworkBloc>().state.node.seed);
+            requestNode.value, locatorRpc<NosoNetworkBloc>().state.node.seed);
         block = targetNode == null ? 0 : targetNode.lastblock;
       }
 
@@ -428,7 +428,7 @@ class RPCHandlers {
   }
 
   bool _isSyncLocalNetwork() {
-    var networkBloc = locator<NosoNetworkBloc>().state;
+    var networkBloc = locatorRpc<NosoNetworkBloc>().state;
     DateTime nowDate = DateTime.now();
     DateTime nodeTime = DateTime.fromMillisecondsSinceEpoch(
         networkBloc.node.utcTime * 1000,
@@ -452,14 +452,14 @@ class RPCHandlers {
   }
 
   Future<Seed> _getNetworkNode(bool localLastNode) async {
-    var appDataBlock = locator<NosoNetworkBloc>();
+    var appDataBlock = locatorRpc<NosoNetworkBloc>();
 
     if (localLastNode) {
       return Seed().tokenizer(NetworkObject.getRandomNode(null),
           rawString: appDataBlock.appBlocConfig.lastSeed);
     }
 
-    locator<DebugRPCBloc>().add(AddStringDebug(
+    locatorRpc<DebugRPCBloc>().add(AddStringDebug(
         "RPC manually changed the seed for noso network",
         StatusReport.RPC,
         DebugType.error));

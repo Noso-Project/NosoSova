@@ -40,8 +40,8 @@ class CliRpcHandler {
 
     await setupDiRPC(PathAppRpcUtil.getAppPath(),
         logger: logger, logLevel: LogLevel(level: settings.logsLevel));
-    locator<NosoNetworkBloc>().add(InitialConnect());
-      locator<RpcBloc>().add(StartServer(
+    locatorRpc<NosoNetworkBloc>().add(InitialConnect());
+    locatorRpc<RpcBloc>().add(StartServer(
           "${settings.ip}:${settings.port}", settings.ignoreMethods));
   }
 }

@@ -55,7 +55,7 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
   }
 
   void _initRPCBloc(event, emit) async {
-    var configRpc = await locator<SettingsYamlHandler>().loadRpcConfig();
+    var configRpc = await locatorRpc<SettingsYamlHandler>().loadRpcConfig();
     emit(state.copyWith(
         rpcAddress: configRpc[0],
         ignoreMethods: configRpc[1],
@@ -67,7 +67,7 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
       var address = event.address;
       var ignoreMethods = event.ignoreMethods;
       var addressArray = address.split(":");
-      locator<SettingsYamlHandler>()
+      locatorRpc<SettingsYamlHandler>()
           .saveRpcConfig(rpcAddress: address, ignoreMethods: ignoreMethods);
       if (rpcServer != null) {
         await rpcServer!.close(force: true);
@@ -99,5 +99,13 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
     rpcServer?.close(force: true);
     rpcServer = null;
     emit(state.copyWith(rpcRunnable: false));
+  }
+
+  @override
+  Future<void> close() {
+    rpcServer?.close(force: true);
+    rpcServer = null;
+
+    return super.close();
   }
 }

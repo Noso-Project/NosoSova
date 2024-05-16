@@ -49,7 +49,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   final RepositoriesRpc _repositories;
   final DebugRPCBloc _debugBloc;
   RPCInfo rpcInfo = RPCInfo();
-  LogLevel logLevel = locator<LogLevel>();
+  LogLevel logLevel = locatorRpc<LogLevel>();
 
   NosoNetworkBloc({
     required RepositoriesRpc repositories,
@@ -172,7 +172,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
             .map((node) => '${node.ip}:${node.port}|${node.address}')
             .join(',');
 
-        locator<SettingsYamlHandler>().saveAppConfig(nodesList: stringMasterNodes);
+        locatorRpc<SettingsYamlHandler>().saveAppConfig(nodesList: stringMasterNodes);
         appBlocConfig = appBlocConfig.copyWith(nodesList: stringMasterNodes);
       }
 
@@ -338,7 +338,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   /// The method that receives the response about the synchronization status in WalletBloc
   Future<void> _syncResult(event, emit) async {
     emit(state.copyWith(statusConnected: StatusConnectNodes.connected));
-    locator<SettingsYamlHandler>()
+    locatorRpc<SettingsYamlHandler>()
         .saveAppConfig(lastSeed: state.node.seed.toTokenizer);
     appBlocConfig = appBlocConfig.copyWith(countAttempsConnections: 0);
     appBlocConfig =
@@ -357,7 +357,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
   /// Request data from sharedPrefs
   Future<void> loadConfig() async {
-    var yamlSet = await locator<SettingsYamlHandler>().loadConfig();
+    var yamlSet = await locatorRpc<SettingsYamlHandler>().loadConfig();
     if (yamlSet != null) {
       var nodesList = yamlSet['nodesList'] as String;
       var lastNode = yamlSet['lastSeed'] as String;

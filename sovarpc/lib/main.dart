@@ -54,17 +54,17 @@ class SovaRPC extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider<RpcBloc>(create: (context) {
-            var bloc = locator<RpcBloc>();
+            var bloc = locatorRpc<RpcBloc>();
             bloc.add(InitBlocRPC());
             return bloc;
           }),
           BlocProvider<NosoNetworkBloc>(create: (context) {
-            var bloc = locator<NosoNetworkBloc>();
+            var bloc = locatorRpc<NosoNetworkBloc>();
             bloc.add(InitialConnect());
             return bloc;
           }),
           BlocProvider<DebugRPCBloc>(
-            create: (context) => locator<DebugRPCBloc>(),
+            create: (context) => locatorRpc<DebugRPCBloc>(),
           ),
         ],
         child: const RpcPage(),

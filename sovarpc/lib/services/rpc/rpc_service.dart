@@ -54,7 +54,7 @@ class ServiceRPC {
 
       return Response.ok(jsonEncode(jsonResponse));
     } catch (e) {
-      locator<DebugRPCBloc>()
+      locatorRpc<DebugRPCBloc>()
           .add(AddStringDebug(e.toString(), StatusReport.RPC, DebugType.error));
     //  if (kDebugMode) {
         print(e);

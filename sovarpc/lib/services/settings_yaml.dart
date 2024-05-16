@@ -41,9 +41,9 @@ class SettingsYamlHandler {
 
   Future<SettingsYaml?> loadConfig() async {
     String backupDirPath =
-        '${locator<AppPath>()}/${PathAppRpcUtil.app_config_system}';
+        '${locatorRpc<AppPath>()}/${PathAppRpcUtil.app_config_system}';
     final File configFile = File(backupDirPath);
-    Directory directory = Directory(locator<AppPath>());
+    Directory directory = Directory(locatorRpc<AppPath>());
     if (!directory.existsSync()) {
       directory.createSync(recursive: true);
     }
@@ -64,9 +64,9 @@ class SettingsYamlHandler {
 
   Future<List<String>> loadRpcConfig() async {
     String backupDirPath =
-        '${locator<AppPath>()}/${PathAppRpcUtil.app_config_system}';
+        '${locatorRpc<AppPath>()}/${PathAppRpcUtil.app_config_system}';
     final File configFile = File(backupDirPath);
-    Directory directory = Directory(locator<AppPath>());
+    Directory directory = Directory(locatorRpc<AppPath>());
     if (!directory.existsSync()) {
       directory.createSync(recursive: true);
     }
@@ -94,12 +94,12 @@ class SettingsYamlHandler {
 
   Future<void> saveAppConfig(
       {String nodesList = "", String lastSeed = ""}) async {
-    Directory directory = Directory(locator<AppPath>());
+    Directory directory = Directory(locatorRpc<AppPath>());
     if (!directory.existsSync()) {
       directory.createSync(recursive: true);
     }
     String backupDirPath =
-        '${locator<AppPath>()}/${PathAppRpcUtil.app_config_system}';
+        '${locatorRpc<AppPath>()}/${PathAppRpcUtil.app_config_system}';
 
     var settings = SettingsYaml.load(pathToSettings: backupDirPath);
     if (nodesList.isNotEmpty) {
@@ -113,12 +113,12 @@ class SettingsYamlHandler {
 
   Future<void> saveRpcConfig(
       {String rpcAddress = "", String ignoreMethods = ""}) async {
-    Directory directory = Directory(locator<AppPath>());
+    Directory directory = Directory(locatorRpc<AppPath>());
     if (!directory.existsSync()) {
       directory.createSync(recursive: true);
     }
     String backupDirPath =
-        '${locator<AppPath>()}/${PathAppRpcUtil.app_config_system}';
+        '${locatorRpc<AppPath>()}/${PathAppRpcUtil.app_config_system}';
 
     var settings = SettingsYaml.load(pathToSettings: backupDirPath);
     if (rpcAddress.isNotEmpty) {

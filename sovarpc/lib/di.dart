@@ -15,38 +15,38 @@ import 'package:sovarpc/services/settings_yaml.dart';
 
 import 'models/log_level.dart';
 
-final GetIt locator = GetIt.instance;
+final GetIt locatorRpc = GetIt.instance;
 
 typedef AppPath = String;
 
 Future<void> setupDiRPC(AppPath pathApp,
     {Logger? logger, LogLevel? logLevel}) async {
   /// AppPath
-  locator.registerLazySingleton<AppPath>(() => pathApp);
-  locator.registerLazySingleton<LogLevel>(
+  locatorRpc.registerLazySingleton<AppPath>(() => pathApp);
+  locatorRpc.registerLazySingleton<LogLevel>(
       () => logLevel ?? LogLevel(level: "Debug"));
-  locator
+  locatorRpc
       .registerLazySingleton<SettingsYamlHandler>(() => SettingsYamlHandler());
 
   /// shared & drift(sql)
-  locator.registerLazySingleton<MyDatabase>(() => MyDatabase(pathApp));
+  locatorRpc.registerLazySingleton<MyDatabase>(() => MyDatabase(pathApp));
 
   /// repo && services
 
-  locator.registerLazySingleton<RepositoriesRpc>(() => RepositoriesRpc(
-      localRepository: LocalRepository(locator<MyDatabase>()),
+  locatorRpc.registerLazySingleton<RepositoriesRpc>(() => RepositoriesRpc(
+      localRepository: LocalRepository(locatorRpc<MyDatabase>()),
       networkRepository: NosoNetworkRepository(NosoNetworkService()),
       fileRepository: FileRepositoryRpc(
           FileServiceRpc(pathApp, nameFileSummary: "summaryRPC.psk")),
       nosoApiService: NosoApiService()));
 
   /// Blocs
-  locator.registerLazySingleton<RpcBloc>(() => RpcBloc(
-      repositories: locator<RepositoriesRpc>(),
-      debugBloc: locator<DebugRPCBloc>()));
-  locator
+  locatorRpc.registerLazySingleton<RpcBloc>(() => RpcBloc(
+      repositories: locatorRpc<RepositoriesRpc>(),
+      debugBloc: locatorRpc<DebugRPCBloc>()));
+  locatorRpc
       .registerLazySingleton<DebugRPCBloc>(() => DebugRPCBloc(logger: logger));
-  locator.registerLazySingleton<NosoNetworkBloc>(() => NosoNetworkBloc(
-      repositories: locator<RepositoriesRpc>(),
-      debugBloc: locator<DebugRPCBloc>()));
+  locatorRpc.registerLazySingleton<NosoNetworkBloc>(() => NosoNetworkBloc(
+      repositories: locatorRpc<RepositoriesRpc>(),
+      debugBloc: locatorRpc<DebugRPCBloc>()));
 }
