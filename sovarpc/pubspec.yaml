@@ -29,7 +29,6 @@ dependencies:
   noso_dart: 1.2.4
     #  noso_dart:
   #    path: ../../NosoDart
-  computer: ^3.2.1
   file_picker: ^5.5.0
   nososova :
     path : ../

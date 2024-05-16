@@ -18,7 +18,7 @@ import 'di.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupDiRPC(pathApp: await PathAppUtil.getAppPath());
+  setupDiRPC(await PathAppUtil.getAppPath());
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(

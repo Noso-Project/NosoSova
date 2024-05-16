@@ -163,8 +163,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         setState(() {
           isLoadingImport = true;
         });
-        var watch = WatchTime();
-        watch.startTimer();
+
         ReceivePort receivePort = ReceivePort();
         Isolate isolate =
             await Isolate.spawn(PkwHandler.isolateImport, receivePort.sendPort);
@@ -184,8 +183,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           } else {
             _snackBar("Error: File does not contain addresses", false);
           }
-
-          watch.stopTimer();
           receivePort.close();
           isolate.kill();
         });

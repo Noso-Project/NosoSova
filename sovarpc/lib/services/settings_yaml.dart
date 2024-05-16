@@ -3,28 +3,37 @@ import 'dart:io';
 import 'package:settings_yaml/settings_yaml.dart';
 
 import '../const.dart';
+import '../di.dart';
 
 class SettingsYamlHandler {
-  String pathApp;
-
-  SettingsYamlHandler(this.pathApp);
-
-  Future<SettingsYaml> loadConfig() async {
-    String backupDirPath = '$pathApp/${Const.BACK_CONFIG_FILE}';
+  Future<SettingsYaml?> loadConfig() async {
+    String backupDirPath = '${locator<AppPath>()}/${Const.BACK_CONFIG_FILE}';
     final File configFile = File(backupDirPath);
-    var settings = SettingsYaml.load(pathToSettings: backupDirPath);
     if (!configFile.existsSync()) {
-      settings['nodesList'] = "";
-      settings['lastSeed'] = "";
-      settings.save();
-      return settings;
+      try {
+        Directory directory = Directory(locator<AppPath>());
+        if (!directory.existsSync()) {
+          directory.createSync(recursive: true);
+        }
+        var settings = SettingsYaml.load(pathToSettings: backupDirPath);
+        settings['nodesList'] = "";
+        settings['lastSeed'] = "";
+        settings.save();
+        return settings;
+      } catch (e) {
+        print(e);
+      }
     }
 
-    return settings;
+    return null;
   }
 
   Future<void> saveConfig({String nodesList = "", String lastSeed = ""}) async {
-    String backupDirPath = '$pathApp/${Const.BACK_CONFIG_FILE}';
+    Directory directory = Directory(locator<AppPath>());
+    if (!directory.existsSync()) {
+      directory.createSync(recursive: true);
+    }
+    String backupDirPath = '${locator<AppPath>()}/${Const.BACK_CONFIG_FILE}';
 
     var settings = SettingsYaml.load(pathToSettings: backupDirPath);
     if (nodesList.isNotEmpty) {

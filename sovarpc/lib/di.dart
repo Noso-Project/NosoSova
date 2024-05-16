@@ -13,35 +13,32 @@ import 'package:sovarpc/repository/repositories_rpc.dart';
 import 'package:sovarpc/services/file_service_rpc.dart';
 import 'package:sovarpc/services/settings_yaml.dart';
 
+import 'models/log_level.dart';
+
 final GetIt locator = GetIt.instance;
 
 typedef AppPath = String;
 
-Future<void> setupDiRPC({Logger? logger, required AppPath pathApp}) async {
+Future<void> setupDiRPC(AppPath pathApp,
+    {Logger? logger, LogLevel? logLevel}) async {
   /// AppPath
   locator.registerLazySingleton<AppPath>(() => pathApp);
-  locator.registerLazySingleton<SettingsYamlHandler>(
-      () => SettingsYamlHandler(pathApp));
+  locator.registerLazySingleton<LogLevel>(
+      () => logLevel ?? LogLevel(level: "Debug"));
+  locator
+      .registerLazySingleton<SettingsYamlHandler>(() => SettingsYamlHandler());
 
   /// shared & drift(sql)
   locator.registerLazySingleton<MyDatabase>(() => MyDatabase(pathApp));
-  locator.registerLazySingleton<NosoApiService>(() => NosoApiService());
 
   /// repo && services
-  locator.registerLazySingleton<FileServiceRpc>(
-      () => FileServiceRpc(pathApp, nameFileSummary: "summaryRPC.psk"));
-  locator.registerLazySingleton<FileRepositoryRpc>(
-      () => FileRepositoryRpc(locator<FileServiceRpc>()));
-  locator.registerLazySingleton<NosoNetworkService>(() => NosoNetworkService());
-  locator.registerLazySingleton<NosoNetworkRepository>(
-      () => NosoNetworkRepository(locator<NosoNetworkService>()));
-  locator.registerLazySingleton<LocalRepository>(
-      () => LocalRepository(locator<MyDatabase>()));
+
   locator.registerLazySingleton<RepositoriesRpc>(() => RepositoriesRpc(
-      localRepository: locator<LocalRepository>(),
-      networkRepository: locator<NosoNetworkRepository>(),
-      fileRepository: locator<FileRepositoryRpc>(),
-      nosoApiService: locator<NosoApiService>()));
+      localRepository: LocalRepository(locator<MyDatabase>()),
+      networkRepository: NosoNetworkRepository(NosoNetworkService()),
+      fileRepository: FileRepositoryRpc(
+          FileServiceRpc(pathApp, nameFileSummary: "summaryRPC.psk")),
+      nosoApiService: NosoApiService()));
 
   /// Blocs
   locator.registerLazySingleton<RpcBloc>(() => RpcBloc(

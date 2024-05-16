@@ -11,9 +11,11 @@ import 'package:sovarpc/blocs/rpc_bloc.dart';
 import 'package:sovarpc/blocs/rpc_events.dart';
 import 'package:sovarpc/const.dart';
 import 'package:sovarpc/di.dart';
+import 'package:sovarpc/models/config_app.dart';
+import 'package:sovarpc/models/log_level.dart';
 import 'package:sovarpc/path_app_rpc.dart';
 
-final _logger = Logger('rpc');
+final _logger = Logger("");
 HttpServer? rpcServer;
 
 Future<void> main(List<String> arguments) async {
@@ -29,7 +31,7 @@ Future<void> main(List<String> arguments) async {
     print('Available commands:\n'
         '--help (-h): Show available commands\n'
         '--run: Start RPC mode\n'
-        '--config: Check/create configuration');
+        '--config: Check/create configuration file');
 
     return;
   }
@@ -41,38 +43,40 @@ Future<void> main(List<String> arguments) async {
 
   if (args['config'] as bool) {
     print('Checking configuration...');
-    var settings = await checkConfig();
-    if (settings == null) {
-      print('${Const.NAME_CONFIG_FILE} not found...');
-      return;
-    }
-    var ip = settings['ip'] as String;
-    var port = settings['port'] as String;
-    var ignoreMethods = settings['ignoreMethods'] as String;
-    print('Config:\n'
-        'ip@port: $ip:$port\n'
-        'ignore methods: $ignoreMethods');
-    return;
+    return await _checkCommandConfig();
   }
   _logger.warning('Bad command');
 }
 
+Future<void> _checkCommandConfig() async {
+  var settings = await checkConfig();
+  if (settings == null) {
+    print('${Const.NAME_CONFIG_FILE} not found...');
+    return;
+  }
+  print('${Const.NAME_CONFIG_FILE}:\n'
+      'ip@port: ${settings.ip}:${settings.port}\n'
+      'ignore methods: ${settings.ignoreMethods}\n'
+      'logs level:  ${settings.logsLevel}');
+}
+
 Future<void> runRpcMode() async {
-  setupDiRPC(logger: _logger, pathApp: PathAppRPCUtil.getAppPath());
-  locator<NosoNetworkBloc>().add(InitialConnect());
   var settings = await checkConfig();
   if (settings == null) {
     print('${Const.NAME_CONFIG_FILE} not found...');
     print('Please use: --config: Create/Check configuration');
     return;
   }
-  var ip = settings['ip'] as String;
-  var port = settings['port'] as String;
-  var ignoreMethods = settings['ignoreMethods'] as String;
-  locator<RpcBloc>().add(StartServer("$ip:$port", ignoreMethods));
+
+  await setupDiRPC(PathAppRPCUtil.getAppPath(),
+      logger: _logger, logLevel: LogLevel(level: settings.logsLevel));
+  locator<NosoNetworkBloc>().add(InitialConnect());
+
+  locator<RpcBloc>().add(
+      StartServer("${settings.ip}:${settings.port}", settings.ignoreMethods));
 }
 
-Future<SettingsYaml?> checkConfig() async {
+Future<ConfigApp?> checkConfig() async {
   final File configFile = File(Const.NAME_CONFIG_FILE);
 
   if (!configFile.existsSync()) {
@@ -83,17 +87,19 @@ Future<SettingsYaml?> checkConfig() async {
       settings['ip'] = Const.DEFAULT_HOST;
       settings['port'] = Const.DEFAULT_PORT;
       settings['ignoreMethods'] = '';
+      settings['logsLevel'] = "Release";
 
       settings.save();
 
       _logger.info('${Const.NAME_CONFIG_FILE} created.');
-      return settings;
+      return ConfigApp.copyYamlConfig(settings);
     } catch (e) {
       _logger.warning('Error creating config file: $e');
       return null;
     }
   }
-  var settings = SettingsYaml.load(pathToSettings: Const.NAME_CONFIG_FILE);
+  var settings = ConfigApp.copyYamlConfig(
+      SettingsYaml.load(pathToSettings: Const.NAME_CONFIG_FILE));
 
   return settings;
 }

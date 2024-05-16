@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'dart:isolate';
 import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
-import 'package:computer/computer.dart';
 import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/models/noso/seed.dart';
 import 'package:noso_dart/node_request.dart';
@@ -12,7 +12,9 @@ import 'package:nososova/configs/network_object.dart';
 import 'package:nososova/models/responses/response_node.dart';
 import 'package:nososova/utils/enum.dart';
 import 'package:sovarpc/blocs/network_events.dart';
+import 'package:sovarpc/calcutes.dart';
 import 'package:sovarpc/di.dart';
+import 'package:sovarpc/models/log_level.dart';
 import 'package:sovarpc/models/rpc_info.dart';
 
 import '../models/app_configs_rpc.dart';
@@ -47,7 +49,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   final RepositoriesRpc _repositories;
   final DebugRPCBloc _debugBloc;
   RPCInfo rpcInfo = RPCInfo();
-  bool cli = false;
+  LogLevel logLevel = locator<LogLevel>();
 
   NosoNetworkBloc({
     required RepositoriesRpc repositories,
@@ -126,26 +128,28 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
     switch (initAlgorithm) {
       case InitialNodeAlgorithm.connectLastNode:
-        //   if (kDebugMode) {
-        _debugBloc.add(AddStringDebug(
-            "Receive information from the last active node",
-            StatusReport.Node));
-        //   }
+        if (logLevel.isDebug) {
+          _debugBloc.add(AddStringDebug(
+              "Receive information from the last active node",
+              StatusReport.Node));
+        }
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
             Seed().tokenizer(NetworkObject.getRandomNode(null),
                 rawString: appBlocConfig.lastSeed));
       case InitialNodeAlgorithm.listenUserNodes:
-        // if (kDebugMode) {
-        _debugBloc.add(AddStringDebug("Search target node", StatusReport.Node));
-        //   }
+        if (logLevel.isDebug) {
+          _debugBloc
+              .add(AddStringDebug("Search target node", StatusReport.Node));
+        }
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
             Seed().tokenizer(NetworkObject.getRandomNode(listUsersNodes)));
       default:
-        //   if (kDebugMode) {
-        _debugBloc.add(AddStringDebug("Search target node", StatusReport.Node));
-        //   }
+        if (logLevel.isDebug) {
+          _debugBloc
+              .add(AddStringDebug("Search target node", StatusReport.Node));
+        }
         return await _repositories.networkRepository.getRandomDevNode();
     }
   }
@@ -154,9 +158,9 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     emit(state.copyWith(
         statusConnected: StatusConnectNodes.sync,
         node: state.node.copyWith(seed: targetNode.seed)));
-    // if (kDebugMode) {
-    _debugBloc.add(AddStringDebug("Sync noso network", StatusReport.Node));
-    //  }
+    if (logLevel.isDebug) {
+      _debugBloc.add(AddStringDebug("Sync noso network", StatusReport.Node));
+    }
 
     if (state.node.lastblock != targetNode.lastblock ||
         state.node.seed.ip != targetNode.seed.ip) {
@@ -185,10 +189,10 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
         var consensusReturn = await _checkConsensus(targetNode);
 
         if (consensusReturn == ConsensusStatus.sync) {
-          //    if (kDebugMode) {
-          _debugBloc
-              .add(AddStringDebug("Consensus confirmed", StatusReport.Node));
-          //   }
+          if (logLevel.isDebug) {
+            _debugBloc
+                .add(AddStringDebug("Consensus confirmed", StatusReport.Node));
+          }
           add(SyncSuccess());
 
           emit(state.copyWith(
@@ -213,58 +217,54 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     return;
   }
 
-  /// A method that calculates summary in a separate thread
   _loadSupply() async {
-    var summary = await _repositories.fileRepository.loadSummary();
+    var summaryBytes = await _repositories.fileRepository.loadSummary();
     var addressesHashes =
         await _repositories.localRepository.fetchTotalAddressHashes();
 
-    List<int> calculateSummary(Uint8List psk) {
-      int supply = 0;
-      int totalBalanceWallet = 0;
-      int index = 0;
+    ReceivePort receivePort = ReceivePort();
+    Isolate isolate = await Isolate.spawn(
+        CalcutesUtils.calculateSummary, receivePort.sendPort);
+    SendPort childSendPort = await receivePort.first;
+    ReceivePort responsePort = ReceivePort();
+    childSendPort.send([summaryBytes, addressesHashes, responsePort.sendPort]);
 
-      try {
-        while (index + 106 <= psk.length) {
-          var hash = String.fromCharCodes(
-              psk.sublist(index + 1, index + psk[index] + 1));
-          var targetBalance = ByteData.view(
-                  Uint8List.fromList(psk.sublist(index + 82, index + 90))
-                      .buffer)
-              .getInt64(0, Endian.little);
+    responsePort.listen((result) {
+      rpcInfo = rpcInfo.copyWith(supply: result[0], walletBalance: result[1]);
+      receivePort.close();
+      isolate.kill();
+    });
+  }
 
-          if (targetBalance != 0) {
-            supply += targetBalance;
-            if (addressesHashes.contains(hash)) {
-              totalBalanceWallet += targetBalance;
-            }
+  List<int> calculateSummary(Uint8List psk, Set<String> addressesHashes) {
+    int supply = 0;
+    int totalBalanceWallet = 0;
+    int index = 0;
+
+    try {
+      while (index + 106 <= psk.length) {
+        var hash = String.fromCharCodes(
+            psk.sublist(index + 1, index + psk[index] + 1));
+        var targetBalance = ByteData.view(
+                Uint8List.fromList(psk.sublist(index + 82, index + 90)).buffer)
+            .getInt64(0, Endian.little);
+
+        if (targetBalance != 0) {
+          supply += targetBalance;
+          if (addressesHashes.isNotEmpty && addressesHashes.contains(hash)) {
+            totalBalanceWallet += targetBalance;
           }
-
-          index += 106;
         }
-      } catch (e) {
-        //  if (kDebugMode) {
-        print('Error total supply: $e');
-        //   }
-        return [0, 0];
+
+        index += 106;
       }
-      return [supply, totalBalanceWallet];
+    } catch (e) {
+      // if (logLevel.isDebug) {
+      //   print('Error total supply: $e');
+      //  }
+      return [0, 0];
     }
-
-    final computer = Computer.create();
-
-    await computer.turnOn(
-      workersCount: 2,
-      verbose: false,
-    );
-    final result = await computer.compute(
-      calculateSummary,
-      param: summary ?? Uint8List(0),
-    );
-
-    await computer.turnOff();
-
-    rpcInfo = rpcInfo.copyWith(supply: result[0], walletBalance: result[1]);
+    return [supply, totalBalanceWallet];
   }
 
   Future<ConsensusStatus> _checkConsensus(Node targetNode) async {
@@ -358,10 +358,12 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   /// Request data from sharedPrefs
   Future<void> loadConfig() async {
     var yamlSet = await locator<SettingsYamlHandler>().loadConfig();
-    var nodesList = yamlSet['nodesList'] as String;
-    var lastNode = yamlSet['lastSeed'] as String;
-    appBlocConfig =
-        appBlocConfig.copyWith(nodesList: nodesList, lastSeed: lastNode);
+    if (yamlSet != null) {
+      var nodesList = yamlSet['nodesList'] as String;
+      var lastNode = yamlSet['lastSeed'] as String;
+      appBlocConfig =
+          appBlocConfig.copyWith(nodesList: nodesList, lastSeed: lastNode);
+    }
   }
 
   @override
