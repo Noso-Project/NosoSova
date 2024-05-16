@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
-import 'package:path_provider/path_provider.dart';
 
 class BackupService {
   static Future<void> writeBackup(List<AddressObject> data) async {
@@ -15,7 +13,7 @@ class BackupService {
 
   static Future<void> _writeBackupInIsolate(
       List<Map<String, dynamic>> data) async {
-    Directory executableDir = await getApplicationSupportDirectory();
+    Directory executableDir = await _getApplicationSupportDirectory();
     String backupDirPath = '${executableDir.path}/backups';
     String backupFilePath = '$backupDirPath/backup_addresses.json';
 
@@ -32,9 +30,9 @@ class BackupService {
         String existingContent = await backupFile.readAsString();
         existingData = jsonDecode(existingContent);
       } catch (e) {
-        if (kDebugMode) {
-          print('Error reading or parsing existing content: $e');
-        }
+        // if (kDebugMode) {
+        print('Error reading or parsing existing content: $e');
+        //  }
       }
     }
 
@@ -45,6 +43,14 @@ class BackupService {
     String jsonData = jsonEncode(combinedData);
 
     await backupFile.writeAsString(jsonData);
+  }
+
+  static Future<Directory> _getApplicationSupportDirectory() async {
+    if (Platform.isMacOS) {
+      return Directory.systemTemp;
+    } else {
+      return Directory.systemTemp.createTemp();
+    }
   }
 
   static Map<String, dynamic> _toJson(AddressObject addressObject) {

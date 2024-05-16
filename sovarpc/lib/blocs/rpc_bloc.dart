@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:nososova/repositories/repositories.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:sovarpc/blocs/rpc_events.dart';
 
 import '../const.dart';
 import '../models/debug_rpc.dart';
+import '../repository/repositories_rpc.dart';
 import '../services/rpc/rpc_service.dart';
 import 'debug_rpc_bloc.dart';
 
@@ -37,12 +37,12 @@ class RpcState {
 }
 
 class RpcBloc extends Bloc<RPCEvents, RpcState> {
-  final Repositories _repositories;
+  final RepositoriesRpc _repositories;
   HttpServer? rpcServer;
   final DebugRPCBloc _debugBloc;
 
   RpcBloc({
-    required Repositories repositories,
+    required RepositoriesRpc repositories,
     required DebugRPCBloc debugBloc,
   })  : _repositories = repositories,
         _debugBloc = debugBloc,
@@ -53,12 +53,12 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
   }
 
   void _initRPCBloc(event, emit) async {
-    var rpcAddress = await _repositories.sharedRepository.loadRPCAddress();
-    var ignoreMethods =
-        await _repositories.sharedRepository.loadRPCMethodsIgnored();
+  //  var rpcAddress = await _repositories.sharedRepository.loadRPCAddress();
+ //   var ignoreMethods =
+  //      await _repositories.sharedRepository.loadRPCMethodsIgnored();
     emit(state.copyWith(
-        rpcAddress: rpcAddress,
-        ignoreMethods: ignoreMethods,
+  //      rpcAddress: rpcAddress,
+  //      ignoreMethods: ignoreMethods,
         rpcRunnable: false));
   }
 
@@ -67,8 +67,8 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
       var address = event.address;
       var ignoreMethods = event.ignoreMethods;
       var addressArray = address.split(":");
-      await _repositories.sharedRepository.saveRPCAddress(address);
-      await _repositories.sharedRepository.saveRPCMethodsIgnored(ignoreMethods);
+     // await _repositories.sharedRepository.saveRPCAddress(address);
+   //   await _repositories.sharedRepository.saveRPCMethodsIgnored(ignoreMethods);
 
       print("sssss");
       if (rpcServer != null) {

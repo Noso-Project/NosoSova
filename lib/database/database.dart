@@ -5,8 +5,6 @@ import 'package:drift/native.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:nososova/database/address.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
-
 import '../../models/address_wallet.dart';
 import '../models/contact.dart';
 import 'contact.dart';
@@ -15,7 +13,9 @@ part 'database.g.dart';
 
 @DriftDatabase(tables: [Addresses, Contact])
 class MyDatabase extends _$MyDatabase {
-  MyDatabase() : super(_openConnection());
+  final String pathDatabase;
+
+  MyDatabase(this.pathDatabase) : super(_openConnection(pathDatabase));
 
   @override
   MigrationStrategy get migration {
@@ -116,20 +116,16 @@ class MyDatabase extends _$MyDatabase {
   int get schemaVersion => 2;
 }
 
-LazyDatabase _openConnection() {
+LazyDatabase _openConnection(String connectionString) {
   var nameDatabase = 'db.sqlite';
 
   return LazyDatabase(() async {
     String dbFolder;
 
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-      var path = Platform.isMacOS
-          ? await getLibraryDirectory()
-          : await getApplicationSupportDirectory();
-      dbFolder = "${path.path}/database";
+      dbFolder = "$connectionString/database";
     } else {
-      var path = await getApplicationSupportDirectory();
-      dbFolder = path.path;
+      dbFolder = connectionString;
     }
 
     final file = File(p.join(dbFolder, nameDatabase));

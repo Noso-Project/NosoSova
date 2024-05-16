@@ -7,9 +7,9 @@ import 'package:logging_appenders/logging_appenders.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 import 'package:sovarpc/blocs/network_events.dart';
 import 'package:sovarpc/blocs/noso_network_bloc.dart';
+import 'package:sovarpc/const.dart';
 import 'package:sovarpc/dependency_injection.dart';
 
-const String _nameConfigFile = "rpc_config.yaml";
 final _logger = Logger('rpc');
 
 Future<void> main(List<String> arguments) async {
@@ -43,33 +43,33 @@ Future<void> main(List<String> arguments) async {
 }
 
 Future<void> runRpcMode() async {
-  setupLocator(logger: _logger);
+  setupLocatorRPC(logger: _logger, pathApp: "sovaData/");
   var bloc = locator<NosoNetworkBloc>();
   bloc.add(InitialConnect());
 }
 
 Future<void> checkConfig() async {
-  final File configFile = File(_nameConfigFile);
+  final File configFile = File(Const.NAME_CONFIG_FILE);
 
   if (!configFile.existsSync()) {
     _logger.info('Config file not found. Creating a new one...');
     try {
-      var settings = SettingsYaml.load(pathToSettings: _nameConfigFile);
+      var settings = SettingsYaml.load(pathToSettings: Const.NAME_CONFIG_FILE);
 
-      settings['ip'] = 'localhost';
-      settings['port'] = 8078;
+      settings['ip'] = Const.DEFAULT_HOST;
+      settings['port'] = Const.DEFAULT_PORT;
       settings['ignoreMethods'] = '';
 
       settings.save();
 
-      _logger.info('$_nameConfigFile created.');
+      _logger.info('${Const.NAME_CONFIG_FILE} created.');
       return;
     } catch (e) {
       _logger.warning('Error creating config file: $e');
       return;
     }
   }
-  var settings = SettingsYaml.load(pathToSettings: _nameConfigFile);
+  var settings = SettingsYaml.load(pathToSettings: Const.NAME_CONFIG_FILE);
 
   var ip = settings['ip'] as String;
   var port = settings['port'] as int;

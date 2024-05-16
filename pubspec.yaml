@@ -22,6 +22,7 @@ dependencies:
   drift: ^2.15.0
   sqlite3_flutter_libs: ^0.5.20
   path_provider: ^2.1.2
+  path_provider_platform_interface: ^2.1.2
   path: ^1.8.3
   get_it: ^7.6.7
   shared_preferences: ^2.2.2

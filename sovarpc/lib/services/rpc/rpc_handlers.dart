@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:noso_dart/handlers/address_handler.dart';
 import 'package:noso_dart/handlers/order_handler.dart';
+import 'package:noso_dart/models/app_info.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/models/noso/pending.dart';
@@ -15,9 +16,8 @@ import 'package:noso_dart/utils/data_parser.dart';
 import 'package:noso_dart/utils/noso_math.dart';
 import 'package:noso_rest_api/models/block.dart';
 import 'package:noso_rest_api/models/transaction.dart';
-import 'package:nososova/configs/network_config.dart';
+import 'package:nososova/configs/network_object.dart';
 import 'package:nososova/models/responses/response_node.dart';
-import 'package:nososova/repositories/repositories.dart';
 import 'package:nososova/utils/enum.dart';
 import 'package:sovarpc/blocs/noso_network_bloc.dart';
 
@@ -25,10 +25,11 @@ import '../../blocs/debug_rpc_bloc.dart';
 import '../../blocs/network_events.dart';
 import '../../dependency_injection.dart';
 import '../../models/debug_rpc.dart';
+import '../../repository/repositories_rpc.dart';
 import '../backup_service.dart';
 
 class RPCHandlers {
-  final Repositories _repositories;
+  final RepositoriesRpc _repositories;
 
   RPCHandlers(this._repositories);
 
@@ -349,7 +350,7 @@ class RPCHandlers {
           await _repositories.localRepository.isLocalAddress(hashAddress);
 
       if (isLocalAddress) {
-        await _repositories.sharedRepository.saveRPCDefaultAddress(hashAddress);
+     //   await _repositories.sharedRepository.saveRPCDefaultAddress(hashAddress);
         return [
           {"result": true}
         ];
@@ -368,8 +369,8 @@ class RPCHandlers {
   Future<List<Map<String, dynamic>>> sendFunds(
       String receiver, int amount, String reference) async {
     try {
-      var defaultAddress =
-          await _repositories.sharedRepository.loadRPCDefaultAddress();
+      var defaultAddress ="";
+       //   await _repositories.sharedRepository.loadRPCDefaultAddress();
       var addressObject = await _repositories.localRepository
           .fetchAddressForHash(defaultAddress ?? "");
       int block;
@@ -390,7 +391,7 @@ class RPCHandlers {
             currentBlock: block.toString(),
             amount: amount,
             message: reference.isEmpty ? "" : reference,
-            appInfo: NetworkConfig().getAppInfo);
+            appInfo: AppInfo(appVersion: "1_0_1"));
         var newOrder =
             OrderHandler().generateNewOrder(orderData, OrderType.TRFR);
 
@@ -454,7 +455,7 @@ class RPCHandlers {
     var appDataBlock = locator<NosoNetworkBloc>();
 
     if (localLastNode) {
-      return Seed().tokenizer(NetworkConfig.getRandomNode(null),
+      return Seed().tokenizer(NetworkObject.getRandomNode(null),
           rawString: appDataBlock.appBlocConfig.lastSeed);
     }
 
@@ -472,7 +473,7 @@ class RPCHandlers {
       var listUsersNodes = appDataBlock.appBlocConfig.nodesList;
       var testNode = await _repositories.networkRepository.fetchNode(
           NodeRequest.getNodeStatus,
-          Seed().tokenizer(NetworkConfig.getRandomNode(listUsersNodes)));
+          Seed().tokenizer(NetworkObject.getRandomNode(listUsersNodes)));
       return testNode.seed;
     }
   }

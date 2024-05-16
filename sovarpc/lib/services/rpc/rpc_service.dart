@@ -1,17 +1,16 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-import 'package:nososova/dependency_injection.dart';
-import 'package:nososova/repositories/repositories.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:sovarpc/blocs/debug_rpc_bloc.dart';
+import 'package:sovarpc/dependency_injection.dart';
+import 'package:sovarpc/repository/repositories_rpc.dart';
 import 'package:sovarpc/services/rpc/rpc_handlers.dart';
 
 import '../../models/debug_rpc.dart';
 
 class ServiceRPC {
-  final Repositories repositories;
+  final RepositoriesRpc repositories;
   final String ignoreMethods;
   late RPCHandlers rpcHandlers;
   final _responseBad = Response.ok(jsonEncode({
@@ -57,9 +56,9 @@ class ServiceRPC {
     } catch (e) {
       locator<DebugRPCBloc>()
           .add(AddStringDebug(e.toString(), StatusReport.RPC, DebugType.error));
-      if (kDebugMode) {
+    //  if (kDebugMode) {
         print(e);
-      }
+      //}
 
       return _responseBad;
     }

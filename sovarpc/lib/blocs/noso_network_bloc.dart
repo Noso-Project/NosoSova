@@ -8,15 +8,17 @@ import 'package:noso_dart/models/noso/node.dart';
 import 'package:noso_dart/models/noso/seed.dart';
 import 'package:noso_dart/node_request.dart';
 import 'package:noso_dart/utils/data_parser.dart';
-import 'package:nososova/configs/network_config.dart';
-import 'package:nososova/models/app/app_bloc_config.dart';
+import 'package:nososova/configs/network_object.dart';
+import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/models/responses/response_node.dart';
-import 'package:nososova/repositories/repositories.dart';
 import 'package:nososova/utils/enum.dart';
 import 'package:sovarpc/blocs/network_events.dart';
 import 'package:sovarpc/models/rpc_info.dart';
 
+import '../models/app_configs_rpc.dart';
 import '../models/debug_rpc.dart';
+import '../repository/repositories_rpc.dart';
+import '../services/settings_yaml.dart';
 import 'debug_rpc_bloc.dart';
 
 class NosoNetworksState {
@@ -40,14 +42,14 @@ class NosoNetworksState {
 }
 
 class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
-  AppBlocConfig appBlocConfig = AppBlocConfig();
+  AppConfigsRpc appBlocConfig = AppConfigsRpc();
   Timer? _timerSyncNetwork;
-  final Repositories _repositories;
+  final RepositoriesRpc _repositories;
   final DebugRPCBloc _debugBloc;
   RPCInfo rpcInfo = RPCInfo();
 
   NosoNetworkBloc({
-    required Repositories repositories,
+    required RepositoriesRpc repositories,
     required DebugRPCBloc debugBloc,
   })  : _repositories = repositories,
         _debugBloc = debugBloc,
@@ -123,28 +125,26 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
     switch (initAlgorithm) {
       case InitialNodeAlgorithm.connectLastNode:
-     //   if (kDebugMode) {
-          _debugBloc.add(AddStringDebug(
-              "Receive information from the last active node",
-              StatusReport.Node));
-     //   }
+        //   if (kDebugMode) {
+        _debugBloc.add(AddStringDebug(
+            "Receive information from the last active node",
+            StatusReport.Node));
+        //   }
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
-            Seed().tokenizer(NetworkConfig.getRandomNode(null),
+            Seed().tokenizer(NetworkObject.getRandomNode(null),
                 rawString: appBlocConfig.lastSeed));
       case InitialNodeAlgorithm.listenUserNodes:
-       // if (kDebugMode) {
-          _debugBloc
-              .add(AddStringDebug("Search target node", StatusReport.Node));
-     //   }
+        // if (kDebugMode) {
+        _debugBloc.add(AddStringDebug("Search target node", StatusReport.Node));
+        //   }
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
-            Seed().tokenizer(NetworkConfig.getRandomNode(listUsersNodes)));
+            Seed().tokenizer(NetworkObject.getRandomNode(listUsersNodes)));
       default:
-     //   if (kDebugMode) {
-          _debugBloc
-              .add(AddStringDebug("Search target node", StatusReport.Node));
-     //   }
+        //   if (kDebugMode) {
+        _debugBloc.add(AddStringDebug("Search target node", StatusReport.Node));
+        //   }
         return await _repositories.networkRepository.getRandomDevNode();
     }
   }
@@ -153,9 +153,9 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     emit(state.copyWith(
         statusConnected: StatusConnectNodes.sync,
         node: state.node.copyWith(seed: targetNode.seed)));
-   // if (kDebugMode) {
-      _debugBloc.add(AddStringDebug("Sync noso network", StatusReport.Node));
-  //  }
+    // if (kDebugMode) {
+    _debugBloc.add(AddStringDebug("Sync noso network", StatusReport.Node));
+    //  }
 
     if (state.node.lastblock != targetNode.lastblock ||
         state.node.seed.ip != targetNode.seed.ip) {
@@ -166,7 +166,8 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
         var stringMasterNodes = listUserNodes
             .map((node) => '${node.ip}:${node.port}|${node.address}')
             .join(',');
-        _repositories.sharedRepository.saveNodesList(stringMasterNodes);
+
+        locator<SettingsYamlHandler>().saveConfig(nodesList: stringMasterNodes);
         appBlocConfig = appBlocConfig.copyWith(nodesList: stringMasterNodes);
       }
 
@@ -183,10 +184,10 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
         var consensusReturn = await _checkConsensus(targetNode);
 
         if (consensusReturn == ConsensusStatus.sync) {
-      //    if (kDebugMode) {
-            _debugBloc
-                .add(AddStringDebug("Consensus confirmed", StatusReport.Node));
-       //   }
+          //    if (kDebugMode) {
+          _debugBloc
+              .add(AddStringDebug("Consensus confirmed", StatusReport.Node));
+          //   }
           add(SyncSuccess());
 
           emit(state.copyWith(
@@ -241,9 +242,9 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
           index += 106;
         }
       } catch (e) {
-      //  if (kDebugMode) {
-          print('Error total supply: $e');
-     //   }
+        //  if (kDebugMode) {
+        print('Error total supply: $e');
+        //   }
         return [0, 0];
       }
       return [supply, totalBalanceWallet];
@@ -298,7 +299,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
     do {
       var randomSeed =
-          Seed().tokenizer(NetworkConfig.getRandomNode(listNodesUsers));
+          Seed().tokenizer(NetworkObject.getRandomNode(listNodesUsers));
       var targetUserNode = await _repositories.networkRepository
           .fetchNode(NodeRequest.getNodeStatus, randomSeed);
       final Node? nodeUserOutput =
@@ -336,15 +337,14 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   /// The method that receives the response about the synchronization status in WalletBloc
   Future<void> _syncResult(event, emit) async {
     emit(state.copyWith(statusConnected: StatusConnectNodes.connected));
-    _repositories.sharedRepository.saveLastSeed(state.node.seed.toTokenizer);
+    locator<SettingsYamlHandler>()
+        .saveConfig(nodesList: state.node.seed.toTokenizer);
     appBlocConfig = appBlocConfig.copyWith(countAttempsConnections: 0);
     appBlocConfig =
         appBlocConfig.copyWith(lastSeed: state.node.seed.toTokenizer);
     _startTimerSyncNetwork();
-  //  if (kDebugMode) {
-      _debugBloc.add(AddStringDebug(
-          "Information from the network received", StatusReport.Node));
-  //  }
+    _debugBloc.add(AddStringDebug(
+        "Information from the network received", StatusReport.Node));
   }
 
   /// Method that starts a timer that simulates updating information
@@ -356,11 +356,11 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
 
   /// Request data from sharedPrefs
   Future<void> loadConfig() async {
-    var nodesList = await _repositories.sharedRepository.loadNodesList();
-    var delaySync = await _repositories.sharedRepository.loadDelaySync();
-
+    var yamlSet = await locator<SettingsYamlHandler>().loadConfig();
+    var nodesList = yamlSet['nodesList'] as String;
+    var lastNode = yamlSet['lastSeed'] as String;
     appBlocConfig =
-        appBlocConfig.copyWith(nodesList: nodesList, delaySync: delaySync);
+        appBlocConfig.copyWith(nodesList: nodesList, lastSeed: lastNode);
   }
 
   @override
