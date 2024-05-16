@@ -7,10 +7,14 @@ import 'package:logging_appenders/logging_appenders.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 import 'package:sovarpc/blocs/network_events.dart';
 import 'package:sovarpc/blocs/noso_network_bloc.dart';
+import 'package:sovarpc/blocs/rpc_bloc.dart';
+import 'package:sovarpc/blocs/rpc_events.dart';
 import 'package:sovarpc/const.dart';
-import 'package:sovarpc/dependency_injection.dart';
+import 'package:sovarpc/di.dart';
+import 'package:sovarpc/path_app_rpc.dart';
 
 final _logger = Logger('rpc');
+HttpServer? rpcServer;
 
 Future<void> main(List<String> arguments) async {
   PrintAppender.setupLogging();
@@ -25,30 +29,50 @@ Future<void> main(List<String> arguments) async {
     print('Available commands:\n'
         '--help (-h): Show available commands\n'
         '--run: Start RPC mode\n'
-        '--config: Check configuration');
+        '--config: Check/create configuration');
 
     return;
   }
 
   if (args['run'] as bool) {
     _logger.info('RPC mode started.');
-    await runRpcMode();
+    return await runRpcMode();
   }
 
   if (args['config'] as bool) {
     print('Checking configuration...');
-    return await checkConfig();
+    var settings = await checkConfig();
+    if (settings == null) {
+      print('${Const.NAME_CONFIG_FILE} not found...');
+      return;
+    }
+    var ip = settings['ip'] as String;
+    var port = settings['port'] as String;
+    var ignoreMethods = settings['ignoreMethods'] as String;
+    print('Config:\n'
+        'ip@port: $ip:$port\n'
+        'ignore methods: $ignoreMethods');
+    return;
   }
   _logger.warning('Bad command');
 }
 
 Future<void> runRpcMode() async {
-  setupLocatorRPC(logger: _logger, pathApp: "sovaData/");
-  var bloc = locator<NosoNetworkBloc>();
-  bloc.add(InitialConnect());
+  setupDiRPC(logger: _logger, pathApp: PathAppRPCUtil.getAppPath());
+  locator<NosoNetworkBloc>().add(InitialConnect());
+  var settings = await checkConfig();
+  if (settings == null) {
+    print('${Const.NAME_CONFIG_FILE} not found...');
+    print('Please use: --config: Create/Check configuration');
+    return;
+  }
+  var ip = settings['ip'] as String;
+  var port = settings['port'] as String;
+  var ignoreMethods = settings['ignoreMethods'] as String;
+  locator<RpcBloc>().add(StartServer("$ip:$port", ignoreMethods));
 }
 
-Future<void> checkConfig() async {
+Future<SettingsYaml?> checkConfig() async {
   final File configFile = File(Const.NAME_CONFIG_FILE);
 
   if (!configFile.existsSync()) {
@@ -63,18 +87,13 @@ Future<void> checkConfig() async {
       settings.save();
 
       _logger.info('${Const.NAME_CONFIG_FILE} created.');
-      return;
+      return settings;
     } catch (e) {
       _logger.warning('Error creating config file: $e');
-      return;
+      return null;
     }
   }
   var settings = SettingsYaml.load(pathToSettings: Const.NAME_CONFIG_FILE);
 
-  var ip = settings['ip'] as String;
-  var port = settings['port'] as int;
-  var ignoreMethods = settings['ignoreMethods'] as String;
-  print('Config:\n'
-      'ip@port: $ip:$port\n'
-      'ignore methods: $ignoreMethods');
+  return settings;
 }

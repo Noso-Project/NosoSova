@@ -7,7 +7,7 @@ import 'package:nososova/blocs/debug_bloc.dart';
 import 'package:nososova/blocs/history_transactions_bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/database/database.dart';
-import 'package:nososova/pathApp.dart';
+import 'package:nososova/path_app.dart';
 import 'package:nososova/repositories/file_repository.dart';
 import 'package:nososova/repositories/local_repository.dart';
 import 'package:nososova/repositories/noso_network_repository.dart';

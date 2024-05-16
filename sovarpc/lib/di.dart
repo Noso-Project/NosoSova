@@ -17,7 +17,7 @@ final GetIt locator = GetIt.instance;
 
 typedef AppPath = String;
 
-Future<void> setupLocatorRPC({Logger? logger, required AppPath pathApp}) async {
+Future<void> setupDiRPC({Logger? logger, required AppPath pathApp}) async {
   /// AppPath
   locator.registerLazySingleton<AppPath>(() => pathApp);
   locator.registerLazySingleton<SettingsYamlHandler>(

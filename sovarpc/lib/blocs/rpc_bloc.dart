@@ -53,12 +53,12 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
   }
 
   void _initRPCBloc(event, emit) async {
-  //  var rpcAddress = await _repositories.sharedRepository.loadRPCAddress();
- //   var ignoreMethods =
-  //      await _repositories.sharedRepository.loadRPCMethodsIgnored();
+    //  var rpcAddress = await _repositories.sharedRepository.loadRPCAddress();
+    //   var ignoreMethods =
+    //      await _repositories.sharedRepository.loadRPCMethodsIgnored();
     emit(state.copyWith(
-  //      rpcAddress: rpcAddress,
-  //      ignoreMethods: ignoreMethods,
+        //      rpcAddress: rpcAddress,
+        //      ignoreMethods: ignoreMethods,
         rpcRunnable: false));
   }
 
@@ -67,10 +67,9 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
       var address = event.address;
       var ignoreMethods = event.ignoreMethods;
       var addressArray = address.split(":");
-     // await _repositories.sharedRepository.saveRPCAddress(address);
-   //   await _repositories.sharedRepository.saveRPCMethodsIgnored(ignoreMethods);
+      // await _repositories.sharedRepository.saveRPCAddress(address);
+      //   await _repositories.sharedRepository.saveRPCMethodsIgnored(ignoreMethods);
 
-      print("sssss");
       if (rpcServer != null) {
         await rpcServer!.close(force: true);
         rpcServer = null;
@@ -89,7 +88,6 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
           rpcRunnable: true,
           ignoreMethods: ignoreMethods));
     } catch (e) {
-      print("xxxx");
       print(e);
       emit(state.copyWith(rpcRunnable: false));
     }

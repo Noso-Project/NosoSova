@@ -9,10 +9,10 @@ import 'package:noso_dart/models/noso/seed.dart';
 import 'package:noso_dart/node_request.dart';
 import 'package:noso_dart/utils/data_parser.dart';
 import 'package:nososova/configs/network_object.dart';
-import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/models/responses/response_node.dart';
 import 'package:nososova/utils/enum.dart';
 import 'package:sovarpc/blocs/network_events.dart';
+import 'package:sovarpc/di.dart';
 import 'package:sovarpc/models/rpc_info.dart';
 
 import '../models/app_configs_rpc.dart';
@@ -47,6 +47,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   final RepositoriesRpc _repositories;
   final DebugRPCBloc _debugBloc;
   RPCInfo rpcInfo = RPCInfo();
+  bool cli = false;
 
   NosoNetworkBloc({
     required RepositoriesRpc repositories,
@@ -338,7 +339,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   Future<void> _syncResult(event, emit) async {
     emit(state.copyWith(statusConnected: StatusConnectNodes.connected));
     locator<SettingsYamlHandler>()
-        .saveConfig(nodesList: state.node.seed.toTokenizer);
+        .saveConfig(lastSeed: state.node.seed.toTokenizer);
     appBlocConfig = appBlocConfig.copyWith(countAttempsConnections: 0);
     appBlocConfig =
         appBlocConfig.copyWith(lastSeed: state.node.seed.toTokenizer);

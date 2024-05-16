@@ -23,7 +23,7 @@ import 'package:sovarpc/blocs/noso_network_bloc.dart';
 
 import '../../blocs/debug_rpc_bloc.dart';
 import '../../blocs/network_events.dart';
-import '../../dependency_injection.dart';
+import '../../di.dart';
 import '../../models/debug_rpc.dart';
 import '../../repository/repositories_rpc.dart';
 import '../backup_service.dart';

@@ -30,7 +30,7 @@ class FileServiceRpc {
         for (var file in archive.files) {
           if (file.isFile) {
             final outputStream =
-                OutputFileStream('$pathApp/data/${nameFileSummary}');
+                OutputFileStream('$pathApp/data/$nameFileSummary');
             file.writeContent(outputStream);
             outputStream.close();
           }

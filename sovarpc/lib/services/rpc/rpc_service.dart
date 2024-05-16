@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:sovarpc/blocs/debug_rpc_bloc.dart';
-import 'package:sovarpc/dependency_injection.dart';
+import 'package:sovarpc/di.dart';
 import 'package:sovarpc/repository/repositories_rpc.dart';
 import 'package:sovarpc/services/rpc/rpc_handlers.dart';
 

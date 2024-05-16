@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nososova/pathApp.dart';
+import 'package:nososova/path_app.dart';
 import 'package:nososova/ui/config/size_config.dart';
 import 'package:nososova/ui/theme/color_schemes.g.dart';
 import 'package:sovarpc/blocs/debug_rpc_bloc.dart';
@@ -14,11 +14,11 @@ import 'package:window_manager/window_manager.dart';
 import 'blocs/network_events.dart';
 import 'blocs/rpc_bloc.dart';
 import 'blocs/rpc_events.dart';
-import 'dependency_injection.dart';
+import 'di.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupLocatorRPC(pathApp: await PathAppUtil.getAppPath());
+  setupDiRPC(pathApp: await PathAppUtil.getAppPath());
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(
