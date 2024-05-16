@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:sovarpc/blocs/rpc_events.dart';
+import 'package:sovarpc/services/settings_yaml.dart';
 
 import '../const.dart';
+import '../di.dart';
 import '../models/debug_rpc.dart';
 import '../repository/repositories_rpc.dart';
 import '../services/rpc/rpc_service.dart';
@@ -53,12 +55,10 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
   }
 
   void _initRPCBloc(event, emit) async {
-    //  var rpcAddress = await _repositories.sharedRepository.loadRPCAddress();
-    //   var ignoreMethods =
-    //      await _repositories.sharedRepository.loadRPCMethodsIgnored();
+    var configRpc = await locator<SettingsYamlHandler>().loadRpcConfig();
     emit(state.copyWith(
-        //      rpcAddress: rpcAddress,
-        //      ignoreMethods: ignoreMethods,
+        rpcAddress: configRpc[0],
+        ignoreMethods: configRpc[1],
         rpcRunnable: false));
   }
 
@@ -67,9 +67,8 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
       var address = event.address;
       var ignoreMethods = event.ignoreMethods;
       var addressArray = address.split(":");
-      // await _repositories.sharedRepository.saveRPCAddress(address);
-      //   await _repositories.sharedRepository.saveRPCMethodsIgnored(ignoreMethods);
-
+      locator<SettingsYamlHandler>()
+          .saveRpcConfig(rpcAddress: address, ignoreMethods: ignoreMethods);
       if (rpcServer != null) {
         await rpcServer!.close(force: true);
         rpcServer = null;

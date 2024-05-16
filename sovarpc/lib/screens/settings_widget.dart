@@ -12,7 +12,6 @@ import 'package:nososova/ui/theme/style/text_style.dart';
 import 'package:nososova/utils/files_const.dart';
 import 'package:sovarpc/screens/widget/loading_button.dart';
 import 'package:sovarpc/services/pkw_handler.dart';
-import 'package:sovarpc/stop_watch.dart';
 
 import '../blocs/rpc_bloc.dart';
 import '../blocs/rpc_events.dart';

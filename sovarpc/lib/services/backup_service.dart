@@ -15,7 +15,7 @@ class BackupService {
 
   static Future<void> _writeBackupInIsolate(
       List<Map<String, dynamic>> data) async {
-    String backupDirPath = '${PathAppRPCUtil.getAppPath()}/backups';
+    String backupDirPath = '${PathAppRpcUtil.getAppPath()}/backups';
     String backupFilePath = '$backupDirPath/backup_addresses.json';
 
     // Create the backup directory if it doesn't exist

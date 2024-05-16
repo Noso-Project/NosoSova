@@ -172,7 +172,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
             .map((node) => '${node.ip}:${node.port}|${node.address}')
             .join(',');
 
-        locator<SettingsYamlHandler>().saveConfig(nodesList: stringMasterNodes);
+        locator<SettingsYamlHandler>().saveAppConfig(nodesList: stringMasterNodes);
         appBlocConfig = appBlocConfig.copyWith(nodesList: stringMasterNodes);
       }
 
@@ -339,7 +339,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   Future<void> _syncResult(event, emit) async {
     emit(state.copyWith(statusConnected: StatusConnectNodes.connected));
     locator<SettingsYamlHandler>()
-        .saveConfig(lastSeed: state.node.seed.toTokenizer);
+        .saveAppConfig(lastSeed: state.node.seed.toTokenizer);
     appBlocConfig = appBlocConfig.copyWith(countAttempsConnections: 0);
     appBlocConfig =
         appBlocConfig.copyWith(lastSeed: state.node.seed.toTokenizer);
