@@ -18,7 +18,7 @@ class CliRpcHandler {
   }
 
   checkConfig() async {
-    var settings = await SettingsYamlHandler().checkConfig();
+    var settings = await SettingsYamlHandler(PathAppRpcUtil.getAppPath()).checkConfig();
     if (settings == null) {
       stdout.writeln('${PathAppRpcUtil.shared_config} not found...');
       return;
@@ -31,7 +31,7 @@ class CliRpcHandler {
   }
 
   Future<void> runRpcMode(Logger logger) async {
-    var settings = await SettingsYamlHandler().checkConfig();
+    var settings = await SettingsYamlHandler(PathAppRpcUtil.getAppPath()).checkConfig();
     if (settings == null) {
       stdout.writeln('${PathAppRpcUtil.shared_config} not found...');
       stdout.writeln('Please use: --config: Create/Check configuration');
@@ -44,4 +44,6 @@ class CliRpcHandler {
     locatorRpc<RpcBloc>().add(StartServer(
           "${settings.ip}:${settings.port}", settings.ignoreMethods));
   }
+
+
 }

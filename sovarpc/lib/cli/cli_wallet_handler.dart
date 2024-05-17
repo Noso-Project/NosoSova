@@ -1,9 +1,13 @@
 import 'dart:io';
 
+import 'package:noso_dart/handlers/address_handler.dart';
 import 'package:noso_dart/handlers/files_handler.dart';
+import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:nososova/database/database.dart';
 import 'package:sovarpc/cli/loading.dart';
+import 'package:sovarpc/cli/pen.dart';
 
+import '../services/settings_yaml.dart';
 import '../utils/path_app_rpc.dart';
 
 class CliWalletHandler {
@@ -24,18 +28,120 @@ class CliWalletHandler {
         [];
 
     var database = MyDatabase(PathAppRpcUtil.getAppPath());
-    await Future.forEach(listAddress, (dynamic address) async {
-      database.addAddress(address);
-    });
+
+    await database.addAddresses(listAddress);
     database.close();
 
     if (listAddress.isNotEmpty) {
-      stdout.write('\rImported ${listAddress.length} addresses!');
+      stdout.writeln('\rImported ${listAddress.length} addresses!');
     } else {
-      stdout.write('\rError importing addresses!');
+      stdout.writeln('\rError importing addresses!');
     }
+
     loading.cancel();
-  //  stdout.close();
+
+    return;
+  }
+
+  Future<void> setPaymentAddress(String paymentHash) async {
+    var settings =
+        await SettingsYamlHandler(PathAppRpcUtil.getAppPath()).checkConfig();
+    if (settings == null) {
+      stdout.writeln('${PathAppRpcUtil.shared_config} not found...');
+      stdout.writeln('Please use: --config: Create/Check configuration');
+      return;
+    }
+
+    var database = MyDatabase(PathAppRpcUtil.getAppPath());
+    var isLocalAddress = await database.isLocalAddress(paymentHash);
+
+    if (isLocalAddress) {
+      SettingsYamlHandler(PathAppRpcUtil.getAppPath())
+          .saveDefaultPaymentAddress(paymentHash);
+      stdout.writeln(
+          Pen().greenText('Billing address has been updated: $paymentHash'));
+    } else {
+      stdout.writeln(Pen().red('Address is not local, changes have been made'));
+    }
+
+    database.close();
+    return;
+  }
+
+  Future<void> getWalletInfo() async {
+    var database = MyDatabase(PathAppRpcUtil.getAppPath());
+    var listAddress = await database.fetchTotalAddresses();
+
+    var defaultAddress = await SettingsYamlHandler(PathAppRpcUtil.getAppPath())
+        .loadDefaultPaymentAddress();
+
+    stdout.writeln(Pen().greenText('Wallet info:\n'
+        'Count addresses: ${listAddress.length} \n'
+        'Payment Address: $defaultAddress'));
+
+    database.close();
+    return;
+  }
+
+  Future<void> getListAddress() async {
+    var database = MyDatabase(PathAppRpcUtil.getAppPath());
+    var listAddress = await database.fetchTotalAddressHashes();
+
+    stdout.writeln(Pen().greenBg('All local Noso addresses:'));
+    stdout.writeln(listAddress.toString());
+
+    database.close();
+    return;
+  }
+
+  Future<void> getListAddressFull() async {
+    var database = MyDatabase(PathAppRpcUtil.getAppPath());
+    var listAddress = await database.fetchTotalAddresses();
+
+    stdout.writeln(Pen().greenBg('All local Noso addresses:'));
+    stdout.writeln(listAddress
+        .map((address) => {
+              "hash": address.hash,
+              "public": address.publicKey,
+              "private": address.privateKey,
+            })
+        .toList());
+
+    database.close();
+    return;
+  }
+
+  Future<void> getNewAddress(bool isSave) async {
+    AddressObject address = AddressHandler.createNewAddress();
+    if (!isSave) {
+      var database = MyDatabase(PathAppRpcUtil.getAppPath());
+      await database.addAddress(address);
+      database.close();
+    }
+    try {
+      stdout.writeln(Pen().greenText({
+        'hash': address.hash,
+        'publicKey': address.publicKey,
+        'privateKey': address.privateKey,
+      }));
+      return;
+    } catch (e) {
+      stdout.writeln(Pen().red('Error creating a new address'));
+      return;
+    }
+  }
+
+  Future<void> isLocalAddress(String hash) async {
+    var database = MyDatabase(PathAppRpcUtil.getAppPath());
+    var isLocal = await database.isLocalAddress(hash);
+
+    if (isLocal) {
+      stdout.writeln(Pen().greenText('$hash available in the local wallet'));
+    } else {
+      stdout.writeln(Pen().red('$hash not in the local wallet'));
+    }
+
+    database.close();
     return;
   }
 }

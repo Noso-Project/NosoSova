@@ -14,6 +14,7 @@ import 'package:noso_dart/node_request.dart';
 import 'package:noso_dart/noso_enum.dart';
 import 'package:noso_dart/utils/data_parser.dart';
 import 'package:noso_dart/utils/noso_math.dart';
+import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:noso_rest_api/models/block.dart';
 import 'package:noso_rest_api/models/transaction.dart';
 import 'package:nososova/configs/network_object.dart';
@@ -26,7 +27,9 @@ import '../../blocs/network_events.dart';
 import '../../di.dart';
 import '../../models/debug_rpc.dart';
 import '../../repository/repositories_rpc.dart';
+import '../../utils/path_app_rpc.dart';
 import '../backup_service.dart';
+import '../settings_yaml.dart';
 
 class RPCHandlers {
   final RepositoriesRpc _repositories;
@@ -349,8 +352,9 @@ class RPCHandlers {
       var isLocalAddress =
           await _repositories.localRepository.isLocalAddress(hashAddress);
 
-      if (isLocalAddress) {
-     //   await _repositories.sharedRepository.saveRPCDefaultAddress(hashAddress);
+      if (isLocalAddress && NosoUtility.isValidHashNoso(hashAddress)) {
+        await SettingsYamlHandler(PathAppRpcUtil.getAppPath())
+            .saveDefaultPaymentAddress(hashAddress);
         return [
           {"result": true}
         ];
@@ -369,8 +373,9 @@ class RPCHandlers {
   Future<List<Map<String, dynamic>>> sendFunds(
       String receiver, int amount, String reference) async {
     try {
-      var defaultAddress ="";
-       //   await _repositories.sharedRepository.loadRPCDefaultAddress();
+      var defaultAddress =
+          await SettingsYamlHandler(PathAppRpcUtil.getAppPath())
+              .loadDefaultPaymentAddress();
       var addressObject = await _repositories.localRepository
           .fetchAddressForHash(defaultAddress ?? "");
       int block;
@@ -384,7 +389,8 @@ class RPCHandlers {
         block = targetNode == null ? 0 : targetNode.lastblock;
       }
 
-      if (addressObject != null && defaultAddress != null) {
+      if (addressObject != null &&
+          NosoUtility.isValidHashNoso(defaultAddress)) {
         var orderData = OrderData(
             currentAddress: addressObject,
             receiver: receiver,

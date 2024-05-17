@@ -26,7 +26,7 @@ Future<void> setupDiRPC(AppPath pathApp,
   locatorRpc.registerLazySingleton<LogLevel>(
       () => logLevel ?? LogLevel(level: "Debug"));
   locatorRpc
-      .registerLazySingleton<SettingsYamlHandler>(() => SettingsYamlHandler());
+      .registerLazySingleton<SettingsYamlHandler>(() => SettingsYamlHandler(pathApp));
 
   /// shared & drift(sql)
   locatorRpc.registerLazySingleton<MyDatabase>(() => MyDatabase(pathApp));
