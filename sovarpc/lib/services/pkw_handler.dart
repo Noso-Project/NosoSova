@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:noso_dart/handlers/files_handler.dart';
 import 'package:nososova/models/address_wallet.dart';
 
@@ -58,15 +58,10 @@ class PkwHandler {
         return false;
       }
       walletFile.writeAsBytesSync(Uint8List.fromList(bytes));
-
-      if (kDebugMode) {
-        print('Wallet file written - OK');
-      }
       return true;
     } catch (e) {
-      if (kDebugMode) {
-        print('Unable to export wallet file - ERR $e');
-      }
+      print('Unable to export wallet file - ERR $e');
+
       return false;
     }
   }
@@ -77,9 +72,7 @@ class PkwHandler {
       final byteData = await file.readAsBytes();
       return byteData.buffer.asUint8List();
     } catch (e) {
-      if (kDebugMode) {
-        print('Error reading file: $e');
-      }
+      print('Error reading file: $e');
       return Uint8List(0);
     }
   }

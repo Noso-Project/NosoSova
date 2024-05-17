@@ -6,6 +6,7 @@ import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:nososova/database/database.dart';
 import 'package:sovarpc/cli/loading.dart';
 import 'package:sovarpc/cli/pen.dart';
+import 'package:sovarpc/services/pkw_handler.dart';
 
 import '../services/settings_yaml.dart';
 import '../utils/path_app_rpc.dart';
@@ -36,6 +37,38 @@ class CliWalletHandler {
       stdout.writeln('\rImported ${listAddress.length} addresses!');
     } else {
       stdout.writeln('\rError importing addresses!');
+    }
+
+    loading.cancel();
+
+    return;
+  }
+
+  exportWallet() async {
+    var fileName = "walletBackup_${DateTime.now().millisecondsSinceEpoch ~/ 1000}.pkw";
+    stdout.writeln('Export addresses from: $fileName');
+
+    var database = MyDatabase(PathAppRpcUtil.getAppPath());
+    var listAddresses = await database.fetchTotalAddresses();
+    database.close();
+
+    if (listAddresses.isEmpty) {
+      stdout.writeln(Pen().red('\rAddress export error, no addresses in the database'));
+      return;
+    }
+
+    var loading = LoadingCli.loading();
+    await Future.delayed(const Duration(seconds: 5));
+
+
+
+    var exportTrue = await PkwHandler.saveWallet(listAddresses, fileName);
+
+
+    if (exportTrue) {
+      stdout.writeln(Pen().greenText('\rExported ${listAddresses.length} addresses, from $fileName'));
+    } else {
+      stdout.writeln(Pen().red('\rAddress export error'));
     }
 
     loading.cancel();

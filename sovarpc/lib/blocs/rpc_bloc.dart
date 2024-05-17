@@ -87,7 +87,8 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
           rpcRunnable: true,
           ignoreMethods: ignoreMethods));
     } catch (e) {
-      print(e);
+      _debugBloc
+          .add(AddStringDebug(e.toString(), StatusReport.RPC, DebugType.error));
       emit(state.copyWith(rpcRunnable: false));
     }
   }

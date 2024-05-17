@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
 
+import '../cli/pen.dart';
 import '../models/debug_rpc.dart';
 
 class DebugRPCState {
@@ -36,13 +37,13 @@ class DebugRPCBloc extends Bloc<DebugEventRPC, DebugRPCState> {
       var source = StatusReport.Node == event.source ? "Node" : "RPC";
       var string = "$source: ${event.value}";
       if (event.type == DebugType.error) {
-        loggerObject!.warning(string);
+        loggerObject!.warning(Pen().red(string));
       }
       if (event.type == DebugType.inform) {
         loggerObject!.info(string);
       }
       if (event.type == DebugType.success) {
-        loggerObject!.fine(string);
+        loggerObject!.info(Pen().greenText(string));
       }
       return;
     }

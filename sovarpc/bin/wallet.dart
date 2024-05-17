@@ -16,10 +16,7 @@ Future<void> main(List<String> arguments) async {
         help:
             'Import your addresses from a .pkw file, use the <file_name.pkw> parameter. Before using, place the file in the same folder as the wallet.exe executable file')
     ..addFlag(CliCommands.export,
-        abbr: 'e',
-        negatable: false,
-        help:
-            'Export your addresses in .pkw file, use with the <file_name.pkw> parameter.')
+        abbr: 'e', negatable: false, help: 'Export your addresses in .pkw file')
     ..addFlag(CliCommands.wInfo,
         negatable: false,
         abbr: 'w',
@@ -38,7 +35,8 @@ Future<void> main(List<String> arguments) async {
     ..addFlag(CliCommands.nosSave,
         help: 'Disables saving address for local database', negatable: false)
     ..addOption(CliCommands.lisLocal,
-        abbr: "l", help: 'Checks if the address is saved locally')
+        abbr: "l",
+        help: 'Checks if the address is saved locally, use <hash> parameter')
     ..addOption(CliCommands.setPaymentAddress,
         abbr: 'p',
         help: 'Sets the default payment address use <hash> parameter');
@@ -83,7 +81,7 @@ Future<void> main(List<String> arguments) async {
     }
 
     if (args.wasParsed(CliCommands.export)) {
-      // Обробка операції експорту
+      walletHandler.exportWallet();
       return;
     }
 
@@ -113,9 +111,7 @@ Future<void> main(List<String> arguments) async {
 
       return;
     }
-  } catch (e) {
-
-  }
+  } catch (e) {}
 
   stdout.writeln(Pen().red(
       'Error: Command or parameter not found. Please use --help to see available options.'));
