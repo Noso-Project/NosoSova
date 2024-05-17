@@ -11,11 +11,15 @@ import 'package:sovarpc/cli/pen.dart';
 
 final _logger = Logger("");
 
+///TODo  Методи не є спільними для ігнорування
+
 Future<void> main(List<String> arguments) async {
   PrintAppender.setupLogging();
   final ArgParser argParser = ArgParser()
     ..addFlag(CliCommands.help,
         abbr: 'h', negatable: false, help: 'Show all RPC commands')
+    ..addFlag(CliCommands.methods,
+        abbr: 'm', negatable: false, help: 'Show all JSON-RPC methods')
     ..addFlag(CliCommands.run,
         abbr: 'r', negatable: false, help: 'Start RPC mode')
     ..addFlag(CliCommands.config,
@@ -29,6 +33,11 @@ Future<void> main(List<String> arguments) async {
     final ArgResults args = argParser.parse(arguments);
     if (args[CliCommands.help] as bool) {
       rpcHandler.help(argParser.usage);
+      return;
+    }
+
+    if (args[CliCommands.methods] as bool) {
+      rpcHandler.methods();
       return;
     }
 

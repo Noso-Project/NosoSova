@@ -17,8 +17,15 @@ class CliRpcHandler {
     stdout.writeln('Available commands:\n$usage');
   }
 
+  methods() {
+    stdout.writeln('JSON-RPC all methods:\n'
+        '[getmainnetinfo,getpendingorders,getblockorders,getorderinfo,getaddressbalance,getnewaddress,getnewaddressfull,islocaladdress,getwalletbalance,setdefault,sendfunds,reset]\n'
+        'Detail: https://github.com/Noso-Project/NosoSova/');
+  }
+
   checkConfig() async {
-    var settings = await SettingsYamlHandler(PathAppRpcUtil.getAppPath()).checkConfig();
+    var settings =
+        await SettingsYamlHandler(PathAppRpcUtil.getAppPath()).checkConfig();
     if (settings == null) {
       stdout.writeln('${PathAppRpcUtil.shared_config} not found...');
       return;
@@ -31,7 +38,8 @@ class CliRpcHandler {
   }
 
   Future<void> runRpcMode(Logger logger) async {
-    var settings = await SettingsYamlHandler(PathAppRpcUtil.getAppPath()).checkConfig();
+    var settings =
+        await SettingsYamlHandler(PathAppRpcUtil.getAppPath()).checkConfig();
     if (settings == null) {
       stdout.writeln('${PathAppRpcUtil.shared_config} not found...');
       stdout.writeln('Please use: --config: Create/Check configuration');
@@ -42,9 +50,7 @@ class CliRpcHandler {
         logger: logger, logLevel: LogLevel(level: settings.logsLevel));
     locatorRpc<NosoNetworkBloc>().add(InitialConnect());
     await Future.delayed(const Duration(seconds: 5));
-    locatorRpc<RpcBloc>().add(StartServer(
-          "${settings.ip}:${settings.port}", settings.ignoreMethods));
+    locatorRpc<RpcBloc>().add(
+        StartServer("${settings.ip}:${settings.port}", settings.ignoreMethods));
   }
-
-
 }

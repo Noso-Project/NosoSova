@@ -1,7 +1,5 @@
 class CliCommands {
-
   static const String help = "help";
-
 
   /// WALLET CLI
   static const String import = "import";
@@ -13,7 +11,9 @@ class CliCommands {
   static const String genAddress = "new";
   static const String nosSave = "no-save";
   static const String lisLocal = "isLocal";
+
   /// RPC CLI
   static const String run = "run";
   static const String config = "config";
+  static const String methods = "methods";
 }
