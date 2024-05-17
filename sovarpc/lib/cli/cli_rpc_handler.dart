@@ -51,7 +51,7 @@ class CliRpcHandler {
       return;
     }
 
-    if (settings[2].isEmpty || NosoUtility.isValidHashNoso(settings[2])) {
+    if (settings[2].isEmpty || !NosoUtility.isValidHashNoso(settings[2])) {
       stdout.writeln(
           Pen().red('Please note! The billing address is not specified.'));
     }
