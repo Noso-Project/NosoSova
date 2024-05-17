@@ -63,7 +63,7 @@ Future<void> main(List<String> arguments) async {
       return;
     }
 
-    if (args[CliCommands.help] as bool) {
+    if (args[CliCommands.help] as bool || arguments.isEmpty) {
       await walletHandler.help(argParser.usage);
       return;
     }

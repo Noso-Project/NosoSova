@@ -41,7 +41,7 @@ Future<void> main(List<String> arguments) async {
       return;
     }
 
-    if (args[CliCommands.run] as bool) {
+    if (args[CliCommands.run] as bool || arguments.isEmpty) {
       CliExit.exitListener(AppType.rpc);
       stdout.writeln(Pen().greenBg('RPC mode started'));
       await rpcHandler.runRpcMode(_logger);
