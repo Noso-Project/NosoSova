@@ -150,7 +150,6 @@ class NosoApiService {
       if (response.error != null) {
         return ResponseNosoApi(error: response.error);
       } else {
-        print(response.value);
         return ResponseNosoApi(value: ApiStatus.fromJson(response.value));
       }
     } catch (e) {
