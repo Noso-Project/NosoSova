@@ -20,6 +20,7 @@
 Follow the instructions in this guide [Installation Flutter](https://docs.flutter.dev/get-started/install/windows)
 
 ### Process
+
 To build, use the following commands, or use the script that is located in the **NosoSova/cmd** path, it will save the results in the **Release** folder
 
 ```bash
@@ -44,7 +45,9 @@ dart compile exe rpc.dart -o rpc
 After running these commands, you will get two executable files **rpc** && **wallet**.
 
 ## CLI commands
+
 ### RPC
+
 | Command    | Short | Parameter | Description                                                                          |
 |------------|-------|-----------|--------------------------------------------------------------------------------------|
 | --help     | -h    |           | Show all RPC commands                                                                |
@@ -52,8 +55,8 @@ After running these commands, you will get two executable files **rpc** && **wal
 | --run      | -r    |           | Start RPC mode                                                                       |
 | --config   | -c    |           | Displays the contents of the configuration file, if it does not exist, it creates it. |
 
-
 ### Wallet
+
 | Command | Short | Parameter          | Description                                                                                                  |
 |---------|-------|--------------------|--------------------------------------------------------------------------------------------------------------|
 | --help  | -h    |                    | Show all wallet commands                                                                                     |
@@ -67,7 +70,6 @@ After running these commands, you will get two executable files **rpc** && **wal
 | --isLocal| -l   | <hash>             | Checks if the address is saved locally, use <hash> parameter                                                 |
 | --setPaymentAddress| -p | <hash>     | Sets the default payment address use <hash> parameter                                                        |
 
-
 ## Example of configuration
 
 This example demonstrates how to install and configure the release on your server
@@ -78,6 +80,7 @@ To use it in linux, you need to install the libsqlite3 library and grant executi
 apt-get install sqlite3 libsqlite3-dev
 chmod +x wallet && chmod +x rpc
 ```
+
 Next steps:
 
 ```bash
@@ -98,6 +101,50 @@ nano rpc_config.yaml
 
 ## Run RPC
 ./rpc (./rpc --run)
+```
+
+### Run rpc for systemd
+
+To run the cli app continuously on a system. It is recommended to add it to a service manager like systemd.
+Here is a minimal viable example on how to do that.
+
+1. Add a service
+
+```bash
+sudo nano /etc/systemd/system/sova_rpc.service
+```
+
+2. Adjust file content
+
+```bash
+Description=Noso Sova RPC
+
+[Service]
+ExecStart=/path/to/file/rpc -r
+Restart=on-abnormal
+WorkingDirectory=/path/to/working/dir
+User=your_user
+
+[Install]
+WantedBy=multi-user.target 
+```
+
+3. Enable service
+
+```bash
+sudo systemctl enable sova_rpc.service
+```
+
+4. Start service
+
+```bash
+sudo systemctl start sova_rpc.service
+```
+
+5. (Optional) check status
+
+```bash
+sudo systemctl status sova_rpc.service
 ```
 
 ## RPC Work Backups
