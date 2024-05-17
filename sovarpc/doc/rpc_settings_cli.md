@@ -90,7 +90,7 @@ nano rpc_config.yaml
 ## Import addresses (Before doing this, place the wallet file in the wallet folder, after importing it, you no longer need it)
 ./wallet --import walletName.pkw
 
-## Set payment (default) adress
+## Set payment (default) address
 ./wallet --setPaymentAddress hashAddress
 
 ## Check if your data matches
