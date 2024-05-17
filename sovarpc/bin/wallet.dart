@@ -5,11 +5,9 @@ import 'package:args/args.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:sovarpc/cli/cli_wallet_handler.dart';
 import 'package:sovarpc/cli/comands.dart';
-import 'package:sovarpc/cli/exit.dart';
 import 'package:sovarpc/cli/pen.dart';
 
 Future<void> main(List<String> arguments) async {
-  CliExit.exitListener(AppType.wallet);
   final ArgParser argParser = ArgParser()
     ..addFlag(CliCommands.help,
         abbr: 'h', negatable: false, help: 'Show all wallet commands')
@@ -49,7 +47,7 @@ Future<void> main(List<String> arguments) async {
     final ArgResults args = argParser.parse(arguments);
 
     if (args.wasParsed(CliCommands.genAddress)) {
-      walletHandler.getNewAddress(args.wasParsed(CliCommands.nosSave));
+      await walletHandler.getNewAddress(args.wasParsed(CliCommands.nosSave));
 
       return;
     }
@@ -66,7 +64,7 @@ Future<void> main(List<String> arguments) async {
     }
 
     if (args[CliCommands.help] as bool) {
-      walletHandler.help(argParser.usage);
+      await walletHandler.help(argParser.usage);
       return;
     }
 
@@ -74,7 +72,7 @@ Future<void> main(List<String> arguments) async {
       final String? walletName = args[CliCommands.import];
 
       if (walletName != null) {
-        walletHandler.importAddresses(walletName);
+        await walletHandler.importAddresses(walletName);
       } else {
         stdout.writeln(Pen().red('File address to import was not provided'));
       }
@@ -83,7 +81,7 @@ Future<void> main(List<String> arguments) async {
     }
 
     if (args.wasParsed(CliCommands.export)) {
-      walletHandler.exportWallet();
+      await walletHandler.exportWallet();
       return;
     }
 

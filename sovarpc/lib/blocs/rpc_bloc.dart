@@ -56,11 +56,14 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
   }
 
   void _initRPCBloc(event, emit) async {
-    var configRpc = await locatorRpc<SettingsYamlHandler>().loadRpcConfig();
+    var config = locatorRpc<SettingsYamlHandler>();
+    var iMethods = await config.getSet(SettingsKeys.ignoreMethods);
+    var ip = await config.getSet(SettingsKeys.ip);
+    var port = await config.getSet(SettingsKeys.port);
+    var address =
+        "${ip.isEmpty ? Const.DEFAULT_HOST : ip}:${port.isEmpty ? Const.DEFAULT_PORT : port}";
     emit(state.copyWith(
-        rpcAddress: configRpc[0],
-        ignoreMethods: configRpc[1],
-        rpcRunnable: false));
+        rpcAddress: address, ignoreMethods: iMethods, rpcRunnable: false));
   }
 
   void _startServer(event, emit) async {
@@ -68,8 +71,11 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
       var address = event.address;
       var ignoreMethods = event.ignoreMethods;
       var addressArray = address.split(":");
-      locatorRpc<SettingsYamlHandler>()
-          .saveRpcConfig(rpcAddress: address, ignoreMethods: ignoreMethods);
+      var config = locatorRpc<SettingsYamlHandler>();
+      await config.writeSet(SettingsKeys.ip, addressArray[0]);
+      await config.writeSet(SettingsKeys.port, addressArray[1]);
+      await config.writeSet(SettingsKeys.ignoreMethods, ignoreMethods);
+
       if (rpcServer != null) {
         await rpcServer!.close(force: true);
         rpcServer = null;
@@ -113,10 +119,7 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
     try {
       await rpcServer?.close(force: true);
       rpcServer = null;
-      print("close bloc");
-    } catch (e) {
-      print("Error closing the server: $e");
-    }
+    } catch (_) {}
     return super.close();
   }
 }

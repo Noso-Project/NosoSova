@@ -9,7 +9,7 @@ import 'package:sovarpc/di.dart';
 enum AppType { wallet, rpc }
 
 class CliExit {
-  static exitListener(AppType typeApp) {
+  static exitListener(AppType typeApp) async {
     stopApp() {
       stdout.write('\b\b  \b\b');
       stdout.writeln(Pen().redBg(
@@ -20,7 +20,7 @@ class CliExit {
       exit(0);
     }
 
-    runZoned(() {
+  runZoned(() {
       ProcessSignal.sigint.watch().listen((_) async => stopApp());
       ProcessSignal.sigterm.watch().listen((_) async => stopApp());
     });

@@ -71,12 +71,9 @@ class FileServiceRpc {
       }
       walletFile.writeAsBytesSync(Uint8List.fromList(bytes));
 
-      print('Wallet file written - OK');
 
       return true;
-    } catch (e) {
-      print('Unable to export wallet file - ERR $e');
-
+    } catch (_) {
       return false;
     }
   }

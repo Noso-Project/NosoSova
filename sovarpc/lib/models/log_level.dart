@@ -3,5 +3,5 @@ class LogLevel {
 
   LogLevel({required this.level});
 
-  get isDebug => level != "Release";
+  get isDebug => level != "release";
 }

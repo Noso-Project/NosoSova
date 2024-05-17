@@ -354,7 +354,7 @@ class RPCHandlers {
 
       if (isLocalAddress && NosoUtility.isValidHashNoso(hashAddress)) {
         await SettingsYamlHandler(PathAppRpcUtil.getAppPath())
-            .saveDefaultPaymentAddress(hashAddress);
+            .writeSet(SettingsKeys.defaultPaymentAddress, hashAddress);
         return [
           {"result": true}
         ];
@@ -375,7 +375,7 @@ class RPCHandlers {
     try {
       var defaultAddress =
           await SettingsYamlHandler(PathAppRpcUtil.getAppPath())
-              .loadDefaultPaymentAddress();
+              .getSet(SettingsKeys.defaultPaymentAddress);
       var addressObject = await _repositories.localRepository
           .fetchAddressForHash(defaultAddress ?? "");
       int block;

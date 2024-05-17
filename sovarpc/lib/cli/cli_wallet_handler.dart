@@ -45,7 +45,8 @@ class CliWalletHandler {
   }
 
   exportWallet() async {
-    var fileName = "walletBackup_${DateTime.now().millisecondsSinceEpoch ~/ 1000}.pkw";
+    var fileName =
+        "walletBackup_${DateTime.now().millisecondsSinceEpoch ~/ 1000}.pkw";
     stdout.writeln('Export addresses from: $fileName');
 
     var database = MyDatabase(PathAppRpcUtil.getAppPath());
@@ -53,20 +54,19 @@ class CliWalletHandler {
     database.close();
 
     if (listAddresses.isEmpty) {
-      stdout.writeln(Pen().red('\rAddress export error, no addresses in the database'));
+      stdout.writeln(
+          Pen().red('\rAddress export error, no addresses in the database'));
       return;
     }
 
     var loading = LoadingCli.loading();
     await Future.delayed(const Duration(seconds: 5));
 
-
-
     var exportTrue = await PkwHandler.saveWallet(listAddresses, fileName);
 
-
     if (exportTrue) {
-      stdout.writeln(Pen().greenText('\rExported ${listAddresses.length} addresses, from $fileName'));
+      stdout.writeln(Pen().greenText(
+          '\rExported ${listAddresses.length} addresses, from $fileName'));
     } else {
       stdout.writeln(Pen().red('\rAddress export error'));
     }
@@ -79,8 +79,9 @@ class CliWalletHandler {
   Future<void> setPaymentAddress(String paymentHash) async {
     var settings =
         await SettingsYamlHandler(PathAppRpcUtil.getAppPath()).checkConfig();
-    if (settings == null) {
-      stdout.writeln('${PathAppRpcUtil.shared_config} not found...');
+
+    if (settings.isEmpty) {
+      stdout.writeln('${PathAppRpcUtil.rpcConfigFilePath} not found...');
       stdout.writeln('Please use: --config: Create/Check configuration');
       return;
     }
@@ -89,8 +90,8 @@ class CliWalletHandler {
     var isLocalAddress = await database.isLocalAddress(paymentHash);
 
     if (isLocalAddress) {
-      SettingsYamlHandler(PathAppRpcUtil.getAppPath())
-          .saveDefaultPaymentAddress(paymentHash);
+      await SettingsYamlHandler(PathAppRpcUtil.getAppPath())
+          .writeSet(SettingsKeys.defaultPaymentAddress, paymentHash);
       stdout.writeln(
           Pen().greenText('Billing address has been updated: $paymentHash'));
     } else {
@@ -106,7 +107,7 @@ class CliWalletHandler {
     var listAddress = await database.fetchTotalAddresses();
 
     var defaultAddress = await SettingsYamlHandler(PathAppRpcUtil.getAppPath())
-        .loadDefaultPaymentAddress();
+        .getSet(SettingsKeys.defaultPaymentAddress);
 
     stdout.writeln(Pen().greenText('Wallet info:\n'
         'Count addresses: ${listAddress.length} \n'

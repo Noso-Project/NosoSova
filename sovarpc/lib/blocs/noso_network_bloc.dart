@@ -12,10 +12,10 @@ import 'package:nososova/configs/network_object.dart';
 import 'package:nososova/models/responses/response_node.dart';
 import 'package:nososova/utils/enum.dart';
 import 'package:sovarpc/blocs/network_events.dart';
-import 'package:sovarpc/utils/calcutes.dart';
 import 'package:sovarpc/di.dart';
 import 'package:sovarpc/models/log_level.dart';
 import 'package:sovarpc/models/rpc_info.dart';
+import 'package:sovarpc/utils/calcutes.dart';
 
 import '../models/app_configs_rpc.dart';
 import '../models/debug_rpc.dart';
@@ -172,7 +172,7 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
             .map((node) => '${node.ip}:${node.port}|${node.address}')
             .join(',');
 
-        locatorRpc<SettingsYamlHandler>().saveAppConfig(nodesList: stringMasterNodes);
+        locatorRpc<SettingsYamlHandler>().writeSeedFile(stringMasterNodes);
         appBlocConfig = appBlocConfig.copyWith(nodesList: stringMasterNodes);
       }
 
@@ -259,9 +259,6 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
         index += 106;
       }
     } catch (e) {
-      // if (logLevel.isDebug) {
-      //   print('Error total supply: $e');
-      //  }
       return [0, 0];
     }
     return [supply, totalBalanceWallet];
@@ -338,14 +335,15 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
   /// The method that receives the response about the synchronization status in WalletBloc
   Future<void> _syncResult(event, emit) async {
     emit(state.copyWith(statusConnected: StatusConnectNodes.connected));
-    locatorRpc<SettingsYamlHandler>()
-        .saveAppConfig(lastSeed: state.node.seed.toTokenizer);
-    appBlocConfig = appBlocConfig.copyWith(countAttempsConnections: 0);
+    await locatorRpc<SettingsYamlHandler>()
+        .writeSet(SettingsKeys.lastSeed, state.node.seed.toTokenizer);
     appBlocConfig =
         appBlocConfig.copyWith(lastSeed: state.node.seed.toTokenizer);
     _startTimerSyncNetwork();
-    _debugBloc.add(AddStringDebug(
-        "Information from the network received", StatusReport.Node));
+    if (logLevel.isDebug) {
+      _debugBloc.add(AddStringDebug(
+          "Information from the network received", StatusReport.Node));
+    }
   }
 
   /// Method that starts a timer that simulates updating information
@@ -355,14 +353,15 @@ class NosoNetworkBloc extends Bloc<NetworkNosoEvents, NosoNetworksState> {
     });
   }
 
-  /// Request data from sharedPrefs
+  /// Request data from config file
   Future<void> loadConfig() async {
-    var yamlSet = await locatorRpc<SettingsYamlHandler>().loadConfig();
-    if (yamlSet != null) {
-      var nodesList = yamlSet['nodesList'] as String;
-      var lastNode = yamlSet['lastSeed'] as String;
-      appBlocConfig =
-          appBlocConfig.copyWith(nodesList: nodesList, lastSeed: lastNode);
+    var config = locatorRpc<SettingsYamlHandler>();
+    var nodesList = await config.loadSeedFile();
+    var lastSeed = await config.getSet(SettingsKeys.lastSeed);
+    if (lastSeed.isNotEmpty) {
+      appBlocConfig = appBlocConfig.copyWith(
+          nodesList: nodesList.isEmpty ? appBlocConfig.nodesList : nodesList,
+          lastSeed: lastSeed);
     }
   }
 
