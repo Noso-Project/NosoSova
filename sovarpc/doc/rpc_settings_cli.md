@@ -57,7 +57,7 @@ After running these commands, you will get two executable files **rpc** && **wal
 | Command | Short | Parameter          | Description                                                                                                  |
 |---------|-------|--------------------|--------------------------------------------------------------------------------------------------------------|
 | --help  | -h    |                    | Show all wallet commands                                                                                     |
-| --import| -i    | <wallet.pkw>       | Import your addresses from a .pkw file, use the <file_name.pkw> parameter. Before using, place the file in the same folder as the wallet.exe executable file |
+| --import| -i    | <wallet.pkw>       | Import your addresses from a .pkw file, use the <file_name.pkw> parameter. Before using, place the file in the same folder as the wallet executable file |
 | --export| -e    |                    | Export your addresses in .pkw file                                                                           |
 | --wallet| -w    |                    | Returns information about the wallet                                                                         |
 | --addresses| -a |                    | Returns list of all addresses                                                                                |
@@ -72,7 +72,33 @@ After running these commands, you will get two executable files **rpc** && **wal
 
 This example demonstrates how to install and configure the release on your server
 
+To use it in linux, you need to install the libsqlite3 library and grant execution rights
 
+```bash
+apt-get install sqlite3 libsqlite3-dev
+chmod +x wallet && chmod +x rpc
+```
+Next steps:
+
+```bash
+## Create config && set config
+./rpc --config
+
+## Set your public ip and open port on which you plan to broadcast RPC
+nano rpc_config.yaml
+
+## Import addresses (Before doing this, place the wallet file in the wallet folder, after importing it, you no longer need it)
+./wallet --import walletName.pkw
+
+## Set payment (default) adress
+./wallet --setPaymentAddress hashAddress
+
+## Check if your data matches
+./wallet --wallet
+
+## Run RPC
+./rpc (./rpc --run)
+```
 
 ## RPC Work Backups
 

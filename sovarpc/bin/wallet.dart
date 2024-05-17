@@ -14,7 +14,7 @@ Future<void> main(List<String> arguments) async {
     ..addOption(CliCommands.import,
         abbr: 'i',
         help:
-            'Import your addresses from a .pkw file, use the <file_name.pkw> parameter. Before using, place the file in the same folder as the wallet.exe executable file')
+            'Import your addresses from a .pkw file, use the <file_name.pkw> parameter. Before using, place the file in the same folder as the wallet executable file')
     ..addFlag(CliCommands.export,
         abbr: 'e', negatable: false, help: 'Export your addresses in .pkw file')
     ..addFlag(CliCommands.wInfo,
