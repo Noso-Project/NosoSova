@@ -5,9 +5,11 @@ import 'package:args/args.dart';
 import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:sovarpc/cli/cli_wallet_handler.dart';
 import 'package:sovarpc/cli/comands.dart';
+import 'package:sovarpc/cli/exit.dart';
 import 'package:sovarpc/cli/pen.dart';
 
 Future<void> main(List<String> arguments) async {
+  CliExit.exitListener(AppType.wallet);
   final ArgParser argParser = ArgParser()
     ..addFlag(CliCommands.help,
         abbr: 'h', negatable: false, help: 'Show all wallet commands')
@@ -111,7 +113,7 @@ Future<void> main(List<String> arguments) async {
 
       return;
     }
-  } catch (e) {}
+  } catch (_) {}
 
   stdout.writeln(Pen().red(
       'Error: Command or parameter not found. Please use --help to see available options.'));

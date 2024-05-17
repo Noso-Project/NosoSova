@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 import 'package:sovarpc/cli/cli_rpc_handler.dart';
 import 'package:sovarpc/cli/comands.dart';
+import 'package:sovarpc/cli/exit.dart';
 import 'package:sovarpc/cli/pen.dart';
 
 final _logger = Logger("");
@@ -32,6 +33,7 @@ Future<void> main(List<String> arguments) async {
     }
 
     if (args[CliCommands.run] as bool) {
+      CliExit.exitListener(AppType.rpc);
       stdout.writeln(Pen().greenBg('RPC mode started'));
       await rpcHandler.runRpcMode(_logger);
       return;
@@ -42,7 +44,8 @@ Future<void> main(List<String> arguments) async {
       await rpcHandler.checkConfig();
       return;
     }
-  } catch (e) {}
+  } catch (_) {}
+
   stdout.writeln(Pen().red(
       'Error: Command or parameter not found. Please use --help to see available options.'));
 }

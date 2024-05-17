@@ -9,4 +9,6 @@ class StartServer extends RPCEvents {
 
 class StopServer extends RPCEvents {}
 
+class ExitServer extends RPCEvents {}
+
 class InitBlocRPC extends RPCEvents {}

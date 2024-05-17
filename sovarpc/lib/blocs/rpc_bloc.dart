@@ -52,6 +52,7 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
     on<StartServer>(_startServer);
     on<StopServer>(_stopServer);
     on<InitBlocRPC>(_initRPCBloc);
+    on<ExitServer>(_exitEvent);
   }
 
   void _initRPCBloc(event, emit) async {
@@ -102,11 +103,20 @@ class RpcBloc extends Bloc<RPCEvents, RpcState> {
     emit(state.copyWith(rpcRunnable: false));
   }
 
-  @override
-  Future<void> close() {
-    rpcServer?.close(force: true);
-    rpcServer = null;
+  void _exitEvent(event, emit) async {
+    add(StopServer());
+    close();
+  }
 
+  @override
+  Future<void> close() async {
+    try {
+      await rpcServer?.close(force: true);
+      rpcServer = null;
+      print("close bloc");
+    } catch (e) {
+      print("Error closing the server: $e");
+    }
     return super.close();
   }
 }
