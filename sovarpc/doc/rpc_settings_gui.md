@@ -10,7 +10,7 @@ This utility shares a common working directory and database with NosoSova, but t
 
 ```text
 Windows:
-\Users\UserName\AppData\Roaming\NosoCoi
+\Users\UserName\AppData\Roaming\NosoCoin
 ```
 
 ```text

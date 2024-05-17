@@ -13,7 +13,7 @@ At the moment the development of this application is still in constant flux, sin
 
 - [Build and use](doc/build_use.md)
 - [Screenshots](doc/screenshots.md)
-- [SovaRPC](sovarpc)
+- [SovaRPC (GUI,CLI)](sovarpc)
 
 ## Donations
 
