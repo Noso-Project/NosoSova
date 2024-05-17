@@ -39,7 +39,7 @@ build_linux_cli() {
      cd bin
      dart compile exe wallet.dart -o wallet
      dart compile exe rpc.dart -o rpc
-     cd ../../ ##.//
+     cd ../../
      mkdir "$FPRODUCTION/$FRPCCLI"
      cp sovarpc/bin/wallet "$FPRODUCTION/$FRPCCLI"
      cp sovarpc/bin/rpc "$FPRODUCTION/$FRPCCLI"
