@@ -25,14 +25,12 @@ dependencies:
   window_manager: ^0.3.8
   shelf: ^1.4.1
   shelf_router: ^1.1.4
-  noso_dart: 1.2.4
-    #  noso_dart:
-  #    path: ../../NosoDart
   file_picker: ^5.5.0
-  nososova :
-    path : ../
+  nososova:
+    path: ../
+  noso_dart: 1.2.4
   noso_rest_api:
-    path: ../noso_rest_api
+    git: https://github.com/Noso-Project/noso_rest_api.git
   args: ^2.5.0
   settings_yaml: ^8.0.1
   logging: ^1.2.0
@@ -48,3 +46,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+platforms:
+  linux:
+  macos:
+  windows:

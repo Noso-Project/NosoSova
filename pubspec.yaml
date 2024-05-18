@@ -3,7 +3,7 @@ description: Multi-platform wallet for NosoCoin.
 publish_to: none
 homepage: 'https://github.com/Noso-Project/NosoSova'
 version: 0.4.6+8
-
+documentation: ''
 environment:
   sdk: '>=3.0.6 <4.0.0'
 
@@ -42,13 +42,11 @@ dependencies:
   wolt_modal_sheet: ^0.2.0
   window_manager: ^0.3.8
   package_info_plus: ^8.0.0
-  noso_dart: 1.2.4
-   # noso_dart:
-   #    path: ../NosoDart
-  noso_rest_api:
-    path: ./noso_rest_api
   shelf: ^1.4.1
   shelf_router: ^1.1.4
+  noso_dart: 1.2.4
+  noso_rest_api:
+    git: https://github.com/Noso-Project/noso_rest_api.git
 dev_dependencies:
   drift_dev: ^2.15.0
   build_runner: ^2.4.6
@@ -76,3 +74,10 @@ flutter:
 
   generate: true
   uses-material-design: true
+
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  windows:
