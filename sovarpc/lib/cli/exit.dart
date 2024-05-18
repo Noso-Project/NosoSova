@@ -20,9 +20,11 @@ class CliExit {
       exit(0);
     }
 
-  runZoned(() {
+    runZoned(() {
       ProcessSignal.sigint.watch().listen((_) async => stopApp());
-      ProcessSignal.sigterm.watch().listen((_) async => stopApp());
+      if (!Platform.isWindows) {
+        ProcessSignal.sigterm.watch().listen((_) async => stopApp());
+      }
     });
   }
 }
