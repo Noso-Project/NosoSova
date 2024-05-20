@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:noso_rest_api/models/transaction.dart';
 import 'package:nososova/ui/theme/style/icons_style.dart';
 import 'package:nososova/ui/theme/style/text_style.dart';
 
 import '../../generated/assets.dart';
-import '../../models/rest_api/transaction_history.dart';
 import '../../utils/other_utils.dart';
 import '../config/responsive.dart';
 import '../theme/style/colors.dart';
 
 class TransactionTile extends StatefulWidget {
   final VoidCallback onTap;
-  final TransactionHistory transactionHistory;
+  final Transaction transactionHistory;
   final bool receiver;
 
   const TransactionTile({
@@ -30,7 +30,7 @@ class TransactionTileState extends State<TransactionTile> {
   @override
   void initState() {
     super.initState();
-    isCustom = widget.transactionHistory.type == "CUSTOM";
+    isCustom = widget.transactionHistory.orderType == "CUSTOM";
   }
 
   Widget _iconAddress() {

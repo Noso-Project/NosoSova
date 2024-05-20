@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nososova/models/app/response_page_listener.dart';
+import 'package:nososova/models/responses/response_page_listener.dart';
 import 'package:nososova/ui/common/responses_util/responses_messages.dart';
-import 'package:nososova/ui/config/responsive.dart';
 
+import '../../config/responsive.dart';
 import '../../theme/style/colors.dart';
 import '../../theme/style/text_style.dart';
 

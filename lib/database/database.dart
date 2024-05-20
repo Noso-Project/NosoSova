@@ -5,7 +5,6 @@ import 'package:drift/native.dart';
 import 'package:noso_dart/models/noso/address_object.dart';
 import 'package:nososova/database/address.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 
 import '../../models/address_wallet.dart';
 import '../models/contact.dart';
@@ -15,7 +14,9 @@ part 'database.g.dart';
 
 @DriftDatabase(tables: [Addresses, Contact])
 class MyDatabase extends _$MyDatabase {
-  MyDatabase() : super(_openConnection());
+  final String pathDatabase;
+
+  MyDatabase(this.pathDatabase) : super(_openConnection(pathDatabase));
 
   @override
   MigrationStrategy get migration {
@@ -39,7 +40,26 @@ class MyDatabase extends _$MyDatabase {
 
   Stream<List<Address>> fetchAddresses() => select(addresses).watch();
 
+  Future<List<Address>> fetchTotalAddresses() => select(addresses).get();
+
+  Future<Set<String>> fetchTotalAddressHashes() async {
+    final hashes = await select(addresses).get();
+    return Set.from(hashes.map((address) => address.hash));
+  }
+
   Stream<List<ContactModel>> fetchContacts() => select(contact).watch();
+
+  Future<bool> isLocalAddress(String hash) async {
+    final addressesList =
+        await (select(addresses)..where((t) => t.hash.equals(hash))).get();
+    return addressesList.isNotEmpty;
+  }
+
+  Future<AddressObject?> fetchAddress(String hash) async {
+    final addressesList =
+        await (select(addresses)..where((t) => t.hash.equals(hash))).get();
+    return addressesList.isNotEmpty ? addressesList.first : null;
+  }
 
   Future<void> addAddress(AddressObject value) async {
     await batch((batch) {
@@ -49,7 +69,8 @@ class MyDatabase extends _$MyDatabase {
             publicKey: Value(value.publicKey),
             privateKey: Value(value.privateKey),
             hash: Value(value.hash),
-          ));
+          ),
+          mode: InsertMode.insertOrIgnore);
     });
   }
 
@@ -62,7 +83,7 @@ class MyDatabase extends _$MyDatabase {
       );
     }).toList();
     await batch((batch) {
-      batch.insertAll(addresses, insertable);
+      batch.insertAll(addresses, insertable, mode: InsertMode.insertOrIgnore);
     });
   }
 
@@ -97,20 +118,16 @@ class MyDatabase extends _$MyDatabase {
   int get schemaVersion => 2;
 }
 
-LazyDatabase _openConnection() {
+LazyDatabase _openConnection(String connectionString) {
   var nameDatabase = 'db.sqlite';
 
   return LazyDatabase(() async {
     String dbFolder;
 
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-      var path = Platform.isMacOS
-          ? await getLibraryDirectory()
-          : await getApplicationSupportDirectory();
-      dbFolder = "${path.path}/database";
+      dbFolder = "$connectionString/database";
     } else {
-      var path = await getApplicationSupportDirectory();
-      dbFolder = path.path;
+      dbFolder = connectionString;
     }
 
     final file = File(p.join(dbFolder, nameDatabase));

@@ -4,7 +4,7 @@ import 'package:nososova/ui/pages/node/screens/list_nodes.dart';
 import 'package:nososova/ui/theme/style/text_style.dart';
 
 import '../../../l10n/app_localizations.dart';
-import '../../theme/decoration/other_gradient_decoration.dart';
+import '../../theme/decoration/only_color_gradient_decoration.dart';
 
 class NodePage extends StatelessWidget {
   const NodePage({super.key});
@@ -24,7 +24,7 @@ class NodeBody extends StatelessWidget {
         appBar: null,
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Container(
-            decoration: const OtherGradientDecoration(),
+            decoration: const OnlyColorGradientDecoration(),
             child: SafeArea(
               child: Padding(
                   padding: const EdgeInsets.only(top: 20),
@@ -70,7 +70,6 @@ class NodeBody extends StatelessWidget {
                                                       .categoryStyle),
                                             ]),
                                       ),
-
                                       const ListNodes()
                                     ],
                                   ),

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:noso_rest_api/models/transaction.dart';
 import 'package:nososova/ui/pages/transaction/screen/widget_transaction.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../l10n/app_localizations.dart';
-import '../../../models/rest_api/transaction_history.dart';
 import '../../theme/style/button_style.dart';
 import '../../theme/style/text_style.dart';
 
 class TransactionPage extends StatefulWidget {
-  final TransactionHistory transaction;
+  final Transaction transaction;
   final bool isReceiver;
 
   const TransactionPage(
@@ -26,7 +26,7 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   void initState() {
     super.initState();
-    isCustom = widget.transaction.type == "CUSTOM";
+    isCustom = widget.transaction.orderType == "CUSTOM";
   }
 
   @override
@@ -75,7 +75,7 @@ class _TransactionPageState extends State<TransactionPage> {
 
   runExplorer() async {
     var urlShare = Uri.parse(
-        "https://explorer.nosocoin.com/getordersinfo.html?orderid=${widget.transaction.id}");
+        "https://explorer.nosocoin.com/getordersinfo.html?orderid=${widget.transaction.orderId}");
     if (await canLaunchUrl(urlShare)) {
       await launchUrl(urlShare);
     } else {
@@ -85,6 +85,6 @@ class _TransactionPageState extends State<TransactionPage> {
 
   shareLinkExplorer() async {
     Share.share(
-        "https://explorer.nosocoin.com/getordersinfo.html?orderid=${widget.transaction.id}");
+        "https://explorer.nosocoin.com/getordersinfo.html?orderid=${widget.transaction.orderId}");
   }
 }

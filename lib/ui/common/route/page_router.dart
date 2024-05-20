@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:noso_rest_api/models/transaction.dart';
 import 'package:nososova/blocs/contacts_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
 import 'package:nososova/blocs/gvt_bloc.dart';
@@ -14,7 +15,6 @@ import '../../../dependency_injection.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../main.dart';
 import '../../../models/address_wallet.dart';
-import '../../../models/rest_api/transaction_history.dart';
 import '../../../repositories/repositories.dart';
 import '../../config/responsive.dart';
 import '../../pages/addressInfo/address_info_page.dart';
@@ -99,7 +99,7 @@ class PageRouter {
 
   /// Transaction information page
   static void showTransactionInfo(
-      BuildContext context, TransactionHistory transaction, bool isReceiver) {
+      BuildContext context, Transaction transaction, bool isReceiver) {
     if (Responsive.isMobile(context)) {
       Navigator.push(
         context,

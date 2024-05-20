@@ -36,4 +36,29 @@ class SharedRepository {
   Future<int?> loadDelaySync() async {
     return _sharedService.loadDelaySync();
   }
+
+
+  Future<void> saveRPCAddress(String value) async {
+    await _sharedService.saveRPCAddress(value);
+  }
+
+  Future<String?> loadRPCAddress() async {
+    return _sharedService.loadRPCAddress();
+  }
+
+  Future<void> saveRPCMethodsIgnored(String value) async {
+    await _sharedService.saveRPCMethodsIgnored(value);
+  }
+
+  Future<String?> loadRPCMethodsIgnored() async {
+    return _sharedService.loadRPCMethodsIgnored();
+  }
+
+  Future<void> saveRPCDefaultAddress(String value) async {
+    await _sharedService.saveRPCDefaultAddress(value);
+  }
+
+  Future<String?> loadRPCDefaultAddress() async {
+    return _sharedService.loadRPCDefaultAddress();
+  }
 }

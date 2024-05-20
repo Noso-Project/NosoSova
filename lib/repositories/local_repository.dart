@@ -13,8 +13,21 @@ class LocalRepository {
 
   Stream<List<Address>> fetchAddress() => _database.fetchAddresses();
 
+  Future<List<Address>> fetchTotalAddress() => _database.fetchTotalAddresses();
+
+  Future<Set<String>> fetchTotalAddressHashes() =>
+      _database.fetchTotalAddressHashes();
+
   Future<void> deleteAddress(Address value) async {
     await _database.deleteWallet(value);
+  }
+
+  Future<AddressObject?> fetchAddressForHash(String hash) async {
+    return await _database.fetchAddress(hash);
+  }
+
+  Future<bool> isLocalAddress(String hash) async {
+    return await _database.isLocalAddress(hash);
   }
 
   Future<void> addAddress(AddressObject value) async {
@@ -28,6 +41,7 @@ class LocalRepository {
   Future<void> addContact(ContactModel value) async {
     await _database.addContact(value);
   }
+
   Future<void> deleteContact(ContactModel value) async {
     await _database.deleteContact(value);
   }

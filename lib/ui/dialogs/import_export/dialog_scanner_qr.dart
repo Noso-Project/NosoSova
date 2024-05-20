@@ -10,6 +10,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../../blocs/events/wallet_events.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/address_wallet.dart';
+import '../../../utils/enum.dart';
 import '../../../utils/status_qr.dart';
 import '../../common/route/page_router.dart';
 import '../../theme/style/colors.dart';
@@ -75,8 +76,7 @@ class _ScannerQrWidgetState extends State<ScannerQrWidget> {
                 padding: const EdgeInsets.all(20),
                 child: Text(
                   AppLocalizations.of(context)!.cancel,
-                  style:
-                      AppTextStyles.buttonText,
+                  style: AppTextStyles.buttonText,
                 )),
           ),
         )

@@ -5,8 +5,11 @@ class SharedService {
   static const String lastBlock = "lastBlock";
   static const String listNodes = "nodesList";
   static const String delaySync = "delaySync";
-
+  static const String rpcAddress = "RPCAddress";
+  static const String rpcMethodsIgnored = "RPCMethodsIgnored";
+  static const String rpcAddressDefault = "RPCDefaultAddress";
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
 
   Future<void> saveLastSeed(String value) async {
     _prefs.then((SharedPreferences prefs) {
@@ -55,4 +58,41 @@ class SharedService {
       return prefs.getInt(delaySync);
     });
   }
+
+  Future<void> saveRPCAddress(String value) async {
+    _prefs.then((SharedPreferences prefs) {
+      return prefs.setString(rpcAddress, value);
+    });
+  }
+
+  Future<String?> loadRPCAddress() async {
+    return _prefs.then((SharedPreferences prefs) {
+      return prefs.getString(rpcAddress);
+    });
+  }
+
+  Future<void> saveRPCMethodsIgnored(String value) async {
+    _prefs.then((SharedPreferences prefs) {
+      return prefs.setString(rpcMethodsIgnored, value);
+    });
+  }
+
+  Future<String?> loadRPCMethodsIgnored() async {
+    return _prefs.then((SharedPreferences prefs) {
+      return prefs.getString(rpcMethodsIgnored);
+    });
+  }
+
+  Future<void> saveRPCDefaultAddress(String value) async {
+    _prefs.then((SharedPreferences prefs) {
+      return prefs.setString(rpcAddressDefault, value);
+    });
+  }
+
+  Future<String?> loadRPCDefaultAddress() async {
+    return _prefs.then((SharedPreferences prefs) {
+      return prefs.getString(rpcAddressDefault);
+    });
+  }
+
 }

@@ -9,9 +9,10 @@ class HomeGradientDecoration extends BoxDecoration {
               colors: [
                 Color(0xFF070F46),
                 Color(0xFF0C1034),
-                Color(0xFF0E1342),
-                Color(0xFF621359),
+                Color(0xFF0C1034),
+                Color(0xFF290944),
                 Color(0xFF560D4E),
+                Color(0xFF560D4E)
               ],
             ),
             borderRadius: borderRadius);

@@ -5,7 +5,7 @@ class Interpreters {
     '@estripaanisetin': 'Español',
     '@gcarreno': 'Português',
     '@maxor_vbg': 'Русский',
-    '@ryanhexsooor': 'Dutch',
+    '@ryanhexspoor': 'Dutch',
     '@xbt3346': 'Chinese (Simplified) - China'
   };
 

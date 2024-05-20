@@ -18,7 +18,6 @@ import 'package:window_manager/window_manager.dart';
 import 'blocs/events/app_data_events.dart';
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
@@ -35,15 +34,15 @@ Future<void> main() async {
       await windowManager.focus();
     });
   }
-  runApp(MyApp());
+  runApp(NosoSova());
 }
 
 class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class NosoSova extends StatelessWidget {
+  NosoSova({super.key});
 
   final AppSettings _appSettings = locator<AppSettings>();
 
@@ -71,6 +70,7 @@ class MyApp extends StatelessWidget {
               providers: [
                 BlocProvider<DebugBloc>(
                     create: (context) => locator<DebugBloc>()),
+
                 BlocProvider<CoinInfoBloc>(create: (context) {
                   var bloc = locator<CoinInfoBloc>();
                   bloc.add(InitBloc());

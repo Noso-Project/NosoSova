@@ -1,7 +1,7 @@
 import 'package:noso_dart/models/halving.dart';
+import 'package:noso_rest_api/models/price.dart';
 
 import '../../utils/enum.dart';
-import '../rest_api/price_dat.dart';
 
 class StatisticsCoin {
   double totalCoin;
@@ -9,7 +9,7 @@ class StatisticsCoin {
   int lastBlock;
   int lastTimeUpdatePrice;
   double reward;
-  List<PriceData>? historyCoin;
+  List<PriceData>? priceData;
   ApiStatus apiStatus;
 
   StatisticsCoin({
@@ -18,11 +18,11 @@ class StatisticsCoin {
     this.lastBlock = 0,
     this.lastTimeUpdatePrice = 0,
     this.reward = 0.15,
-    this.historyCoin,
+    this.priceData,
     this.apiStatus = ApiStatus.loading,
   });
 
-  double get getCurrentPrice => historyCoin?.reversed.toList().first.price ?? 0;
+  double get getCurrentPrice => priceData?.reversed.toList().first.price ?? 0;
 
   Halving get getHalvingTimer => lastBlock == 0 ? Halving(days: 0) : Halving().getHalvingTimer(lastBlock);
 
@@ -44,7 +44,7 @@ class StatisticsCoin {
 
   get getBlockMonthNodeReward => reward * 4320;
 
-  get getLastPrice => historyCoin?.reversed.toList().last.price ?? 0.0000000;
+  get getLastPrice => priceData?.reversed.toList().last.price ?? 0.0000000;
 
   get getDiff => getCurrentPrice != 0 && getLastPrice != 0
       ? (((getCurrentPrice - getLastPrice) / getLastPrice) * 100)
@@ -53,7 +53,7 @@ class StatisticsCoin {
   /// Method that returns a list of prices with a given interval
   List<PriceData> getIntervalPrices(int minutes) {
     List<PriceData> lastTenWithInterval = [];
-    var dtPrice = historyCoin?.toList() ?? [];
+    var dtPrice = priceData?.toList() ?? [];
 
     for (PriceData priceData in dtPrice) {
       DateTime targetTime = DateTime.parse(priceData.timestamp);
@@ -77,7 +77,7 @@ class StatisticsCoin {
     int? lastTimeUpdatePrice,
     double? reward,
     ApiStatus? apiStatus,
-    List<PriceData>? historyCoin,
+    List<PriceData>? priceData,
   }) {
     return StatisticsCoin(
       totalCoin: totalCoin ?? this.totalCoin,
@@ -86,7 +86,7 @@ class StatisticsCoin {
       lastTimeUpdatePrice: lastTimeUpdatePrice ?? this.lastTimeUpdatePrice,
       reward: reward ?? this.reward,
       apiStatus: apiStatus ?? this.apiStatus,
-      historyCoin: historyCoin ?? this.historyCoin,
+      priceData: priceData ?? this.priceData,
     );
   }
 }

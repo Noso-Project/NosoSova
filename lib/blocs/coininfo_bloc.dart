@@ -1,8 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:nososova/models/rest_api/block_info.dart';
+import 'package:noso_rest_api/enum/time_range.dart';
+import 'package:noso_rest_api/models/nodes_info.dart';
+import 'package:noso_rest_api/models/price.dart';
+import 'package:noso_rest_api/models/set_price.dart';
+import 'package:nososova/blocs/app_data_bloc.dart';
 
+import '../dependency_injection.dart';
 import '../models/app/stats.dart';
 import '../repositories/repositories.dart';
 import '../utils/enum.dart';
@@ -44,7 +49,7 @@ class CoinInfoBloc extends Bloc<CoinInfoEvent, CoinInfoState> {
     event,
     emit,
   ) async {
-    BlockInfo blockInfo = event.blockInfo;
+    NodesInfo blockInfo = event.blockInfo;
 
     emit(state.copyWith(
         statisticsCoin: state.statisticsCoin.copyWith(
@@ -77,14 +82,16 @@ class CoinInfoBloc extends Bloc<CoinInfoEvent, CoinInfoState> {
     emit(state.copyWith(
         statisticsCoin:
             state.statisticsCoin.copyWith(apiStatus: ApiStatus.loading)));
-    var responsePriceHistory =
-        await _repositories.networkRepository.fetchHistoryPrice();
 
-    var lastblock = 0;
-    if (responsePriceHistory.errors == null) {
+    var responsePrice = await _repositories.nosoApiService
+        .fetchPrice(SetPriceRequest(TimeRange.day, 10));
+    var lastblock = locator<AppDataBloc>().state.node.lastblock;
+    if (responsePrice.error == null) {
+      List<PriceData> priceDataList = (responsePrice.value ?? []);
+
       emit(state.copyWith(
           statisticsCoin: state.statisticsCoin.copyWith(
-              historyCoin: responsePriceHistory.value,
+              priceData: priceDataList,
               lastBlock: lastblock,
               apiStatus: ApiStatus.connected,
               lastTimeUpdatePrice: DateTime.now().millisecondsSinceEpoch)));

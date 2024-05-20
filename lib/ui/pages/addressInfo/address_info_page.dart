@@ -23,6 +23,7 @@ import '../../common/widgets/node_light_status.dart';
 import '../../config/responsive.dart';
 import '../../theme/anim/transform_widget.dart';
 import '../../theme/decoration/card_gradient_decoration.dart';
+import '../../theme/decoration/only_color_gradient_decoration.dart';
 import '../../theme/decoration/other_gradient_decoration.dart';
 import '../../theme/style/text_style.dart';
 import '../main/widgets/default_app_bar.dart';
@@ -89,7 +90,7 @@ class _AddressInfoPageState extends State<AddressInfoPage> {
         body: BlocBuilder<WalletBloc, WalletState>(builder: (context, state) {
           return Container(
               decoration: Responsive.isMobile(context)
-                  ? const OtherGradientDecoration()
+                  ? const OnlyColorGradientDecoration()
                   : const BoxDecoration(),
               child: SafeArea(
                   child: Row(children: [

@@ -4,7 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:nososova/models/address_wallet.dart';
 import 'package:nososova/services/file_service.dart';
 
-import '../models/app/response_backup.dart';
+import '../models/responses/response_backup.dart';
 
 class FileRepository {
   final FileService _fileService;

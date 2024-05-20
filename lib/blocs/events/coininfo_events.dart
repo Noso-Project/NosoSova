@@ -1,9 +1,9 @@
-import 'package:nososova/models/rest_api/block_info.dart';
+import 'package:noso_rest_api/models/nodes_info.dart';
 
 abstract class CoinInfoEvent {}
 
 class UpdateCoinInfo extends CoinInfoEvent {
-  final BlockInfo blockInfo;
+  final NodesInfo blockInfo;
 
   UpdateCoinInfo(this.blockInfo);
 }

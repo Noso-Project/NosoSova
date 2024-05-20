@@ -9,10 +9,12 @@ import 'package:noso_dart/utils/noso_utility.dart';
 import 'package:nososova/models/address_wallet.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../models/app/response_backup.dart';
+import '../models/responses/response_backup.dart';
 
 class FileService {
-  String nameFileSummary = "sumary.psk";
+  String nameFileSummary;
+
+  FileService({this.nameFileSummary = "sumary.psk"});
 
   /// Saves a summary file by writing the provided [bytesValue] to the application support directory.
   /// The method checks for a ZIP header in the byte array, removes it, and then extracts the files
@@ -41,7 +43,7 @@ class FileService {
         for (var file in archive.files) {
           if (file.isFile) {
             final outputStream =
-                OutputFileStream('${directory.path}/${file.name}');
+                OutputFileStream('${directory.path}/data/${nameFileSummary}');
             file.writeContent(outputStream);
             outputStream.close();
           }
