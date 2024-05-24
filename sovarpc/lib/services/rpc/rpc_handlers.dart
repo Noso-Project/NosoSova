@@ -134,8 +134,8 @@ class RPCHandlers {
             "type": transaction.orderType,
             "trfrs": transaction.transactionCount,
             "receiver": transaction.receiver,
-            "amount": NosoMath().doubleToBigEndian(transaction.amount),
-            "fee": NosoMath().doubleToBigEndian(transaction.fee),
+            "amount": transaction.amount,
+            "fee": transaction.fee,
             "reference": transaction.reference,
             "sender": transaction.sender,
           };
