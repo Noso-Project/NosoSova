@@ -544,6 +544,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0"
+  json_serializable:
+    dependency: transitive
+    description:
+      name: json_serializable
+      sha256: ea1432d167339ea9b5bb153f0571d0039607a873d6e04e0117af043f14a1fd4b
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.8.0"
   lints:
     dependency: transitive
     description:
@@ -629,7 +637,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "40e4cea84efb9df787e53d2a62b3d2a18c471042"
+      resolved-ref: "0fbc403ff09cd139603c7bf3bf4f9e2ee0511ac7"
       url: "https://github.com/Noso-Project/noso_rest_api.git"
     source: git
     version: "0.0.1"
@@ -1005,6 +1013,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
+  source_helper:
+    dependency: transitive
+    description:
+      name: source_helper
+      sha256: "6adebc0006c37dd63fe05bca0a929b99f06402fc95aa35bf36d67f5c06de01fd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.4"
   source_span:
     dependency: transitive
     description:
