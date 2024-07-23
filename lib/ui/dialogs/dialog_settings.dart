@@ -241,9 +241,9 @@ class DialogSettings {
                                 onTap: () {
                                   pageIndexNotifier.value =
                                       pageIndexNotifier.value + 3;
-                                }) ,
+                                }),
 
-                          /*
+                            /*
                             ListTile(
                                 title: Text(
                                   AppLocalizations.of(context)!.setVerNodes,
@@ -499,8 +499,7 @@ class DialogSettings {
                                           AppLocalizations.of(context)!
                                               .resetNetworkSuccess,
                                           () => {
-                                                BlocProvider.of<AppDataBloc>(
-                                                        context)
+                                                locator<AppDataBloc>()
                                                     .add(ReconnectFromError()),
                                                 Navigator.of(modalSheetContext)
                                                     .pop()
@@ -524,7 +523,7 @@ class DialogSettings {
           padding: const EdgeInsets.all(pagePadding),
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () =>
-          pageIndexNotifier.value = pageIndexNotifier.value - 4,
+              pageIndexNotifier.value = pageIndexNotifier.value - 4,
         ),
         trailingNavBarWidget: IconButton(
           padding: const EdgeInsets.all(pagePadding),
@@ -538,7 +537,7 @@ class DialogSettings {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               childCount: 1,
-                  (_, index) => Padding(
+              (_, index) => Padding(
                   padding: const EdgeInsets.all(0),
                   child: ListenableBuilder(
                       listenable: appSettings,
@@ -552,10 +551,10 @@ class DialogSettings {
                                         ? CustomSizes.paddingDialogMobile
                                         : CustomSizes.paddingDialogDesktop,
                                     horizontal:
-                                    CustomSizes.paddingDialogVertical),
+                                        CustomSizes.paddingDialogVertical),
                                 child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         AppLocalizations.of(context)!
@@ -572,13 +571,13 @@ class DialogSettings {
                                           context,
                                           AppLocalizations.of(context)!
                                               .resetNetworkSuccess,
-                                              () => {
-                                            BlocProvider.of<AppDataBloc>(
-                                                context)
-                                                .add(ResetNetworkData()),
-                                            Navigator.of(modalSheetContext)
-                                                .pop()
-                                          })
+                                          () => {
+                                                BlocProvider.of<AppDataBloc>(
+                                                        context)
+                                                    .add(ResetNetworkData()),
+                                                Navigator.of(modalSheetContext)
+                                                    .pop()
+                                              })
                                     ])),
                             const SizedBox(height: 10),
                           ],
