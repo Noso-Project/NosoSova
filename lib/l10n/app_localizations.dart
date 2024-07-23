@@ -1142,6 +1142,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Thank you for translation'**
   String get thanksTranslate;
+
+  /// No description provided for @resetNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset network data'**
+  String get resetNetwork;
+
+  /// No description provided for @resetNetworkDescrpt.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset network settings to help with sync freezes'**
+  String get resetNetworkDescrpt;
+
+  /// No description provided for @resetNetworkDialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you confirming the reset of the network connection data?'**
+  String get resetNetworkDialog;
+
+  /// No description provided for @resetNetworkSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, RESET!'**
+  String get resetNetworkSuccess;
+
+  /// No description provided for @setVerNodes.
+  ///
+  /// In en, this message translates to:
+  /// **'Change verified nodes'**
+  String get setVerNodes;
+
+  /// No description provided for @setVerNodesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.'**
+  String get setVerNodesDesc;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -66,7 +66,7 @@ class _AddressListTileState extends State<AddressListTile> {
   _styleCustom() {
     return ListTile(
         contentPadding: const EdgeInsets.only(left: 10, right: 15, top: 10, bottom: 10),
-   //     leading: _iconAddress(),
+       leading: _iconAddress(),
         title: Text(
           widget.address.description ?? _getTitleHash(),
           style: AppTextStyles.walletHash,

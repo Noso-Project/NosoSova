@@ -5,6 +5,10 @@ class SharedRepository {
 
   SharedRepository(this._sharedService);
 
+  Future<void> removeLastSeed() async {
+    await _sharedService.removeLastSeed();
+  }
+
   Future<void> saveLastSeed(String ipPort) async {
     await _sharedService.saveLastSeed(ipPort);
   }
@@ -36,7 +40,6 @@ class SharedRepository {
   Future<int?> loadDelaySync() async {
     return _sharedService.loadDelaySync();
   }
-
 
   Future<void> saveRPCAddress(String value) async {
     await _sharedService.saveRPCAddress(value);

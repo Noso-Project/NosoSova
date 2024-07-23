@@ -8,6 +8,8 @@ import '../generated/assets.dart';
 import '../utils/enum.dart';
 
 final class NetworkConfig {
+
+
   static const List<String> seedsVerification = [
     "20.199.50.27",
     "84.247.143.153",

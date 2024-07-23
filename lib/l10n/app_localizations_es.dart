@@ -522,4 +522,22 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get thanksTranslate => 'Gracias por la traducción';
+
+  @override
+  String get resetNetwork => 'Reset network data';
+
+  @override
+  String get resetNetworkDescrpt => 'Reset network settings to help with sync freezes';
+
+  @override
+  String get resetNetworkDialog => 'Are you confirming the reset of the network connection data?';
+
+  @override
+  String get resetNetworkSuccess => 'Yes, RESET!';
+
+  @override
+  String get setVerNodes => 'Change verified nodes';
+
+  @override
+  String get setVerNodesDesc => 'You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.';
 }

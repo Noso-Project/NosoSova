@@ -21,3 +21,8 @@ class SyncSuccess extends AppDataEvent {
 class ReconnectFromError extends AppDataEvent {
   ReconnectFromError();
 }
+
+
+class ResetNetworkData extends AppDataEvent {
+  ResetNetworkData();
+}
