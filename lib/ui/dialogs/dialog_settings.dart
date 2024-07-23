@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/configs/social_links.dart';
 import 'package:nososova/models/address_wallet.dart';
+import 'package:nososova/ui/theme/style/colors.dart';
 import 'package:nososova/ui/tiles/tile_wallet_address.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+import '../../blocs/events/app_data_events.dart';
 import '../../configs/author.dart';
 import '../../configs/interpreters.dart';
 import '../../dependency_injection.dart';
@@ -89,13 +93,6 @@ class DialogSettings {
                     const AuthorLink()
                   ]),
                   const SizedBox(height: 20),
-                  Text(AppLocalizations.of(context)!.thanksTranslate,
-                      style: AppTextStyles.dialogTitle),
-                  Text(
-                    "${Interpreters.getInterpreters}",
-                    style: AppTextStyles.infoItemTitle.copyWith(fontSize: 14),
-                  ),
-                  const SizedBox(height: 20),
                   Text(AppLocalizations.of(context)!.socialLinks,
                       style: AppTextStyles.dialogTitle),
                   Row(children: [
@@ -115,7 +112,24 @@ class DialogSettings {
                         onPressed: () => openLink(SocialLinks.reddit),
                         icon: AppIconsStyle.icon3x2NoColor(
                             Assets.iconsSocReddit)),
-                  ])
+                  ]),
+                  ExpansionTile(
+                    tilePadding: const EdgeInsets.all(0),
+                    title: Text(
+                      AppLocalizations.of(context)!.thanksTranslate,
+                      style: AppTextStyles.dialogTitle,
+                    ),
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "${Interpreters.getInterpreters}",
+                          style: AppTextStyles.infoItemTitle
+                              .copyWith(fontSize: 14),
+                        ),
+                      ),
+                    ],
+                  ),
                 ])),
       );
     }
@@ -205,7 +219,48 @@ class DialogSettings {
                                   pageIndexNotifier.value =
                                       pageIndexNotifier.value + 2;
                                 }),
-                            const SizedBox(height: 10)
+                            const SizedBox(height: 10),
+                            Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 10),
+                                child: Text(
+                                  "Network",
+                                  style: AppTextStyles.dialogTitle,
+                                )),
+                            ListTile(
+                                title: Text(
+                                  AppLocalizations.of(context)!.resetNetwork,
+                                  style: AppTextStyles.itemMedium.copyWith(
+                                      color: CustomColors.negativeBalance),
+                                ),
+                                subtitle: Text(
+                                  AppLocalizations.of(context)!
+                                      .resetNetworkDescrpt,
+                                  style: AppTextStyles.textHiddenSmall(context),
+                                ),
+                                onTap: () {
+                                  pageIndexNotifier.value =
+                                      pageIndexNotifier.value + 3;
+                                }) ,
+
+                          /*
+                            ListTile(
+                                title: Text(
+                                  AppLocalizations.of(context)!.setVerNodes,
+                                  style: AppTextStyles.itemMedium.copyWith(
+                                      color: CustomColors.negativeBalance),
+                                ),
+                                subtitle: Text(
+                                  AppLocalizations.of(context)!.setVerNodesDesc,
+                                  style: AppTextStyles.textHiddenSmall(context),
+                                ),
+                                onTap: () {
+                                  pageIndexNotifier.value =
+                                      pageIndexNotifier.value + 4;
+                                }),
+
+                           */
+                            const SizedBox(height: 10),
                           ],
                         );
                       })),
@@ -387,6 +442,154 @@ class DialogSettings {
       );
     }
 
+    SliverWoltModalSheetPage pageResetSettings(
+        BuildContext modalSheetContext, TextTheme textTheme) {
+      return SliverWoltModalSheetPage(
+        enableDrag: false,
+        leadingNavBarWidget: IconButton(
+          padding: const EdgeInsets.all(pagePadding),
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () =>
+              pageIndexNotifier.value = pageIndexNotifier.value - 3,
+        ),
+        trailingNavBarWidget: IconButton(
+          padding: const EdgeInsets.all(pagePadding),
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            Navigator.of(modalSheetContext).pop();
+            pageIndexNotifier.value = 0;
+          },
+        ),
+        mainContentSlivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: 1,
+              (_, index) => Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: ListenableBuilder(
+                      listenable: appSettings,
+                      builder: (BuildContext context, Widget? child) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: Responsive.isMobile(context)
+                                        ? CustomSizes.paddingDialogMobile
+                                        : CustomSizes.paddingDialogDesktop,
+                                    horizontal:
+                                        CustomSizes.paddingDialogVertical),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .resetNetwork,
+                                        style: AppTextStyles.dialogTitle,
+                                      ),
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .resetNetworkDialog,
+                                        style: AppTextStyles.infoItemTitle,
+                                      ),
+                                      const SizedBox(height: 20),
+                                      AppButtonStyle.buttonDefault(
+                                          context,
+                                          AppLocalizations.of(context)!
+                                              .resetNetworkSuccess,
+                                          () => {
+                                                BlocProvider.of<AppDataBloc>(
+                                                        context)
+                                                    .add(ReconnectFromError()),
+                                                Navigator.of(modalSheetContext)
+                                                    .pop()
+                                              })
+                                    ])),
+                            const SizedBox(height: 10),
+                          ],
+                        );
+                      })),
+            ),
+          )
+        ],
+      );
+    }
+
+    SliverWoltModalSheetPage pageVerNodesSettings(
+        BuildContext modalSheetContext, TextTheme textTheme) {
+      return SliverWoltModalSheetPage(
+        enableDrag: false,
+        leadingNavBarWidget: IconButton(
+          padding: const EdgeInsets.all(pagePadding),
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () =>
+          pageIndexNotifier.value = pageIndexNotifier.value - 4,
+        ),
+        trailingNavBarWidget: IconButton(
+          padding: const EdgeInsets.all(pagePadding),
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            Navigator.of(modalSheetContext).pop();
+            pageIndexNotifier.value = 0;
+          },
+        ),
+        mainContentSlivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: 1,
+                  (_, index) => Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: ListenableBuilder(
+                      listenable: appSettings,
+                      builder: (BuildContext context, Widget? child) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: Responsive.isMobile(context)
+                                        ? CustomSizes.paddingDialogMobile
+                                        : CustomSizes.paddingDialogDesktop,
+                                    horizontal:
+                                    CustomSizes.paddingDialogVertical),
+                                child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .setVerNodes,
+                                        style: AppTextStyles.dialogTitle,
+                                      ),
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .resetNetworkDialog,
+                                        style: AppTextStyles.infoItemTitle,
+                                      ),
+                                      const SizedBox(height: 20),
+                                      AppButtonStyle.buttonDefault(
+                                          context,
+                                          AppLocalizations.of(context)!
+                                              .resetNetworkSuccess,
+                                              () => {
+                                            BlocProvider.of<AppDataBloc>(
+                                                context)
+                                                .add(ResetNetworkData()),
+                                            Navigator.of(modalSheetContext)
+                                                .pop()
+                                          })
+                                    ])),
+                            const SizedBox(height: 10),
+                          ],
+                        );
+                      })),
+            ),
+          )
+        ],
+      );
+    }
+
     WoltModalSheet.show<void>(
       pageIndexNotifier: pageIndexNotifier,
       context: context,
@@ -398,6 +601,8 @@ class DialogSettings {
           pageSettings(modalSheetContext, textTheme),
           pageSetLocale(modalSheetContext, textTheme),
           pageDisplayAddress(modalSheetContext, textTheme),
+          pageResetSettings(modalSheetContext, textTheme),
+          pageVerNodesSettings(modalSheetContext, textTheme),
         ];
       },
       modalTypeBuilder: (context) {

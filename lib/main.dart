@@ -10,6 +10,7 @@ import 'package:nososova/blocs/events/coininfo_events.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
 import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/l10n/app_localizations.dart';
+import 'package:nososova/path_app.dart';
 import 'package:nososova/ui/notifer/app_settings_notifer.dart';
 import 'package:nososova/ui/pages/main/main_page.dart';
 import 'package:nososova/ui/theme/color_schemes.g.dart';
@@ -19,7 +20,7 @@ import 'blocs/events/app_data_events.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupLocator();
+  setupLocator(await PathAppUtil.getAppPath());
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(

@@ -10,6 +10,11 @@ class SharedService {
   static const String rpcAddressDefault = "RPCDefaultAddress";
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
+  Future<void> removeLastSeed() async {
+    _prefs.then((SharedPreferences prefs) {
+      return prefs.remove(lastSeed);
+    });
+  }
 
   Future<void> saveLastSeed(String value) async {
     _prefs.then((SharedPreferences prefs) {

@@ -65,6 +65,7 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     on<InitialConnect>(_init);
     on<SyncSuccess>(_syncResult);
     on<ReconnectFromError>(_reconnectFromError);
+    on<ResetNetworkData>(_resetNetworkData);
   }
 
   /// This method initializes the first network connection
@@ -73,12 +74,23 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
     await loadConfig();
 
     if (appBlocConfig.lastSeed != null) {
-      await _selectTargetNode(event, emit, InitialNodeAlgorithm.connectLastNode);
+      await _selectTargetNode(
+          event, emit, InitialNodeAlgorithm.connectLastNode);
     } else if (appBlocConfig.nodesList != null) {
-      await _selectTargetNode(event, emit, InitialNodeAlgorithm.listenUserNodes);
+      await _selectTargetNode(
+          event, emit, InitialNodeAlgorithm.listenUserNodes);
     } else {
-      await _selectTargetNode(event, emit, InitialNodeAlgorithm.listenDefaultNodes);
+      await _selectTargetNode(
+          event, emit, InitialNodeAlgorithm.listenDefaultNodes);
     }
+  }
+
+  Future<void> _resetNetworkData(event, emit) async {
+    _debugBloc.add(AddStringDebug("Reset Network Data"));
+    _repositories.sharedRepository.removeLastSeed();
+    appBlocConfig = appBlocConfig.copyWith(lastSeed: null);
+    _stopTimerSyncNetwork();
+    add(ReconnectSeed(false, hasError: true));
   }
 
   /// A method that notifies the system about an error.
@@ -279,6 +291,7 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
         .map((node) => '${node.ipv4}:${node.port}|${node.address}')
         .join(',');
   }
+
 
   List<Masternode> _createMasternodeListFromSeed(List<Seed> seeds) {
     if (seeds.isEmpty) {
