@@ -43,7 +43,7 @@ class _AddressListTileState extends State<AddressListTile> {
   _styleDefault() {
     return ListTile(
         contentPadding: const EdgeInsets.only(left: 10, right: 15),
-    //    leading: _iconAddress(),
+        leading: _iconAddress(),
         title: Text(
           _getHashSize(),
           style: AppTextStyles.walletHash,

@@ -89,13 +89,7 @@ class DialogSettings {
                     const AuthorLink()
                   ]),
                   const SizedBox(height: 20),
-                  Text(AppLocalizations.of(context)!.thanksTranslate,
-                      style: AppTextStyles.dialogTitle),
-                  Text(
-                    "${Interpreters.getInterpreters}",
-                    style: AppTextStyles.infoItemTitle.copyWith(fontSize: 14),
-                  ),
-                  const SizedBox(height: 20),
+
                   Text(AppLocalizations.of(context)!.socialLinks,
                       style: AppTextStyles.dialogTitle),
                   Row(children: [
@@ -115,7 +109,23 @@ class DialogSettings {
                         onPressed: () => openLink(SocialLinks.reddit),
                         icon: AppIconsStyle.icon3x2NoColor(
                             Assets.iconsSocReddit)),
-                  ])
+                  ]),
+                  ExpansionTile(
+                    tilePadding:  const EdgeInsets.all(0),
+                    title: Text(
+                      AppLocalizations.of(context)!.thanksTranslate,
+                      style: AppTextStyles.dialogTitle,
+                    ),
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "${Interpreters.getInterpreters}",
+                          style: AppTextStyles.infoItemTitle.copyWith(fontSize: 14),
+                        ),
+                      ),
+                    ],
+                  ),
                 ])),
       );
     }

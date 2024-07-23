@@ -19,8 +19,9 @@ dependencies:
   qr_code_scanner: ^1.0.1
   permission_handler: ^10.4.3
   provider: ^6.1.2
-  drift: ^2.15.0
-  sqlite3_flutter_libs: ^0.5.20
+  drift:  ^2.19.1+1
+  sqlite3: ^2.4.4
+  sqlite3_flutter_libs: ^0.5.24
   path_provider: ^2.1.2
   path_provider_platform_interface: ^2.1.2
   path: ^1.8.3
