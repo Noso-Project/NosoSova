@@ -127,7 +127,7 @@ jobs:
 
       - name: Build Application
         run: |
-          flutter config --enable-macos-desktop
+         # flutter config --enable-macos-desktop
           flutter build macos --release
 
       - name: List Files
