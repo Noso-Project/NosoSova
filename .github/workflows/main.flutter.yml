@@ -125,9 +125,29 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Decrypt certificates
+        run: |
+          openssl aes-256-cbc -K ${{ secrets.CERT_KEY }} -iv ${{ secrets.CERT_IV }} -in macos-cert.p12.enc -out macos-cert.p12 -d
+          openssl aes-256-cbc -K ${{ secrets.PROFILE_KEY }} -iv ${{ secrets.PROFILE_IV }} -in macos-profile.mobileprovision.enc -out macos-profile.mobileprovision -d
+
+      - name: Install certificates
+        run: |
+          sudo security import macos-cert.p12 -k /Library/Keychains/System.keychain -P ${{ secrets.CERT_PASSWORD }} -T /usr/bin/codesign
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp macos-profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+
+      - name: Update Xcode project for automatic signing
+        run: |
+          cd macos
+          xcodebuild -project Runner.xcodeproj \
+            -scheme Runner \
+            -configuration Release \
+            -allowProvisioningUpdates \
+            -destination 'platform=macOS,arch=x86_64' clean build
+
       - name: Build Application
         run: |
-         # flutter config --enable-macos-desktop
+          flutter config --enable-macos-desktop
           flutter build macos --release
 
       - name: List Files
