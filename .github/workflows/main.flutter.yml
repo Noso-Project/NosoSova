@@ -27,6 +27,126 @@ on:
      - 'LICENSE'
 
 jobs:
+
+  
+  build-linux:
+    name: Build Linux (ubuntu-latest;flutter 3.22.3)
+    runs-on: [ubuntu-latest]
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Install Ubuntu packages
+        run: |
+          sudo apt-get update -y
+          sudo apt install -y ninja-build libgtk-3-dev
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.22.3"
+          channel: "stable"
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Application
+        run: |
+          flutter config --enable-linux-desktop
+          flutter build linux --release
+
+      - name: List Files
+        run: |
+          echo "Listing build/linux/x64/release/bundle"
+          ls -alF build/linux/x64/release/bundle
+
+      - name: Upload bundle folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: NosoSova-ubuntu-latest-x86_64
+          path: build/linux/x64/release/bundle
+
+  build-windows:
+    name: Build Windows (windows-latest;flutter 3.22.3)
+    runs-on: [windows-latest]
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.22.3"
+          channel: "stable"
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Application
+        run: |
+          flutter config --enable-windows-desktop
+          flutter build windows --release
+
+      - name: List Files
+        run: |
+          echo "Listing build/windows/x64/runner/Release"
+          ls -alF build/windows/x64/runner/Release
+
+      - name: Upload Release folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: NosoSova-windows-latest-x86_64
+          path: build/windows/x64/runner/Release
+
+  build-android:
+    name: Build Android (ubuntu-latest;flutter 3.22.3;Java zulu 17)
+    runs-on: [ubuntu-latest]
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.22.3"
+          channel: "stable"
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Application
+        run: flutter build apk --release
+
+      - name: List Files
+        run: |
+          echo "Listing build/app/outputs/apk"
+          ls -alF build/app/outputs/apk/release
+
+      - name: Upload apk folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: NosoSova-ubuntu-latest-android
+          path: build/app/outputs/apk/release
+
+          
   build-macos:
     name: Build macOS (macos-latest;flutter 3.22.3)
     runs-on: [macos-latest]
@@ -83,45 +203,104 @@ jobs:
 
   
   release:
-    if: contains(github.ref_type, 'tag')
-
-    name: Create GitHub Release
-    needs: [build-macos]
-    runs-on: [ubuntu-latest]
-    strategy:
-      fail-fast: false
+    if: github.actor == 'pasichDev'
+    needs: [build-linux, build-windows, build-android, build-macos]
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Export tag
-      run: echo "tag=${{ github.ref_name }}" >> "$GITHUB_ENV"
+      - name: Download ubuntu artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: NosoSova-ubuntu-latest-x86_64
+          path: NosoSova
 
-    - name: Download the Release binaries
-      uses: actions/download-artifact@v4
+      - name: Download windows artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: NosoSova-windows-latest-x86_64
+          path: NosoSova
 
-    - name: List files
-      run: |
-        echo "Listing macOS"
-        ls -alF NosoSova-macos-latest-x86_64
+      - name: Download android artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: NosoSova-ubuntu-latest-android
+          path: NosoSova
 
-    - name: Create Archives
-      run: |
-        # macOS
-        cd NosoSova-macos-latest-x86_64
-        zip -r ../NosoSova-x86_64-macos-${{ env.tag }}.zip *
-        cd ..
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: NosoSova-macos-latest-x86_64
+          path: NosoSova
 
-    - name: Create GitHub release
-      uses: softprops/action-gh-release@v1
-      with:
-        name: NosoSova ${{ env.tag }}
-        body: "This text needs to be replaced by the git-cliff output.\r\nBut before that, you need to begin to use the proper way of wording the commit messages!!!"
-        files: |
-          *.tar.gz
-          *.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get version from pubspec.yaml
+        id: get_version
+        run: |
+          VERSION=$(grep ^version pubspec.yaml | sed 's/version: //')
+          echo "::set-output name=VERSION::$VERSION"
+          echo "::set-output name=TAG::v$VERSION"
+          echo "::set-output name=RELEASE_NAME::NosoSova $VERSION"
+
+      - name: Check if release exists
+        id: check_release
+        run: |
+          if gh release view ${{ steps.get_version.outputs.TAG }}; then
+            echo "Release already exists"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.get_version.outputs.TAG }}
+          release_name: ${{ steps.get_version.outputs.RELEASE_NAME }}
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload ubuntu asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: NosoSova/NosoSova-ubuntu-latest-x86_64.tar.gz
+          asset_name: NosoSova-ubuntu-latest-x86_64.tar.gz
+          asset_content_type: application/gzip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload windows asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: NosoSova/NosoSova-windows-latest-x86_64.zip
+          asset_name: NosoSova-windows-latest-x86_64.zip
+          asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload android asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: NosoSova/NosoSova-ubuntu-latest-android.apk
+          asset_name: NosoSova-ubuntu-latest-android.apk
+          asset_content_type: application/vnd.android.package-archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload macOS asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: NosoSova/NosoSova-macos-latest-x86_64.dmg
+          asset_name: NosoSova-macos-latest-x86_64.dmg
+          asset_content_type: application/x-apple-diskimage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
