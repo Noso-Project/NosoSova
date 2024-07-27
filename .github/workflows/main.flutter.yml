@@ -26,7 +26,6 @@ on:
      - 'devtools_options.yaml'
      - 'LICENSE'
 
-    
 jobs:
 
   build-linux:
@@ -186,7 +185,7 @@ jobs:
     if: contains(github.ref_type, 'tag')
 
     name: Create GitHub Release
-    needs: [build-linux,build-windows,build-android]
+    needs: [build-linux, build-windows, build-macos, build-android]
     runs-on: [ubuntu-latest]
     strategy:
       fail-fast: false
@@ -209,10 +208,12 @@ jobs:
         ls -alF NosoSova-ubuntu-latest-x86_64
         echo "Listing Windows"
         ls -alF NosoSova-windows-latest-x86_64
+        echo "Listing macOS"
+        ls -alF NosoSova-macos-latest-x86_64
         echo "Listing Android"
         ls -alF NosoSova-ubuntu-latest-android
 
-    - name: Create Linux Archive
+    - name: Create Archives
       run: |
         # Linux
         cd NosoSova-ubuntu-latest-x86_64
@@ -222,6 +223,10 @@ jobs:
         # Windows
         cd NosoSova-windows-latest-x86_64
         zip -r ../NosoSova-x86_64-win64-${{ env.tag }}.zip *
+        cd ..
+        # macOS
+        cd NosoSova-macos-latest-x86_64
+        zip -r ../NosoSova-x86_64-macos-${{ env.tag }}.zip *
         cd ..
         # Android
         cd NosoSova-ubuntu-latest-android
@@ -239,4 +244,3 @@ jobs:
           *.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
