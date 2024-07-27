@@ -107,7 +107,7 @@ jobs:
           path: build/windows/x64/runner/Release
 
   build-macos:
-    name: Build macOS (macos-latest;flutter 3.16.0)
+    name: Build macOS (macos-latest;flutter 3.22.3)
     runs-on: [macos-latest]
     strategy:
       fail-fast: false
@@ -119,7 +119,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.16.0"
+          flutter-version: "3.22.3"
           channel: "stable"
           cache: true
 
