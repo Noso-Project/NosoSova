@@ -94,8 +94,8 @@ jobs:
 
       - name: List Files
         run: |
-          echo "Listing build/macos/Build/Products/Release/NosoSova.app"
-          ls -alF build/macos/Build/Products/Release/NosoSova.app
+          echo "Listing NosoSova.dmg"
+          ls -alF build/macos/Build/Products/Release/NosoSova.dmg
 
       - name: Upload NosoSova.dmg
         uses: actions/upload-artifact@v4
