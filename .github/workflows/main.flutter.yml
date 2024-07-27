@@ -28,125 +28,6 @@ on:
 
 jobs:
 
-  
-  build-linux:
-    name: Build Linux (ubuntu-latest;flutter 3.22.3)
-    runs-on: [ubuntu-latest]
-    strategy:
-      fail-fast: false
-
-    steps:
-      - name: Install Ubuntu packages
-        run: |
-          sudo apt-get update -y
-          sudo apt install -y ninja-build libgtk-3-dev
-
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.22.3"
-          channel: "stable"
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Build Application
-        run: |
-          flutter config --enable-linux-desktop
-          flutter build linux --release
-
-      - name: List Files
-        run: |
-          echo "Listing build/linux/x64/release/bundle"
-          ls -alF build/linux/x64/release/bundle
-
-      - name: Upload bundle folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: NosoSova-ubuntu-latest-x86_64
-          path: build/linux/x64/release/bundle
-
-  build-windows:
-    name: Build Windows (windows-latest;flutter 3.22.3)
-    runs-on: [windows-latest]
-    strategy:
-      fail-fast: false
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.22.3"
-          channel: "stable"
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Build Application
-        run: |
-          flutter config --enable-windows-desktop
-          flutter build windows --release
-
-      - name: List Files
-        run: |
-          echo "Listing build/windows/x64/runner/Release"
-          ls -alF build/windows/x64/runner/Release
-
-      - name: Upload Release folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: NosoSova-windows-latest-x86_64
-          path: build/windows/x64/runner/Release
-
-  build-android:
-    name: Build Android (ubuntu-latest;flutter 3.22.3;Java zulu 17)
-    runs-on: [ubuntu-latest]
-    strategy:
-      fail-fast: false
-
-    steps:
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: "zulu"
-          java-version: "17"
-
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.22.3"
-          channel: "stable"
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Build Application
-        run: flutter build apk --release
-
-      - name: List Files
-        run: |
-          echo "Listing build/app/outputs/apk"
-          ls -alF build/app/outputs/apk/release
-
-      - name: Upload apk folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: NosoSova-ubuntu-latest-android
-          path: build/app/outputs/apk/release
-
-          
   build-macos:
     name: Build macOS (macos-latest;flutter 3.22.3)
     runs-on: [macos-latest]
@@ -173,6 +54,27 @@ jobs:
       - name: Build macOS app
         run: flutter build macos --release
 
+      - name: Codesign executable
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+        run: |
+          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+          echo "Create Keychain"
+          security create-keychain -p $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Assign to Login Keychain"
+          security default-keychain -s build.keychain
+          echo "Unlock the Login Keychain"
+          security unlock-keychain -p $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Import certificate"
+          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+          echo "Set Key Partition"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Find Identity"
+          security find-identity
+          echo "Sign the app"
+          /usr/bin/codesign --force --deep -s 6FB8K959N9 build/macos/Build/Products/Release/NosoSova.app
+
       - name: Create a dmg
         run: |
           echo "Install create-dmg"
@@ -195,7 +97,7 @@ jobs:
           echo "Listing build/macos/Build/Products/Release/NosoSova.app"
           ls -alF build/macos/Build/Products/Release/NosoSova.app
 
-      - name: Upload NosoSova.app folder
+      - name: Upload NosoSova.dmg
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-macos-latest-x86_64
@@ -204,30 +106,13 @@ jobs:
   
   release:
     if: github.actor == 'pasichDev'
-    needs: [build-linux, build-windows, build-android, build-macos]
+    needs: [build-macos]
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download ubuntu artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: NosoSova-ubuntu-latest-x86_64
-          path: NosoSova
-
-      - name: Download windows artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: NosoSova-windows-latest-x86_64
-          path: NosoSova
-
-      - name: Download android artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: NosoSova-ubuntu-latest-android
-          path: NosoSova
 
       - name: Download macOS artifact
         uses: actions/download-artifact@v3
@@ -264,37 +149,7 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload ubuntu asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: NosoSova/NosoSova-ubuntu-latest-x86_64.tar.gz
-          asset_name: NosoSova-ubuntu-latest-x86_64.tar.gz
-          asset_content_type: application/gzip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload windows asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: NosoSova/NosoSova-windows-latest-x86_64.zip
-          asset_name: NosoSova-windows-latest-x86_64.zip
-          asset_content_type: application/zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload android asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: NosoSova/NosoSova-ubuntu-latest-android.apk
-          asset_name: NosoSova-ubuntu-latest-android.apk
-          asset_content_type: application/vnd.android.package-archive
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          
       - name: Upload macOS asset
         uses: actions/upload-release-asset@v1
         with:
