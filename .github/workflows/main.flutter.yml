@@ -53,6 +53,23 @@ jobs:
       - name: Build macOS app
         run: flutter build macos --release
 
+      - name: Create a dmg
+        run: |
+          echo "Install create-dmg"
+          brew install create-dmg
+          create-dmg \
+          --volname "NosoSova" \
+          --window-pos 200 120 \
+          --window-size 800 529 \
+          --icon-size 130 \
+          --text-size 14 \
+          --icon "NosoSova.app" 260 250 \
+          --hide-extension "NosoSova.app" \
+          --app-drop-link 540 250 \
+          --hdiutil-quiet \
+          "build/macos/Build/Products/Release/NosoSova.dmg" \
+          "build/macos/Build/Products/Release/NosoSova.app"
+
       - name: List Files
         run: |
           echo "Listing build/macos/Build/Products/Release/NosoSova.app"
@@ -62,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-macos-latest-x86_64
-          path: build/macos/Build/Products/Release/NosoSova.app
+          path: build/macos/Build/Products/Release/NosoSova.dmg
 
   
   release:
