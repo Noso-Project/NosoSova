@@ -7,6 +7,11 @@ defaults:
   run:
     shell: bash
 
+env:
+  FLUTTER_VERSION: 3.22.3
+  APP_FOLDER_NAME: NosoSova
+    
+
 on:
 
   push:
@@ -18,7 +23,6 @@ on:
     branches: [ main ]
     paths-ignore:
      - "doc/**"
-     - "tool/**"
      - ".vscode/**"
      - 'README.md'
      - '.gitignore'
@@ -27,8 +31,8 @@ on:
      - 'LICENSE'
 
 jobs:
- build-windows:
-    name: Build Windows (windows-latest;flutter 3.22.3)
+  build-windows:
+    name: Build Windows (windows-latest;flutter ${{ env.FLUTTER_VERSION }})
     runs-on: [windows-latest]
     strategy:
       fail-fast: false
@@ -40,7 +44,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.22.3"
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: "stable"
           cache: true
 
@@ -57,26 +61,71 @@ jobs:
           echo "Listing build/windows/x64/runner/Release"
           ls -alF build/windows/x64/runner/Release
 
-      - name: Rename Release folder to NosoSova
+      - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
         run: |
-          Rename-Item -Path build/windows/x64/runner/Release -NewName NosoSova
+          Rename-Item -Path build/windows/x64/runner/Release -NewName ${{ env.APP_FOLDER_NAME }}
         shell: pwsh
 
-      - name: Move DLL files to NosoSova
+      - name: Move DLL files to ${{ env.APP_FOLDER_NAME }}
         run: |
-          Move-Item -Path dlls/msvcp140.dll -Destination build/windows/x64/runner/NosoSova/
-          Move-Item -Path dlls/msvcp140_1.dll -Destination build/windows/x64/runner/NosoSova/
-          Move-Item -Path dlls/vcruntime140.dll -Destination build/windows/x64/runner/NosoSova/
-          Move-Item -Path dlls/vcruntime140_1.dll -Destination build/windows/x64/runner/NosoSova/
+          Move-Item -Path dlls/msvcp140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/msvcp140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/vcruntime140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/vcruntime140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
         shell: pwsh
 
-      - name: List Files in NosoSova
+      - name: List Files in ${{ env.APP_FOLDER_NAME }}
         run: |
-          Get-ChildItem -Path build/windows/x64/runner/NosoSova
+          Get-ChildItem -Path build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}
         shell: pwsh
 
       - name: Upload Release folder
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-windows-latest-x86_64
-          path: build/windows/x64/runner/Release
+          path: build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}
+
+  build-linux:
+    name: Build Linux (ubuntu-latest;flutter ${{ env.FLUTTER_VERSION }})
+    runs-on: [ubuntu-latest]
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Install Ubuntu packages
+        run: |
+          sudo apt-get update -y
+          sudo apt install -y ninja-build libgtk-3-dev
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Application
+        run: |
+          flutter config --enable-linux-desktop
+          flutter build linux --release
+
+      - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
+        run: |
+          mv build/linux/x64/release/bundle build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
+
+      - name: List Files
+        run: |
+          echo "Listing files"
+          ls -alF build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
+
+      - name: Upload bundle folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: NosoSova-ubuntu-latest-x86_64
+          path: build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
