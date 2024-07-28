@@ -57,35 +57,11 @@ jobs:
         id: extract_release_info
         run: python extract_release_info.py
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: "stable"
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Build Application
-        run: |
-          flutter config --enable-linux-desktop
-          flutter build linux --release
-
-      - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
-        run: |
-          mv build/linux/x64/release/bundle build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
-
-      - name: List Files
-        run: |
-          echo "Listing files"
-          ls -alF build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
-
-      - name: Upload bundle folder
+      - name: Upload changelog.txt
         uses: actions/upload-artifact@v4
         with:
-          name: NosoSova-ubuntu-latest-x86_64
-          path: build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
+          name: changelog
+          path: changelog.txt
 
   create-release:
     name: Create GitHub Release
@@ -95,21 +71,27 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Download changelog.txt
+        uses: actions/download-artifact@v4
+        with:
+          name: changelog
+          path: .
+
+      - name: Source release info
+        id: release_info
+        run: |
+          source changelog.txt
+          echo "VERSION=$VERSION"
+          echo "RELEASE_NOTES=$RELEASE_NOTES"
+
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ needs.build-linux.outputs.VERSION }}
-          release_name: v${{ needs.build-linux.outputs.VERSION }}
-          body: ${{ needs.build-linux.outputs.RELEASE_NOTES }}
+          tag_name: v${{ steps.release_info.outputs.VERSION }}
+          release_name: v${{ steps.release_info.outputs.VERSION }}
+          body: ${{ steps.release_info.outputs.RELEASE_NOTES }}
           draft: false
           prerelease: false
 
-      - name: Upload Release Assets
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
-          asset_name: NosoSova-ubuntu-latest-x86_64.tar.gz
-          asset_content_type: application/gzip
