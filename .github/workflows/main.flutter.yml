@@ -54,11 +54,8 @@ jobs:
           pip install pyyaml
 
       - name: Extract Release Info
+        id: extract_release_info
         run: python extract_release_info.py
-
-      - name: Source release info
-        id: release_info
-        run: . release_info.txt
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -98,18 +95,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Source release info
-        id: release_info
-        run: . release_info.txt
-
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.release_info.outputs.VERSION }}
-          release_name: v${{ steps.release_info.outputs.VERSION }}
-          body: ${{ steps.release_info.outputs.RELEASE_NOTES }}
+          tag_name: v${{ needs.build-linux.outputs.VERSION }}
+          release_name: v${{ needs.build-linux.outputs.VERSION }}
+          body: ${{ needs.build-linux.outputs.RELEASE_NOTES }}
           draft: false
           prerelease: false
 
