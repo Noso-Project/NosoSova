@@ -27,14 +27,19 @@ on:
      - 'LICENSE'
 
 jobs:
-
-  build-macos:
-    name: Build macOS (macos-latest;flutter 3.22.3)
-    runs-on: [macos-latest]
+  build-android:
+    name: Build Android (ubuntu-latest;flutter 3.22.3;Java zulu 17)
+    runs-on: [ubuntu-latest]
     strategy:
       fail-fast: false
 
     steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -48,114 +53,33 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Enable Macos
-        run: flutter config --enable-macos-desktop
-      
-      - name: Build macOS app
-        run: flutter build macos --release
+      - name: Build Application
+        run: flutter build apk --release
 
-      - name: Codesign executable
-        env:
-          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
-          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+      - name: Sign APK
         run: |
-          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
-          echo "Create Keychain"
-          security create-keychain -p $MACOS_CERTIFICATE_PWD build.keychain
-          echo "Assign to Login Keychain"
-          security default-keychain -s build.keychain
-          echo "Unlock the Login Keychain"
-          security unlock-keychain -p $MACOS_CERTIFICATE_PWD build.keychain
-          echo "Import certificate"
-          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
-          echo "Set Key Partition"
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $MACOS_CERTIFICATE_PWD build.keychain
-          echo "Find Identity"
-          security find-identity
-          echo "Sign the app"
-          /usr/bin/codesign --force --deep -s 6FB8K959N9 build/macos/Build/Products/Release/NosoSova.app
+          jarsigner -verbose \
+          -keystore keys/key_store.jks \
+          -storepass ${{ secrets.KEYSTORE_PASSWORD }} \
+          -keypass ${{ secrets.KEYSTORE_PASSWORD }} \
+          build/app/outputs/flutter-apk/app-release.apk \
+          ${{ secrets.KEY_ALIAS_ANDROID }}
 
-      - name: Create a dmg
+      - name: Verify APK
         run: |
-          echo "Install create-dmg"
-          brew install create-dmg
-          create-dmg \
-          --volname "NosoSova" \
-          --window-pos 200 120 \
-          --window-size 800 529 \
-          --icon-size 130 \
-          --text-size 14 \
-          --icon "NosoSova.app" 260 250 \
-          --hide-extension "NosoSova.app" \
-          --app-drop-link 540 250 \
-          --hdiutil-quiet \
-          "build/macos/Build/Products/Release/NosoSova.dmg" \
-          "build/macos/Build/Products/Release/NosoSova.app"
+          jarsigner -verify build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Rename and Move APK
+        run: |
+          mv build/app/outputs/flutter-apk/app-release.apk NosoSova.apk
 
       - name: List Files
         run: |
-          echo "Listing NosoSova.dmg"
-          ls -alF build/macos/Build/Products/Release/NosoSova.dmg
+          echo "Listing signed APK"
+          ls -alF NosoSova.apk
 
-      - name: Upload NosoSova.dmg
+      - name: Upload apk folder
         uses: actions/upload-artifact@v4
         with:
-          name: NosoSova-macos-latest-x86_64
-          path: build/macos/Build/Products/Release/NosoSova.dmg
-
-  
-  release:
-    if: github.actor == 'pasichDev'
-    needs: [build-macos]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-
-      - name: Download macOS artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: NosoSova-macos-latest-x86_64
-          path: NosoSova
-
-      - name: Get version from pubspec.yaml
-        id: get_version
-        run: |
-          VERSION=$(grep ^version pubspec.yaml | sed 's/version: //')
-          echo "::set-output name=VERSION::$VERSION"
-          echo "::set-output name=TAG::v$VERSION"
-          echo "::set-output name=RELEASE_NAME::NosoSova $VERSION"
-
-      - name: Check if release exists
-        id: check_release
-        run: |
-          if gh release view ${{ steps.get_version.outputs.TAG }}; then
-            echo "Release already exists"
-            exit 1
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ steps.get_version.outputs.TAG }}
-          release_name: ${{ steps.get_version.outputs.RELEASE_NAME }}
-          body_path: CHANGELOG.md
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Upload macOS asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: NosoSova/NosoSova-macos-latest-x86_64.dmg
-          asset_name: NosoSova-macos-latest-x86_64.dmg
-          asset_content_type: application/x-apple-diskimage
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: NosoSova-android
+          path: NosoSova.apk
