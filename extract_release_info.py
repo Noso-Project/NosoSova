@@ -1,25 +1,27 @@
-# scripts/extract_release_info.py
 import yaml
-import re
 
-# Читання файлу pubspec.yaml для отримання версії
-with open('pubspec.yaml', 'r') as file:
-    pubspec = yaml.safe_load(file)
+# Function to read version from pubspec.yaml
+def get_version():
+    with open('pubspec.yaml', 'r') as file:
+        pubspec = yaml.safe_load(file)
     version = pubspec['version']
+    return version.split('+')[0]
 
-# Видалення коду версії після +
-version = version.split('+')[0]
+# Function to read release notes from CHANGELOG.md
+def get_release_notes(version):
+    with open('CHANGELOG.md', 'r') as file:
+        changelog = file.read()
+    version_header = f"## v.{version}"
+    start = changelog.find(version_header)
+    if start == -1:
+        return "No release notes found."
+    start += len(version_header)
+    end = changelog.find("## v.", start)
+    return changelog[start:end].strip()
 
-# Читання файлу CHANGELOG.md для отримання опису релізу
-with open('CHANGELOG.md', 'r') as file:
-    changelog = file.read()
+version = get_version()
+release_notes = get_release_notes(version)
 
-# Пошук опису для необхідної версії
-pattern = rf"## v\.{version}\n\n([\s\S]+?)(?=\n##|\Z)"
-match = re.search(pattern, changelog)
-release_notes = match.group(1).strip() if match else "No release notes found."
-
-# Запис інформації у файл для використання в GitHub Actions
-with open('release_info.txt', 'w') as file:
-    file.write(f"VERSION={version}\n")
-    file.write(f"RELEASE_NOTES<<EOF\n{release_notes}\nEOF\n")
+# Writing the outputs in a way that GitHub Actions can read them
+print(f"::set-output name=VERSION::{version}")
+print(f"::set-output name=RELEASE_NOTES::{release_notes}")
