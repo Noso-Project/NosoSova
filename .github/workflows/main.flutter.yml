@@ -60,7 +60,7 @@ jobs:
       - name: Rename Release folder to NosoSova
         run: |
           Rename-Item -Path build/windows/x64/runner/Release -NewName NosoSova
-          shell: pwsh
+        shell: pwsh
 
       - name: Move DLL files to NosoSova
         run: |
@@ -68,12 +68,12 @@ jobs:
           Move-Item -Path build/windows/x64/runner/dlls/msvcp140_1.dll -Destination build/windows/x64/runner/NosoSova/
           Move-Item -Path build/windows/x64/runner/dlls/vcruntime140.dll -Destination build/windows/x64/runner/NosoSova/
           Move-Item -Path build/windows/x64/runner/dlls/vcruntime140_1.dll -Destination build/windows/x64/runner/NosoSova/
-          shell: pwsh
+        shell: pwsh
 
       - name: List Files in NosoSova
         run: |
           Get-ChildItem -Path build/windows/x64/runner/NosoSova
-          shell: pwsh
+        shell: pwsh
 
       - name: Upload Release folder
         uses: actions/upload-artifact@v4
