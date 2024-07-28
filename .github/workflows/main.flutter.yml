@@ -77,21 +77,22 @@ jobs:
           name: changelog
           path: .
 
-      - name: Source release info
+      - name: Read release info
         id: release_info
         run: |
-          source changelog.txt
-          echo "VERSION=$VERSION"
-          echo "RELEASE_NOTES=$RELEASE_NOTES"
+          release_info=$(cat changelog.txt)
+          VERSION=$(echo "$release_info" | jq -r '.VERSION')
+          RELEASE_NOTES=$(echo "$release_info" | jq -r '.RELEASE_NOTES')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
 
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.release_info.outputs.VERSION }}
-          release_name: v${{ steps.release_info.outputs.VERSION }}
-          body: ${{ steps.release_info.outputs.RELEASE_NOTES }}
+          tag_name: v${{ env.VERSION }}
+          release_name: v${{ env.VERSION }}
+          body: ${{ env.RELEASE_NOTES }}
           draft: false
           prerelease: false
-
