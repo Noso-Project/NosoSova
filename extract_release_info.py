@@ -17,11 +17,15 @@ def get_release_notes(version):
         return "No release notes found."
     start += len(version_header)
     end = changelog.find("## v.", start)
+    if end == -1:
+        end = len(changelog)
     return changelog[start:end].strip()
 
+# Get version and release notes
 version = get_version()
 release_notes = get_release_notes(version)
 
-# Writing the outputs in a way that GitHub Actions can read them
-print(f"::set-output name=VERSION::{version}")
-print(f"::set-output name=RELEASE_NOTES::{release_notes}")
+# Write the outputs to a file
+with open('changelog.txt', 'w') as file:
+    file.write(f"VERSION={version}\n")
+    file.write(f"RELEASE_NOTES={release_notes}\n")
