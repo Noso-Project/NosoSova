@@ -27,6 +27,7 @@ on:
      - 'LICENSE'
 
 jobs:
+
   build-macos:
     name: Build macOS (macos-latest;flutter 3.22.3)
     runs-on: [macos-latest]
@@ -53,58 +54,108 @@ jobs:
       - name: Build macOS app
         run: flutter build macos --release
 
+      - name: Codesign executable
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+        run: |
+          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+          echo "Create Keychain"
+          security create-keychain -p $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Assign to Login Keychain"
+          security default-keychain -s build.keychain
+          echo "Unlock the Login Keychain"
+          security unlock-keychain -p $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Import certificate"
+          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+          echo "Set Key Partition"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Find Identity"
+          security find-identity
+          echo "Sign the app"
+          /usr/bin/codesign --force --deep -s 6FB8K959N9 build/macos/Build/Products/Release/NosoSova.app
+
+      - name: Create a dmg
+        run: |
+          echo "Install create-dmg"
+          brew install create-dmg
+          create-dmg \
+          --volname "NosoSova" \
+          --window-pos 200 120 \
+          --window-size 800 529 \
+          --icon-size 130 \
+          --text-size 14 \
+          --icon "NosoSova.app" 260 250 \
+          --hide-extension "NosoSova.app" \
+          --app-drop-link 540 250 \
+          --hdiutil-quiet \
+          "build/macos/Build/Products/Release/NosoSova.dmg" \
+          "build/macos/Build/Products/Release/NosoSova.app"
+
       - name: List Files
         run: |
-          echo "Listing build/macos/Build/Products/Release/NosoSova.app"
-          ls -alF build/macos/Build/Products/Release/NosoSova.app
+          echo "Listing NosoSova.dmg"
+          ls -alF build/macos/Build/Products/Release/NosoSova.dmg
 
-      - name: Upload NosoSova.app folder
+      - name: Upload NosoSova.dmg
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-macos-latest-x86_64
-          path: build/macos/Build/Products/Release/NosoSova.app
+          path: build/macos/Build/Products/Release/NosoSova.dmg
 
   
   release:
-    if: contains(github.ref_type, 'tag')
-
-    name: Create GitHub Release
+    if: github.actor == 'pasichDev'
     needs: [build-macos]
-    runs-on: [ubuntu-latest]
-    strategy:
-      fail-fast: false
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Export tag
-      run: echo "tag=${{ github.ref_name }}" >> "$GITHUB_ENV"
 
-    - name: Download the Release binaries
-      uses: actions/download-artifact@v4
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: NosoSova-macos-latest-x86_64
+          path: NosoSova
 
-    - name: List files
-      run: |
-        echo "Listing macOS"
-        ls -alF NosoSova-macos-latest-x86_64
+      - name: Get version from pubspec.yaml
+        id: get_version
+        run: |
+          VERSION=$(grep ^version pubspec.yaml | sed 's/version: //')
+          echo "::set-output name=VERSION::$VERSION"
+          echo "::set-output name=TAG::v$VERSION"
+          echo "::set-output name=RELEASE_NAME::NosoSova $VERSION"
 
-    - name: Create Archives
-      run: |
-        # macOS
-        cd NosoSova-macos-latest-x86_64
-        zip -r ../NosoSova-x86_64-macos-${{ env.tag }}.zip *
-        cd ..
+      - name: Check if release exists
+        id: check_release
+        run: |
+          if gh release view ${{ steps.get_version.outputs.TAG }}; then
+            echo "Release already exists"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Create GitHub release
-      uses: softprops/action-gh-release@v1
-      with:
-        name: NosoSova ${{ env.tag }}
-        body: "This text needs to be replaced by the git-cliff output.\r\nBut before that, you need to begin to use the proper way of wording the commit messages!!!"
-        files: |
-          *.tar.gz
-          *.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.get_version.outputs.TAG }}
+          release_name: ${{ steps.get_version.outputs.RELEASE_NAME }}
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Upload macOS asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: NosoSova/NosoSova-macos-latest-x86_64.dmg
+          asset_name: NosoSova-macos-latest-x86_64.dmg
+          asset_content_type: application/x-apple-diskimage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
