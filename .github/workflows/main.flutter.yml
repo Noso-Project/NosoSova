@@ -59,7 +59,7 @@ jobs:
       - name: Sign APK
         run: |
          apksigner sign \
-         --ks ${{ keys/key_store.jks }} \
+         --ks keys/key_store.jks \
          --ks-key-alias ${{ secrets.KEY_ALIAS_ANDROID }} \
          --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
          --key-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
