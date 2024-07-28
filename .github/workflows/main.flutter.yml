@@ -10,8 +10,6 @@ defaults:
 env:
   FLUTTER_VERSION: 3.22.3
   APP_FOLDER_NAME: NosoSova
-  FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.22.3-x64
-  PUB_CACHE: /home/runner/.pub-cache
 
 on:
   push:
@@ -32,7 +30,7 @@ on:
 
 jobs:
   build-linux:
-    name: Build Linux (ubuntu-latest;flutter ${{ env.FLUTTER_VERSION }})
+    name: Build Linux (ubuntu-latest)
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -52,7 +50,7 @@ jobs:
           python-version: '3.x'
 
       - name: Extract Release Info
-        run: python scripts/extract_release_info.py
+        run: python extract_release_info.py
 
       - name: Source release info
         id: release_info
