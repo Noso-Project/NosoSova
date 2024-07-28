@@ -49,8 +49,12 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Install PyYAML
+        run: |
+          pip install pyyaml
+
       - name: Extract Release Info
-        run: python extract_release_info.py
+        run: python scripts/extract_release_info.py
 
       - name: Source release info
         id: release_info
