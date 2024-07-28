@@ -54,7 +54,7 @@ jobs:
           pip install pyyaml
 
       - name: Extract Release Info
-        run: python scripts/extract_release_info.py
+        run: python extract_release_info.py
 
       - name: Source release info
         id: release_info
