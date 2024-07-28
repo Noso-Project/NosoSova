@@ -56,6 +56,9 @@ jobs:
       - name: Build Application
         run: flutter build apk --release
 
+      - name: Install Android SDK Build-Tools
+        run: sdkmanager "build-tools;30.0.3"
+
       - name: Sign APK
         run: |
          apksigner sign \
