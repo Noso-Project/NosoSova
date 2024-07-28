@@ -32,7 +32,7 @@ on:
 
 jobs:
   build-windows:
-    name: Build Windows (windows-latest;flutter ${{ env.FLUTTER_VERSION }})
+    name: Build Windows (windows-latest)
     runs-on: windows-latest
     strategy:
       fail-fast: false
@@ -86,7 +86,7 @@ jobs:
           path: build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}
 
   build-linux:
-    name: Build Linux (ubuntu-latest;flutter ${{ env.FLUTTER_VERSION }})
+    name: Build Linux (ubuntu-latest)
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
