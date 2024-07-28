@@ -33,7 +33,7 @@ on:
 jobs:
   build-windows:
     name: Build Windows (windows-latest;flutter ${{ env.FLUTTER_VERSION }})
-    runs-on: [windows-latest]
+    runs-on: windows-latest
     strategy:
       fail-fast: false
 
@@ -62,22 +62,22 @@ jobs:
           ls -alF build/windows/x64/runner/Release
 
       - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
+        shell: pwsh
         run: |
           Rename-Item -Path build/windows/x64/runner/Release -NewName ${{ env.APP_FOLDER_NAME }}
-        shell: pwsh
 
       - name: Move DLL files to ${{ env.APP_FOLDER_NAME }}
+        shell: pwsh
         run: |
           Move-Item -Path dlls/msvcp140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
           Move-Item -Path dlls/msvcp140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
           Move-Item -Path dlls/vcruntime140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
           Move-Item -Path dlls/vcruntime140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
-        shell: pwsh
 
       - name: List Files in ${{ env.APP_FOLDER_NAME }}
+        shell: pwsh
         run: |
           Get-ChildItem -Path build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}
-        shell: pwsh
 
       - name: Upload Release folder
         uses: actions/upload-artifact@v4
@@ -87,7 +87,7 @@ jobs:
 
   build-linux:
     name: Build Linux (ubuntu-latest;flutter ${{ env.FLUTTER_VERSION }})
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
 
