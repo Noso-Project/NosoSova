@@ -64,10 +64,10 @@ jobs:
 
       - name: Move DLL files to NosoSova
         run: |
-          Move-Item -Path build/windows/x64/runner/dlls/msvcp140.dll -Destination build/windows/x64/runner/NosoSova/
-          Move-Item -Path build/windows/x64/runner/dlls/msvcp140_1.dll -Destination build/windows/x64/runner/NosoSova/
-          Move-Item -Path build/windows/x64/runner/dlls/vcruntime140.dll -Destination build/windows/x64/runner/NosoSova/
-          Move-Item -Path build/windows/x64/runner/dlls/vcruntime140_1.dll -Destination build/windows/x64/runner/NosoSova/
+          Move-Item -Path dlls/msvcp140.dll -Destination build/windows/x64/runner/NosoSova/
+          Move-Item -Path dlls/msvcp140_1.dll -Destination build/windows/x64/runner/NosoSova/
+          Move-Item -Path dlls/vcruntime140.dll -Destination build/windows/x64/runner/NosoSova/
+          Move-Item -Path dlls/vcruntime140_1.dll -Destination build/windows/x64/runner/NosoSova/
         shell: pwsh
 
       - name: List Files in NosoSova
