@@ -56,22 +56,26 @@ jobs:
       - name: Build Application
         run: flutter build apk --release
 
-      - name: Install Android SDK Build-Tools
-        run: sdkmanager "build-tools;30.0.3"
-
       - name: Sign APK
         run: |
-         apksigner sign \
-         --ks keys/key_store.jks \
-         --ks-key-alias ${{ secrets.KEY_ALIAS_ANDROID }} \
-         --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
-         --key-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
-         --out NosoSova.apk \
-         build/app/outputs/flutter-apk/app-release.apk
+          jarsigner -verbose \
+          -keystore keys/key_store.jks \
+          -storepass ${{ secrets.KEYSTORE_PASSWORD }} \
+          -keypass ${{ secrets.KEYSTORE_PASSWORD }} \
+          build/app/outputs/flutter-apk/app-release.apk \
+          ${{ secrets.KEY_ALIAS_ANDROID }}
+
+      - name: Verify APK
+        run: |
+          jarsigner -verify build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Rename and Move APK
+        run: |
+          mv build/app/outputs/flutter-apk/app-release.apk NosoSova.apk
 
       - name: List Files
         run: |
-          echo "Listing build/app/outputs/apk"
+          echo "Listing signed APK"
           ls -alF NosoSova.apk
 
       - name: Upload apk folder
@@ -79,5 +83,3 @@ jobs:
         with:
           name: NosoSova-android
           path: NosoSova.apk
-
-  
