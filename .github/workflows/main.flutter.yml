@@ -309,6 +309,14 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
 
+      - name: Extract artifacts
+        run: |
+          mkdir -p release
+          tar -xzf NosoSova-windows-latest-x86_64.tar.gz -C release/
+          tar -xzf NosoSova-ubuntu-latest-x86_64.tar.gz -C release/
+          mv NosoSova.apk release/
+          mv NosoSova.dmg release/
+          
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
