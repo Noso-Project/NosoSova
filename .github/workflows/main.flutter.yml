@@ -100,6 +100,19 @@ jobs:
           channel: "stable"
           cache: true
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install PyYAML
+        run: |
+          pip install pyyaml
+
+      - name: Extract Release Info
+        id: extract_release_info
+        run: python extract_release_info.py
+
       - name: Get dependencies
         run: flutter pub get
 
