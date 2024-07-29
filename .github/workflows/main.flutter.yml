@@ -251,11 +251,10 @@ jobs:
 
       - name: Extract artifacts
         run: |
-          ls
           cd ./release
           ls
-          tar -xzf NosoSova-macos-latest-x86_64.zip -C release/
-          tar -xzf NosoSova-android.zip -C release/
+        #  tar -xzf NosoSova-macos-latest-x86_64.zip -C release/
+        #  tar -xzf NosoSova-android.zip -C release/
         # tar -xzf NosoSova-windows-latest-x86_64.tar.gz -C release/
         # tar -xzf NosoSova-ubuntu-latest-x86_64.tar.gz -C release/
         # mv NosoSova.apk release/
