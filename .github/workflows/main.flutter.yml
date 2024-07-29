@@ -7,10 +7,6 @@ defaults:
   run:
     shell: bash
 
-env:
-  FLUTTER_VERSION: 3.22.3
-  APP_FOLDER_NAME: NosoSova
-
 on:
   push:
     branches: [ main ]
@@ -21,6 +17,7 @@ on:
     branches: [ main ]
     paths-ignore:
      - "doc/**"
+     - "tool/**"
      - ".vscode/**"
      - 'README.md'
      - '.gitignore'
@@ -29,6 +26,50 @@ on:
      - 'LICENSE'
 
 jobs:
+  build-windows:
+    name: Build Windows (windows-latest)
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Application
+        run: |
+          flutter config --enable-windows-desktop
+          flutter build windows --release
+
+      - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
+        shell: pwsh
+        run: |
+          Rename-Item -Path build/windows/x64/runner/Release -NewName ${{ env.APP_FOLDER_NAME }}
+
+      - name: Move DLL files to ${{ env.APP_FOLDER_NAME }}
+        shell: pwsh
+        run: |
+          Move-Item -Path dlls/msvcp140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/msvcp140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/vcruntime140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/vcruntime140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+
+      - name: Upload Release folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: NosoSova-windows-latest-x86_64
+          path: build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}
+
   build-linux:
     name: Build Linux (ubuntu-latest)
     runs-on: ubuntu-latest
@@ -44,32 +85,190 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          python-version: '3.x'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
 
-      - name: Install PyYAML
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Application
         run: |
-          pip install pyyaml
+          flutter config --enable-linux-desktop
+          flutter build linux --release
 
-      - name: Extract Release Info
-        id: extract_release_info
-        run: python extract_release_info.py
+      - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
+        run: |
+          mv build/linux/x64/release/bundle build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
 
+      - name: Upload bundle folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: NosoSova-ubuntu-latest-x86_64
+          path: build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
+      
       - name: Upload changelog.txt
         uses: actions/upload-artifact@v4
         with:
           name: changelog
           path: changelog.txt
 
-  create-release:
-    name: Create GitHub Release
-    runs-on: ubuntu-latest
-    needs: [build-linux]
+  build-android:
+    name: Build Android (ubuntu-latest;flutter 3.22.3;Java zulu 17)
+    runs-on: [ubuntu-latest]
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Application
+        run: flutter build apk --release
+
+      - name: Sign APK
+        run: |
+          jarsigner -verbose \
+          -keystore keys/key_store.jks \
+          -storepass ${{ secrets.KEYSTORE_PASSWORD }} \
+          -keypass ${{ secrets.KEYSTORE_PASSWORD }} \
+          build/app/outputs/flutter-apk/app-release.apk \
+          ${{ secrets.KEY_ALIAS_ANDROID }}
+
+      - name: Verify APK
+        run: |
+          jarsigner -verify build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Rename and Move APK
+        run: |
+          mv build/app/outputs/flutter-apk/app-release.apk NosoSova.apk
+
+      - name: Upload apk folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: NosoSova-android
+          path: NosoSova.apk
+
+  build-macos:
+    name: Build macOS (macos-latest;flutter 3.22.3)
+    runs-on: [macos-latest]
+    strategy:
+      fail-fast: false
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Enable Macos
+        run: flutter config --enable-macos-desktop
+      
+      - name: Build macOS app
+        run: flutter build macos --release
+
+      - name: Codesign executable
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+        run: |
+          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+          echo "Create Keychain"
+          security create-keychain -p $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Assign to Login Keychain"
+          security default-keychain -s build.keychain
+          echo "Unlock the Login Keychain"
+          security unlock-keychain -p $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Import certificate"
+          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+          echo "Set Key Partition"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Find Identity"
+          security find-identity
+          echo "Sign the app"
+          /usr/bin/codesign --force --deep -s 6FB8K959N9 build/macos/Build/Products/Release/NosoSova.app
+
+      - name: Create a dmg
+        run: |
+          echo "Install create-dmg"
+          brew install create-dmg
+          create-dmg \
+          --volname "NosoSova" \
+          --window-pos 200 120 \
+          --window-size 800 529 \
+          --icon-size 130 \
+          --text-size 14 \
+          --icon "NosoSova.app" 260 250 \
+          --hide-extension "NosoSova.app" \
+          --app-drop-link 540 250 \
+          --hdiutil-quiet \
+          "build/macos/Build/Products/Release/NosoSova.dmg" \
+          "build/macos/Build/Products/Release/NosoSova.app"
+
+      - name: Upload NosoSova.dmg
+        uses: actions/upload-artifact@v4
+        with:
+          name: NosoSova-macos-latest-x86_64
+          path: build/macos/Build/Products/Release/NosoSova.dmg
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [build-windows, build-linux, build-android, build-macos]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: NosoSova-windows-latest-x86_64
+          path: .
+
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: NosoSova-ubuntu-latest-x86_64
+          path: .
+
+      - name: Download Android artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: NosoSova-android
+          path: .
+
+      - name: Download MacOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: NosoSova-macos-latest-x86_64
+          path: .
 
       - name: Download changelog.txt
         uses: actions/download-artifact@v4
@@ -96,3 +295,8 @@ jobs:
           body: ${{ env.RELEASE_NOTES }}
           draft: false
           prerelease: false
+          files: |
+            NosoSova-windows-latest-x86_64
+            NosoSova-ubuntu-latest-x86_64
+            NosoSova-android
+            NosoSova-macos-latest-x86_64
