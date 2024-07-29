@@ -30,6 +30,54 @@ on:
      - 'LICENSE'
 
 jobs:
+  build-windows:
+    name: Build Windows (windows-latest)
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Application
+        run: |
+          flutter config --enable-windows-desktop
+          flutter build windows --release
+
+      - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
+        shell: pwsh
+        run: |
+          Rename-Item -Path build/windows/x64/runner/Release -NewName ${{ env.APP_FOLDER_NAME }}
+
+      - name: Move DLL files to ${{ env.APP_FOLDER_NAME }}
+        shell: pwsh
+        run: |
+          Move-Item -Path dlls/msvcp140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/msvcp140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/vcruntime140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/vcruntime140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+
+      - name: Archive Windows build
+        run: |
+          tar -czf NosoSova-windows-latest-x86_64.tar.gz -C build/windows/x64/runner ${{ env.APP_FOLDER_NAME }}
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NosoSova-windows-latest-x86_64
+          path: NosoSova-windows-latest-x86_64.tar.gz
+
   build-linux:
     name: Build Linux (ubuntu-latest)
     runs-on: ubuntu-latest
@@ -221,6 +269,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: NosoSova-windows-latest-x86_64
+          path: ./release
+
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: NosoSova-ubuntu-latest-x86_64
+          path: ./release
 
       - name: Download Android artifacts
         uses: actions/download-artifact@v4
@@ -252,7 +312,7 @@ jobs:
       - name: Extract artifacts
         run: |
           cd ./release
-          ls
+        #  ls
         #  tar -xzf NosoSova-macos-latest-x86_64.zip -C release/
         #  tar -xzf NosoSova-android.zip -C release/
         # tar -xzf NosoSova-windows-latest-x86_64.tar.gz -C release/
