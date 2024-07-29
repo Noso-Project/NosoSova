@@ -261,25 +261,25 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: NosoSova-windows-latest-x86_64
-          path: ./
+          path: ./release
 
       - name: Download Linux artifacts
         uses: actions/download-artifact@v4
         with:
           name: NosoSova-ubuntu-latest-x86_64
-          path: ./
+          path: ./release
 
       - name: Download Android artifacts
         uses: actions/download-artifact@v4
         with:
           name: NosoSova-android
-          path: ./
+          path: ./release
 
       - name: Download macOS artifacts
         uses: actions/download-artifact@v4
         with:
           name: NosoSova-macos-latest-x86_64
-          path: ./
+          path: ./release
 
       - name: Download Changelog
         uses: actions/download-artifact@v4
@@ -287,19 +287,63 @@ jobs:
           name: changelog
           path: ./
 
-      - name: Extract artifacts
+      - name: Read release info
+        id: release_info
         run: |
-          mkdir -p release
-          tar -xzf NosoSova-windows-latest-x86_64.tar.gz -C release/
-          tar -xzf NosoSova-ubuntu-latest-x86_64.tar.gz -C release/
-          mv NosoSova.apk release/
-          mv NosoSova.dmg release/
+          release_info=$(cat changelog.txt)
+          VERSION=$(echo "$release_info" | jq -r '.VERSION')
+          RELEASE_NOTES=$(echo "$release_info" | jq -r '.RELEASE_NOTES')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
 
-      - name: Create release and upload assets
-        uses: softprops/action-gh-release@v1
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: |
-            release/*
-            changelog.txt
+          tag_name: v${{ env.VERSION }}
+          release_name: v${{ env.VERSION }}
+          body: ${{ env.RELEASE_NOTES }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Windows asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/NosoSova-windows-latest-x86_64.tar.gz
+          asset_name: NosoSova-windows-latest-x86_64.tar.gz
+          asset_content_type: application/gzip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Ubuntu asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/NosoSova-ubuntu-latest-x86_64.tar.gz
+          asset_name: NosoSova-ubuntu-latest-x86_64.tar.gz
+          asset_content_type: application/gzip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload macOS asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/NosoSova-macos-latest-x86_64.dmg
+          asset_name: NosoSova-macos-latest-x86_64.dmg
+          asset_content_type: application/x-apple-diskimage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Android asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/NosoSova-android.apk
+          asset_name: NosoSova-android.apk
+          asset_content_type: application/vnd.android.package-archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
