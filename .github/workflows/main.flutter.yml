@@ -331,6 +331,7 @@ jobs:
           echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
 
       - name: Create Release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -341,10 +342,10 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            NosoSova-windows-latest-x86_64
-            NosoSova-ubuntu-latest-x86_64
-            NosoSova-android
-            NosoSova-macos-latest-x86_64
+            nososova/NosoSova-windows-latest-x86_64.zip
+            nososova/NosoSova-ubuntu-latest-x86_64.zip
+            nososova/NosoSova-android.zip
+            nososova/NosoSova-macos-latest-x86_64.zip
 
       - name: Upload ubuntu asset
         uses: actions/upload-release-asset@v1
@@ -385,4 +386,3 @@ jobs:
           asset_content_type: application/gzip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
