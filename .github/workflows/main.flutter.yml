@@ -12,7 +12,6 @@ env:
   APP_FOLDER_NAME: NosoSova
 
 on:
-
   push:
     branches: [ main ]
     tags: [ "*" ]
@@ -56,11 +55,6 @@ jobs:
           flutter config --enable-windows-desktop
           flutter build windows --release
 
-      - name: List Files
-        run: |
-          echo "Listing build/windows/x64/runner/Release"
-          ls -alF build/windows/x64/runner/Release
-
       - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
         shell: pwsh
         run: |
@@ -74,16 +68,15 @@ jobs:
           Move-Item -Path dlls/vcruntime140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
           Move-Item -Path dlls/vcruntime140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
 
-      - name: List Files in ${{ env.APP_FOLDER_NAME }}
-        shell: pwsh
+      - name: Archive Windows build
         run: |
-          Get-ChildItem -Path build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}
+          tar -czf NosoSova-windows-latest-x86_64.tar.gz -C build/windows/x64/runner ${{ env.APP_FOLDER_NAME }}
 
-      - name: Upload Release folder
+      - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-windows-latest-x86_64
-          path: build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}
+          path: NosoSova-windows-latest-x86_64.tar.gz
 
   build-linux:
     name: Build Linux (ubuntu-latest)
@@ -107,19 +100,6 @@ jobs:
           channel: "stable"
           cache: true
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: Install PyYAML
-        run: |
-          pip install pyyaml
-
-      - name: Extract Release Info
-        id: extract_release_info
-        run: python extract_release_info.py
-
       - name: Get dependencies
         run: flutter pub get
 
@@ -128,31 +108,29 @@ jobs:
           flutter config --enable-linux-desktop
           flutter build linux --release
 
-      - name: Rename folder to NosoSova
+      - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
         run: |
           mv build/linux/x64/release/bundle build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
 
-      - name: List Files
+      - name: Archive Linux build
         run: |
-          echo "Listing files"
-          ls -alF build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
+          tar -czf NosoSova-ubuntu-latest-x86_64.tar.gz -C build/linux/x64/release ${{ env.APP_FOLDER_NAME }}
 
-      - name: Upload bundle folder
+      - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-ubuntu-latest-x86_64
-          path: build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
-      
+          path: NosoSova-ubuntu-latest-x86_64.tar.gz
+
       - name: Upload changelog.txt
         uses: actions/upload-artifact@v4
         with:
           name: changelog
           path: changelog.txt
 
-
   build-android:
     name: Build Android (ubuntu-latest;flutter 3.22.3;Java zulu 17)
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
 
@@ -192,16 +170,11 @@ jobs:
         run: |
           jarsigner -verify build/app/outputs/flutter-apk/app-release.apk
 
-      - name: Rename and Move APK
+      - name: Move APK
         run: |
           mv build/app/outputs/flutter-apk/app-release.apk NosoSova.apk
 
-      - name: List Files
-        run: |
-          echo "Listing signed APK"
-          ls -alF NosoSova.apk
-
-      - name: Upload apk folder
+      - name: Upload Android artifact
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-android
@@ -209,7 +182,7 @@ jobs:
 
   build-macos:
     name: Build macOS (macos-latest;flutter 3.22.3)
-    runs-on: [macos-latest]
+    runs-on: macos-latest
     strategy:
       fail-fast: false
 
@@ -229,7 +202,7 @@ jobs:
 
       - name: Enable Macos
         run: flutter config --enable-macos-desktop
-      
+
       - name: Build macOS app
         run: flutter build macos --release
 
@@ -256,7 +229,6 @@ jobs:
 
       - name: Create a dmg
         run: |
-          echo "Install create-dmg"
           brew install create-dmg
           create-dmg \
           --volname "NosoSova" \
@@ -271,18 +243,12 @@ jobs:
           "build/macos/Build/Products/Release/NosoSova.dmg" \
           "build/macos/Build/Products/Release/NosoSova.app"
 
-      - name: List Files
-        run: |
-          echo "Listing NosoSova.dmg"
-          ls -alF build/macos/Build/Products/Release/NosoSova.dmg
-
-      - name: Upload NosoSova.dmg
+      - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-macos-latest-x86_64
           path: build/macos/Build/Products/Release/NosoSova.dmg
 
-  
   create-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
@@ -295,101 +261,45 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: NosoSova-windows-latest-x86_64
-          path: nososova
+          path: ./
 
       - name: Download Linux artifacts
         uses: actions/download-artifact@v4
         with:
           name: NosoSova-ubuntu-latest-x86_64
-          path: nososova
+          path: ./
 
       - name: Download Android artifacts
         uses: actions/download-artifact@v4
         with:
           name: NosoSova-android
-          path: nososova
+          path: ./
 
-      - name: Download MacOS artifacts
+      - name: Download macOS artifacts
         uses: actions/download-artifact@v4
         with:
           name: NosoSova-macos-latest-x86_64
-          path: nososova
+          path: ./
 
-      - name: Download changelog.txt
+      - name: Download Changelog
         uses: actions/download-artifact@v4
         with:
           name: changelog
-          path: .
+          path: ./
 
-      - name: Check files
+      - name: Extract artifacts
         run: |
-           ls
-           cd nososova
-           ls
-           cd ..
+          mkdir -p release
+          tar -xzf NosoSova-windows-latest-x86_64.tar.gz -C release/
+          tar -xzf NosoSova-ubuntu-latest-x86_64.tar.gz -C release/
+          mv NosoSova.apk release/
+          mv NosoSova.dmg release/
 
-      - name: Read release info
-        id: release_info
-        run: |
-          release_info=$(cat changelog.txt)
-          VERSION=$(echo "$release_info" | jq -r '.VERSION')
-          RELEASE_NOTES=$(echo "$release_info" | jq -r '.RELEASE_NOTES')
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create release and upload assets
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ env.VERSION }}
-          release_name: v${{ env.VERSION }}
-          body: ${{ env.RELEASE_NOTES }}
-          draft: false
-          prerelease: false
           files: |
-            nososova/NosoSova-windows-latest-x86_64.zip
-            nososova/NosoSova-ubuntu-latest-x86_64.zip
-            nososova/NosoSova-android.apk
-            nososova/NosoSova-macos-latest-x86_64.zip
-
-      - name: Upload ubuntu asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: nososova/NosoSova-ubuntu-latest-x86_64.zip
-          asset_name: NosoSova-ubuntu-latest-x86_64.zip
-          asset_content_type: application/gzip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload windows asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: nososova/NosoSova-windows-latest-x86_64.zip
-          asset_name: NosoSova-windows-latest-x86_64.zip
-          asset_content_type: application/zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload macOS asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: nososova/NosoSova-macos-latest-x86_64.zip
-          asset_name: NosoSova-macos-latest-x86_64.zip
-          asset_content_type: application/gzip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Android asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: nososova/NosoSova-android.zip
-          asset_name: NosoSova-android.apk
-          asset_content_type: application/gzip
+            release/*
+            changelog.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
