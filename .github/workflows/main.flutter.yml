@@ -294,25 +294,25 @@ jobs:
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
         with:
-          name: NosoSova-windows-latest-x86_64.zip
+          name: NosoSova-windows-latest-x86_64
           path: nososova
 
       - name: Download Linux artifacts
         uses: actions/download-artifact@v4
         with:
-          name: NosoSova-ubuntu-latest-x86_64.zip
+          name: NosoSova-ubuntu-latest-x86_64
           path: nososova
 
       - name: Download Android artifacts
         uses: actions/download-artifact@v4
         with:
-          name: NosoSova-android.zip
+          name: NosoSova-android
           path: nososova
 
       - name: Download MacOS artifacts
         uses: actions/download-artifact@v4
         with:
-          name: NosoSova-macos-latest-x86_64.zip
+          name: NosoSova-macos-latest-x86_64
           path: nososova
 
       - name: Download changelog.txt
@@ -320,6 +320,13 @@ jobs:
         with:
           name: changelog
           path: .
+
+      - name: Check files
+        run: |
+           ls
+           cd nososova
+           ls
+           cd ..
 
       - name: Read release info
         id: release_info
@@ -344,7 +351,7 @@ jobs:
           files: |
             nososova/NosoSova-windows-latest-x86_64.zip
             nososova/NosoSova-ubuntu-latest-x86_64.zip
-            nososova/NosoSova-android.zip
+            nososova/NosoSova-android.apk
             nososova/NosoSova-macos-latest-x86_64.zip
 
       - name: Upload ubuntu asset
@@ -382,7 +389,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: nososova/NosoSova-android.zip
-          asset_name: NosoSova-android.zip
+          asset_name: NosoSova-android.apk
           asset_content_type: application/gzip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
