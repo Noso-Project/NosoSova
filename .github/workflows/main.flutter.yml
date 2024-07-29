@@ -7,7 +7,12 @@ defaults:
   run:
     shell: bash
 
+env:
+  FLUTTER_VERSION: 3.22.3
+  APP_FOLDER_NAME: NosoSova
+
 on:
+
   push:
     branches: [ main ]
     tags: [ "*" ]
@@ -51,6 +56,11 @@ jobs:
           flutter config --enable-windows-desktop
           flutter build windows --release
 
+      - name: List Files
+        run: |
+          echo "Listing build/windows/x64/runner/Release"
+          ls -alF build/windows/x64/runner/Release
+
       - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
         shell: pwsh
         run: |
@@ -63,6 +73,11 @@ jobs:
           Move-Item -Path dlls/msvcp140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
           Move-Item -Path dlls/vcruntime140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
           Move-Item -Path dlls/vcruntime140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+
+      - name: List Files in ${{ env.APP_FOLDER_NAME }}
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}
 
       - name: Upload Release folder
         uses: actions/upload-artifact@v4
@@ -92,6 +107,19 @@ jobs:
           channel: "stable"
           cache: true
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install PyYAML
+        run: |
+          pip install pyyaml
+
+      - name: Extract Release Info
+        id: extract_release_info
+        run: python extract_release_info.py
+
       - name: Get dependencies
         run: flutter pub get
 
@@ -100,9 +128,14 @@ jobs:
           flutter config --enable-linux-desktop
           flutter build linux --release
 
-      - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
+      - name: Rename folder to NosoSova
         run: |
           mv build/linux/x64/release/bundle build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
+
+      - name: List Files
+        run: |
+          echo "Listing files"
+          ls -alF build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
 
       - name: Upload bundle folder
         uses: actions/upload-artifact@v4
@@ -116,7 +149,8 @@ jobs:
           name: changelog
           path: changelog.txt
 
-  build-android:
+
+ build-android:
     name: Build Android (ubuntu-latest;flutter 3.22.3;Java zulu 17)
     runs-on: [ubuntu-latest]
     strategy:
@@ -161,6 +195,11 @@ jobs:
       - name: Rename and Move APK
         run: |
           mv build/app/outputs/flutter-apk/app-release.apk NosoSova.apk
+
+      - name: List Files
+        run: |
+          echo "Listing signed APK"
+          ls -alF NosoSova.apk
 
       - name: Upload apk folder
         uses: actions/upload-artifact@v4
@@ -232,12 +271,18 @@ jobs:
           "build/macos/Build/Products/Release/NosoSova.dmg" \
           "build/macos/Build/Products/Release/NosoSova.app"
 
+      - name: List Files
+        run: |
+          echo "Listing NosoSova.dmg"
+          ls -alF build/macos/Build/Products/Release/NosoSova.dmg
+
       - name: Upload NosoSova.dmg
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-macos-latest-x86_64
           path: build/macos/Build/Products/Release/NosoSova.dmg
 
+  
   create-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
