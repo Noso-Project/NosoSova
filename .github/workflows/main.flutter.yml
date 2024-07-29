@@ -185,13 +185,13 @@ jobs:
 
       - name: Move APK
         run: |
-          mv build/app/outputs/flutter-apk/app-release.apk NosoSova.apk
+          mv build/app/outputs/flutter-apk/app-release.apk NosoSova-android.apk
 
       - name: Upload Android artifact
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-android
-          path: NosoSova.apk
+          path: NosoSova-android.apk
 
   build-macos:
     name: Build macOS (macos-latest;flutter 3.22.3)
@@ -253,14 +253,14 @@ jobs:
           --hide-extension "NosoSova.app" \
           --app-drop-link 540 250 \
           --hdiutil-quiet \
-          "build/macos/Build/Products/Release/NosoSova.dmg" \
+          "build/macos/Build/Products/Release/NosoSova-macos-latest-x86_64.dmg" \
           "build/macos/Build/Products/Release/NosoSova.app"
 
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-macos-latest-x86_64
-          path: build/macos/Build/Products/Release/NosoSova.dmg
+          path: build/macos/Build/Products/Release/NosoSova-macos-latest-x86_64.dmg
 
   create-release:
     name: Create GitHub Release
@@ -311,12 +311,14 @@ jobs:
 
       - name: Extract artifacts
         run: |
-          ls
           mkdir -p release
-         # tar -xzf NosoSova-windows-latest-x86_64.tar.gz -C release/
-         # tar -xzf NosoSova-ubuntu-latest-x86_64.tar.gz -C release/
-        #  mv NosoSova.apk release/
-        #  mv NosoSova.dmg release/
+          ls
+          tar -xzf NosoSova-macos-latest-x86_64.zip -C release/
+          tar -xzf NosoSova-android.zip -C release/
+        # tar -xzf NosoSova-windows-latest-x86_64.tar.gz -C release/
+        # tar -xzf NosoSova-ubuntu-latest-x86_64.tar.gz -C release/
+        # mv NosoSova.apk release/
+        # mv NosoSova.dmg release/
           
       - name: Create GitHub Release
         id: create_release
