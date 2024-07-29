@@ -150,7 +150,7 @@ jobs:
           path: changelog.txt
 
 
- build-android:
+  build-android:
     name: Build Android (ubuntu-latest;flutter 3.22.3;Java zulu 17)
     runs-on: [ubuntu-latest]
     strategy:
