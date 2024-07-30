@@ -1,3 +1,7 @@
+## v.0.4.7
+
+- Fixing bugs and updating verification nodes
+
 ## v.0.3.6
 
 - Fixing bugs and improving your experience with our app.

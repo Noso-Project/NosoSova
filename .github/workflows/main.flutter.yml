@@ -7,21 +7,75 @@ defaults:
   run:
     shell: bash
 
+env:
+  FLUTTER_VERSION: 3.22.3
+  APP_FOLDER_NAME: NosoSova
+
 on:
-
-  push:
-    branches: [ main ]
-    tags: [ "*" ]
-    paths-ignore: [ "README.md" ]
-
   pull_request:
     branches: [ main ]
+    paths-ignore:
+     - "doc/**"
+     - "tool/**"
+     - ".vscode/**"
+     - 'README.md'
+     - '.gitignore'
+     - 'analysis_options.yaml'
+     - 'devtools_options.yaml'
+     - 'LICENSE'
 
 jobs:
+  build-windows:
+    name: Build Windows (windows-latest)
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Application
+        run: |
+          flutter config --enable-windows-desktop
+          flutter build windows --release
+
+      - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
+        shell: pwsh
+        run: |
+          Rename-Item -Path build/windows/x64/runner/Release -NewName ${{ env.APP_FOLDER_NAME }}
+
+      - name: Move DLL files to ${{ env.APP_FOLDER_NAME }}
+        shell: pwsh
+        run: |
+          Move-Item -Path dlls/msvcp140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/msvcp140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/vcruntime140.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+          Move-Item -Path dlls/vcruntime140_1.dll -Destination build/windows/x64/runner/${{ env.APP_FOLDER_NAME }}/
+
+      - name: Archive Windows build
+        run: |
+          tar -czf NosoSova-windows-latest-x86_64.tar.gz -C build/windows/x64/runner ${{ env.APP_FOLDER_NAME }}
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NosoSova-windows-latest-x86_64
+          path: NosoSova-windows-latest-x86_64.tar.gz
 
   build-linux:
-    name: Build Linux (ubuntu-latest;flutter 3.16.8)
-    runs-on: [ubuntu-latest]
+    name: Build Linux (ubuntu-latest)
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
 
@@ -37,9 +91,22 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.16.8"
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: "stable"
           cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install PyYAML
+        run: |
+          pip install pyyaml
+
+      - name: Extract Release Info
+        id: extract_release_info
+        run: python extract_release_info.py
 
       - name: Get dependencies
         run: flutter pub get
@@ -49,92 +116,29 @@ jobs:
           flutter config --enable-linux-desktop
           flutter build linux --release
 
-      - name: List Files
+      - name: Rename folder to ${{ env.APP_FOLDER_NAME }}
         run: |
-          echo "Listing build/linux/x64/release/bundle"
-          ls -alF build/linux/x64/release/bundle
+          mv build/linux/x64/release/bundle build/linux/x64/release/${{ env.APP_FOLDER_NAME }}
 
-      - name: Upload bundle folder
+      - name: Archive Linux build
+        run: |
+          tar -czf NosoSova-ubuntu-latest-x86_64.tar.gz -C build/linux/x64/release ${{ env.APP_FOLDER_NAME }}
+
+      - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
           name: NosoSova-ubuntu-latest-x86_64
-          path: build/linux/x64/release/bundle
+          path: NosoSova-ubuntu-latest-x86_64.tar.gz
 
-  build-windows:
-    name: Build Windows (windows-latest;flutter 3.16.8)
-    runs-on: [windows-latest]
-    strategy:
-      fail-fast: false
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.16.8"
-          channel: "stable"
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Build Application
-        run: |
-          flutter config --enable-windows-desktop
-          flutter build windows --release
-
-      - name: List Files
-        run: |
-          echo "Listing build/windows/x64/runner/Release"
-          ls -alF build/windows/x64/runner/Release
-
-      - name: Upload Release folder
+      - name: Upload changelog.txt
         uses: actions/upload-artifact@v4
         with:
-          name: NosoSova-windows-latest-x86_64
-          path: build/windows/x64/runner/Release
-
-#  build-macos:
-#    name: Build macOS (macos-latest;flutter 3.16.0)
-#    runs-on: [macos-latest]
-#    strategy:
-#      fail-fast: false
-
-#    steps:
-#      - name: Checkout Repository
-#        uses: actions/checkout@v4
-#
-#      - name: Set up Flutter
-#        uses: subosito/flutter-action@v2
-#        with:
-#          flutter-version: "3.16.0"
-#          channel: "stable"
-#          cache: true
-
-#      - name: Get dependencies
-#        run: flutter pub get
-
-#      - name: Build Application
-#        run: |
-#          flutter config --enable-macos-desktop
-#          flutter build macos --release
-
-#      - name: List Files
-#        run: |
-#          echo "Listing build/macos/Build/Products/Release/NosoSova.app"
-#          ls -alF build/macos/Build/Products/Release/NosoSova.app
-
-#      - name: Upload NosoSova.app folder
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: NosoSova-macos-latest-x86_64
-#          path: build/macos/Build/Products/Release/NosoSova.app
+          name: changelog
+          path: changelog.txt
 
   build-android:
-    name: Build Android (ubuntu-latest;flutter 3.16.8;Java zulu 17)
-    runs-on: [ubuntu-latest]
+    name: Build Android (ubuntu-latest;flutter 3.22.3;Java zulu 17)
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
 
@@ -151,117 +155,207 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.16.8"
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: "stable"
           cache: true
 
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Build Application
+      - name: 🔧 Build APK
+        env:
+          KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS_ANDROID }}
         run: flutter build apk --release
 
-      - name: List Files
+      - name: Move APK
         run: |
-          echo "Listing build/app/outputs/apk"
-          ls -alF build/app/outputs/apk/release
+          mv build/app/outputs/flutter-apk/app-release.apk NosoSova-android.apk
 
-      - name: Upload apk folder
+      - name: Upload Android artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NosoSova-ubuntu-latest-android
-          path: build/app/outputs/apk/release
+          name: NosoSova-android
+          path: NosoSova-android.apk
 
-#  build-ios:
-#    name: Build iOS (macos-latest;flutter 3.16.0)
-#    runs-on: [macos-latest]
-#    strategy:
-#      fail-fast: false
-#
-#    steps:
-#      - name: Checkout Repository
-#        uses: actions/checkout@v4
-
-#      - name: Set up Flutter
-#        uses: subosito/flutter-action@v2
-#        with:
-#          flutter-version: "3.16.0"
-#          channel: "stable"
-#          cache: true
-
-#      - name: Get dependencies
-#        run: flutter pub get
-
-#      - name: Build Application
-#        run: |
-#          flutter build ios --release --no-codesign
-
-#      - name: List Files
-#        run: |
-#         echo "Listing build"
-#          ls -alF build
-#
-#      - name: Upload build folder
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: NosoSova-macos-latest-ios
-#          path: build
-
-  release:
-    if: contains(github.ref_type, 'tag')
-
-#
-    name: Create GitHub Release
-    needs: [build-linux,build-windows,build-android]
-    runs-on: [ubuntu-latest]
+  build-macos:
+    name: Build macOS (macos-latest;flutter 3.22.3)
+    runs-on: macos-latest
     strategy:
       fail-fast: false
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Export tag
-      run: echo "tag=${{ github.ref_name }}" >> "$GITHUB_ENV"
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
 
-    - name: Download the Release binaries
-      uses: actions/download-artifact@v4
+      - name: Get dependencies
+        run: flutter pub get
 
-    - name: List files
-      run: |
-        echo "Listing Linux"
-        ls -alF NosoSova-ubuntu-latest-x86_64
-        echo "Listing Windows"
-        ls -alF NosoSova-windows-latest-x86_64
-        echo "Listing Android"
-        ls -alF NosoSova-ubuntu-latest-android
+      - name: Enable Macos
+        run: flutter config --enable-macos-desktop
 
-    - name: Create Linux Archive
-      run: |
-        # Linux
-        cd NosoSova-ubuntu-latest-x86_64
-        chmod +x nososova
-        tar -zcvf ../NosoSova-x86_64-linux-${{ env.tag }}.tar.gz *
-        cd ..
-        # Windows
-        cd NosoSova-windows-latest-x86_64
-        zip -r ../NosoSova-x86_64-win64-${{ env.tag }}.zip *
-        cd ..
-        # Android
-        cd NosoSova-ubuntu-latest-android
-        mv app-release.apk nososova.apk
-        zip -r ../NosoSova-arm-android-APK-${{ env.tag }}.zip nososova.apk
-        cd ..
+      - name: Build macOS app
+        run: flutter build macos --release
 
-    - name: Create GitHub release
-      uses: softprops/action-gh-release@v1
-      with:
-        name: NosoSova ${{ env.tag }}
-        body: "This text needs to be replaced by the git-cliff output.\r\nBut before that, you need to begin to use the proper way of wording the commit messages!!!"
-        files: |
-          *.tar.gz
-          *.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Codesign executable
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+        run: |
+          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+          echo "Create Keychain"
+          security create-keychain -p $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Assign to Login Keychain"
+          security default-keychain -s build.keychain
+          echo "Unlock the Login Keychain"
+          security unlock-keychain -p $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Import certificate"
+          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+          echo "Set Key Partition"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $MACOS_CERTIFICATE_PWD build.keychain
+          echo "Find Identity"
+          security find-identity
+          echo "Sign the app"
+          /usr/bin/codesign --force --deep -s 6FB8K959N9 build/macos/Build/Products/Release/NosoSova.app
+
+      - name: Create a dmg
+        run: |
+          brew install create-dmg
+          create-dmg \
+          --volname "NosoSova" \
+          --window-pos 200 120 \
+          --window-size 800 529 \
+          --icon-size 130 \
+          --text-size 14 \
+          --icon "NosoSova.app" 260 250 \
+          --hide-extension "NosoSova.app" \
+          --app-drop-link 540 250 \
+          --hdiutil-quiet \
+          "build/macos/Build/Products/Release/NosoSova-macos-latest-x86_64.dmg" \
+          "build/macos/Build/Products/Release/NosoSova.app"
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NosoSova-macos-latest-x86_64
+          path: build/macos/Build/Products/Release/NosoSova-macos-latest-x86_64.dmg
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [build-windows, build-linux, build-android, build-macos]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: NosoSova-windows-latest-x86_64
+          path: ./release
+
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: NosoSova-ubuntu-latest-x86_64
+          path: ./release
+
+      - name: Download Android artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: NosoSova-android
+          path: ./release
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: NosoSova-macos-latest-x86_64
+          path: ./release
+
+      - name: Download Changelog
+        uses: actions/download-artifact@v4
+        with:
+          name: changelog
+          path: ./
+
+      - name: Read release info
+        id: release_info
+        run: |
+          release_info=$(cat changelog.txt)
+          VERSION=$(echo "$release_info" | jq -r '.VERSION')
+          RELEASE_NOTES=$(echo "$release_info" | jq -r '.RELEASE_NOTES')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
+
+      - name: Extract artifacts
+        run: |
+          cd ./release
+
+      - name: Check if release exists
+        id: check_release
+        run: |
+          if gh release view ${{ steps.get_version.outputs.TAG }}; then
+            echo "Release already exists"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.VERSION }}
+          release_name: v${{ env.VERSION }}
+          body: ${{ env.RELEASE_NOTES }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Windows asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/NosoSova-windows-latest-x86_64.tar.gz
+          asset_name: NosoSova-windows-latest-x86_64.tar.gz
+          asset_content_type: application/gzip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Ubuntu asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/NosoSova-ubuntu-latest-x86_64.tar.gz
+          asset_name: NosoSova-ubuntu-latest-x86_64.tar.gz
+          asset_content_type: application/gzip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload macOS asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/NosoSova-macos-latest-x86_64.dmg
+          asset_name: NosoSova-macos-latest-x86_64.dmg
+          asset_content_type: application/x-apple-diskimage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Android asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/NosoSova-android.apk
+          asset_name: NosoSova-android.apk
+          asset_content_type: application/vnd.android.package-archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
