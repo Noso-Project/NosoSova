@@ -170,7 +170,7 @@ jobs:
       - name: 🔧 Build APK
         env:
           KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          ALIAS_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS_ANDROID }}
           run: flutter build apk --release
 
      # - name: Sign APK
