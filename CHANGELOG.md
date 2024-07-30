@@ -1,3 +1,7 @@
+## v.0.4.8
+
+- SovaRPC - moved to another repository. Cleaning up the project and code.
+
 ## v.0.4.7
 
 - Fixing bugs and updating verification nodes

@@ -9,11 +9,14 @@ This is wallet for the cryptocurrency [Noso](https://nosocoin.com).
 
 At the moment the development of this application is still in constant flux, since it's at an beta stage.
 
+## SovaRPC
+
+**SovaRPC** - moved to another repository. It will now be available in this [repository](https://github.com/Noso-Project/SovaRPC). 
+
 ## Table of contents 
 
 - [Build and use](doc/build_use.md)
 - [Screenshots](doc/screenshots.md)
-- [SovaRPC (GUI,CLI)](sovarpc)
 
 ## Donations
 
