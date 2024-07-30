@@ -54,10 +54,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'nososova'
-            keyPassword 'nososova12'
+            keyAlias "$System.env.KEY_ALIAS"
+            keyPassword "$System.env.KEY_PASSWORD"
             storeFile file('keystore/nososova.jks')
-            storePassword 'nososova12'
+            storePassword "$System.env.KEY_PASSWORD"
         }
     }
 
