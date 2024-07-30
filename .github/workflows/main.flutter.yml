@@ -167,21 +167,24 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Build Application
-        run: flutter build apk --release
+      - name: 🔧 Build APK
+        env:
+          KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          ALIAS_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          run: flutter build apk --release
 
-      - name: Sign APK
-        run: |
-          jarsigner -verbose \
-          -keystore keys/key_store.jks \
-          -storepass ${{ secrets.KEYSTORE_PASSWORD }} \
-          -keypass ${{ secrets.KEYSTORE_PASSWORD }} \
-          build/app/outputs/flutter-apk/app-release.apk \
-          ${{ secrets.KEY_ALIAS_ANDROID }}
+     # - name: Sign APK
+     #  run: |
+     #      jarsigner -verbose \
+     #      -keystore keys/key_store.jks \
+     #      -storepass ${{ secrets.KEYSTORE_PASSWORD }} \
+     #      -keypass ${{ secrets.KEYSTORE_PASSWORD }} \
+     #      build/app/outputs/flutter-apk/app-release.apk \
+     #      ${{ secrets.KEY_ALIAS_ANDROID }}
 
-      - name: Verify APK
-        run: |
-          jarsigner -verify build/app/outputs/flutter-apk/app-release.apk
+     #  - name: Verify APK
+     #    run: |
+     #       jarsigner -verify build/app/outputs/flutter-apk/app-release.apk
 
       - name: Move APK
         run: |
