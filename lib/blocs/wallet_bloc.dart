@@ -99,6 +99,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     on<SendOrder>(_sendOrder);
     on<CalculateBalance>(_calculateBalance);
     on<ErrorSync>(_errorSync);
+    on<EditDescriptionAddress>(_editDescriptionAddress);
     initBloc();
 
     _walletEvents = appDataBloc.walletEvents.listen((event) {
@@ -770,6 +771,11 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           actionValue: [address],
           action: ActionsFileWallet.walletOpen));
     }
+  }
+
+  void _editDescriptionAddress(event, emit) async {
+    _repositories.localRepository
+        .editDescription(event.hash, event.description);
   }
 
   @override

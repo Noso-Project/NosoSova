@@ -540,4 +540,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get setVerNodesDesc => 'You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.';
+
+  @override
+  String get addDescription => 'Beschreibung hinzufügen';
+
+  @override
+  String get editDescription => 'Beschreibung bearbeiten';
+
+  @override
+  String get descrDescription => 'Sie können eine Beschreibung für Ihre Adresse hinzufügen, die lokal in der NosoSova-App gespeichert wird';
+
+  @override
+  String get description => 'Beschreibung für Ihre Adresse';
 }

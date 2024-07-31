@@ -18,6 +18,7 @@ import '../../../models/contact.dart';
 import '../../config/responsive.dart';
 import '../../dialogs/address_action/dialog_address_info.dart';
 import '../../dialogs/address_action/dialog_custom_name.dart';
+import '../../dialogs/address_action/dialog_description_address.dart';
 import '../../dialogs/address_action/dialog_view_qr.dart';
 import '../../dialogs/dialog_debug.dart';
 import '../../dialogs/dialog_info_network.dart';
@@ -462,5 +463,55 @@ class DialogRouter {
         ];
       },
     );
+  }
+
+  /// Dialog for setting Description
+  static void showDialogEditDescription(BuildContext context, Address address) {
+    if (Responsive.isMobile(context)) {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          shape: DialogStyle.borderShape,
+          context: context,
+          builder: (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(
+                    value: BlocProvider.of<WalletBloc>(context),
+                  ),
+                ],
+                child: DialogEditDescriptionAddress(address: address),
+              ));
+    } else {
+      WoltModalSheet.show(
+        context: NavigationService.navigatorKey.currentContext ?? context,
+        showDragHandle: false,
+        minDialogWidth: 600,
+        pageListBuilder: (BuildContext _) {
+          return [
+            WoltModalSheetPage(
+                hasSabGradient: false,
+                trailingNavBarWidget: IconButton(
+                  padding: const EdgeInsets.all(20),
+                  icon: const Icon(Icons.close),
+                  onPressed: Navigator.of(_).pop,
+                ),
+                topBarTitle: Text(
+                    address.description == null
+                        ? AppLocalizations.of(context)!.addDescription
+                        : AppLocalizations.of(context)!.editDescription,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.dialogTitle),
+                isTopBarLayerAlwaysVisible: true,
+                child: MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: BlocProvider.of<WalletBloc>(context),
+                    ),
+                  ],
+                  child: DialogEditDescriptionAddress(address: address),
+                ))
+          ];
+        },
+      );
+    }
   }
 }

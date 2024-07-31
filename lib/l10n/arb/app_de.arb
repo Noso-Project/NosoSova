@@ -171,5 +171,9 @@
   "lockedCoins" : "Gesperrte Münzen",
   "exchanges": "Börsen",
   "errorImportNoPassword": "Achtung! Bevor Sie importieren, entsperren Sie Ihre Adressen, die Sie mit einem Passwort in der NosoLite-App gesperrt haben. Andernfalls werden sie ignoriert.",
-  "thanksTranslate": "Danke für Übersetzung"
+  "thanksTranslate": "Danke für Übersetzung",
+  "addDescription": "Beschreibung hinzufügen",
+  "editDescription": "Beschreibung bearbeiten",
+  "descrDescription": "Sie können eine Beschreibung für Ihre Adresse hinzufügen, die lokal in der NosoSova-App gespeichert wird",
+  "description": "Beschreibung für Ihre Adresse"
 }

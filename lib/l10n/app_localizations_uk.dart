@@ -540,4 +540,16 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get setVerNodesDesc => 'You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.';
+
+  @override
+  String get addDescription => 'Додати опис';
+
+  @override
+  String get editDescription => 'Редагувати опис';
+
+  @override
+  String get descrDescription => 'Ви можете додати опис для вашої адреси, він буде зберігатися локально в додатку NosoSova';
+
+  @override
+  String get description => 'Опис для вашо адреси';
 }

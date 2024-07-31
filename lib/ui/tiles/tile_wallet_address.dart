@@ -45,11 +45,11 @@ class _AddressListTileState extends State<AddressListTile> {
         contentPadding: const EdgeInsets.only(left: 10, right: 15),
         leading: _iconAddress(),
         title: Text(
-          _getHashSize(),
+          _getTitleHash(),
           style: AppTextStyles.walletHash,
         ),
         subtitle: Text(
-          widget.address.custom ?? "",
+          widget.address.description ?? "",
           style: AppTextStyles.textHiddenSmall(context),
         ),
         trailing: Text(

@@ -540,4 +540,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get setVerNodesDesc => 'You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.';
+
+  @override
+  String get addDescription => '添加描述';
+
+  @override
+  String get editDescription => '编辑描述';
+
+  @override
+  String get descrDescription => '您可以为您的地址添加描述，它将本地存储在NosoSova应用程序中';
+
+  @override
+  String get description => '您的地址描述';
 }

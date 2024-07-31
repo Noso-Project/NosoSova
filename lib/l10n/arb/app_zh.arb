@@ -171,5 +171,9 @@
   "lockedCoins" : "锁定的硬币",
   "exchanges": "交易所",
   "errorImportNoPassword": "注意！在导入前，请解锁您在NosoLite应用中用密码锁定的地址。否则，它们将被忽略。",
-  "thanksTranslate": "感谢您的翻译"
+  "thanksTranslate": "感谢您的翻译",
+  "addDescription": "添加描述",
+  "editDescription": "编辑描述",
+  "descrDescription": "您可以为您的地址添加描述，它将本地存储在NosoSova应用程序中",
+  "description": "您的地址描述"
 }

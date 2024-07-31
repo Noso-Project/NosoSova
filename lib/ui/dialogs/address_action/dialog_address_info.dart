@@ -64,6 +64,12 @@ class AddressInfoState extends State<AddressInfo> {
                   Assets.iconsTextTwo,
                   AppLocalizations.of(context)!.copyAddress,
                   () => _copy(context)),
+              buildListTileSvg(
+                  Assets.iconsDescription,
+                  widget.address.description == null
+                      ? AppLocalizations.of(context)!.addDescription
+                      : AppLocalizations.of(context)!.editDescription,
+                  () => _showDescriptionSettings(context)),
               if (widget.address.balance >=
                   NosoUtility.getCountMonetToRunNode())
                 buildListTileSvg(
@@ -102,5 +108,10 @@ class AddressInfoState extends State<AddressInfo> {
     Navigator.pop(context);
     PageRouter.routePaymentPage(
         widget.scaffoldKey.currentContext ?? context, widget.address);
+  }
+
+  void _showDescriptionSettings(BuildContext context) {
+    Navigator.pop(context);
+    DialogRouter.showDialogEditDescription(context, widget.address);
   }
 }

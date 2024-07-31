@@ -1178,6 +1178,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.'**
   String get setVerNodesDesc;
+
+  /// No description provided for @addDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add description'**
+  String get addDescription;
+
+  /// No description provided for @editDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit description'**
+  String get editDescription;
+
+  /// No description provided for @descrDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You can add a description for your address, it will be stored locally in the NosoSova app.'**
+  String get descrDescription;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description for your address'**
+  String get description;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

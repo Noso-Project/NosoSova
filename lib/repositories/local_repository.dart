@@ -34,6 +34,10 @@ class LocalRepository {
     await _database.addAddress(value);
   }
 
+  Future<void> editDescription(String hash, String? newDescription) async {
+    await _database.updateAddressDescription(hash,newDescription);
+  }
+
   Future<void> addAddresses(List<AddressObject> value) async {
     await _database.addAddresses(value);
   }

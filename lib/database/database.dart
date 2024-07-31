@@ -27,12 +27,16 @@ class MyDatabase extends _$MyDatabase {
       onUpgrade: (m, from, to) async {
         if (from == 1 && to == 2) {
           const sql = """
-      CREATE TABLE contact (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        alias TEXT CHECK(LENGTH(alias) >= 1 AND LENGTH(alias) <= 50),
-        hash TEXT CHECK(LENGTH(hash) >= 1 AND LENGTH(hash) <= 100)
-      );""";
+          CREATE TABLE contact (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            alias TEXT CHECK(LENGTH(alias) >= 1 AND LENGTH(alias) <= 50),
+            hash TEXT CHECK(LENGTH(hash) >= 1 AND LENGTH(hash) <= 100)
+          );""";
           await m.issueCustomQuery(sql);
+        }
+        if (from <= 2 && to == 3) {
+          await m.addColumn(
+              addresses, addresses.description as GeneratedColumn<Object>);
         }
       },
     );
@@ -96,6 +100,13 @@ class MyDatabase extends _$MyDatabase {
     await delete(addresses).delete(insertable);
   }
 
+  Future<void> updateAddressDescription(
+      String hash, String? newDescription) async {
+    await (update(addresses)..where((t) => t.hash.equals(hash))).write(
+      AddressesCompanion(description: Value(newDescription)),
+    );
+  }
+
   Future<void> addContact(ContactModel value) async {
     await batch((batch) {
       batch.insert(contact,
@@ -115,7 +126,7 @@ class MyDatabase extends _$MyDatabase {
   }
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 }
 
 LazyDatabase _openConnection(String connectionString) {

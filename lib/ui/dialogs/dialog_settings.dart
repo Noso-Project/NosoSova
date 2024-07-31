@@ -377,10 +377,10 @@ class DialogSettings {
       }
 
       var mAddress = Address(
-          hash: 'Hash',
+          hash: '',
           publicKey: '',
           privateKey: '',
-          custom: "Alias",
+          custom: "Hash/Alias",
           description: "Description (In other cases alias/hash)");
 
       return SliverWoltModalSheetPage(

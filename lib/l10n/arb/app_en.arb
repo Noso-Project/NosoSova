@@ -176,6 +176,10 @@
   "resetNetworkDescrpt": "Reset network settings to help with sync freezes",
   "resetNetworkDialog": "Are you confirming the reset of the network connection data?",
   "resetNetworkSuccess": "Yes, RESET!",
-  "setVerNodes":  "Change verified nodes",
-  "setVerNodesDesc":  "You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain."
+  "setVerNodes": "Change verified nodes",
+  "setVerNodesDesc": "You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.",
+  "addDescription": "Add description",
+  "editDescription": "Edit description",
+  "descrDescription": "You can add a description for your address, it will be stored locally in the NosoSova app.",
+  "description": "Description for your address"
 }

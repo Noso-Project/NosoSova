@@ -171,5 +171,9 @@
   "lockedCoins" : "Moedas bloqueadas",
   "exchanges": "Bolsas",
   "errorImportNoPassword": "Atenção! Antes de importar, desbloqueie seus endereços que você bloqueou com senha no aplicativo NosoLite. Caso contrário, eles serão ignorados.",
-  "thanksTranslate": "Obrigado pela tradução"
+  "thanksTranslate": "Obrigado pela tradução",
+  "addDescription": "Adicionar descrição",
+  "editDescription": "Editar descrição",
+  "descrDescription": "Você pode adicionar uma descrição para o seu endereço, que será armazenada localmente no aplicativo NosoSova",
+  "description": "Descrição para o seu endereço"
 }

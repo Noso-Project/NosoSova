@@ -102,3 +102,10 @@ class ExportWallet extends WalletEvent {
 
   ExportWallet(this.pathFile);
 }
+
+class EditDescriptionAddress extends WalletEvent {
+  final String? description;
+  final String hash;
+
+  EditDescriptionAddress(this.hash, this.description);
+}
