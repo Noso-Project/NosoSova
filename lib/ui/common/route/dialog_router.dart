@@ -475,7 +475,7 @@ class DialogRouter {
           builder: (_) => MultiBlocProvider(
                 providers: [
                   BlocProvider.value(
-                    value: BlocProvider.of<WalletBloc>(context),
+                    value:locator<WalletBloc>(),
                   ),
                 ],
                 child: DialogEditDescriptionAddress(address: address),
@@ -504,7 +504,7 @@ class DialogRouter {
                 child: MultiBlocProvider(
                   providers: [
                     BlocProvider.value(
-                      value: BlocProvider.of<WalletBloc>(context),
+                      value: locator<WalletBloc>(),
                     ),
                   ],
                   child: DialogEditDescriptionAddress(address: address),
