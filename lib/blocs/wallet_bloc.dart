@@ -28,7 +28,7 @@ import 'package:nososova/models/responses/response_page_listener.dart';
 import 'package:nososova/repositories/repositories.dart';
 
 import '../../models/address_wallet.dart';
-import '../configs/network_config.dart';
+import '../configs/app_config.dart';
 import '../models/app/debug.dart';
 import '../models/app/state_node.dart';
 import '../models/app/wallet.dart';
@@ -51,7 +51,7 @@ class WalletState {
   WalletState({Wallet? wallet, StateNodes? stateNodes})
       : wallet = wallet ?? Wallet(),
         stateNodes = stateNodes ?? StateNodes(),
-        appInfo = NetworkConfig().getAppInfo;
+        appInfo = AppConfig().getAppInfo;
 
   WalletState copyWith({
     Wallet? wallet,
@@ -508,8 +508,9 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     int maxDevFalseAttempts = 4;
     int attemptsDev = 0;
     do {
-      var targetDevNode =
-          await _repositories.networkRepository.getRandomDevNode();
+      var targetDevNode = await _repositories.networkRepository
+          .getRandomDevNode(
+              await appDataBloc.defaultSeeds.getVerificationSeedList());
       final Node? nodeOutput =
           DataParser.parseDataNode(targetDevNode.value, targetDevNode.seed);
       if (targetDevNode.errors != null ||
@@ -532,8 +533,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     int attemptsUser = 0;
 
     do {
-      var randomSeed =
-          Seed().tokenizer(NetworkConfig.getRandomNode(listNodesUsers));
+      var randomSeed = Seed().tokenizer(
+          await appDataBloc.defaultSeeds.getRandomNode(listNodesUsers));
       var targetUserNode = await _repositories.networkRepository
           .fetchNode(NodeRequest.getNodeStatus, randomSeed);
 

@@ -175,5 +175,13 @@
   "addDescription": "Agregar descripción",
   "editDescription": "Editar descripción",
   "descrDescription": "Puede agregar una descripción para su dirección, que se almacenará localmente en la aplicación NosoSova",
-  "description": "Descripción para su dirección"
+  "description": "Descripción para su dirección",
+  "resetNetwork": "Restablecer datos de red",
+  "resetNetworkDescrpt": "Restablecer la configuración de red para ayudar con los bloqueos de sincronización",
+  "resetNetworkDialog": "¿Confirma el restablecimiento de los datos de conexión de la red?",
+  "resetNetworkSuccess": "¡Sí, REINICIAR!",
+  "setVerNodes": "Cambiar nodos verificados",
+  "setVerNodesDesc": "Puede cambiar los nodos verificados, hágalo cuando la aplicación no pueda establecer una conexión con la cadena de bloques.",
+  "testVerSeeds": "Probar semillas verificadas",
+  "testVerSeedsDesc": "Haga esto si no puede conectarse a la red"
 }

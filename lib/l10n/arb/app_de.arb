@@ -175,5 +175,14 @@
   "addDescription": "Beschreibung hinzufügen",
   "editDescription": "Beschreibung bearbeiten",
   "descrDescription": "Sie können eine Beschreibung für Ihre Adresse hinzufügen, die lokal in der NosoSova-App gespeichert wird",
-  "description": "Beschreibung für Ihre Adresse"
+  "description": "Beschreibung für Ihre Adresse",
+  "resetNetwork": "Netzwerkdaten zurücksetzen",
+  "resetNetworkDescrpt": "Netzwerkeinstellungen zurücksetzen, um Synchronisierungsprobleme zu beheben",
+  "resetNetworkDialog": "Bestätigen Sie das Zurücksetzen der Netzwerkverbindungsdaten?",
+  "resetNetworkSuccess": "Ja, ZURÜCKSETZEN!",
+  "setVerNodes": "Verifizierte Knoten ändern",
+  "setVerNodesDesc": "Sie können die verifizierten Knoten ändern, tun Sie dies, wenn die Anwendung keine Verbindung zur Blockchain herstellen kann.",
+  "testVerSeeds": "Verifizierte Seeds testen",
+  "testVerSeedsDesc": "Tun Sie dies, wenn Sie keine Verbindung zum Netzwerk herstellen können"
+
 }

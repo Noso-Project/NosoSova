@@ -524,6 +524,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thanksTranslate => 'Thank you for translation';
 
   @override
+  String get addDescription => 'Add description';
+
+  @override
+  String get editDescription => 'Edit description';
+
+  @override
+  String get descrDescription => 'You can add a description for your address, it will be stored locally in the NosoSova app.';
+
+  @override
+  String get description => 'Description for your address';
+
+  @override
   String get resetNetwork => 'Reset network data';
 
   @override
@@ -542,14 +554,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setVerNodesDesc => 'You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.';
 
   @override
-  String get addDescription => 'Add description';
+  String get testVerSeeds => 'Test verified seeds';
 
   @override
-  String get editDescription => 'Edit description';
+  String get testVerSeedsDesc => 'Do this if you cannot connect to the network';
 
   @override
-  String get descrDescription => 'You can add a description for your address, it will be stored locally in the NosoSova app.';
-
-  @override
-  String get description => 'Description for your address';
+  String get verfNodes => 'Verified nodes';
 }

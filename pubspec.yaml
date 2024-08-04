@@ -48,6 +48,7 @@ dependencies:
   noso_dart: 1.2.4
   noso_rest_api:
     git: https://github.com/Noso-Project/noso_rest_api.git
+  settings_yaml: ^8.0.1
 dev_dependencies:
   drift_dev: ^2.15.0
   build_runner: ^2.4.6

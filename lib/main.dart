@@ -71,7 +71,6 @@ class NosoSova extends StatelessWidget {
               providers: [
                 BlocProvider<DebugBloc>(
                     create: (context) => locator<DebugBloc>()),
-
                 BlocProvider<CoinInfoBloc>(create: (context) {
                   var bloc = locator<CoinInfoBloc>();
                   bloc.add(InitBloc());

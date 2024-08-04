@@ -12,7 +12,7 @@ class NosoNetworkRepository {
     return _nodeService.fetchNode(command, seed);
   }
 
-  Future<ResponseNode<List<int>>> getRandomDevNode() {
-    return _nodeService.getRandomDevNode();
+  Future<ResponseNode<List<int>>> getRandomDevNode(List<Seed> seedsDefault) {
+    return _nodeService.getRandomDevNode(seedsDefault);
   }
 }

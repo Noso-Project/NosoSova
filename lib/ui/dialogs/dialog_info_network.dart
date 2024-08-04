@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:noso_dart/models/noso/node.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/l10n/app_localizations.dart';
 
 import '../../blocs/events/app_data_events.dart';
-import '../../configs/network_config.dart';
 import '../../generated/assets.dart';
 import '../../ui/tiles/seed_tile.dart';
 import '../../utils/date_utils.dart';
@@ -30,6 +28,11 @@ class DialogInfoNetwork extends StatefulWidget {
 
 class DialogInfoNetworkState extends State<DialogInfoNetwork> {
   bool isVisibleAction = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,10 +125,6 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
                 ],
                 if (state.statusConnected != StatusConnectNodes.error) ...[
                   ItemInfoWidget(
-                      nameItem: AppLocalizations.of(context)!.nodeType,
-                      value: getNetworkType(state.node),
-                      onShimmer: onShimmer),
-                  ItemInfoWidget(
                       nameItem: AppLocalizations.of(context)!.lastBlock,
                       value: state.node.lastblock.toString(),
                       onShimmer: onShimmer),
@@ -144,11 +143,5 @@ class DialogInfoNetworkState extends State<DialogInfoNetwork> {
         ],
       );
     });
-  }
-
-  String getNetworkType(Node node) {
-    bool isDev = NetworkConfig.getVerificationSeedList()
-        .any((item) => item.toTokenizer == node.seed.toTokenizer);
-    return isDev ? "Verified node" : "Custom node";
   }
 }

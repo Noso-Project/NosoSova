@@ -6,6 +6,7 @@ import 'package:nososova/blocs/contacts_bloc.dart';
 import 'package:nososova/blocs/debug_bloc.dart';
 import 'package:nososova/blocs/history_transactions_bloc.dart';
 import 'package:nososova/blocs/wallet_bloc.dart';
+import 'package:nososova/configs/default_seeds.dart';
 import 'package:nososova/database/database.dart';
 import 'package:nososova/repositories/file_repository.dart';
 import 'package:nososova/repositories/local_repository.dart';
@@ -57,7 +58,8 @@ Future<void> setupLocator(AppPath pathApp) async {
   locator.registerLazySingleton<AppDataBloc>(() => AppDataBloc(
       coinInfoBloc: locator<CoinInfoBloc>(),
       repositories: locator<Repositories>(),
-      debugBloc: locator<DebugBloc>()));
+      debugBloc: locator<DebugBloc>(),
+  defaultSeeds: DefaultSeeds()));
   locator.registerLazySingleton<WalletBloc>(() => WalletBloc(
       repositories: locator<Repositories>(),
       debugBloc: locator<DebugBloc>(),

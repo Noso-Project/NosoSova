@@ -6,7 +6,7 @@ import 'package:nososova/ui/theme/style/icons_style.dart';
 import 'package:nososova/ui/theme/style/text_style.dart';
 import 'package:nososova/utils/enum.dart';
 
-import '../../../configs/network_config.dart';
+import '../../../utils/status_connect_ui.dart';
 
 class NetworkInfo extends StatelessWidget {
   final VoidCallback nodeStatusDialog;
@@ -42,7 +42,7 @@ class NetworkInfo extends StatelessWidget {
                 )
               ] else ...[
                 AppIconsStyle.icon2x4(
-                    CheckConnect.getStatusConnected(state.statusConnected),
+                    CheckConnectUi.getStatusConnected(state.statusConnected),
                     colorCustom: Colors.white)
               ],
               if (state.statusConnected == StatusConnectNodes.connected ||

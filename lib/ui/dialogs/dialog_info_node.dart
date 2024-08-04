@@ -6,9 +6,9 @@ import 'package:nososova/dependency_injection.dart';
 import 'package:nososova/models/address_wallet.dart';
 import 'package:nososova/ui/common/widgets/empty_list_widget.dart';
 
-import '../../configs/network_config.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/enum.dart';
+import '../../utils/status_connect_ui.dart';
 import '../common/widgets/item_info_widget.dart';
 import '../theme/style/icons_style.dart';
 import '../theme/style/text_style.dart';
@@ -62,7 +62,7 @@ class _DialogInfoNodeState extends State<DialogInfoNode> {
                   children: [
                     ListTile(
                       leading: AppIconsStyle.icon3x2(
-                          CheckConnect.getStatusConnected(
+                          CheckConnectUi.getStatusConnected(
                               StatusConnectNodes.connected)),
                       title: Text(
                         widget.address.seedNodeOn,

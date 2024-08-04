@@ -14,4 +14,8 @@ class PathAppUtil {
       return path.path;
     }
   }
+
+  static getYamlConfig() {
+    return "settings.yaml";
+  }
 }

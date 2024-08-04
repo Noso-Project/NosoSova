@@ -13,7 +13,7 @@ import 'package:nososova/blocs/events/coininfo_events.dart';
 import 'package:nososova/blocs/events/wallet_events.dart';
 import 'package:nososova/models/app/app_bloc_config.dart';
 
-import '../configs/network_config.dart';
+import '../configs/default_seeds.dart';
 import '../models/app/debug.dart';
 import '../models/app/stats.dart';
 import '../models/responses/response_node.dart';
@@ -49,7 +49,7 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
   final CoinInfoBloc coinInfoBloc;
   Timer? _timerSyncNetwork;
   final Repositories _repositories;
-
+  final DefaultSeeds defaultSeeds;
   final _walletEvent = StreamController<WalletEvent>.broadcast();
 
   Stream<WalletEvent> get walletEvents => _walletEvent.stream;
@@ -57,6 +57,7 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
   AppDataBloc({
     required Repositories repositories,
     required DebugBloc debugBloc,
+    required this.defaultSeeds,
     required this.coinInfoBloc,
   })  : _repositories = repositories,
         _debugBloc = debugBloc,
@@ -180,14 +181,15 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
       case InitialNodeAlgorithm.connectLastNode:
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
-            Seed().tokenizer(NetworkConfig.getRandomNode(null),
+            Seed().tokenizer(await defaultSeeds.getRandomNode(null),
                 rawString: appBlocConfig.lastSeed));
       case InitialNodeAlgorithm.listenUserNodes:
         return await _repositories.networkRepository.fetchNode(
             NodeRequest.getNodeStatus,
-            Seed().tokenizer(NetworkConfig.getRandomNode(listUsersNodes)));
+            Seed().tokenizer(await defaultSeeds.getRandomNode(listUsersNodes)));
       default:
-        return await _repositories.networkRepository.getRandomDevNode();
+        return await _repositories.networkRepository
+            .getRandomDevNode(await defaultSeeds.getVerificationSeedList());
     }
   }
 
@@ -291,7 +293,6 @@ class AppDataBloc extends Bloc<AppDataEvent, AppDataState> {
         .map((node) => '${node.ipv4}:${node.port}|${node.address}')
         .join(',');
   }
-
 
   List<Masternode> _createMasternodeListFromSeed(List<Seed> seeds) {
     if (seeds.isEmpty) {

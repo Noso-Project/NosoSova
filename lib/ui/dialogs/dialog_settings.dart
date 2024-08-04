@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nososova/blocs/app_data_bloc.dart';
 import 'package:nososova/configs/social_links.dart';
 import 'package:nososova/models/address_wallet.dart';
@@ -22,6 +21,7 @@ import '../theme/style/button_style.dart';
 import '../theme/style/icons_style.dart';
 import '../theme/style/sizes.dart';
 import '../theme/style/text_style.dart';
+import 'node_status_widget.dart';
 
 class DialogSettings {
   static void showDialogSettings(BuildContext context) {
@@ -229,6 +229,20 @@ class DialogSettings {
                                 )),
                             ListTile(
                                 title: Text(
+                                  AppLocalizations.of(context)!.testVerSeeds,
+                                  style: AppTextStyles.itemMedium,
+                                ),
+                                subtitle: Text(
+                                  AppLocalizations.of(context)!
+                                      .testVerSeedsDesc,
+                                  style: AppTextStyles.textHiddenSmall(context),
+                                ),
+                                onTap: () {
+                                  pageIndexNotifier.value =
+                                      pageIndexNotifier.value + 4;
+                                }),
+                            ListTile(
+                                title: Text(
                                   AppLocalizations.of(context)!.resetNetwork,
                                   style: AppTextStyles.itemMedium.copyWith(
                                       color: CustomColors.negativeBalance),
@@ -242,8 +256,6 @@ class DialogSettings {
                                   pageIndexNotifier.value =
                                       pageIndexNotifier.value + 3;
                                 }),
-
-                            /*
                             ListTile(
                                 title: Text(
                                   AppLocalizations.of(context)!.setVerNodes,
@@ -256,10 +268,8 @@ class DialogSettings {
                                 ),
                                 onTap: () {
                                   pageIndexNotifier.value =
-                                      pageIndexNotifier.value + 4;
+                                      pageIndexNotifier.value + 5;
                                 }),
-
-                           */
                             const SizedBox(height: 10),
                           ],
                         );
@@ -542,46 +552,45 @@ class DialogSettings {
                   child: ListenableBuilder(
                       listenable: appSettings,
                       builder: (BuildContext context, Widget? child) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: Responsive.isMobile(context)
-                                        ? CustomSizes.paddingDialogMobile
-                                        : CustomSizes.paddingDialogDesktop,
-                                    horizontal:
-                                        CustomSizes.paddingDialogVertical),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        AppLocalizations.of(context)!
-                                            .setVerNodes,
-                                        style: AppTextStyles.dialogTitle,
-                                      ),
-                                      Text(
-                                        AppLocalizations.of(context)!
-                                            .resetNetworkDialog,
-                                        style: AppTextStyles.infoItemTitle,
-                                      ),
-                                      const SizedBox(height: 20),
-                                      AppButtonStyle.buttonDefault(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .resetNetworkSuccess,
-                                          () => {
-                                                BlocProvider.of<AppDataBloc>(
-                                                        context)
-                                                    .add(ResetNetworkData()),
-                                                Navigator.of(modalSheetContext)
-                                                    .pop()
-                                              })
-                                    ])),
-                            const SizedBox(height: 10),
-                          ],
-                        );
+                        return const NodeStatusWidget();
+                      })),
+            ),
+          )
+        ],
+      );
+    }
+
+    SliverWoltModalSheetPage pageSetVerNodes(
+        BuildContext modalSheetContext, TextTheme textTheme) {
+      return SliverWoltModalSheetPage(
+        enableDrag: false,
+        leadingNavBarWidget: IconButton(
+          padding: const EdgeInsets.all(pagePadding),
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () =>
+              pageIndexNotifier.value = pageIndexNotifier.value - 5,
+        ),
+        trailingNavBarWidget: IconButton(
+          padding: const EdgeInsets.all(pagePadding),
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            Navigator.of(modalSheetContext).pop();
+            pageIndexNotifier.value = 0;
+          },
+        ),
+        mainContentSlivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: 1,
+              (_, index) => Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: ListenableBuilder(
+                      listenable: appSettings,
+                      builder: (BuildContext context, Widget? child) {
+                        return const Column(children: [
+
+
+                        ],);
                       })),
             ),
           )
@@ -602,6 +611,7 @@ class DialogSettings {
           pageDisplayAddress(modalSheetContext, textTheme),
           pageResetSettings(modalSheetContext, textTheme),
           pageVerNodesSettings(modalSheetContext, textTheme),
+          pageSetVerNodes(modalSheetContext, textTheme)
         ];
       },
       modalTypeBuilder: (context) {

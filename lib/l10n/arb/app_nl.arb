@@ -175,5 +175,14 @@
   "addDescription": "Beschrijving toevoegen",
   "editDescription": "Beschrijving bewerken",
   "descrDescription": "U kunt een beschrijving toevoegen voor uw adres, die lokaal in de NosoSova-app wordt opgeslagen",
-  "description": "Beschrijving voor uw adres"
+  "description": "Beschrijving voor uw adres",
+  "resetNetwork": "Netwerkgegevens resetten",
+  "resetNetworkDescrpt": "Netwerkinstellingen resetten om synchronisatieproblemen te verhelpen",
+  "resetNetworkDialog": "Bevestigt u het resetten van de netwerkverbindingsgegevens?",
+  "resetNetworkSuccess": "Ja, RESETTEN!",
+  "setVerNodes": "Geverifieerde nodes wijzigen",
+  "setVerNodesDesc": "U kunt de geverifieerde nodes wijzigen, doe dit wanneer de applicatie geen verbinding kan maken met de blockchain.",
+  "testVerSeeds": "Geverifieerde seeds testen",
+  "testVerSeedsDesc": "Doe dit als u geen verbinding kunt maken met het netwerk"
+
 }

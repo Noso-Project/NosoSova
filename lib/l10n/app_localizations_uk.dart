@@ -524,24 +524,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get thanksTranslate => 'Дякуємо за переклад';
 
   @override
-  String get resetNetwork => 'Reset network data';
-
-  @override
-  String get resetNetworkDescrpt => 'Reset network settings to help with sync freezes';
-
-  @override
-  String get resetNetworkDialog => 'Are you confirming the reset of the network connection data?';
-
-  @override
-  String get resetNetworkSuccess => 'Yes, RESET!';
-
-  @override
-  String get setVerNodes => 'Change verified nodes';
-
-  @override
-  String get setVerNodesDesc => 'You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.';
-
-  @override
   String get addDescription => 'Додати опис';
 
   @override
@@ -552,4 +534,31 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get description => 'Опис для вашо адреси';
+
+  @override
+  String get resetNetwork => 'Скинути дані мережі';
+
+  @override
+  String get resetNetworkDescrpt => 'Скинути налаштування мережі, щоб виправити зависання синхронізації';
+
+  @override
+  String get resetNetworkDialog => 'Ви підтверджуєте скидання даних підключення до мережі?';
+
+  @override
+  String get resetNetworkSuccess => 'Так, СКИНУТИ!';
+
+  @override
+  String get setVerNodes => 'Змінити перевірені вузли';
+
+  @override
+  String get setVerNodesDesc => 'Ви можете змінити перевірені вузли, зробіть це, коли додаток не може встановити з\'єднання з блокчейном.';
+
+  @override
+  String get testVerSeeds => 'Тестувати перевірені вузли';
+
+  @override
+  String get testVerSeedsDesc => 'Зробіть це, якщо не можете підключитися до мережі';
+
+  @override
+  String get verfNodes => 'Verified nodes';
 }

@@ -44,20 +44,7 @@ class MyDatabase extends _$MyDatabase {
 
   Stream<List<Address>> fetchAddresses() => select(addresses).watch();
 
-  Future<List<Address>> fetchTotalAddresses() => select(addresses).get();
-
-  Future<Set<String>> fetchTotalAddressHashes() async {
-    final hashes = await select(addresses).get();
-    return Set.from(hashes.map((address) => address.hash));
-  }
-
   Stream<List<ContactModel>> fetchContacts() => select(contact).watch();
-
-  Future<bool> isLocalAddress(String hash) async {
-    final addressesList =
-        await (select(addresses)..where((t) => t.hash.equals(hash))).get();
-    return addressesList.isNotEmpty;
-  }
 
   Future<AddressObject?> fetchAddress(String hash) async {
     final addressesList =

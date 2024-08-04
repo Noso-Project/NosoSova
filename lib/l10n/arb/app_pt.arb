@@ -175,5 +175,13 @@
   "addDescription": "Adicionar descrição",
   "editDescription": "Editar descrição",
   "descrDescription": "Você pode adicionar uma descrição para o seu endereço, que será armazenada localmente no aplicativo NosoSova",
-  "description": "Descrição para o seu endereço"
+  "description": "Descrição para o seu endereço",
+  "resetNetwork": "Redefinir dados de rede",
+  "resetNetworkDescrpt": "Redefinir as configurações de rede para ajudar com congelamentos de sincronização",
+  "resetNetworkDialog": "Você confirma a redefinição dos dados de conexão de rede?",
+  "resetNetworkSuccess": "Sim, REDEFINIR!",
+  "setVerNodes": "Alterar nós verificados",
+  "setVerNodesDesc": "Você pode alterar os nós verificados, faça isso quando o aplicativo não conseguir estabelecer uma conexão com o blockchain.",
+  "testVerSeeds": "Testar sementes verificadas",
+  "testVerSeedsDesc": "Faça isso se você não conseguir se conectar à rede"
 }

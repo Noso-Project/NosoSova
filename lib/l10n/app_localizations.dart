@@ -1143,6 +1143,30 @@ abstract class AppLocalizations {
   /// **'Thank you for translation'**
   String get thanksTranslate;
 
+  /// No description provided for @addDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add description'**
+  String get addDescription;
+
+  /// No description provided for @editDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit description'**
+  String get editDescription;
+
+  /// No description provided for @descrDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You can add a description for your address, it will be stored locally in the NosoSova app.'**
+  String get descrDescription;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description for your address'**
+  String get description;
+
   /// No description provided for @resetNetwork.
   ///
   /// In en, this message translates to:
@@ -1179,29 +1203,23 @@ abstract class AppLocalizations {
   /// **'You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.'**
   String get setVerNodesDesc;
 
-  /// No description provided for @addDescription.
+  /// No description provided for @testVerSeeds.
   ///
   /// In en, this message translates to:
-  /// **'Add description'**
-  String get addDescription;
+  /// **'Test verified seeds'**
+  String get testVerSeeds;
 
-  /// No description provided for @editDescription.
+  /// No description provided for @testVerSeedsDesc.
   ///
   /// In en, this message translates to:
-  /// **'Edit description'**
-  String get editDescription;
+  /// **'Do this if you cannot connect to the network'**
+  String get testVerSeedsDesc;
 
-  /// No description provided for @descrDescription.
+  /// No description provided for @verfNodes.
   ///
   /// In en, this message translates to:
-  /// **'You can add a description for your address, it will be stored locally in the NosoSova app.'**
-  String get descrDescription;
-
-  /// No description provided for @description.
-  ///
-  /// In en, this message translates to:
-  /// **'Description for your address'**
-  String get description;
+  /// **'Verified nodes'**
+  String get verfNodes;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -524,24 +524,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get thanksTranslate => 'Danke für Übersetzung';
 
   @override
-  String get resetNetwork => 'Reset network data';
-
-  @override
-  String get resetNetworkDescrpt => 'Reset network settings to help with sync freezes';
-
-  @override
-  String get resetNetworkDialog => 'Are you confirming the reset of the network connection data?';
-
-  @override
-  String get resetNetworkSuccess => 'Yes, RESET!';
-
-  @override
-  String get setVerNodes => 'Change verified nodes';
-
-  @override
-  String get setVerNodesDesc => 'You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.';
-
-  @override
   String get addDescription => 'Beschreibung hinzufügen';
 
   @override
@@ -552,4 +534,31 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get description => 'Beschreibung für Ihre Adresse';
+
+  @override
+  String get resetNetwork => 'Netzwerkdaten zurücksetzen';
+
+  @override
+  String get resetNetworkDescrpt => 'Netzwerkeinstellungen zurücksetzen, um Synchronisierungsprobleme zu beheben';
+
+  @override
+  String get resetNetworkDialog => 'Bestätigen Sie das Zurücksetzen der Netzwerkverbindungsdaten?';
+
+  @override
+  String get resetNetworkSuccess => 'Ja, ZURÜCKSETZEN!';
+
+  @override
+  String get setVerNodes => 'Verifizierte Knoten ändern';
+
+  @override
+  String get setVerNodesDesc => 'Sie können die verifizierten Knoten ändern, tun Sie dies, wenn die Anwendung keine Verbindung zur Blockchain herstellen kann.';
+
+  @override
+  String get testVerSeeds => 'Verifizierte Seeds testen';
+
+  @override
+  String get testVerSeedsDesc => 'Tun Sie dies, wenn Sie keine Verbindung zum Netzwerk herstellen können';
+
+  @override
+  String get verfNodes => 'Verified nodes';
 }

@@ -121,4 +121,9 @@ class AppTextStyles {
         fontFamily: "Gilroy",
         fontWeight: FontWeight.w600);
   }
+
+  static TextStyle statusSeed = const TextStyle(
+      fontSize: _mediumSizeText,
+      fontFamily: "Gilroy",
+      fontWeight: FontWeight.w700);
 }

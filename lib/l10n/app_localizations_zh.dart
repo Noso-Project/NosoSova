@@ -524,24 +524,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get thanksTranslate => '感谢您的翻译';
 
   @override
-  String get resetNetwork => 'Reset network data';
-
-  @override
-  String get resetNetworkDescrpt => 'Reset network settings to help with sync freezes';
-
-  @override
-  String get resetNetworkDialog => 'Are you confirming the reset of the network connection data?';
-
-  @override
-  String get resetNetworkSuccess => 'Yes, RESET!';
-
-  @override
-  String get setVerNodes => 'Change verified nodes';
-
-  @override
-  String get setVerNodesDesc => 'You can change the verified nodes, do it at the moment when the application cannot establish a connection to the blockchain.';
-
-  @override
   String get addDescription => '添加描述';
 
   @override
@@ -552,4 +534,31 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get description => '您的地址描述';
+
+  @override
+  String get resetNetwork => '重置网络数据';
+
+  @override
+  String get resetNetworkDescrpt => '重置网络设置以帮助解决同步冻结问题';
+
+  @override
+  String get resetNetworkDialog => '您确认要重置网络连接数据吗？';
+
+  @override
+  String get resetNetworkSuccess => '是的，重置！';
+
+  @override
+  String get setVerNodes => '更改验证节点';
+
+  @override
+  String get setVerNodesDesc => '您可以更改验证节点，当应用程序无法连接到区块链时，请执行此操作。';
+
+  @override
+  String get testVerSeeds => '测试验证种子';
+
+  @override
+  String get testVerSeedsDesc => '如果您无法连接到网络，请执行此操作';
+
+  @override
+  String get verfNodes => 'Verified nodes';
 }
