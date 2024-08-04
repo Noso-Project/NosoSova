@@ -1,4 +1,4 @@
-name: NosoSova Main Workflow
+name: NosoSova Main Auto Release
 
 permissions:
   contents: write
