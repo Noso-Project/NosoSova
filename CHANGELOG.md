@@ -1,5 +1,6 @@
 ## v.0.4.8
 
+- Added the ability to test verified nodes
 - Add comments/description of addresses
 - SovaRPC - moved to another repository. Cleaning up the project and code.
 
